@@ -1,0 +1,34 @@
+{
+  "name": "huebee",
+  "authors": [
+    "David DeSandro <desandrocodes@gmail.com>"
+  ],
+  "description": "1-click color picker",
+  "main": [
+    "huebee.js",
+    "huebee.css"
+  ],
+  "dependencies": {
+    "ev-emitter": "^1.0.3",
+    "unipointer": "^2.1.0"
+  },
+  "devDependencies": {
+    "qunit": "^2.0.1"
+  },
+  "keywords": [
+    "color",
+    "picker"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "sandbox",
+    "gulpfile.js",
+    "package.json"
+  ]
+}

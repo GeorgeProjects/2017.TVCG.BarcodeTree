@@ -1,0 +1,112 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "huebee",
+        "scope": null,
+        "escapedName": "huebee",
+        "name": "huebee",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/liguozheng/MyWorks/2018.PacificVis.BarcodeTree/code/version2/2017.INFOVIS.BarcodeTreeComparison2"
+    ]
+  ],
+  "_cnpm_publish_time": 1488681678586,
+  "_from": "huebee@latest",
+  "_hasShrinkwrap": false,
+  "_id": "huebee@1.0.1",
+  "_inCache": true,
+  "_location": "/huebee",
+  "_nodeVersion": "6.9.1",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/huebee-1.0.1.tgz_1488681677905_0.0069569062907248735"
+  },
+  "_npmUser": {
+    "name": "desandro",
+    "email": "desandrocodes@gmail.com"
+  },
+  "_npmVersion": "3.10.8",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "huebee",
+    "scope": null,
+    "escapedName": "huebee",
+    "name": "huebee",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/huebee/download/huebee-1.0.1.tgz",
+  "_shasum": "65c5de1bc7a7aba2df6ab2d3bdd658afc4c59f46",
+  "_shrinkwrap": null,
+  "_spec": "huebee",
+  "_where": "/Users/liguozheng/MyWorks/2018.PacificVis.BarcodeTree/code/version2/2017.INFOVIS.BarcodeTreeComparison2",
+  "author": {
+    "name": "David DeSandro"
+  },
+  "bugs": {
+    "url": "https://github.com/metafizzy/huebee/issues"
+  },
+  "dependencies": {
+    "ev-emitter": "^1.0.3",
+    "unipointer": "^2.1.0"
+  },
+  "description": "1-click color picker",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.13",
+    "gulp-jshint": "^2.0.4",
+    "gulp-json-lint": "^0.1.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.5.4",
+    "gulp-requirejs-optimize": "github:metafizzy/gulp-requirejs-optimize",
+    "gulp-uglify": "^2.0.0",
+    "gulp-util": "^3.0.7",
+    "jshint": "^2.9.4",
+    "qunitjs": "^2.0.1"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dist": {
+    "shasum": "65c5de1bc7a7aba2df6ab2d3bdd658afc4c59f46",
+    "size": 24658,
+    "noattachment": false,
+    "tarball": "http://registry.npm.taobao.org/huebee/download/huebee-1.0.1.tgz"
+  },
+  "gitHead": "b25e6fe2a06ddb900622acb55ad3a8bd771e670d",
+  "homepage": "http://huebee.buzz",
+  "keywords": [
+    "color",
+    "picker",
+    "ui",
+    "dom"
+  ],
+  "license": "GPL-3.0",
+  "main": "huebee.js",
+  "maintainers": [
+    {
+      "name": "desandro",
+      "email": "desandrocodes@gmail.com"
+    }
+  ],
+  "name": "huebee",
+  "optionalDependencies": {},
+  "publish_time": 1488681678586,
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/metafizzy/huebee.git"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "version": "1.0.1"
+}

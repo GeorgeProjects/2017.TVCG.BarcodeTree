@@ -1,0 +1,44 @@
+#histogram-view {
+  #histogram-main-panel{
+    position: absolute;
+    left: 0%;
+    right: 30px;
+    top: 0%;
+    bottom: 0%;
+    text {
+      font-size: 1rem;
+    }
+    .axis {
+      stroke-width: 1px;
+      path { /*x轴线*/
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+      line { /*x轴上刻度标*/
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    }
+    .brush .extent {
+      stroke: #fff;
+      stroke-opacity: .6;
+      stroke-width: 2px;
+      fill-opacity: .1;
+      shape-rendering: crispEdges;
+    }
+  }
+  #histogram-control-panel{
+    position: absolute;
+    width: 30px;
+    right: 0%;
+    top: 0%;
+    bottom: 0%;
+    padding-top: 10px;
+    .btn{
+      padding: 2px 6px;
+    }
+  }
+
+}

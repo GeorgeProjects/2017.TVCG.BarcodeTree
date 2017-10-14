@@ -1,0 +1,9 @@
+将所有与comparison版本的系统合成相关的代码去除掉，
+用时可以直接覆盖
+
+barcodeView.tpl > templates文件夹
+
+structure.less:
+@barcode-panel-scroll_top > top: 0px
+
+

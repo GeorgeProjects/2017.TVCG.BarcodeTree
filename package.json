@@ -1,0 +1,38 @@
+{
+  "name": "expresstest",
+  "version": "1.0.0",
+  "description": "this system is fro test expressJs",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeorgeProjects/my-first-node-package.git"
+  },
+  "keywords": [
+    "node",
+    "package"
+  ],
+  "author": "Guozheng Li",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GeorgeProjects/my-first-node-package/issues"
+  },
+  "homepage": "https://github.com/GeorgeProjects/my-first-node-package#readme",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "bootstrap-slider": "^9.7.2",
+    "clone": "^2.1.0",
+    "cookie-parser": "^1.4.3",
+    "csv2json": "^1.2.0",
+    "deep": "0.0.2",
+    "edit-distance": "^1.0.1",
+    "express": "^4.14.1",
+    "fast-csv": "^2.3.1",
+    "huebee": "^1.0.1",
+    "jQuery": "^1.7.4",
+    "multer": "^1.3.0",
+    "tracer": "^0.8.7"
+  }
+}

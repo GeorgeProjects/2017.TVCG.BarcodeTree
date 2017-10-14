@@ -1,0 +1,24 @@
+#barcode-view {
+  #barcodetree-svg {
+    rect.bg {
+      stroke: #ddd;
+      stroke-width: 0.25px;
+    }
+    rect.bg-odd {
+      fill: #fff;//#f9f9f9
+    }
+    rect.bg-even {
+      fill: #fff;
+    }
+    .bg[class~=hovering-highlight]{
+      stroke: #1F77B4;
+      stroke-width: 2;
+      stroke-alignment: outside;
+    }
+    .bg[class~=compare-based-selection]{
+      stroke: #1F77B4;
+      stroke-width: 2;
+      stroke-alignment: outside;
+    }
+  }
+}

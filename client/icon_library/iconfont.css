@@ -1,0 +1,35 @@
+
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot?t=1503754268059'); /* IE9*/
+  src: url('iconfont.eot?t=1503754268059#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff?t=1503754268059') format('woff'), /* chrome, firefox */
+  url('iconfont.ttf?t=1503754268059') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('iconfont.svg?t=1503754268059#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-UnionLayout:before { content: "\e62b"; }
+
+.icon-FishEyeLayout:before { content: "\e633"; }
+
+.icon-level-density_width:before { content: "\e62c"; }
+
+.icon-level-density_width1:before { content: "\e62d"; }
+
+.icon-level-widthvalue-he:before { content: "\e62e"; }
+
+.icon-level-densityvalue-:before { content: "\e62f"; }
+
+.icon-level-densityvalue-1:before { content: "\e630"; }
+
+.icon-level-widthvalue-de:before { content: "\e631"; }
+
+.icon-level-widthvalue-nu:before { content: "\e632"; }
+

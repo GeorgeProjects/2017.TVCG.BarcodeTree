@@ -1,0 +1,1 @@
+rsync -avz 2017.INFOVIS.BarcodeTreeComparison2/ guozheng.li@192.168.10.9:/var/www/html/BarcodedTreeComparison

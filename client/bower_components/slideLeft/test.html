@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>jQuery: slideLeft plugin</title>
+<meta charset="utf-8" />
+<style type="text/css">
+body {
+
+	margin: 2em auto;
+	width: 35em;
+	font: 90% Arial, sans-serif;
+
+}
+
+#wrapper {
+	background: #ccc;
+}
+
+#test-1 {
+
+	width: 150px;
+	height: 150px;
+	background: #06c;
+	display: none;
+
+}
+
+#test-2 {
+
+	display: none;
+
+}
+</style>
+</head>
+
+<body>
+
+<div id="wrapper">
+
+<p><a href="#" id="left-1">slideLeft() 1</a> | <a href="#" id="left-2">slideLeft() 2</a></p>
+
+
+
+<div id="test-1"></div>
+<div id="test-2">
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</div>
+
+</div>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script type="text/javascript" src="jquery.slideLeft.js"></script>
+<script type="text/javascript">
+$(function() {
+
+	$('#left-1').click(function(event) {
+	
+		$('#test-1').slideLeft();
+			
+		event.preventDefault();
+	
+	});
+	
+	$('#left-2').click(function(event) {
+	
+		$('#test-2').slideLeft({ speed: 500, callback: function() {
+		  	alert('Animation completed');
+		  }
+		});
+		
+	
+		event.preventDefault();
+	
+	});
+
+});
+</script>
+</body>
+</html>

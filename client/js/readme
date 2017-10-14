@@ -1,0 +1,12 @@
+在barcode.collection.js中的1330行中的计算属性值之和使用的是最深层次的所有节点属性值之和,所以对于一个层次结构的最深层次不同的,需要进行调整
+get_sum_attr_value: function (rangeStart, rangeEnd, barcodeNodeAttrArray) {
+      var self = this
+      var sumValue = 0
+      var maxLevel = maxDepth
+      for (var bI = rangeStart; bI <= rangeEnd; bI++) {
+        if (barcodeNodeAttrArray[ bI ].existed) {
+          if(barcodeNodeAttrArray[ bI ].depth === )
+        }
+      }
+      return nodeNumber
+    },

@@ -1,0 +1,152 @@
+@toolbar-view_height: 30px;
+
+
+@font-family1: Microsoft Yahei;
+@box-shadow-style: 0 0 3px #c8c8c8;
+@toolbar-color: #fafafa;
+@border: 1px solid rgba(200, 200, 200, 0.5);
+@border2: 1px solid #ffffff;
+@barcode-panel-color: #eeeeee;
+
+@standard-button-width: 24px;
+@1_2standard-button-width: 1/2 * @standard-button-width;
+@padding-div: 2px;
+
+@background-color: rgba(100, 100, 100, 0.5);
+@test-background1: white;
+@test-background2: white;
+@test-background3: white;
+
+@app_height: 100%;
+//the toolbar view settings
+@toolbar-view_top: 0px;
+@toolbar-view_width: 100%;
+@toolbar-view_navbar-border-radius: 0px;
+@toolbar-view_padding: 6px 5px 5px 5px;
+@toolbar-view_font-size: 13px;
+@toolbar-container_margin-right: 0px;
+@toolbar-container_margin-left: 0px;
+@toolbar-container_width: 100%;
+@toolbar-a_padding-top: 6px;
+@toolbar-a_padding-bottom: 5px;
+// the SingleBarcodeView
+@barcode-mode-config-view_left: 0%;
+@barcode-mode-config-view_width: 6%;
+@half-view_width: (100% - @barcode-mode-config-view_width)/2;
+@single-nodelink-tree-view_left: @barcode-mode-config-view_width + @half-view_width;
+//the content view width of the view
+@content-view_width: 100%;
+//the histogram view settings
+@histogram-view_top: @toolbar-view_height;
+@histogram-view_height: 15%;
+@histogram-view_bottom: ~"calc(15% + 35px)"; //20% is the height of the histogram-view
+@histogram-view_width: 100%;
+
+@his-left_height: 100%;
+@his-left_width: 90%;
+@his-main_height: 100%;
+@his-info_width: 110px;
+@his-main_width: calc(~"100% - " @his-info_width);
+;
+@his-panel_height: 18%;
+@his-panel_width: 100%;
+@his-panel_left: @his-main_width;
+@his-info_height: 100%;
+@his-info_left: @his-main_width;
+@his-info_right: 0%;
+
+@barcode-view_top: @histogram-view_bottom;
+@barcode-view_width: @content-view_width;
+@barcode-view_bottom: 0%;
+//barcode toolbar panel settings
+@barcode-panel-toolbar_width: @content-view_width;
+@barcode-panel-toolbar_height: 15px;
+
+@around-height: 90px;
+@barcode-height: 80px;
+
+@super-tree-scroll-div-height: @barcode-height;
+@super-tree-scroll-div-right: @around-height;
+@super-tree-scroll-div-top: 0px;
+@super-tree-scroll-div-left: 0px;
+
+@super-tree-rightconfig_top: 0px;
+@super-tree-rightconfig_height: @barcode-height;
+@super-tree-rightconfig-left: ~"calc(100% - 90px)"; // 90px是@around-height, super-tree-rihgtconfig的left是100% - @around-height, 因为around-height是scroll-div-right的值
+@super-tree-rightconfig-right: 0px;
+
+@super-tree-div-bottom: 0px;
+@super-tree-div-right: 0px;
+@super-tree-div-top: 0px;
+@super-tree-div-left: 0px;
+
+@date-node-attribute-amount-line-width: @around-height;
+@date-node-attribute-amount-line-right: 0px;
+@date-node-attribute-amount-line-top: @barcode-height; //@barcode-height date-node-line-chart的top值要比barcode-height 65px更小, 这样才可以显示axis以及axis上面的标注
+@date-node-attribute-amount-line-bottom: 80px;
+
+@subtree-node-attribute-amount-line-right: @around-height;
+@subtree-node-attribute-amount-line-height: @around-height;
+@subtree-node-attribute-amount-line-left: 0px;
+@subtree-node-attribute-amount-line-bottom: 0px;
+
+//barcode scroll panel setting, this is the parent node of the barcode container
+@barcode-panel-scroll_width: @content-view_width;
+@barcode-panel-scroll_height: 100%; //~"calc(100% - 30px)";
+@barcode-panel-scroll_top: @barcode-height;// @around-height;
+@barcode-panel-scroll-left: 0%;
+@barcode-panel-scroll-right: @around-height;
+@barcode-panel-scroll-bottom: @around-height;
+//the setting of barcode panel container
+@barcode-panel-container_width: 100%;
+@barcode-panel-container_height: 100%;
+
+@side-toolbar_top: 0%;
+@side-toolbar_bottom: 0%;
+@side-toolbar_left: @content-view_width;
+@side-toolbar_right: 0%;
+
+@barcode-main-view_width: 100%;
+@barcode-main-view_height: 100%;
+@barcode-single-div_width: 100%;
+@barcode-single-div_height: 50px;
+
+@singletree-projection-projectionlink_top: 0%;
+@singletree-projection-projectionlink_left: 0%;
+@singletree-projection-projectionlink_height: 100%;
+@singletree-projection-projectionlink_width: 50%;
+
+@inner-single-projection-projectionlink_top: 28px;
+@inner-single-projection-projectionlink_left: 0%;
+@inner-single-projection-projectionlink_width: 100%;
+@inner-single-projection-projectionlink_height: ~"calc(100% - 30px)";
+
+@multi-tree-comparison-view_top: 0%;
+@multi-tree-comparison-view_left: 50%;
+@multi-tree-comparison-view_height: 100%;
+@multi-tree-comparison-view_width: 50%;
+
+@barcode-panel-depth-change-width: 13%;
+@barcode-panel-node-select-left: @barcode-panel-depth-change-width;
+@barcode-panel-node-select-width: 13%;
+@barcode-panel-wh-controller-left: @barcode-panel-node-select-left + @barcode-panel-node-select-width;
+@barcode-panel-wh-controller-width: 11%;
+
+@frame-border: 1px solid #a0a0a0; /*三个view公用的border样式*/
+
+@button-group-margin-left: 8px;
+@button-padding-left: 7px;
+@button-padding-right: 7px;
+@button-margin-top: 3px;
+@button-margin-left: -5px;
+@interaction-button-margin-left: 5px;
+
+//color setting
+@selection-highlight-positive: #1F77B4;
+@selection-highlight-negative: #FF7F0E;
+@mouseover-highlight-parent-children: #af82ec;
+@selection-unselect-color: #C0C0C0;
+@border-type: 1px solid #a0a0a0;
+
+@treeline-color: #eeeeee;
+@treeline-hover-color: #888888;
