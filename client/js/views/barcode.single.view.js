@@ -151,11 +151,15 @@ define([
             var dateInTip = barcodeTreeId.split('-')[ 1 ].replaceAll('_', '/')
             var date = barcodeTreeId.split('-')[ 1 ].replaceAll('_', '-')
             var curDay = new Date(date).getDay()
-            var tipValue = "date:<span style='color:#ff0000'>" + dateInTip + "</span>" //+ ",value:<span style='color:red'>" + barValue + "</span>"
-              + ",Day:<span style='color:red'>" + dayArray[ curDay ] + "</span>"
+            var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>date:<span style='color:#ff0000'>" + dateInTip + "</span>" //+ ",value:<span style='color:red'>" + barValue + "</span>"
+              + ",Day:<span style='color:red'>" + dayArray[ curDay ] + "</span></span></span>"
             // var tipValue = "date:<span style='color:red'>" + date + "</span>" + ",value:<span style='color:red'>" + barValue + "</span>"
             //   + ",Day:<span style='color:red'>" + dayArray[ curDay ] + "</span>"
             tip.show(tipValue)
+            var d3TipLeft = $(".d3-tip").position().left
+            if (d3TipLeft < 0) {
+              $('#tip-content').css({ left: -d3TipLeft });
+            }
           })
           .on('mouseout', function () {
             d3.select(this).classed('hovering-highlight', false)
@@ -178,6 +182,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //var barcodeNodeAttrArray = self.model.get('barcodeNodeAttrArray')
         var barcodeTreeLabelYearMonthDday = barcodeTreeId.split('-')[ 1 ]
@@ -256,6 +262,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //  var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         var DURATION = 1000
@@ -350,6 +358,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //  var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         var alignedComparisonResultArray = treeDataModel.get('alignedComparisonResultArray')
@@ -440,6 +450,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         var alignedBarcodeNodes = self.d3el.select('#barcode-container')
           .selectAll('.aligned-barcode-node')
@@ -464,6 +476,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         var DURATION = 1000
         var selectedLevels = Variables.get('selectedLevels')
@@ -612,6 +626,8 @@ define([
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
           alignedRangeObjArray = treeDataModel.get('compactAlignedRangeObjArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          return
         }
         // var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         var alignedComparisonResultArray = treeDataModel.get('alignedComparisonResultArray')
@@ -790,12 +806,25 @@ define([
        */
       node_mouseover_handler: function (d, i, globalObj) {
         var self = this
+        var tipValue = null
+        var divWidth = $('#histogram-main-panel').width()
         globalObj.node_mouseout_handler()
         if (d.existed) {
           if (typeof(d.categoryName) !== 'undefined') {
-            tip.show(d.category + '-' + d.categoryName + ",<span style='color:red'>num:</span>" + d.num)
+            tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.category + '-' + d.categoryName + ",<span style='color:red'>num:</span>" + d.num + "</span></span>"
+            tip.show(tipValue)
           } else {
-            tip.show(d.category)
+            tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.category + "</span></span>"
+            tip.show(tipValue)
+          }
+          var d3TipLeft = $(".d3-tip").position().left
+          var tipWidth = Variables.get('tipWidth')
+          if (d3TipLeft < 0) {
+            var tipLeft = d3TipLeft - 10
+            $('#tip-content').css({ left: -tipLeft });
+          } else if ((d3TipLeft + tipWidth) > divWidth) {
+            var tipDivLeft = (d3TipLeft + tipWidth) - divWidth
+            $('#tip-content').css({ left: -tipDivLeft });
           }
           globalObj.trigger_hovering_event()
           d3.selectAll('.bg').classed('hovering-highlight', false)
@@ -900,6 +929,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         // var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         if (barcodeNodeAttrArray[ nodeIndex ].existed) {
@@ -921,6 +952,8 @@ define([
           paddingNodeObjArray = treeDataModel.get('paddingNodeObjArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           paddingNodeObjArray = treeDataModel.get('compactPaddingNodeObjArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          return
         }
         var barcodeNodePadding = Config.get('BARCODE_NODE_PADDING')
         self.d3el.select('#barcode-container')
@@ -1024,6 +1057,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //  var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         var selectedLevels = Variables.get('selectedLevels')
@@ -1079,6 +1114,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //  var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
@@ -1099,6 +1136,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //  var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         var childrenNodesArray = []
@@ -1128,6 +1167,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //  var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         var fatherNodesArray = []
@@ -1155,6 +1196,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //  var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         var siblingNodesArray = []
@@ -1307,6 +1350,8 @@ define([
           barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           barcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = treeDataModel.get('categoryNodeObjArray')
         }
         //  var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
@@ -1351,7 +1396,7 @@ define([
       }
       ,
       /**
-       * model中的barcodeNodeHeight发生变化的时候的响应函数, 更新background的高度, labeld的位置以及barcodeNode的高度
+       * model中的barcodeNodeHeight发生变化的时候的响应函数, 更新background的高度, label的位置以及barcodeNode的高度
        */
       update_view: function () {
         var self = this
@@ -1371,9 +1416,11 @@ define([
           .duration(1000)
           .attr('transform', 'translate(' + 0 + ',' + barcodeTreeYLocation + ')')
         var containerWidth = $('#barcodetree-scrollpanel').width()
+        //  更新barcode的背景矩形的高度
         self.d3el.selectAll('.bg')
           .attr('width', containerWidth)
           .attr('height', barcodeHeight)
+        //  更新所有的barcode节点的矩形的高度
         self.d3el.selectAll('.barcode-node')
           .attr('height', function (d) {
             if (typeof (d.compactAttr) !== 'undefined') {
@@ -1381,6 +1428,11 @@ define([
                 return barcodeCompactNodeHeight
               }
             }
+            return barcodeOriginalNodeHeight
+          })
+        //  更新barcode代表压缩节点的glyph的高度
+        self.d3el.selectAll('.padding-covered-rect')
+          .attr('height', function (d) {
             return barcodeOriginalNodeHeight
           })
         if (barcodeHeight < 16) {

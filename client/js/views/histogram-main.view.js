@@ -224,22 +224,19 @@ define([
         }
         d3.select('#confirmation').classed('active', false)
       }
-
       //  click的时候发生的事件
       var selectBarItem = function (barId, isUpdate) {
         var selectedItemArray = [ barId ]
         self.requestData(selectedItemArray)
       }
-
       //  unclick的时候发生的事件
       var unSelectBarItem = function (barId) {
         var selectItemNameArray = Variables.get('selectItemNameArray')
         var itemIndex = selectItemNameArray.indexOf(barId)
         selectItemNameArray.splice(itemIndex, 1)
         barcodeCollection.remove_barcode_dataset(barId)
-        // window.Variables.update_barcode_attr()
-        // barcodeCollection.update_barcode_height()
       }
+      var divWidth = $('#histogram-main-panel').width()
       var barchart = d3.chart()
         .width(histogramWidth)
         .height(histogramHeight)
@@ -257,11 +254,9 @@ define([
         .bar_interval(0.5)
         .brush_trigger(function (d3_event, brushed_bar_selection) {
           brushend()
-          console.log('histogram brushend')
         })
         .brushmove_trigger(function () {
           brushmove()
-          console.log('histogram brushmove')
         })
         .hovering_trigger(function (d) {
           var barId = d.id
@@ -273,9 +268,18 @@ define([
           })
           var date = barId.split('-')[ 1 ].replaceAll('_', '-')
           var curDay = new Date(date).getDay()
-          var tipValue = "date:<span style='color:red'>" + date + "</span>" + ",value:<span style='color:red'>" + barValue + "</span>"
-            + ",Day:<span style='color:red'>" + dayArray[ curDay ] + "</span>"
+          var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>date:<span style='color:red'>" + date + "</span>" + ",value:<span style='color:red'>" + barValue + "</span>"
+            + ",Day:<span style='color:red'>" + dayArray[ curDay ] + "</span></span></span>"
           tip.show(tipValue)
+          var d3TipLeft = $(".d3-tip").position().left
+          var tipWidth = Variables.get('tipWidth')
+          if (d3TipLeft < 0) {
+            var tipLeft = d3TipLeft - 10
+            $('#tip-content').css({ left: -tipLeft });
+          } else if ((d3TipLeft + tipWidth) > divWidth) {
+            var tipDivLeft = (d3TipLeft + tipWidth) - divWidth
+            $('#tip-content').css({ left: -tipDivLeft });
+          }
         })
         .unhovering_trigger(function (d) {
           var barcodeId = d.id
@@ -285,11 +289,9 @@ define([
           tip.hide()
         })
       self.barchart = barchart
-      console.log('histogram-view', histogramDataArray)
       d3.select(self.el)
         .data([ histogramDataArray ])
         .call(barchart)
-
       function getFileNameIndex (fileName, fileInfoData) {
         var index = null
         for (var fI = 0; fI < fileInfoData.length; fI++) {
@@ -317,6 +319,9 @@ define([
       } else if (displayMode === Config.get('CONSTANT')[ 'COMPACT' ]) {
         url = 'barcode_compact_data'
         window.Datacenter.requestCompactData(url, selectedItemsArray)
+      } else if (displayMode === Config.get('CONSTANT')[ 'GLOBAL' ]) {
+        url = 'barcode_original_data'
+        window.Datacenter.requestDataCenter(url, selectedItemsArray)
       }
     },
     //  点击brush上面的确认按钮, 表示选中brush的部分

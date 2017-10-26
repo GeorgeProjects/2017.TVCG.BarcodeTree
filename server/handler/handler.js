@@ -25,9 +25,12 @@ var clone = require('clone')
 var fs = require('fs')
 var existedFileObj = {}
 var categoryObj = null
+var categoryNodeArray = null
+var categoryNodeObjArray = null
 var categoryIndexObj = null
 //  dataSetName是在所有的方法中通用的一个变量
 var dataSetName = null
+var PER_GAP_WIDTH = 2
 
 function initialize (root, dataProcessor, v_logger, fs) {
   var resOpt = {
@@ -38,13 +41,14 @@ function initialize (root, dataProcessor, v_logger, fs) {
   function initCategoryObj () {
     if (dataSetName != null) {
       categoryObj = require('../data/' + dataSetName + '/categoryName.json')
-      var categoryNodeArray = linearize(categoryObj)
+      categoryNodeArray = linearize(categoryObj)
       categoryIndexObj = {}
       for (var cI = 0; cI < categoryNodeArray.length; cI++) {
         categoryIndexObj[ categoryNodeArray[ cI ][ 0 ] ] = categoryNodeArray[ cI ][ 1 ]
       }
     }
     return categoryIndexObj
+
     function linearize (categoryObj) {
       var categoryNodeArray = []
       var depth = 0
@@ -186,13 +190,13 @@ function initialize (root, dataProcessor, v_logger, fs) {
     // }
     var treeNodeArrayObj = innerHandleOriginalTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight)
     innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth)
-    sendTreeNodeArray(treeNodeArrayObj)
-
+    var categoryNodeObjWithLocArray = linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight)
+    sendTreeNodeArray(treeNodeArrayObj, categoryNodeObjArray)
     //  向客户端传递barcode的节点位置, 大小等信息
-    function sendTreeNodeArray (treeNodeArray) {
+    function sendTreeNodeArray (treeNodeArray, categoryNodeObjArray) {
       response.setHeader('Content-Type', 'application/json')
       response.setHeader('Access-Control-Allow-Origin', '*')
-      var treeNodeObject = { 'treeNodeObject': treeNodeArray }
+      var treeNodeObject = { 'treeNodeObject': treeNodeArray, 'categoryNodeObjArray': categoryNodeObjWithLocArray }
       response.send(JSON.stringify(treeNodeObject, null, 3))
     }
   }
@@ -206,6 +210,54 @@ function initialize (root, dataProcessor, v_logger, fs) {
     }
     addCategoryName(treeNodeArrayObj)
     return treeNodeArrayObj
+  }
+
+  //  将category对象转换为category的节点数组
+  function linearize2NodeArray (categoryObj, barcodeWidthArray, barcodeHeight) {
+    var categoryNodeAttrArray = []
+    var categoryNodeWithLocArray = []
+    var depth = 0
+    innerLinearize2NodeArray(categoryObj, categoryNodeAttrArray, depth)
+    var xLoc = 0
+    for (var cI = 0; cI < categoryNodeAttrArray.length; cI++) {
+      var nodeCategory = categoryNodeAttrArray[ cI ][ 0 ]
+      var nodeCategoryName = categoryNodeAttrArray[ cI ][ 1 ]
+      var depth = categoryNodeAttrArray[ cI ][ 2 ]
+      var nodeWidth = barcodeWidthArray[ depth ]
+      var nodeItemObj = {
+        'id': nodeCategory,
+        'nodeCategory': nodeCategory,
+        'nodeCategoryName': nodeCategoryName,
+        'depth': depth,
+        'x': xLoc,
+        'y': 0,
+        'width': nodeWidth,
+        'height': barcodeHeight,
+        'existed': false
+      }
+      categoryNodeWithLocArray.push(nodeItemObj)
+      xLoc = xLoc + nodeWidth + PER_GAP_WIDTH
+    }
+    return categoryNodeWithLocArray
+    function innerLinearize2NodeArray (categoryObj, categoryNodeAttrArray, depth) {
+      var nodeCategory = null
+      var nodeCategoryName = null
+      if (categoryObj.category !== 'root') {
+        nodeCategory = 'node-' + depth + '-' + categoryObj.category.substring(0, 3)
+        nodeCategoryName = categoryObj.category.substring(4, categoryObj.category.length)
+      } else {
+        nodeCategory = 'node-' + depth + '-root'
+        nodeCategoryName = 'root'
+      }
+      var singleCategoryNodeName = [ nodeCategory, nodeCategoryName, depth ]
+      categoryNodeAttrArray.push(singleCategoryNodeName)
+      if (typeof(categoryObj.children) !== 'undefined') {
+        depth = depth + 1
+        for (var cI = 0; cI < categoryObj.children.length; cI++) {
+          innerLinearize2NodeArray(categoryObj.children[ cI ], categoryNodeAttrArray, depth)
+        }
+      }
+    }
   }
 
   /**
@@ -236,13 +288,14 @@ function initialize (root, dataProcessor, v_logger, fs) {
     }
     var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth)
     innerHandleOriginalTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight)
-    sendTreeNodeArray(compactTreeNodeArrayObj)
+    var categoryNodeObjArray = linearize2NodeArray(categoryObj, barcodeWidthArray)
+    sendTreeNodeArray(compactTreeNodeArrayObj, categoryNodeObjArray)
 
     //  向客户端传递barcode的节点位置, 大小等信息
-    function sendTreeNodeArray (treeNodeArray) {
+    function sendTreeNodeArray (treeNodeArray, categoryNodeObjArray) {
       response.setHeader('Content-Type', 'application/json')
       response.setHeader('Access-Control-Allow-Origin', '*')
-      var treeNodeObject = { 'treeNodeObject': treeNodeArray }
+      var treeNodeObject = { 'treeNodeObject': treeNodeArray, 'categoryNodeObjArray': categoryNodeObjArray }
       response.send(JSON.stringify(treeNodeObject, null, 3))
     }
   }

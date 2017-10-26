@@ -94,7 +94,6 @@ define([
       function resetCurrentPreClick (color) {
         self.set_preclick_color(color)
       }
-
       function resetColorButton () {
         $('#color-picker').html('<span class="glyphicon glyphicon-pencil jscolor" aria-hidden="true"></span>')
         $('#color-picker').css("background-color", "")

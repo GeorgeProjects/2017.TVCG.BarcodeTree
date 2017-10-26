@@ -22,6 +22,7 @@ define([
       'CONSTANT': {
         'ORIGINAL': 'ORIGINAL',
         'COMPACT': 'COMPACT',
+        'GLOBAL': 'GLOBAL',
         'UNION': 'UNION',
         'FISHEYE': 'FISHEYE',
         'ABSOLUTE_COMPACT_FATHER': 'ABSOLUTE_COMPACT_FATHER',
@@ -55,9 +56,39 @@ define([
       },
       'EVENTS': {
         //*******************************************
+        //  设置选择的颜色
         'SET_PRECLICK_COLOR': 'set-preclick-color',
         'UPDATE_DISTRIBUTION_VIEW': 'update-distribution-view',
         'UPDATE_FILTERING_HIGHLIGHT_NODES': 'update-filtering-highlight-nodes',
+        //  更新barcode视图的宽度
+        'UPDATE_BARCODE_VIEW_WIDTH': 'update-barcode-view-width',
+        //  选中视图中的所有元素
+        'SELECT_ALL': 'select-all',
+        //  清空选中视图中的所有元素
+        'CLEAR_ALL': 'clear-all',
+        //  渲染supertree
+        'RENDER_SUPERTREE': 'render-supertree',
+        //  渲染histogram视图
+        'RENDER_HISTOGRAM': 'render-histogram',
+        //  鼠标悬浮在某个barcode上面广播的事件
+        'HOVERING_BARCODE_EVENT': 'hovering-barcode',
+        //  鼠标从某个barcode上面移开广播的事件
+        'UN_HOVERING_BARCODE_EVENT': 'unhovering-barcode',
+        //  在barcodeview里点击未选中的barcode选中barcode
+        'SELECT_BARCODE_EVENT': 'select-barcode',
+        //  在barcodeview里点击选中的barcode取消选中barcode
+        'UNSELECT_BARCODE_EVENT': 'unselect-barcode',
+        //  更新histogram视图中的颜色映射
+        'UPDATE_HISTOGRAM_ENCODE': 'update-histogram-encode',
+        //  打开superTree panel视图
+        'OPEN_SUPER_TREE': 'open-super-tree',
+        //  关闭supertree panel视图
+        'CLOSE_SUPER_TREE': 'close-super-tree',
+        //*******************************************
+        //  删除的属性
+        // //  更新barcode的高度以及位置
+        // 'UPDATE_BARCODE_ATTR': 'update-barcode-attr',
+        //*******************************************
         //*******************************************
         'UPDATE_ALIGN_LEVEL': 'update-align-level',
         //  单树模式下高亮nodelink树中的节点
@@ -78,30 +109,14 @@ define([
         'BEGIN_RENDER_BARCODE_VIEW': 'begin-render-barcode-view',
         //  渲染完成视图之后, 将加载的进度条消失
         'FINISH_RENDER_VIEW': 'finish-render-view',
-        //  选中视图中的所有元素
-        'SELECT_ALL': 'select-all',
-        //  在barcodeview里点击未选中的barcode选中barcode
-        'SELECT_BARCODE_EVENT': 'select-barcode',
-        //  在barcodeview里点击选中的barcode取消选中barcode
-        'UNSELECT_BARCODE_EVENT': 'unselect-barcode',
-        //  清空选中视图中的所有元素
-        'CLEAR_ALL': 'clear-all',
         //  显示loading的标志
         'SHOW_LOADING_ICON': 'show-loading-icon',
         //  隐藏loading的标志
         'HIDE_LOADING_ICON': 'hide-loading-icon',
-        //  更新barcode的高度以及位置
-        'UPDATE_BARCODE_ATTR': 'update-barcode-attr',
-        //  更新histogram视图中的颜色映射
-        'UPDATE_HISTOGRAM_ENCODE': 'update-histogram-encode',
         //  barcode视图发生变化, 重新绘制barcode视图
         'UPDATE_BARCODE_VIEW': 'update-barcode-view',
-        //  更新barcode视图的宽度
-        'UPDATE_BARCODE_VIEW_WIDTH': 'update-barcode-view-width',
         //  取消在单个视图上的高亮效果
         'NODE_MOUSEOUT': 'node-mouseout',
-        //  渲染supertree
-        'RENDER_SUPERTREE': 'render-supertree',
         //  渲染覆盖在barcode的上面的带有斜纹的矩形
         'RENDER_HOVER_RECT': 'render-hover-rect',
         //  更新barcode的位置
@@ -114,14 +129,9 @@ define([
         'HOVERING_SORT_BARCODE_NODE': 'hovering-sort-barcode-node',
         //  取消高亮supertree上排序的节点
         'UNHOVERING_SORT_BARCODE_NODE': 'unhovering-sort-barcode-node',
-        //  打开superTree panel视图
-        'OPEN_SUPER_TREE': 'open-super-tree',
+
         //  重新设置barcode的相关参数
         'RESET_BARCODE_ATTR': 'reset-barcode-attr',
-        //  鼠标悬浮在某个barcode上面广播的事件
-        'HOVERING_BARCODE_EVENT': 'hovering-barcode',
-        //  鼠标从某个barcode上面移开广播的事件
-        'UN_HOVERING_BARCODE_EVENT': 'unhovering-barcode',
         //  改变barcode的宽度
         'CHANGE_BARCODE_WIDTH': 'render-barcode-width-controller',
         //  将barcode从original模式转换为compact模式
@@ -162,7 +172,6 @@ define([
         //  在直方图上进行刷选从而筛选节点
         'BRUSH_HISTOGRAM': 'brush_histogram',
         'RESIZE': 'resize',
-        'RENDER_HISTOGRAM': 'render-histogram',
         'RENDER_ARCLINK': 'render-arclink',
       },
       'PREFIX': {

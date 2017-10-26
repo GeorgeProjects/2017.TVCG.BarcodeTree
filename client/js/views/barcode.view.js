@@ -41,8 +41,8 @@ define([
       var barcodeCollection = self.options.barcodeCollection
       var categoryModel = self.options.categoryModel
       var supertreeModel = self.options.supertreeModel
-      var barcodetreeViewWidth = $('#barcodetree-view').width
-      var barcodetreeViewHeight = $('#barcodetree-view').height
+      var barcodetreeViewWidth = $('#barcodetree-view').width()
+      var barcodetreeViewHeight = $('#barcodetree-view').height()
       Variables.set('barcodetreeViewWidth', barcodetreeViewWidth)
       Variables.set('barcodetreeViewHeight', barcodetreeViewHeight)
       //  绘制superTree的视图, 主要是对于barcodeView进行一定的控制
@@ -66,7 +66,7 @@ define([
       //  在按钮上面添加点击的响应事件
       $('#btn-toggle').click(function () {
         var configPanelState = Variables.get('configPanelState')
-        var duration  = 500
+        var duration = 500
         //  当前的状态是关闭, 点击按钮将config panel打开
         if (configPanelState === 'close') {
           $('#barcode-config').animate({
@@ -85,17 +85,43 @@ define([
           Variables.set('configPanelState', 'close')
         }
       })
+      //  在supertree-view-toggle按钮上增加监听函数, 将superTree视图打开
+      $('#supertree-view-toggle').click(function () {
+        var superTreeViewState = Variables.get('superTreeViewState')
+        if (superTreeViewState) {
+          //  当前的状态是打开的状态, 转变成关闭的状态
+          self.close_supertree_view()
+          $('#supertree-state-controller').attr('class', 'glyphicon glyphicon-chevron-down')
+        } else {
+          //  当前的状态是关闭的状态, 转变成打开的状态
+          self.open_supertree_view()
+          $('#supertree-state-controller').attr('class', 'glyphicon glyphicon-chevron-top')
+        }
+      })
+      //  锁定按钮
       $('#btn-pin').click(function () {
         if ($('#btn-toggle').prop('disabled')) {
           $('#btn-toggle').prop('disabled', false)
+          $('#supertree-view-toggle').prop('disabled', false)
           $('#btn-pin').removeClass('active')
         } else {
           $('#btn-toggle').prop('disabled', true)
+          $('#supertree-view-toggle').prop('disabled', true)
           $('#btn-pin').addClass('active')
         }
       })
     },
-    update_barcode_width: function(barcodeMaxX){
+    open_supertree_view: function () {
+      var self = this
+      Backbone.Events.trigger(Config.get('EVENTS')[ 'OPEN_SUPER_TREE' ])
+      window.Variables.update_barcode_attr()
+    },
+    close_supertree_view: function () {
+      var self = this
+      Backbone.Events.trigger(Config.get('EVENTS')[ 'CLOSE_SUPER_TREE' ])
+      window.Variables.update_barcode_attr()
+    },
+    update_barcode_width: function (barcodeMaxX) {
       $('#barcodetree-view').width(barcodeMaxX)
       $('#supertree-view').width(barcodeMaxX)
       //  修改barcode背景的宽度

@@ -71,6 +71,33 @@ define([
       window.compactNum = compactNum
     },
     /**
+     * 将barcode的宽度控制在视图的范围内
+     */
+    transformBarcodeWidth2ViewWidth: function (categoryNodeObjArray) {
+      var self = this
+      var barcodetreeViewWidth = Variables.get('barcodetreeViewWidth')
+      console.log('barcodetreeViewWidth', barcodetreeViewWidth)
+      var categoryBarcodeWidth = categoryNodeObjArray[ categoryNodeObjArray.length - 1 ].x + categoryNodeObjArray[ categoryNodeObjArray.length - 1 ].width
+      var changeRatio = barcodetreeViewWidth / categoryBarcodeWidth
+      changeRatio = changeRatio > 1 ? 1 : changeRatio
+      for (var cI = 0; cI < categoryNodeObjArray.length; cI++) {
+        categoryNodeObjArray[ cI ].x = categoryNodeObjArray[ cI ].x * changeRatio
+        categoryNodeObjArray[ cI ].width = categoryNodeObjArray[ cI ].width * changeRatio
+      }
+    },
+    /**
+     * 将遍历得到的node数组转换为对象
+     */
+    transfromNodeArray2NodeObj: function (barcodeNodeArray) {
+      var self = this
+      var barcodeNodeObj = {}
+      for (var bI = 0; bI < barcodeNodeArray.length; bI++) {
+        var nodeCategory = barcodeNodeArray[ bI ].nodeCategory
+        barcodeNodeObj[ nodeCategory ] = barcodeNodeArray[ bI ]
+      }
+      return barcodeNodeObj
+    },
+    /**
      * 在dataCenter.model的start方法中调用, 主要用于初始化histogram.model
      */
     request_histogram_dataset: function () {
@@ -193,10 +220,18 @@ define([
         var treeNodeObject = result.treeNodeObject
         var selectItemNameArray = Variables.get('selectItemNameArray')
         var addedBarcodeModelArray = []
+        //  将展示全部的barcode压缩到屏幕的范围内
+        self.transformBarcodeWidth2ViewWidth(result.categoryNodeObjArray)
         for (var item in treeNodeObject) {
+          var categoryNodeObjArray = JSON.parse(JSON.stringify(result.categoryNodeObjArray))
+          var categoryNodeObj = self.transfromNodeArray2NodeObj(categoryNodeObjArray)
           var barcodeNodeAttrArray = treeNodeObject[ item ]
           for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
             barcodeNodeAttrArray[ bI ].existed = true
+            var nodeId = barcodeNodeAttrArray[ bI ].id
+            if (typeof (categoryNodeObj[ nodeId ]) !== 'undefined') {
+              categoryNodeObj[ nodeId ].existed = true
+            }
           }
           var alignedBarcodeNodeAttrArray = JSON.parse(JSON.stringify(barcodeNodeAttrArray))
           var barcodeIndex = selectItemNameArray.indexOf(item)
@@ -216,6 +251,7 @@ define([
             var barcodeModel = new BarcodeModel({
               'barcodeTreeId': item,
               'barcodeNodeAttrArray': barcodeNodeAttrArray,
+              'categoryNodeObjArray': categoryNodeObjArray,
               'alignedBarcodeNodeAttrArray': alignedBarcodeNodeAttrArray,
               'barcodeNodeHeight': barcodeNodeHeight,
               'barcodeIndex': barcodeIndex,
@@ -257,6 +293,8 @@ define([
         var treeNodeObject = result.treeNodeObject
         var selectItemNameArray = Variables.get('selectItemNameArray')
         var addedCompactBarcodeModelArray = []
+        var categoryNodeArray = result.categoryNodeArray
+        console.log('categoryNodeArray', categoryNodeArray)
         for (var item in treeNodeObject) {
           var compactBarcodeNodeAttrArray = treeNodeObject[ item ][ 'compact-level-0' ]
           for (var bI = 0; bI < compactBarcodeNodeAttrArray.length; bI++) {

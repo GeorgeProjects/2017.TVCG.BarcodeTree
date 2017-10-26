@@ -2,9 +2,6 @@
 <div id = "histogram-view">
     <div id = "histogram-main-panel"></div>
     <div id = "histogram-control-panel">
-        <!--<button type="button" class="btn btn-default" id="select-all">
-            <span class="glyphicon glyphicon-check" aria-hidden="true"></span>
-        </button>-->
         <button type="button" class="btn btn-default" id="clear-all">
             <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
         </button>

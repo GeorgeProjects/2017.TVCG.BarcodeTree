@@ -3,6 +3,9 @@
     </div>
 </div>
 <div id = 'barcode-config'>
+    <button id = "supertree-view-toggle" class = "btn btn-default btn-barcode-config">
+      <span id = "supertree-state-controller" class = "glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+    </button>
     <button id = "btn-toggle" class = "btn btn-default btn-barcode-config">
       <!--<span class = "glyphicon glyphicon-chevron-right" aria-hidden="true"></span>-->
       <span id = "btn-state-controller" class = "glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

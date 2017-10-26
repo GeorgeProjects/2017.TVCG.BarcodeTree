@@ -29,6 +29,9 @@ define([
       Backbone.Events.on(Config.get('EVENTS')[ 'OPEN_SUPER_TREE' ], function (event) {
         self.open_supertree_view()
       })
+      Backbone.Events.on(Config.get('EVENTS')[ 'CLOSE_SUPER_TREE' ], function (event) {
+        self.close_supertree_view()
+      })
       Backbone.Events.on(Config.get('EVENTS')[ 'RENDER_SUPERTREE' ], function (event) {
         self.draw_super_tree()
       })
@@ -95,22 +98,18 @@ define([
           }
           sortCount = sortCount + 1
         })
-
-      // .on('mouseover', function (d, i) {
-      //   d3.select(this).style('fill', 'black')
-      // })
-      // .on('mouseout', function (d, i) {
-      //   if (d3.select(this).classed('click-highlight')) {
-      //     d3.select(this).style('fill', 'black')
-      //   } else {
-      //     d3.select(this).style('fill', '#ddd')
-      //   }
-      // })
     },
     open_supertree_view: function () {
+      Variables.set('superTreeViewState', true)
       var superTreeHeight = Variables.get('superTreeHeight')
       $('#barcodetree-scrollpanel').css('top', superTreeHeight + 'px')
       $('#supertree-scroll-panel').css('height', superTreeHeight + 'px')
+    },
+    close_supertree_view: function () {
+      var self = this
+      Variables.set('superTreeViewState', false)
+      $('#barcodetree-scrollpanel').css('top', '0px')
+      $('#supertree-scroll-panel').css('height', '0px')
     },
     draw_super_tree: function () {
       var self = this

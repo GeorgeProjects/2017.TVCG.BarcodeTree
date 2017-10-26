@@ -44,7 +44,7 @@ define([
       var self = this
       self.remove(self.where({ 'barcodeTreeId': barcodeTreeId }))
       self.update_barcode_location()
-      Backbone.Events.trigger(Config.get('EVENTS')[ 'UPDATE_BARCODE_ATTR' ])
+      // Backbone.Events.trigger(Config.get('EVENTS')[ 'UPDATE_BARCODE_ATTR' ])
     },
     //  trigger出的信号所表示的是已经完成了对于barcode数据的准备, 接下来app.view中开始调用render_barcodetree_view进行渲染
     request_barcode_dataset: function () {
@@ -77,6 +77,8 @@ define([
         barcodeNodeAttrArray = barcodeModel.get('barcodeNodeAttrArray')
       } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
         barcodeNodeAttrArray = barcodeModel.get('compactBarcodeNodeAttrArray')
+      } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+        barcodeNodeAttrArray = barcodeModel.get('categoryNodeObjArray')
       }
       var leveledNodeNumArray = []
       for (var mI = 0; mI <= maxDepth; mI++) {
@@ -945,7 +947,14 @@ define([
       var self = this
       var maxX = 0
       self.each(function (model) {
-        var barcodeNodeAttrArray = model.get('barcodeNodeAttrArray')
+        var barcodeNodeAttrArray = null
+        if (Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) {
+          barcodeNodeAttrArray = model.get('barcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
+          barcodeNodeAttrArray = model.get('compactBarcodeNodeAttrArray')
+        } else if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+          barcodeNodeAttrArray = model.get('categoryNodeObjArray')
+        }
         var locationX = findMaxX(barcodeNodeAttrArray)
         maxX = maxX > locationX ? maxX : locationX
       })

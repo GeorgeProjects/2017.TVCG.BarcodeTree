@@ -1,12 +1,25 @@
 .d3-tip {
   line-height: 1;
   font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.7);
+  padding: -2px;
   color: #fff;
   border-radius: 2px;
   pointer-events: none !important;
   z-index: 101;
+  #tip-content {
+    background: rgba(0, 0, 0, 0.2);
+    display: inline-block;
+    _height: 40px;
+    _width: 200px;
+    #vertical-center {
+      line-height: 40px;
+      vertical-align: middle;
+      text-align: center;
+      padding-left: 10px;
+      padding-right: 10px;
+      white-space:nowrap
+    }
+  }
 }
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {

@@ -37,7 +37,6 @@ define([
       var self = this
       Backbone.Events.on(Config.get('EVENTS')[ 'CHANGE_BARCODE_WIDTH' ], function (event) {
         self.set_barcode_widtharray()
-        self.slidebar_initialize()
         self.update_dataset_check_icon()
         self.update_barcode_mode()
         self.update_barcode_type()
@@ -123,6 +122,9 @@ define([
         $('#barcode-single-view').css('visibility', 'hidden')
       }
     },
+    /**
+     * 上传文件
+     */
     upload_file: function () {
       var self = this
       $("#single-view-dialog").dialog({
@@ -208,14 +210,19 @@ define([
       self.set_current_mode(barcodeMode)
       self.trigger_transition_original_to_compact()
     },
-    //  设置当前barcode的mode, barcode的mode有两类, originalMode和compactMode
+    /**
+     * 设置当前barcode的mode
+     * barcode的mode有两类, originalMode和compactMode
+     */
     set_current_mode: function (barcodeMode) {
       Variables.set('barcodeMode', barcodeMode)
       window.barcodeMode = barcodeMode
       $('.mode-check-icon').css('visibility', 'hidden')
       $('#' + barcodeMode).css('visibility', 'visible')
     },
-    //  初始化barcode的的宽度数组, 如何保证不同的层级之间的区分度,使用颜色会怎样,但是如果是10000层也会有问题, 无法分配
+    /**
+     * 初始化barcode的的宽度数组, 如何保证不同的层级之间的区分度,使用颜色会怎样,但是如果是10000层也会有问题, 无法分配
+     */
     set_barcode_widtharray: function () {
       var self = this
       var maxBarcodeWidth = Variables.get('maxBarcodeWidth')
@@ -231,123 +238,32 @@ define([
       }
       Variables.set('barcodeWidthArray', barcodeWidthArray)
     },
-    //  在视图更新的时候会对于初始选择以及视图进行初始化, 下面的三个函数是分别对于当前barcode模式,barcode的数据集,barcod的类型三个方面初始化
+    /*
+     * 在视图更新的时候会对于初始选择以及视图进行初始化
+     * 当前barcode模式初始化
+     */
     update_barcode_mode: function () {
       var barcodeMode = window.barcodeMode
       $('.mode-check-icon').css('visibility', 'hidden')
       $('#' + barcodeMode).css('visibility', 'visible')
     },
+    /*
+     * 在视图更新的时候会对于初始选择以及视图进行初始化
+     * barcode的数据集初始化
+     */
     update_dataset_check_icon: function () {
       var dataSetName = window.dataSetName
       $('.dataset-check-icon').css('visibility', 'hidden')
       $('#' + dataSetName).css('visibility', 'visible')
     },
+    /*
+     * 在视图更新的时候会对于初始选择以及视图进行初始化
+     * barcod的类型初始化
+     */
     update_barcode_type: function () {
       var barcodeCategory = Variables.get('barcodeCategory')
       $('.barcodetype-check-icon').css('visibility', 'hidden')
       $('#' + barcodeCategory).css('visibility', 'visible')
-    },
-    //  初始化滑动条
-    slidebar_initialize: function () {
-      var self = this
-      var histogramModel = self.model
-      var dataSetName = window.dataSetName
-      var histogramDataObject = histogramModel.get('histogramDataObject')
-      var maxDepth = +histogramDataObject.maxDepth
-      var maxCompactTolerance = Config.get('COMPACT_TOLERANCE')
-      var compactTolerance = Variables.get('compactTolerance')
-      var heightHandle = $('#height-controller-custom-handle')
-      var toleranceHandle = $('#tolerance-controller-custom-handle')
-      //  根据树的最大深度增加width controller
-      $('#width-controller-menu').empty()
-      for (var i1 = 0; i1 < maxDepth; i1++) {
-        var aId = 'level-' + i1
-        var controllerId = 'level-' + i1 + '-controller-slider'
-        var customHandlerId = 'level-' + i1 + '-controller-custom-handle'
-        $('#width-controller-menu').append('<li> <a href="#" id=' + aId + ' class="level-a"> <div id=' + controllerId + '><div id=' + customHandlerId + ' class="ui-slider-handle"></div></div> </a> </li>')
-      }
-      //  初始化树高度的滑动控制条
-      var defaultBarcodeHeight = +Config.get('DEFAULT_BARCODE_HEIGHT')
-      var maxBarcodeHeight = defaultBarcodeHeight * 2
-      $('#height-controller-slider').slider({
-        create: function () {
-          heightHandle.text($(this).slider('value'))
-        },
-        slide: function (event, ui) {
-          heightHandle.text(ui.value)
-          var heightSlideValue = +ui.value
-          self.change_barcode_height(heightSlideValue, dataSetName)
-        },
-        max: maxBarcodeHeight,
-        value: defaultBarcodeHeight
-      })
-      // 树压缩状态阈值的控制条, 即不仅仅是完全相似的子树才会被压缩, 存在差别的子树也会被压缩成一个节点
-      $('#tolerance-controller-slider').slider({
-        create: function () {
-          toleranceHandle.text($(this).slider('value'))
-        },
-        slide: function (event, ui) {
-          toleranceHandle.text(ui.value)
-          var toleranceNum = +ui.value
-          Variables.set('compactTolerance', toleranceNum)
-        },
-        stop: function (event, ui) {
-          self.change_compact_tolerance(dataSetName)
-        },
-        max: maxCompactTolerance,
-        value: compactTolerance
-      })
-      //  初始化barcode的各个宽度控制的滑动条
-      var maxBarcodeWidth = Config.get('MAX_BARCODE_WIDTH')
-      var barcodeWidthArray = Variables.get('barcodeWidthArray')
-      for (var i = 0; i < maxDepth; i++) {
-        var controllerSlider = '#level-' + i + '-controller-slider'
-        var levelHandlerId = '#level-' + i + '-controller-custom-handle'
-        $(controllerSlider).slider({
-          create: function () {
-            var levelHandler = $(levelHandlerId)
-            levelHandler.text($(this).slider('value'))
-          },
-          slide: function (event, ui) {
-            var levelHandlerId = '#' + $(this).attr('id').replace('-controller-slider', '-controller-custom-handle')
-            var levelHandler = $(levelHandlerId)
-            levelHandler.text(ui.value)
-            var widthIndex = +levelHandlerId.replace('-controller-custom-handle', '').replace('#level-', '')
-            var widthSlideValue = +ui.value
-            self.change_barcode_width(widthIndex, widthSlideValue, dataSetName)
-          },
-          max: 2 * maxBarcodeWidth,
-          value: barcodeWidthArray[ i ]
-        })
-      }
-    },
-    //  直接改变model中的数据, 改变compact的程度
-    change_compact_tolerance: function (dataSetName) {
-      var self = this
-      var barcodeCollection = self.options.barcodeCollection
-      barcodeCollection.change_existed_barcode_compact_tolerance(dataSetName)
-      barcodeCollection.change_existed_barcode_super_tolerance(dataSetName)
-    },
-    //  改变model中的数据, 改变barcode的宽度
-    change_barcode_width: function (widthIndex, num, dataSetName) {
-      var self = this
-      var barcodeWidthArray = Variables.get('barcodeWidthArray')
-      barcodeWidthArray[ widthIndex ] = num
-      Variables.set('barcodeWidthArray', barcodeWidthArray)
-      var barcodeCollection = self.options.barcodeCollection
-      barcodeCollection.change_existed_barcode_dataset_width(dataSetName)
-    },
-    //  改变model中的数据, 改变barcode的高度
-    change_barcode_height: function (num, dataSetName) {
-      var self = this
-      var formerBarcodeHeight = Variables.get('barcodeHeight')
-      var formerCurrentRatio = num / formerBarcodeHeight
-      var formerAggreCurrentHeightRatio = Variables.get('formerAggreCurrentHeightRatio')
-      formerAggreCurrentHeightRatio = formerAggreCurrentHeightRatio * formerCurrentRatio
-      Variables.set('formerAggreCurrentHeightRatio', formerAggreCurrentHeightRatio)
-      Variables.set('formerCurrentHeightRatio', formerCurrentRatio)
-      var barcodeCollection = self.options.barcodeCollection
-      barcodeCollection.update_existed_barcode_dataset_height(dataSetName)
     }
   })
 })

@@ -33,6 +33,10 @@ define([
       barcodeNodeCollectionObj: {},
       //  带有节点的id的节点属性值分布对象
       barcodeNodeCollectionObjWithId: {},
+      //  tooltip的宽度, 在tooltip的边界超过视图的边界, 那么就会移动tooltip的位置
+      tipWidth: 220,
+      //  supertree的状态, false表示关闭, true表示打开
+      superTreeViewState: false,
       //****************************************************
       'finishInit': false,
       //  whether loading page show
@@ -121,7 +125,7 @@ define([
       //  barcode布局的方法
       'layoutMode': 'UNION', //或者FISHEYE
       //  display布局的方法
-      'displayMode': 'ORIGINAL',//或者  COMPACT ORIGINAL
+      'displayMode': 'GLOBAL',//或者  COMPACT ORIGINAL GLOBAL
       //  barcode的margin对象
       barcodeMargin: { top: 0, left: 1 / 25, bottom: 1 / 90, right: 0 },
       //  datelinechart的margin对象
@@ -166,8 +170,7 @@ define([
       barcodeCategory: 'supertreeline', // 或者是single || super || supertreeline
       //  barcodeView的高度
       barcodeViewHeight: 0,
-      //  barcodeView的宽度
-      barcodeViewWidth: 0,
+
       //  treeline的高度
       treeLineHeight: 0,
       //  treeline包括gap的高度
