@@ -1,77 +1,89 @@
-.barcode-node{
+.barcode-node {
   fill: black;
 }
-.barcode-node.node-existed{
+.barcode-node.node-existed {
   fill: black
 }
-.barcode-node.node-none{
+.barcode-node.node-none {
   opacity: 0;
-  visibility:hidden;
+  visibility: hidden;
 }
-.barcode-node.node-missed{
+.barcode-node.node-missed {
   fill: white !important;
   stroke: #ccc !important;
-  stroke-width: 1px !important;
+  stroke-width: 0.5px !important;
 }
-.barcode-node.node-missed-wide{
+.barcode-node.node-missed-wide {
   fill: white !important;
   stroke: #ccc !important;
-  stroke-width: 1px !important;
+  stroke-width: 0.5px !important;
 }
-.barcode-node.node-missed-narrow{
+.barcode-node.node-missed-narrow {
   fill: #ccc !important;
   //stroke: gray !important;
   //stroke-width: 1px !important;
 }
-.barcode-node[class~=unhighlight]{
+.barcode-node[class~=selection-unhighlight] {
   opacity: 0.05;
 }
-.barcode-node.sibling-highlight[class~=unhighlight]{
+.barcode-node.selection-sibling-highlight[class~=selection-unhighlight] {
   opacity: 0.4;
 }
-.barcode-node[class~=sort-hovering-highlight],.padding-covered-rect[class~=sort-hovering-highlight]{
+.barcode-node[class~=selection-highlight] {
+  opacity: 1;
+}
+.barcode-node[class~=unhighlight] {
+  opacity: 0.05;
+}
+.barcode-node.sibling-highlight[class~=unhighlight] {
+  opacity: 0.4;
+}
+.barcode-node[class~=sort-hovering-highlight], .padding-covered-rect[class~=sort-hovering-highlight] {
   //fill: #1F77B4;
   stroke: #1f77b4 !important;
   stroke-width: 2px;
 }
-.barcode-node[class~=sort-selection-highlight],.padding-covered-rect[class~=sort-selection-highlight]{
+.barcode-node[class~=sort-selection-highlight], .padding-covered-rect[class~=sort-selection-highlight] {
   //fill: #1f77b3 !important;
   stroke: #1f77b4 !important;
   stroke-width: 2px;
 }
-.barcode-node[class~=father-highlight]{
+.barcode-node[class~=father-highlight] {
   //fill: #1F77B4;
 }
-.barcode-node[class~=children-highlight]{
+.barcode-node[class~=children-highlight] {
   //fill: #a6cee3;
 }
-.barcode-node[class~=added-node-highlight]{
-  fill: green !important
+.barcode-node[class~=added-node-highlight] {
+  fill: #a1d76a !important
 }
-.barcode-node[class~=missed-node-highlight]{
-  fill: red !important
+.barcode-node[class~=missed-node-highlight] {
+  fill: #e9a3c9 !important
 }
-.barcode-node[class~=same-node-highlight]{
+.barcode-node[class~=same-node-highlight] {
   fill: black !important
 }
-.barcode-node[class~=sibling-highlight]{
-   fill: #d8b365;//#5B647C//#d8b365;//#b2df8a;
- }
-.covered-rect[class~=mouseover-highlight]{
+.barcode-node[class~=sibling-highlight] {
+  fill: #d8b365; //#5B647C//#d8b365;//#b2df8a;
+}
+.barcode-node[class~=selection-sibling-highlight] {
+  fill: #d8b365;
+}
+.covered-rect[class~=mouseover-highlight] {
   fill: none
 }
-.padding-covered-rect[class~=mouseover-highlight]{
+.padding-covered-rect[class~=mouseover-highlight] {
   stroke: 1px black;
 }
-.link-circle{
+.link-circle {
   fill: black;
 }
-.node-link{
+.node-link {
   stroke: #4d4d4d;
 }
-.opacity-bg{
+.opacity-bg {
   opacity: 0;
 }
-.container-bg{
-  fill: white;
+.collapse-triangle {
+  fill: black;
 }

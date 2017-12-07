@@ -112,14 +112,23 @@ body {
       width: 100%;
       background-color: white;
       overflow-y: visible;
+      #top-toolbar-container {
+        position: absolute;
+        left: 0%;
+        right: 0%;
+        top: 0%;
+        height: 33px;
+        border-bottom: #eeeeee 1px;
+        background-color: white;
+      }
       #supertree-scroll-panel {
         position: absolute;
         overflow-x: auto;
         overflow-y: hidden;
         top: 0%;
-        height: 0%;
         left: 0%;
         right: 0%;
+        z-index: 101;
         background-color: #eeeeee;
         #supertree-view {
           position: absolute;
@@ -133,31 +142,21 @@ body {
       }
       #barcode-config {
         position: fixed;
-        top: ~"calc(15% + 40px)";
+        top: ~"calc(15% + 120px)";
         height: auto;
-        right: -280px;
+        right: -270px;
         //right: 0px;
         bottom: 5%;
         z-index: 102;
-        #supertree-view-toggle {
-          position: absolute;
-          height: 35px;
-          width: 26px;
-          left: -25px;
-          border-radius: 4px 0 0;
-          z-index: 1;
-          span {
-            margin-left: -6px;
-          }
-        }
         #btn-toggle {
           position: absolute;
-          top: 34px;
-          height: 35px;
+          top: 0px;
+          height: 45px;
           width: 26px;
           left: -25px;
-          border-radius: 0 0 0;
+          border-radius: 4px 0 0 4px;
           z-index: 1;
+          visibility: hidden;
           span {
             margin-left: -6px;
           }
@@ -200,15 +199,6 @@ body {
             }
           }
         }
-        #distribution-content {
-          position: relative;
-          width: 240px;
-          .distribution-level {
-            height: 80px;
-            background-color: #eee;
-            margin-top: 3px;
-          }
-        }
       }
       #barcodetree-scrollpanel {
         position: absolute;
@@ -218,6 +208,20 @@ body {
         left: 0%;
         right: 0%;
         bottom: 0%;
+        border-top: 1px solid #eeeeee;
+        #supertree-view-toggle {
+          position: fixed;
+          top: -1px;
+          height: 25px;
+          width: 40px;
+          left: 95%;
+          border-radius: 0 0 4px 4px;
+          padding: 3px 12px;
+          z-index: 1;
+          span {
+            margin-top: -3px;
+          }
+        }
         #barcodetree-view {
           position: absolute;
           top: 0%;
@@ -251,6 +255,7 @@ body {
     }
   }
 }
+
 /**
 **
 #barcode-config{

@@ -1,24 +1,26 @@
-<div id = 'supertree-scroll-panel'>
-    <div id = 'supertree-view'>
-    </div>
+<div id = 'top-toolbar-container'>
 </div>
+<span id = "supertree-content-container">
+	<div id = 'supertree-scroll-panel'>
+	    <div id = 'supertree-view'>
+	    </div>
+	</div>
+</span>
 <div id = 'barcode-config'>
-    <button id = "supertree-view-toggle" class = "btn btn-default btn-barcode-config">
-      <span id = "supertree-state-controller" class = "glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+    <button id = "btn-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title = "Distribution View">
+      <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </button>
-    <button id = "btn-toggle" class = "btn btn-default btn-barcode-config">
-      <!--<span class = "glyphicon glyphicon-chevron-right" aria-hidden="true"></span>-->
-      <span id = "btn-state-controller" class = "glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    </button>
-    <button id = "btn-pin" class = "btn btn-default btn-barcode-config to-tooltip" data-placement = "left" title="pin the control panel">
-      <span class = "glyphicon glyphicon-pushpin"></span>
-    </button>
-    <div id = "barcode-config-view" class="content">
+    <div id = "barcode-distribution-view" class="content">
     </div>
 </div>
 <div id = 'barcodetree-scrollpanel'>
-	<div id = 'barcodetree-view'>
-	</div>
+		<button id = "supertree-view-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title = "Supertree View">
+		    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+		</button>
+		<div id = 'barcodetree-view'>
+		</div>
+</div>
+<div id = "tree-config-view" class="content">
 </div>
 <div id = "barcode-view-loading">
     <div class="back"></div>

@@ -30,31 +30,31 @@ var categoryNodeObjArray = null
 var categoryIndexObj = null
 //  dataSetName是在所有的方法中通用的一个变量
 var dataSetName = null
-var PER_GAP_WIDTH = 2
+var PER_GAP_WIDTH = 4
 
-function initialize (root, dataProcessor, v_logger, fs) {
+function initialize(root, dataProcessor, v_logger, fs) {
   var resOpt = {
     root: root
   }
   var logger = v_logger
 
-  function initCategoryObj () {
+  function initCategoryObj() {
     if (dataSetName != null) {
       categoryObj = require('../data/' + dataSetName + '/categoryName.json')
       categoryNodeArray = linearize(categoryObj)
       categoryIndexObj = {}
       for (var cI = 0; cI < categoryNodeArray.length; cI++) {
-        categoryIndexObj[ categoryNodeArray[ cI ][ 0 ] ] = categoryNodeArray[ cI ][ 1 ]
+        categoryIndexObj[categoryNodeArray[cI][0]] = categoryNodeArray[cI][1]
       }
     }
     return categoryIndexObj
 
-    function linearize (categoryObj) {
+    function linearize(categoryObj) {
       var categoryNodeArray = []
       var depth = 0
       innerLinearize(categoryObj, categoryNodeArray, depth)
       return categoryNodeArray
-      function innerLinearize (categoryObj, categoryNodeArray, depth) {
+      function innerLinearize(categoryObj, categoryNodeArray, depth) {
         var nodeCategory = null
         var nodeCategoryName = null
         if (categoryObj.category !== 'root') {
@@ -64,34 +64,34 @@ function initialize (root, dataProcessor, v_logger, fs) {
           nodeCategory = 'root-' + depth
           nodeCategoryName = 'root'
         }
-        var singleCategoryNode = [ nodeCategory, nodeCategoryName ]
+        var singleCategoryNode = [nodeCategory, nodeCategoryName]
         categoryNodeArray.push(singleCategoryNode)
         if (typeof(categoryObj.children) !== 'undefined') {
           depth = depth + 1
           for (var cI = 0; cI < categoryObj.children.length; cI++) {
-            innerLinearize(categoryObj.children[ cI ], categoryNodeArray, depth)
+            innerLinearize(categoryObj.children[cI], categoryNodeArray, depth)
           }
         }
       }
     }
   }
 
-  function addCategoryName (treeNodeArrayObj) {
+  function addCategoryName(treeNodeArrayObj) {
     if (categoryIndexObj == null) {
       categoryIndexObj = initCategoryObj()
     }
     for (var item in treeNodeArrayObj) {
-      var treeNodeArray = treeNodeArrayObj[ item ]
+      var treeNodeArray = treeNodeArrayObj[item]
       for (var tI = 0; tI < treeNodeArray.length; tI++) {
-        var treeNodeIndex = treeNodeArray[ tI ].category + '-' + treeNodeArray[ tI ].depth
-        var categoryName = categoryIndexObj[ treeNodeIndex ]
-        treeNodeArray[ tI ].categoryName = categoryName
+        var treeNodeIndex = treeNodeArray[tI].category + '-' + treeNodeArray[tI].depth
+        var categoryName = categoryIndexObj[treeNodeIndex]
+        treeNodeArray[tI].categoryName = categoryName
       }
     }
     return treeNodeArrayObj
   }
 
-  function handleStart (path, response, next) {
+  function handleStart(path, response, next) {
     // logger.log("    Handler: Start!");
     response.status(200).type('html').sendFile('/client' + path + '/index.html', resOpt,
       function (err) {
@@ -103,8 +103,8 @@ function initialize (root, dataProcessor, v_logger, fs) {
       })
   }
 
-  function handleFile (path, response, next) {
-    if (typeof handle[ path ] === 'function') {
+  function handleFile(path, response, next) {
+    if (typeof handle[path] === 'function') {
       next()
       return
     }
@@ -113,7 +113,7 @@ function initialize (root, dataProcessor, v_logger, fs) {
     var t_path = path.slice(t_index)
     var tt_path = '/client' + path
     // logger.log("                                                 " + tt_path)
-    response.status(200).type(fileType[ t_path ]).sendFile(tt_path.slice(1), resOpt,
+    response.status(200).type(fileType[t_path]).sendFile(tt_path.slice(1), resOpt,
       function (err) {
         if (err) {
           logger.log(err)
@@ -123,7 +123,7 @@ function initialize (root, dataProcessor, v_logger, fs) {
       })
   }
 
-  function handleQuery (request, response) {
+  function handleQuery(request, response) {
     logger.log("    Handler: Query!");
     var t_record = request.url.replace("/query?name=", "");
     var responseFunc = function (v_result) {
@@ -138,13 +138,13 @@ function initialize (root, dataProcessor, v_logger, fs) {
     db.query(t_record, responseFunc);
   }
 
-  function handle404 (path, response, next) {
+  function handle404(path, response, next) {
     logger.log('    Handler: File not found for ' + path)
     response.sendStatus(404)
     next()
   }
 
-  function handleFileName (request, response) {
+  function handleFileName(request, response) {
     var sampleDataName = request.body.DataSetName
     dataSetName = sampleDataName
     var fileNameJson = clone(require('../data/' + sampleDataName + '/filesName.json'))
@@ -157,20 +157,22 @@ function initialize (root, dataProcessor, v_logger, fs) {
    * 传递树的id数组, 以及dataSetName, barcodeHeight, barcodeWidth等信息, 返回树的节点数组
    * 点击histogram上面的每一个柱状图时, 调用这个方法, 读取原始的数据进行显示
    */
-  function handleOriginalData (request, response) {
+  function handleOriginalData(request, response) {
     //  读取传递的的数据
     var reqBody = request.body
     var dataSetName = reqBody.dataSetName
-    var dataItemNameArray = reqBody[ 'dataItemNameArray' ]
+    var dataItemNameArray = reqBody['dataItemNameArray']
     var dataItemType = typeof(dataItemNameArray)
-    var selectedLevels = reqBody[ 'selectedLevels' ]
-    var barcodeWidthArray = reqBody[ 'barcodeWidthArray' ]
-    var barcodeHeight = reqBody[ 'barcodeHeight' ]
-    var compactNum = reqBody[ 'compactNum' ]
-    var maxDepth = reqBody[ 'maxDepth' ]
+    var selectedLevels = reqBody['selectedLevels']
+    var barcodeWidthArray = reqBody['barcodeWidthArray']
+    var barcodeHeight = reqBody['barcodeHeight']
+    var compactNum = reqBody['compactNum']
+    var maxDepth = reqBody['maxDepth']
+    var barcodeNodeInterval = +reqBody['barcodeNodeInterval']
+    console.log('barcodeNodeInterval', barcodeNodeInterval)
     //  将barcodeWidth的数组内部的元素转换为数字
     for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
-      barcodeWidthArray[ bI ] = +barcodeWidthArray[ bI ]
+      barcodeWidthArray[bI] = +barcodeWidthArray[bI]
     }
     var selectedLevelStr = ''
     //  将selectedLevels的数组内部的元素转换为数字
@@ -178,8 +180,8 @@ function initialize (root, dataProcessor, v_logger, fs) {
       selectedLevels = []
     }
     for (var sI = 0; sI < selectedLevels.length; sI++) {
-      selectedLevels[ sI ] = +selectedLevels[ sI ]
-      selectedLevelStr = selectedLevelStr + selectedLevels[ sI ]
+      selectedLevels[sI] = +selectedLevels[sI]
+      selectedLevelStr = selectedLevelStr + selectedLevels[sI]
     }
     //  现在传递的barcodeWidthArray是将所有层级的节点的宽度都进行了赋值, 但是对于某一些层级的节点应该是0
     //  这样才能保证barcode的节点之间是紧密排布的, 所以需要将在barcodeWidthArray中不存在的层级的宽度赋值为0
@@ -188,46 +190,50 @@ function initialize (root, dataProcessor, v_logger, fs) {
     //     barcodeWidthArray[ bI ] = 0
     //   }
     // }
-    var treeNodeArrayObj = innerHandleOriginalTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight)
-    innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth)
-    var categoryNodeObjWithLocArray = linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight)
-    sendTreeNodeArray(treeNodeArrayObj, categoryNodeObjArray)
+    var treeNodeArrayObj = innerHandleOriginalTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
+    var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
+    var categoryNodeObjWithLocArray = linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
+    sendTreeNodeArray(treeNodeArrayObj, compactTreeNodeArrayObj, categoryNodeObjWithLocArray)
     //  向客户端传递barcode的节点位置, 大小等信息
-    function sendTreeNodeArray (treeNodeArray, categoryNodeObjArray) {
+    function sendTreeNodeArray(treeNodeArray, compactTreeNodeArrayObj, categoryNodeObjWithLocArray) {
       response.setHeader('Content-Type', 'application/json')
       response.setHeader('Access-Control-Allow-Origin', '*')
-      var treeNodeObject = { 'treeNodeObject': treeNodeArray, 'categoryNodeObjArray': categoryNodeObjWithLocArray }
+      var treeNodeObject = {
+        'treeNodeObject': treeNodeArray,
+        'compactTreeNodeArrayObj': compactTreeNodeArrayObj,
+        'categoryNodeObjArray': categoryNodeObjWithLocArray
+      }
       response.send(JSON.stringify(treeNodeObject, null, 3))
     }
   }
 
-  function innerHandleOriginalTreeNodeObj (dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight) {
+  function innerHandleOriginalTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval) {
     var treeNodeArrayObj = null
     if (dataItemType === 'string') {
-      treeNodeArrayObj = readTreeNodeObj([ dataItemNameArray ], selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight)
+      treeNodeArrayObj = readTreeNodeObj([dataItemNameArray], selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
     } else if (dataItemType === 'object') {
-      treeNodeArrayObj = readTreeNodeObj(dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight)
+      treeNodeArrayObj = readTreeNodeObj(dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
     }
     addCategoryName(treeNodeArrayObj)
     return treeNodeArrayObj
   }
 
   //  将category对象转换为category的节点数组
-  function linearize2NodeArray (categoryObj, barcodeWidthArray, barcodeHeight) {
+  function linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight, barcodeNodeInterval) {
     var categoryNodeAttrArray = []
     var categoryNodeWithLocArray = []
     var depth = 0
     innerLinearize2NodeArray(categoryObj, categoryNodeAttrArray, depth)
     var xLoc = 0
     for (var cI = 0; cI < categoryNodeAttrArray.length; cI++) {
-      var nodeCategory = categoryNodeAttrArray[ cI ][ 0 ]
-      var nodeCategoryName = categoryNodeAttrArray[ cI ][ 1 ]
-      var depth = categoryNodeAttrArray[ cI ][ 2 ]
-      var nodeWidth = barcodeWidthArray[ depth ]
+      var nodeCategory = categoryNodeAttrArray[cI][0]
+      var nodeCategoryName = categoryNodeAttrArray[cI][1]
+      var depth = categoryNodeAttrArray[cI][2]
+      var nodeWidth = barcodeWidthArray[depth]
       var nodeItemObj = {
         'id': nodeCategory,
-        'nodeCategory': nodeCategory,
-        'nodeCategoryName': nodeCategoryName,
+        'category': nodeCategory,
+        'categoryName': nodeCategoryName,
         'depth': depth,
         'x': xLoc,
         'y': 0,
@@ -236,10 +242,10 @@ function initialize (root, dataProcessor, v_logger, fs) {
         'existed': false
       }
       categoryNodeWithLocArray.push(nodeItemObj)
-      xLoc = xLoc + nodeWidth + PER_GAP_WIDTH
+      xLoc = xLoc + nodeWidth + barcodeNodeInterval
     }
     return categoryNodeWithLocArray
-    function innerLinearize2NodeArray (categoryObj, categoryNodeAttrArray, depth) {
+    function innerLinearize2NodeArray(categoryObj, categoryNodeAttrArray, depth) {
       var nodeCategory = null
       var nodeCategoryName = null
       if (categoryObj.category !== 'root') {
@@ -249,12 +255,12 @@ function initialize (root, dataProcessor, v_logger, fs) {
         nodeCategory = 'node-' + depth + '-root'
         nodeCategoryName = 'root'
       }
-      var singleCategoryNodeName = [ nodeCategory, nodeCategoryName, depth ]
+      var singleCategoryNodeName = [nodeCategory, nodeCategoryName, depth]
       categoryNodeAttrArray.push(singleCategoryNodeName)
       if (typeof(categoryObj.children) !== 'undefined') {
         depth = depth + 1
         for (var cI = 0; cI < categoryObj.children.length; cI++) {
-          innerLinearize2NodeArray(categoryObj.children[ cI ], categoryNodeAttrArray, depth)
+          innerLinearize2NodeArray(categoryObj.children[cI], categoryNodeAttrArray, depth)
         }
       }
     }
@@ -263,19 +269,19 @@ function initialize (root, dataProcessor, v_logger, fs) {
   /**
    *  处理BarcodeTree压缩形式
    */
-  function handleCompactData (request, response) {
+  function handleCompactData(request, response) {
     var reqBody = request.body
     var dataSetName = reqBody.dataSetName
-    var dataItemNameArray = reqBody[ 'dataItemNameArray' ]
+    var dataItemNameArray = reqBody['dataItemNameArray']
     var dataItemType = typeof(dataItemNameArray)
-    var selectedLevels = reqBody[ 'selectedLevels' ]
-    var barcodeWidthArray = reqBody[ 'barcodeWidthArray' ]
-    var barcodeHeight = reqBody[ 'barcodeHeight' ]
-    var compactNum = reqBody[ 'compactNum' ]
-    var maxDepth = reqBody[ 'maxDepth' ]
+    var selectedLevels = reqBody['selectedLevels']
+    var barcodeWidthArray = reqBody['barcodeWidthArray']
+    var barcodeHeight = reqBody['barcodeHeight']
+    var compactNum = reqBody['compactNum']
+    var maxDepth = reqBody['maxDepth']
     //  将barcodeWidth的数组内部的元素转换为数字
     for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
-      barcodeWidthArray[ bI ] = +barcodeWidthArray[ bI ]
+      barcodeWidthArray[bI] = +barcodeWidthArray[bI]
     }
     var selectedLevelStr = ''
     //  将selectedLevels的数组内部的元素转换为数字
@@ -283,8 +289,8 @@ function initialize (root, dataProcessor, v_logger, fs) {
       selectedLevels = []
     }
     for (var sI = 0; sI < selectedLevels.length; sI++) {
-      selectedLevels[ sI ] = +selectedLevels[ sI ]
-      selectedLevelStr = selectedLevelStr + selectedLevels[ sI ]
+      selectedLevels[sI] = +selectedLevels[sI]
+      selectedLevelStr = selectedLevelStr + selectedLevels[sI]
     }
     var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth)
     innerHandleOriginalTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight)
@@ -292,20 +298,20 @@ function initialize (root, dataProcessor, v_logger, fs) {
     sendTreeNodeArray(compactTreeNodeArrayObj, categoryNodeObjArray)
 
     //  向客户端传递barcode的节点位置, 大小等信息
-    function sendTreeNodeArray (treeNodeArray, categoryNodeObjArray) {
+    function sendTreeNodeArray(treeNodeArray, categoryNodeObjArray) {
       response.setHeader('Content-Type', 'application/json')
       response.setHeader('Access-Control-Allow-Origin', '*')
-      var treeNodeObject = { 'treeNodeObject': treeNodeArray, 'categoryNodeObjArray': categoryNodeObjArray }
+      var treeNodeObject = {'treeNodeObject': treeNodeArray, 'categoryNodeObjArray': categoryNodeObjArray}
       response.send(JSON.stringify(treeNodeObject, null, 3))
     }
   }
 
-  function innerHandleCompactTreeNodeObj (dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth) {
+  function innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval) {
     var treeNodeArrayObj = null
     if (dataItemType === 'string') {
-      treeNodeArrayObj = readCompactTreeNodeObj([ dataItemNameArray ], selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth)
+      treeNodeArrayObj = readCompactTreeNodeObj([dataItemNameArray], selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
     } else if (dataItemType === 'object') {
-      treeNodeArrayObj = readCompactTreeNodeObj(dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth)
+      treeNodeArrayObj = readCompactTreeNodeObj(dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
     }
     addCompactCategoryName(treeNodeArrayObj)
     return treeNodeArrayObj
@@ -314,10 +320,10 @@ function initialize (root, dataProcessor, v_logger, fs) {
   /**
    *
    */
-  function addCompactCategoryName (treeNodeArrayObj) {
+  function addCompactCategoryName(treeNodeArrayObj) {
     for (var item in treeNodeArrayObj) {
       if (item !== 'treeNodeObj') {
-        addCategoryName(treeNodeArrayObj[ item ])
+        addCategoryName(treeNodeArrayObj[item])
       }
     }
   }
@@ -326,25 +332,25 @@ function initialize (root, dataProcessor, v_logger, fs) {
    * 1. 从文件中读取tree object对象
    * 2. 将treeObject对象进行线性化转换成treeNodeArray数组
    */
-  function readTreeNodeObj (fileNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight) {
+  function readTreeNodeObj(fileNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval) {
     var treeNodeArrayObj = {}
     var fileName = null
     var filePath = '../data/' + dataSetName + '/originalData/'
     for (var fI = 0; fI < fileNameArray.length; fI++) {
-      var dataItemName = fileNameArray[ fI ]
+      var dataItemName = fileNameArray[fI]
       var dataItemNameWithOptions = dataItemName + selectedLevelStr
       fileName = dataItemName + '.json'
-      if (typeof (existedFileObj[ dataItemNameWithOptions ]) === 'undefined') {
-        existedFileObj[ dataItemNameWithOptions ] = {}
-        var originalTreeObj = clone(require(filePath + fileName))
-        existedFileObj[ dataItemNameWithOptions ][ 'originalTreeObj' ] = originalTreeObj
-        var treeNodeArray = dataProcessor.loadOriginalSingleData(originalTreeObj, barcodeWidthArray, existedFileObj[ dataItemNameWithOptions ], selectedLevels, barcodeHeight)
-        treeNodeArrayObj[ dataItemName ] = treeNodeArray
-      } else {
-        var fileObjData = existedFileObj[ dataItemNameWithOptions ]
-        var treeNodeArray = fileObjData[ 'treeNodeLocArray' ]
-        treeNodeArrayObj[ dataItemName ] = treeNodeArray
-      }
+      // if (typeof (existedFileObj[ dataItemNameWithOptions ]) === 'undefined') {
+      existedFileObj[dataItemNameWithOptions] = {}
+      var originalTreeObj = clone(require(filePath + fileName))
+      existedFileObj[dataItemNameWithOptions]['originalTreeObj'] = originalTreeObj
+      var treeNodeArray = dataProcessor.loadOriginalSingleData(originalTreeObj, barcodeWidthArray, existedFileObj[dataItemNameWithOptions], selectedLevels, barcodeHeight, barcodeNodeInterval)
+      treeNodeArrayObj[dataItemName] = treeNodeArray
+      // } else {
+      //   var fileObjData = existedFileObj[ dataItemNameWithOptions ]
+      //   var treeNodeArray = fileObjData[ 'treeNodeLocArray' ]
+      //   treeNodeArrayObj[ dataItemName ] = treeNodeArray
+      // }
     }
     return treeNodeArrayObj
   }
@@ -353,24 +359,24 @@ function initialize (root, dataProcessor, v_logger, fs) {
    * 1. 从文件中读取tree object对象
    * 2. 将treeObject对象进行线性化转换成treeNodeArray数组
    */
-  function readCompactTreeNodeObj (fileNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth) {
+  function readCompactTreeNodeObj(fileNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval) {
     var treeNodeArrayObj = {}
     var fileName = null
     var compactSelectedLevelStr = 'compact-' + selectedLevelStr
     var filePath = '../data/' + dataSetName + '/originalData/'
     for (var fI = 0; fI < fileNameArray.length; fI++) {
-      var dataItemName = fileNameArray[ fI ]
+      var dataItemName = fileNameArray[fI]
       var dataItemNameWithOptions = dataItemName + compactSelectedLevelStr
       fileName = dataItemName + '.json'
-      if (typeof (existedFileObj[ dataItemNameWithOptions ]) === 'undefined') {
-        existedFileObj[ dataItemNameWithOptions ] = {}
-        var originalTreeObj = clone(require(filePath + fileName))
-        existedFileObj[ dataItemNameWithOptions ][ 'originalTreeObj' ] = originalTreeObj
-        dataProcessor.loadCompactSingleData(originalTreeObj, barcodeWidthArray, existedFileObj[ dataItemNameWithOptions ], selectedLevels, barcodeHeight, compactNum, maxDepth)
-        treeNodeArrayObj[ dataItemName ] = getTreeNodeArrayObj(existedFileObj[ dataItemNameWithOptions ])
-      } else {
-        treeNodeArrayObj[ dataItemName ] = getTreeNodeArrayObj(existedFileObj[ dataItemNameWithOptions ])
-      }
+      // if (typeof (existedFileObj[dataItemNameWithOptions]) === 'undefined') {
+      existedFileObj[dataItemNameWithOptions] = {}
+      var originalTreeObj = clone(require(filePath + fileName))
+      existedFileObj[dataItemNameWithOptions]['originalTreeObj'] = originalTreeObj
+      dataProcessor.loadCompactSingleData(originalTreeObj, barcodeWidthArray, existedFileObj[dataItemNameWithOptions], selectedLevels, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
+      treeNodeArrayObj[dataItemName] = getTreeNodeArrayObj(existedFileObj[dataItemNameWithOptions])
+      // } else {
+      //   treeNodeArrayObj[dataItemName] = getTreeNodeArrayObj(existedFileObj[dataItemNameWithOptions])
+      // }
     }
     return treeNodeArrayObj
     /**
@@ -384,14 +390,124 @@ function initialize (root, dataProcessor, v_logger, fs) {
      * }
      * @returns {{}}
      */
-    function getTreeNodeArrayObj (existedFileObj) {
+    function getTreeNodeArrayObj(existedFileObj) {
       var treeNodeArrayObj = {}
       for (var item in existedFileObj) {
         if ((item !== 'originalTreeObj') && (item !== 'treeNodeObj')) {
-          treeNodeArrayObj[ item ] = existedFileObj[ item ].compactTreeNodeLocArray
+          treeNodeArrayObj[item] = existedFileObj[item].compactTreeNodeLocArray
         }
       }
       return treeNodeArrayObj
+    }
+  }
+
+  /**
+   * 根据传递的rootId得到现存的原始的树的子树的节点数组
+   */
+  function removeSuperTree(request, response) {
+    var reqBody = request.body
+    var dataItemNameArray = reqBody['dataItemNameArray']
+    var dataItemType = typeof(dataItemNameArray)
+    var dataSetName = reqBody.dataSetName
+    var selectedLevels = reqBody['selectedLevels']
+    var barcodeWidthArray = reqBody['barcodeWidthArray']
+    var barcodeHeight = reqBody['barcodeHeight']
+    var rootId = reqBody.rootId
+    var rootLevel = reqBody.rootLevel
+    var compactNum = reqBody.compactNum
+    var maxDepth = reqBody['maxDepth']
+    //  将barcodeWidth的数组内部的元素转换为数字
+    for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
+      barcodeWidthArray[bI] = +barcodeWidthArray[bI]
+    }
+    var selectedLevelStr = ''
+    //  将selectedLevels的数组内部的元素转换为数字
+    if (typeof(selectedLevels) === 'undefined') {
+      selectedLevels = []
+    }
+    for (var sI = 0; sI < selectedLevels.length; sI++) {
+      selectedLevels[sI] = +selectedLevels[sI]
+      selectedLevelStr = selectedLevelStr + selectedLevels[sI]
+    }
+    var treeNodeArrayObj = innerHandleOriginalTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight)
+    var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth)
+    var remainedSubtreeNodeArrayObj = getRemainedOriginalTreeNodeObj(treeNodeArrayObj, rootId, rootLevel)
+    var remainedCompactTreeNodeArrayObj = getRemainedCompactTreeNodeObj(compactTreeNodeArrayObj, rootId, rootLevel)
+    console.log('rootLevel', rootLevel)
+    sendTreeNodeArray(remainedSubtreeNodeArrayObj, remainedCompactTreeNodeArrayObj)
+    //  获得一个原始模式下的子树的节点数组
+    function getRemainedOriginalTreeNodeObj(treeNodeArrayObj, rootId, rootLevel) {
+      var remainedTreeNodeArrayObj = {}
+      rootLevel = +rootLevel
+      for (var item in treeNodeArrayObj) {
+        var treeNodeArray = treeNodeArrayObj[item]
+        //  计算subtree的begin值
+        var remainedBegin = 0
+        for (var tI = 0; tI < treeNodeArray.length; tI++) {
+          if (treeNodeArray[tI].id === rootId) {
+            remainedBegin = tI
+            break
+          }
+        }
+        //  计算subtree的end值
+        var remainedEnd = 0
+        console.log('begin depth', treeNodeArray[remainedBegin].depth)
+        console.log('treeNodeArray.length', treeNodeArray.length)
+        for (var rI = (remainedBegin + 1); rI < treeNodeArray.length; rI++) {
+          var nodeDepth = +treeNodeArray[rI].depth
+          if (nodeDepth <= rootLevel) {
+            remainedEnd = rI - 1
+            break
+          }
+        }
+        console.log('remainedBegin', remainedBegin)
+        console.log('remainedEnd', remainedEnd)
+        remainedTreeNodeArrayObj[item] = treeNodeArray.slice(remainedBegin, remainedEnd)
+      }
+      return remainedTreeNodeArrayObj
+    }
+
+    //  获得一个compact模式下的子树的节点数组
+    function getRemainedCompactTreeNodeObj(treeNodeArrayObj, rootId, rootLevel) {
+      var remainedTreeNodeArrayObj = {}
+      rootLevel = +rootLevel
+      for (var treeItem in treeNodeArrayObj) {
+        var treeObj = treeNodeArrayObj[treeItem]
+        remainedTreeNodeArrayObj[treeItem] = {}
+        for (var levelItem in treeObj) {
+          var treeNodeArray = treeObj[levelItem]
+          //  计算subtree的begin值
+          var remainedBegin = 0
+          for (var tI = 0; tI < treeNodeArray.length; tI++) {
+            if (treeNodeArray[tI].id === rootId) {
+              remainedBegin = tI
+              break
+            }
+          }
+          //  计算subtree的end值
+          var remainedEnd = 0
+          for (var rI = (remainedBegin + 1); rI < treeNodeArray.length; rI++) {
+            var nodeDepth = +treeNodeArray[rI].depth
+            if (nodeDepth <= rootLevel) {
+              remainedEnd = rI - 1
+              break
+            }
+          }
+          remainedTreeNodeArrayObj[treeItem][levelItem] = treeNodeArray.slice(remainedBegin, remainedEnd)
+        }
+      }
+      return remainedTreeNodeArrayObj
+    }
+
+    //  向客户端传递barcode的节点位置, 大小等信息
+    function sendTreeNodeArray(treeNodeArray, compactTreeNodeArrayObj) {
+      response.setHeader('Content-Type', 'application/json')
+      response.setHeader('Access-Control-Allow-Origin', '*')
+      var treeNodeObject = {
+        'treeNodeObject': treeNodeArray,
+        'compactTreeNodeArrayObj': compactTreeNodeArrayObj,
+      }
+      response.send(JSON.stringify(treeNodeObject, null, 3))
     }
   }
 
@@ -400,14 +516,15 @@ function initialize (root, dataProcessor, v_logger, fs) {
    * @param request
    * @param response
    */
-  function handleBuildSuperTree (request, response) {
+  function handleBuildSuperTree(request, response) {
     var reqBody = request.body
-    var dataItemNameArray = reqBody[ 'dataItemNameArray' ]
+    var dataItemNameArray = reqBody['dataItemNameArray']
     var dataItemType = typeof(dataItemNameArray)
     var dataSetName = reqBody.dataSetName
-    var selectedLevels = reqBody[ 'selectedLevels' ]
-    var barcodeWidthArray = reqBody[ 'barcodeWidthArray' ]
-    var barcodeHeight = reqBody[ 'barcodeHeight' ]
+    var selectedLevels = reqBody['selectedLevels']
+    var barcodeWidthArray = reqBody['barcodeWidthArray']
+    var barcodeHeight = reqBody['barcodeHeight']
+    var barcodeNodeInterval = +reqBody['barcodeNodeInterval']
     var rootId = reqBody.rootId
     var rootLevel = reqBody.rootLevel
     var alignedLevel = reqBody.alignedLevel
@@ -415,7 +532,7 @@ function initialize (root, dataProcessor, v_logger, fs) {
     var compactNum = reqBody.compactNum
     //  将barcodeWidth的数组内部的元素转换为数字
     for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
-      barcodeWidthArray[ bI ] = +barcodeWidthArray[ bI ]
+      barcodeWidthArray[bI] = +barcodeWidthArray[bI]
     }
     var selectedLevelStr = ''
     //  将selectedLevels的数组内部的元素转换为数字
@@ -423,18 +540,18 @@ function initialize (root, dataProcessor, v_logger, fs) {
       selectedLevels = []
     }
     for (var sI = 0; sI < selectedLevels.length; sI++) {
-      selectedLevels[ sI ] = +selectedLevels[ sI ]
-      selectedLevelStr = selectedLevelStr + selectedLevels[ sI ]
+      selectedLevels[sI] = +selectedLevels[sI]
+      selectedLevelStr = selectedLevelStr + selectedLevels[sI]
     }
     var original_compact_superTreeNodeObj = null
     if (dataItemType === 'string') {
-      original_compact_superTreeNodeObj = dataProcessor.getSuperTreeNodes([ dataItemNameArray ], existedFileObj, selectedLevelStr, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel, compactNum)
+      original_compact_superTreeNodeObj = dataProcessor.getSuperTreeNodes([dataItemNameArray], existedFileObj, selectedLevelStr, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel, compactNum, barcodeNodeInterval)
     } else if (dataItemType === 'object') {
-      original_compact_superTreeNodeObj = dataProcessor.getSuperTreeNodes(dataItemNameArray, existedFileObj, selectedLevelStr, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel, compactNum)
+      original_compact_superTreeNodeObj = dataProcessor.getSuperTreeNodes(dataItemNameArray, existedFileObj, selectedLevelStr, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel, compactNum, barcodeNodeInterval)
     }
     if (original_compact_superTreeNodeObj != null) {
-      var originalSuperTreeNodeObj = original_compact_superTreeNodeObj[ 'originalSuperTreeObj' ]
-      var compactSuperTreeObj = original_compact_superTreeNodeObj[ 'compactSuperTreeObj' ]
+      var originalSuperTreeNodeObj = original_compact_superTreeNodeObj['originalSuperTreeObj']
+      var compactSuperTreeObj = original_compact_superTreeNodeObj['compactSuperTreeObj']
       addCategoryName(compactSuperTreeObj)
       addCategoryName(originalSuperTreeNodeObj)
       sendTreeNodeArray(original_compact_superTreeNodeObj)
@@ -472,58 +589,58 @@ function initialize (root, dataProcessor, v_logger, fs) {
     }
      */
     //  向客户端传递barcode的节点位置, 大小等信息
-    function sendTreeNodeArray (treeNodeArray) {
+    function sendTreeNodeArray(treeNodeArray) {
       response.setHeader('Content-Type', 'application/json')
       response.setHeader('Access-Control-Allow-Origin', '*')
-      var treeNodeObject = { 'treeNodeObject': treeNodeArray }
+      var treeNodeObject = {'treeNodeObject': treeNodeArray}
       response.send(JSON.stringify(treeNodeObject, null, 3))
     }
   }
 
-  function handleTreeObjToNodeList (request, response) {
+  function handleTreeObjToNodeList(request, response) {
     var reqBody = request.body
-    var treeObjArray = reqBody[ "treeObjArray" ]
+    var treeObjArray = reqBody["treeObjArray"]
     var rootId = reqBody.rootId
     var rootLevel = reqBody.rootLevel
     var alignedLevel = reqBody.alignedLevel
     var treeNodeArrayObj = {}
-    var barcodeWidthArray = reqBody[ 'barcodeWidthArray' ]
-    var barcodeHeight = reqBody[ 'barcodeHeight' ]
+    var barcodeWidthArray = reqBody['barcodeWidthArray']
+    var barcodeHeight = reqBody['barcodeHeight']
     //  将barcodeWidth的数组内部的元素转换为数字
     for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
-      barcodeWidthArray[ bI ] = +barcodeWidthArray[ bI ]
+      barcodeWidthArray[bI] = +barcodeWidthArray[bI]
     }
-    var selectedLevels = reqBody[ 'selectedLevels' ]
+    var selectedLevels = reqBody['selectedLevels']
     for (var sI = 0; sI < selectedLevels.length; sI++) {
-      selectedLevels[ sI ] = +selectedLevels[ sI ]
+      selectedLevels[sI] = +selectedLevels[sI]
     }
     var superTreeNodeArray = dataProcessor.getSuperTreeNodeFromTreeObjArray(treeObjArray, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel)
     addCategoryName(superTreeNodeArray)
     sendTreeNodeArray(superTreeNodeArray)
 
     //  向客户端传递barcode的节点位置, 大小等信息
-    function sendTreeNodeArray (treeNodeArray) {
+    function sendTreeNodeArray(treeNodeArray) {
       response.setHeader('Content-Type', 'application/json')
       response.setHeader('Access-Control-Allow-Origin', '*')
-      var treeNodeObject = { 'treeNodeObject': treeNodeArray }
+      var treeNodeObject = {'treeNodeObject': treeNodeArray}
       response.send(JSON.stringify(treeNodeObject, null, 3))
     }
   }
 
-  function handleTreeNodeIdArray (request, response) {
+  function handleTreeNodeIdArray(request, response) {
     var reqBody = request.body
-    var treeObjArray = reqBody[ 'treeObjArray' ]
+    var treeObjArray = reqBody['treeObjArray']
     var treeObjectIdArray = dataProcessor.getTreeObjectIdArray(treeObjArray)
     //  向客户端传递barcode的节点位置, 大小等信息
-    function sendTreeNodeArray (treeObjectIdArray) {
+    function sendTreeNodeArray(treeObjectIdArray) {
       response.setHeader('Content-Type', 'application/json')
       response.setHeader('Access-Control-Allow-Origin', '*')
-      var treeNodeObject = { 'treeObjectIdArray': treeObjectIdArray }
+      var treeNodeObject = {'treeObjectIdArray': treeObjectIdArray}
       response.send(JSON.stringify(treeNodeObject, null, 3))
     }
   }
 
-  function handleCategoryName (request, response) {
+  function handleCategoryName(request, response) {
     var reqBody = request.body
     var sampleDataName = reqBody.DataSetName
     var filePath = '../data/' + sampleDataName + '/categoryName.json'
@@ -534,21 +651,22 @@ function initialize (root, dataProcessor, v_logger, fs) {
   }
 
   var handle = {}
-  handle[ '/' ] = handleStart
-  handle[ '/start' ] = handleStart
-  handle[ '404' ] = handle404
-  handle[ 'file' ] = handleFile
-  handle[ 'query' ] = handleQuery
-  handle[ '/file_name' ] = handleFileName
-  handle[ '/barcode_original_data' ] = handleOriginalData
-  handle[ '/barcode_compact_data' ] = handleCompactData
-  handle[ '/build_super_tree' ] = handleBuildSuperTree
-  handle[ '/treeobject_to_nodelist' ] = handleTreeObjToNodeList
+  handle['/'] = handleStart
+  handle['/start'] = handleStart
+  handle['404'] = handle404
+  handle['file'] = handleFile
+  handle['query'] = handleQuery
+  handle['/file_name'] = handleFileName
+  handle['/barcode_original_data'] = handleOriginalData
+  handle['/barcode_compact_data'] = handleCompactData
+  handle['/build_super_tree'] = handleBuildSuperTree
+  handle['/remove_super_tree'] = removeSuperTree
+  handle['/treeobject_to_nodelist'] = handleTreeObjToNodeList
   // handle[ '/treeNodeIdArray' ] = handleTreeNodeIdArray
   // handle[ '/barcode_compact_data' ] = handleBarcodeCompactData
   // handle[ '/distance_matrix' ] = handleDistanceMatrix
   // handle[ '/load_data' ] = handleLoadData
-  handle[ '/category_name' ] = handleCategoryName
+  handle['/category_name'] = handleCategoryName
   // handle[ '/brush_super_tree' ] = handleBrushSuperTree
   // handle[ '/brush_line_tree' ] = handleBrushLineTree
   return handle

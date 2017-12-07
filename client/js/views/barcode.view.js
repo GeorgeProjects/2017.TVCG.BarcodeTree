@@ -8,20 +8,28 @@ define([
   'datacenter',
   'config',
   'variables',
+  'bootstrap',
   'views/supertree.view',
   'views/barcode.comparison.view',
-  'views/barcode.config.view',
+  'views/tree.config.view',
+  'views/barcode.distribution.view',
+  'views/top.toolbar.view',
   'text!templates/barcodeView.tpl'
-], function (require, Mn, _, $, Backbone, d3, Datacenter, Config, Variables, SuperTreeView, BarcodeComparisonView, BarcodeConfigView, Tpl) {
+], function (require, Mn, _, $, Backbone, d3, Datacenter, Config, Variables, Bootstrap, SuperTreeView, BarcodeComparisonView, TreeConfigView, BarcodeDistributionView, TopToolBarView, Tpl) {
   'use strict'
-
+  //  barcode.view中包含三个视图, 分别是比较barcodeTree的主视图, barcode的superTree视图, barcode的参数控制视图
   return Mn.LayoutView.extend({
     tagName: 'div',
     template: _.template(Tpl),
+    default: {
+      duration: 500
+    },
     regions: {
+      'topToolbarView': '#top-toolbar-container',
       'supertreeView': '#supertree-view',
       'barcodetreeView': '#barcodetree-view',
-      'configView': '#barcode-config-view'
+      'distributionView': '#barcode-distribution-view',
+      'treeConfigView': '#tree-config-view'
     },
     attributes: {
       'style': 'height: 100%; width: 100%',
@@ -30,10 +38,33 @@ define([
     initialize: function () {
       var self = this
       self.d3el = d3.select(self.el)
-      Backbone.Events.on(Config.get('EVENTS')[ 'UPDATE_BARCODE_VIEW_WIDTH' ], function (event) {
-        var barcodeCollection = self.options.barcodeCollection
-        var barcodeMaxX = barcodeCollection.get_barcode_nodex_max()
-        self.update_barcode_width(barcodeMaxX)
+      // self.initEventFunc()
+    },
+    // initEventFunc: function () {
+    //   var self = this
+    //   // Backbone.Events.on(Config.get('EVENTS')['UPDATE_BARCODE_VIEW_WIDTH'], function (event) {
+    //   //   var barcodeCollection = self.options.barcodeCollection
+    //   //   var barcodeMaxX = barcodeCollection.get_barcode_nodex_max()
+    //   //   self.update_barcode_width(barcodeMaxX)
+    //   // })
+    // },
+    trigger_update_barcode_view: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
+    },
+    trigger_open_supertree: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['OPEN_SUPER_TREE'])
+    },
+    trigger_close_supertree: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['CLOSE_SUPER_TREE'])
+    },
+    //  更新tree config的视图
+    trigger_update_tree_config_view: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_TREE_CONFIG_VIEW'])
+    },
+    init_tooltip: function () {
+      var self = this
+      $(function () {
+        $('[data-toggle = "tooltip"]').tooltip()
       })
     },
     onShow: function () {
@@ -41,10 +72,18 @@ define([
       var barcodeCollection = self.options.barcodeCollection
       var categoryModel = self.options.categoryModel
       var supertreeModel = self.options.supertreeModel
-      var barcodetreeViewWidth = $('#barcodetree-view').width()
-      var barcodetreeViewHeight = $('#barcodetree-view').height()
-      Variables.set('barcodetreeViewWidth', barcodetreeViewWidth)
-      Variables.set('barcodetreeViewHeight', barcodetreeViewHeight)
+      var barcodetreeViewWidth = Variables.get('barcodetreeViewWidth')
+      var barcodetreeViewHeight = Variables
+      //  initBarcodeView的参数
+      self.init_barcodeview_para()
+      self.init_tooltip()
+      self.init_sync()
+      self.init_view_loc()
+      //  barcode视图上方的toolbar视图
+      var topToolBarView = new TopToolBarView({
+        barcodeCollection: barcodeCollection
+      })
+      self.showChildView('topToolbarView', topToolBarView)
       //  绘制superTree的视图, 主要是对于barcodeView进行一定的控制
       var superTreeView = new SuperTreeView({
         model: supertreeModel,
@@ -58,31 +97,26 @@ define([
       })
       self.showChildView('barcodetreeView', barcodeComparisonView)
       //  绘制barcode右侧的config panel的视图, 在config panel上面存在对于barcode视图中通用的控制
-      var configView = new BarcodeConfigView({
+      var distributionView = new BarcodeDistributionView({
         barcodeCollection: barcodeCollection,
         categoryModel: categoryModel
       })
-      self.showChildView('configView', configView)
-      //  在按钮上面添加点击的响应事件
+      self.showChildView('distributionView', distributionView)
+      //  绘制barcode的config panel的视图, 在config panel上包括显示层级, 对齐层级, 布局模式, 展示模式, 比较模式的控制
+      var treeConfigView = new TreeConfigView({
+        barcodeCollection: barcodeCollection,
+        categoryModel: categoryModel
+      })
+      self.showChildView('treeConfigView', treeConfigView)
+      //  右侧的控制视图打开按钮的控制函数
       $('#btn-toggle').click(function () {
         var configPanelState = Variables.get('configPanelState')
-        var duration = 500
-        //  当前的状态是关闭, 点击按钮将config panel打开
         if (configPanelState === 'close') {
-          $('#barcode-config').animate({
-            right: '+=260',
-          }, duration, function () {
-            $('#btn-state-controller').attr('class', 'glyphicon glyphicon-chevron-right')
-          })
-          Variables.set('configPanelState', 'open')
+          //  当前的状态是关闭, 点击按钮将config panel打开
+          self.open_config_view()
         } else if (configPanelState === 'open') {
           //  当前的状态是打开, 点击按钮将config panel关闭
-          $('#barcode-config').animate({
-            right: '-=260',
-          }, duration, function () {
-            $('#btn-state-controller').attr('class', 'glyphicon glyphicon-chevron-left')
-          })
-          Variables.set('configPanelState', 'close')
+          self.close_config_view()
         }
       })
       //  在supertree-view-toggle按钮上增加监听函数, 将superTree视图打开
@@ -91,47 +125,96 @@ define([
         if (superTreeViewState) {
           //  当前的状态是打开的状态, 转变成关闭的状态
           self.close_supertree_view()
-          $('#supertree-state-controller').attr('class', 'glyphicon glyphicon-chevron-down')
         } else {
           //  当前的状态是关闭的状态, 转变成打开的状态
           self.open_supertree_view()
-          $('#supertree-state-controller').attr('class', 'glyphicon glyphicon-chevron-top')
         }
       })
-      //  锁定按钮
-      $('#btn-pin').click(function () {
-        if ($('#btn-toggle').prop('disabled')) {
-          $('#btn-toggle').prop('disabled', false)
-          $('#supertree-view-toggle').prop('disabled', false)
-          $('#btn-pin').removeClass('active')
-        } else {
-          $('#btn-toggle').prop('disabled', true)
-          $('#supertree-view-toggle').prop('disabled', true)
-          $('#btn-pin').addClass('active')
-        }
+      // //  将打开按钮锁定按钮
+      // $('#btn-pin').click(function () {
+      //   if ($('#btn-pin').hasClass('active')) {
+      //     //  对于barcode解除锁定
+      //     $('#btn-pin').removeClass('active')
+      //     $('#lock-container').html('<i class="fa fa-unlock" aria-hidden="true"></i>')
+      //     Variables.set('barcodeTreeIsLocked', false)
+      //     self.trigger_update_barcode_view()
+      //     self.trigger_update_tree_config_view()
+      //   } else {
+      //     //  对于barcode的锁定状态
+      //     $('#btn-pin').addClass('active')
+      //     $('#lock-container').html('<i class="fa fa-lock" aria-hidden="true"></i>')
+      //     Variables.set('barcodeTreeIsLocked', true)
+      //     self.trigger_update_barcode_view()
+      //     self.trigger_update_tree_config_view()
+      //   }
+      // })
+    },
+    //  初始化barcode视图的宽度和高度的参数
+    init_barcodeview_para: function () {
+      var self = this
+      var barcodetreeViewWidth = $('#barcodetree-view').width()
+      var barcodetreeViewHeight = $('#barcodetree-view').height()
+      Variables.set('barcodetreeViewWidth', barcodetreeViewWidth)
+      Variables.set('barcodetreeViewHeight', barcodetreeViewHeight)
+    },
+    open_config_view: function () {
+      var self = this
+      var duration = self.duration
+      $('#barcode-config').animate({
+        right: '+=260',
+      }, duration, function () {
+        $('#btn-state-controller').attr('class', 'glyphicon glyphicon-chevron-right')
       })
+      Variables.set('configPanelState', 'open')
+    },
+    close_config_view: function () {
+      var self = this
+      var duration = self.duration
+      $('#barcode-config').animate({
+        right: '-=260',
+      }, duration, function () {
+        $('#btn-state-controller').attr('class', 'glyphicon glyphicon-chevron-left')
+      })
+      Variables.set('configPanelState', 'close')
     },
     open_supertree_view: function () {
       var self = this
-      Backbone.Events.trigger(Config.get('EVENTS')[ 'OPEN_SUPER_TREE' ])
+      self.trigger_open_supertree()
       window.Variables.update_barcode_attr()
+      $('#supertree-state-controller').attr('class', 'glyphicon glyphicon-chevron-up')
     },
     close_supertree_view: function () {
       var self = this
-      Backbone.Events.trigger(Config.get('EVENTS')[ 'CLOSE_SUPER_TREE' ])
+      self.trigger_close_supertree()
       window.Variables.update_barcode_attr()
+      $('#supertree-state-controller').attr('class', 'glyphicon glyphicon-chevron-down')
     },
-    update_barcode_width: function (barcodeMaxX) {
-      $('#barcodetree-view').width(barcodeMaxX)
-      $('#supertree-view').width(barcodeMaxX)
-      //  修改barcode背景的宽度
-      d3.select('#barcode-view').selectAll('.bg').attr('width', barcodeMaxX)
+    init_sync: function () {
+      var self = this
       $('#supertree-scroll-panel').scroll(function () {
         $('#barcodetree-scrollpanel').scrollLeft($(this).scrollLeft())
       })
       $('#barcodetree-scrollpanel').scroll(function () {
         $('#supertree-scroll-panel').scrollLeft($(this).scrollLeft())
       })
+    },
+    init_view_loc: function(){
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      var barcodeTreeConfigHeight = Variables.get('barcodeTreeConfigHeight')
+      var toolbarHistogramHeight = +$('#barcode-view').css('top').replace('px', '')
+      var barcodePaddingLeft = Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft')
+      $('#top-toolbar-container').css('height', barcodeTreeConfigHeight + 'px')
+      $('#top-toolbar-container').css('padding-left', barcodePaddingLeft + 'px')
+      $('#supertree-view-toggle').css('top', (toolbarHistogramHeight + barcodeTreeConfigHeight) + 'px')
+      $('#barcodetree-scrollpanel').css('top', barcodeTreeConfigHeight + 'px')
     }
+    // ,
+    // update_barcode_width: function (barcodeMaxX) {
+    //   $('#barcodetree-view').width(barcodeMaxX)
+    //   $('#supertree-view').width(barcodeMaxX)
+    //   //  修改barcode背景的宽度
+    //   d3.select('#barcode-view').selectAll('.bg').attr('width', barcodeMaxX)
+    // }
   })
 })

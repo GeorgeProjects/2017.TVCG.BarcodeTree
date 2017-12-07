@@ -23,7 +23,7 @@ define([
       self.listenTo(this.collection, 'remove', self.remove)
       self.listenTo(Variables, 'change:barcodeNodexMaxX', self.update_barcode_view_width)
       Backbone.Events.on(Config.get('EVENTS')[ 'UPDATE_BARCODE_ATTR' ], function (event) {
-        self.update_barcode_attr()
+        // self.update_barcode_attr()
       })
       Backbone.Events.on(Config.get('EVENTS')[ 'RESET_BARCODE_ATTR' ], function (event) {
         self.reset_barcode_attr()
@@ -41,8 +41,7 @@ define([
       })
       //  鼠标从barcode上面移开广播的事件
       Backbone.Events.on(Config.get('EVENTS')[ 'UN_HOVERING_BARCODE_EVENT' ], function (event) {
-        var barcodeTreeId = event.barcodeTreeId
-        self.unhovering_barcode(barcodeTreeId)
+        self.unhovering_barcode()
       })
     },
     update_barcode_view_width: function () {
@@ -50,11 +49,17 @@ define([
       var barcodeTreeContainerWidth = +$('#barcodetree-scrollpanel').width()
       var barcodeNodexMaxX = Variables.get('barcodeNodexMaxX')
       var comparisonViewMargin = Variables.get('comparisonViewMargin')
+      var barcodeTextPaddingLeft = Variables.get('barcodeTextPaddingLeft')
+      var barcodePaddingLeft = Variables.get('barcodePaddingLeft')
+      var barcodePaddingLeftAll = barcodeTextPaddingLeft + barcodePaddingLeft
+      //  增加barcode左侧padding的距离
+      barcodeNodexMaxX = barcodeNodexMaxX + barcodePaddingLeftAll
+      //  增加barcode右侧padding的距离
+      barcodeNodexMaxX = barcodeNodexMaxX + comparisonViewMargin.right
       var barcodetreeViewWidth = barcodeTreeContainerWidth
       if ((!isNaN(barcodeNodexMaxX)) && (typeof(barcodeNodexMaxX) !== 'undefined')) {
         barcodetreeViewWidth = barcodeTreeContainerWidth > barcodeNodexMaxX ? barcodeTreeContainerWidth : barcodeNodexMaxX
       }
-      barcodetreeViewWidth = barcodetreeViewWidth + comparisonViewMargin.right
       $('#barcodetree-view').width(barcodetreeViewWidth)
       $('#supertree-view').width(barcodetreeViewWidth)
       d3.selectAll('.bg').attr('width', barcodetreeViewWidth)
@@ -90,10 +95,10 @@ define([
         .select('.bg')
         .classed('hovering-highlight', true)
     },
-    unhovering_barcode: function (barcodeTreeId) {
+    unhovering_barcode: function () {
       var self = this
-      d3.select(self.el).select('#' + barcodeTreeId)
-        .select('.bg')
+      d3.select(self.el)
+        .selectAll('.bg')
         .classed('hovering-highlight', false)
     }
   }, SVGBase))

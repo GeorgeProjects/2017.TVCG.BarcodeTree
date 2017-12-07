@@ -1,6 +1,6 @@
 require.config({
   shim: {
-    'bootstrap': ['jquery'],
+    'bootstrap': ['jquery', 'Popper'],
     'backbone': {
       deps: ['jquery','underscore']
     },
@@ -15,8 +15,10 @@ require.config({
   paths: {
     // libs loader
     'text': '../bower_components/requirejs-text/text',
+    'jquery': '../bower_components/jquery/dist/jquery.min',
     'jquery-ui': '../bower_components/jquery-ui/jquery-ui',
     'underscore': '../bower_components/underscore/underscore-min',
+    'Popper': '../bower_components/popper/popper.min',
     'bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',
     'backbone': '../bower_components/backbone/backbone-min',
     'nprogress': '../bower_components/nprogress/nprogress',
@@ -32,6 +34,7 @@ require.config({
     'pagination': '../bower_components/JqueryPagination/jquery.simplePagination',
     'tooltips': '../bower_components/d3-tip/d3-tip',
     'iconfont': '../icon_library/iconfont',
+    'rangeslider': '../bower_components/rangeslider/dist/rangeslider',
     'huebee': '../bower_components/huebee/dist/huebee.pkgd',
     // templates path
     'templates': '../templates',

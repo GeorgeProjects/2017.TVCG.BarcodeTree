@@ -1,11 +1,21 @@
-#barcode-config-div {
-  width: 100%;
-  height: 100%;
+#tree-config-div {
+  position: absolute;
+  min-width: 200px;
+  min-height: 270px;
+  //height: 30%;
+  top: 20%;
+  left: 20%;
+  background-color: #ffffff;
+  border: 1px solid #eee;
+  visibility: hidden;
   .panel-header {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     #node-label {
       font-weight: bold;
-      margin-bottom: 5px;
+      padding-top: 5px;
+      padding-left: 5px;
+      padding-bottom: 5px;
+      background-color: #eeeeee;
     }
     hr {
       //margin-top: 20px;
@@ -13,8 +23,26 @@
       border: 0;
       border-top: 1px solid #eee;
     }
+    #control-panel {
+      position: relative;
+      float: right;
+      right: 5px;
+      top: 0%;
+    }
+    #config-minimize {
+      -webkit-text-fill-color: #aaa;
+    }
+    #config-close {
+      -webkit-text-fill-color: #aaa;
+    }
   }
   .panel-content {
+    padding-right: 10px;
+    padding-left: 10px;
+
+    #level-controller {
+      font-weight: bold;
+    }
     #align-controller {
       font-weight: bold;
     }
@@ -26,6 +54,12 @@
         padding-bottom: 5px;
       }
     }
+    .mode-button {
+      padding: 4px 6px;
+    }
+    .level-btn {
+      padding: 4px 8.5px;
+    }
     .sort-button {
       fill: #ddd;
     }
@@ -36,10 +70,10 @@
       fill: black !important;
     }
     #refresh-display-level {
-      padding: 6px 8px;
+      padding: 4px 8.5px;
     }
     #refresh-aligned-level {
-      padding: 6px 8px;
+      padding: 4px 8.5px;
     }
   }
   #distribution-content {

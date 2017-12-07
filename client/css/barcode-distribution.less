@@ -1,0 +1,49 @@
+#barcode-distribution-div {
+  width: 100%;
+  height: 100%;
+  .panel-header {
+    margin-bottom: 20px;
+    #node-label {
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+    hr {
+      //margin-top: 20px;
+      margin-bottom: 20px;
+      border: 0;
+      border-top: 1px solid #eee;
+    }
+  }
+  #distribution-content {
+    margin-top: -18px;
+    #distribution-histogram {
+      font-weight: bold;
+    }
+    .distribution-levels {
+      background-color: #eee;
+    }
+    text {
+      font-size: 1rem;
+    }
+    .axis {
+      stroke-width: 1px;
+      path { /*x轴线*/
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+      line { /*x轴上刻度标*/
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+      }
+    }
+    .brush .extent {
+      stroke: #fff;
+      stroke-opacity: .6;
+      stroke-width: 2px;
+      fill-opacity: .1;
+      shape-rendering: crispEdges;
+    }
+  }
+}

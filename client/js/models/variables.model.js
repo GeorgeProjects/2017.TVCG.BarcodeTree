@@ -18,7 +18,7 @@ define([
       //  barcode的最大的宽度
       barcodeNodexMaxX: 0,
       //  barcode视图的margin
-      comparisonViewMargin: { left: 30, right: 50 },
+      comparisonViewMargin: {left: 30, right: 50},
       //  对齐的节点
       alignedLevel: 0,
       //  标记不同的barcode背景颜色的对象
@@ -27,8 +27,6 @@ define([
       comparisonMode: 'TOPOLOGICAL', //'TOPOLOGICAL' 'ATTRIBUTE'
       TOPOLOGICAL: 'TOPOLOGICAL',
       ATTRIBUTE: 'ATTRIBUTE',
-      //  barcode的边界宽度
-      barcodePadding: 40,
       //  当前对齐的barcode的范围的节点属性值分布对象
       barcodeNodeCollectionObj: {},
       //  带有节点的id的节点属性值分布对象
@@ -37,18 +35,49 @@ define([
       tipWidth: 220,
       //  supertree的状态, false表示关闭, true表示打开
       superTreeViewState: false,
+      //*************************
+      //  treeconfigView视图中的参数
+      current_config_barcodeTreeId: null,
+      //*************************
+      //  在superTreeView视图中的参数
+      //  barcode的上方padding的距离
+      supertreeView_barcodePaddingLeft: 40,
+      //*************************
+      //  在barcode.single.view视图中的参数
+      SingleView_renderBarcodeNodeWidthThredhold: 1,
+      //  判断显示的barcode是否同步变化的参数
+      barcodeTreeIsLocked: true,
+      //  display布局的方法
+      displayMode: 'ORIGINAL',//或者 COMPACT ORIGINAL GLOBAL
+      //  当前hover的节点
+      currentHoveringBarcodeId: null,
+      //****************************************************
+      //  在barcode.collection.view视图中的参数
+      // barcodeViewPaddingRight: 20,
+      //  barcode的前的label距离barcode左边界的宽度
+      barcodeTextPaddingLeft: 15,
+      //  barcode的边界宽度
+      barcodePaddingLeft: 40,
       //****************************************************
       'finishInit': false,
       //  whether loading page show
       'loading': true,
       //在histogram上选中的item的数组
       'selectItemNameArray': [],
+      //  width同步进行变化状态
+      'changeMeanTime': true,
       //  标记各层的bar的宽度
-      'barcodeWidthArray': [ 18, 12, 8, 4, 1 ],
+      'barcodeWidthArray': [18, 12, 8, 4, 1],
+      //  改变之间的状态的属性: 各层的bar的宽度
+      'barcodeWidthArray_previous': [18, 12, 8, 4, 1],
       //  标记barcode的高度
-      'barcodeHeight': 40,
+      barcodeHeight: 40,
+      //  改变之间的状态的属性: barcode的节点之间的间距
+      barcodeNodeInterval_previous: 3,
+      //  barcode的节点之间的间距
+      barcodeNodeInterval: 3,
       //  在fish eye模式下不同的barcode类型的高度的数量
-      'differentHeightNumber': 15,
+      'differentHeightNumber': 20,
       //  barcodeHeight传递到服务器端需要增加一定的比例, 因为barcode的节点的上部分与下部分都是存在一定的间隙
       'barcodeHeightRatio': 0.8,
       //  最小的barcode的高度
@@ -68,6 +97,8 @@ define([
       'displayedLastLevel': 3,
       //  supertree的高度
       'superTreeHeight': 60,
+      //  barcodetree config视图的高度
+      'barcodeTreeConfigHeight': 33,
       //  当前的config panel的状态, 打开(open)或者关闭(close)
       'configPanelState': 'close',
       'removeBarId': undefined,
@@ -111,7 +142,7 @@ define([
       //  设置bar允许的最大高度
       'maxHeight': 100,
       //  标记所有bar的高度
-      'barHeight': 40,
+      barHeight: 40,
       //  3. 与数据格式无关，但是也不会暴露出来的在代码中调整的样式参数
       //  相邻的bar之间的距离
       'barInterval': 1.5,
@@ -124,16 +155,14 @@ define([
       'histogramValueDim': 'sum_flowSize',
       //  barcode布局的方法
       'layoutMode': 'UNION', //或者FISHEYE
-      //  display布局的方法
-      'displayMode': 'GLOBAL',//或者  COMPACT ORIGINAL GLOBAL
       //  barcode的margin对象
-      barcodeMargin: { top: 0, left: 1 / 25, bottom: 1 / 90, right: 0 },
+      barcodeMargin: {top: 0, left: 1 / 25, bottom: 1 / 90, right: 0},
       //  datelinechart的margin对象
-      dateLineChartMargin: { top: 0, left: 1 / 20, bottom: 1 / 90, right: 1 / 10 },
+      dateLineChartMargin: {top: 0, left: 1 / 20, bottom: 1 / 90, right: 1 / 10},
       //  subtreelinechart的margin对象
-      subtreeLineChartMargin: { top: 1 / 70, left: 1 / 25, bottom: 1 / 70, right: 1 / 50 },
+      subtreeLineChartMargin: {top: 1 / 70, left: 1 / 25, bottom: 1 / 70, right: 1 / 50},
       //  histogram的margin对象
-      histogramMargin: { top: 1 / 10, left: 1 / 20, bottom: 1 / 6, right: 1 / 60 },
+      histogramMargin: {top: 1 / 10, left: 1 / 20, bottom: 1 / 6, right: 1 / 60},
       //  当前渲染的数据集名称
       currentDataSet: null,
       //  barcode的宽度数组
@@ -170,7 +199,6 @@ define([
       barcodeCategory: 'supertreeline', // 或者是single || super || supertreeline
       //  barcodeView的高度
       barcodeViewHeight: 0,
-
       //  treeline的高度
       treeLineHeight: 0,
       //  treeline包括gap的高度
@@ -204,22 +232,29 @@ define([
       var selectItemNameArray = self.get('selectItemNameArray')
       var barcodeHeight = self.get('barcodeHeight')
       var compactNum = self.get('compactNum')
-      var superTreeHeight = $('#supertree-scroll-panel').height()
-      var barcodeViewHeight = $('#barcode-view').height() - superTreeHeight - selectItemNameArray.length
-      var updatedHeight = new Number(barcodeViewHeight / selectItemNameArray.length).toFixed(1)
-      window.barcodeHeight = updatedHeight > barcodeHeight ? barcodeHeight : updatedHeight
+      var superTreeHeight = +$('#supertree-scroll-panel').height()
+      var barcodeTreeConfigHeight = self.get('barcodeTreeConfigHeight')
+      var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - selectItemNameArray.length
+      var updatedHeight = barcodeViewHeight / selectItemNameArray.length
+      console.log('updatedHeight', updatedHeight)
+      window.barcodeHeight = updatedHeight > barcodeHeight ? barcodeHeight : new Number(updatedHeight).toFixed(1)
+      self.change_barcode_node_config(window.barcodeHeight)
       // window.Datacenter.barcodeCollection.update_height()
-      window.Datacenter.barcodeCollection.update_barcode_location()
+      // window.Datacenter.barcodeCollection.update_barcode_location()
+    },
+    change_barcode_node_config: function (barcodeHeight) {
+      var self = this
+      $("#range-input-height").val(barcodeHeight)
     },
     initNodesColor: function () {
       var self = this
       var maxDepth = self.get('maxDepth') + 1
       var barcodeNodeColorArray = self.get('barcodeNodeColorArray')
-      var RootColor = Config.get('BARCODE_COLOR')[ 'ROOT_COLOR' ]
-      var LeafColor = Config.get('BARCODE_COLOR')[ 'LEAF_COLOR' ]
+      var RootColor = Config.get('BARCODE_COLOR')['ROOT_COLOR']
+      var LeafColor = Config.get('BARCODE_COLOR')['LEAF_COLOR']
       var linear = d3.scale.linear()
-        .domain([ 0, maxDepth ])
-        .range([ 0, 1 ])
+        .domain([0, maxDepth])
+        .range([0, 1])
       var d3RootColor = d3.rgb(RootColor)
       var d3LeafColor = d3.rgb(LeafColor)
       var compute = d3.interpolate(d3RootColor, d3LeafColor)

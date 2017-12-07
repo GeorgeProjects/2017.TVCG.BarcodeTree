@@ -36,7 +36,7 @@ define([
     initialize: function () {
       var self = this
       Backbone.Events.on(Config.get('EVENTS')[ 'CHANGE_BARCODE_WIDTH' ], function (event) {
-        self.set_barcode_widtharray()
+        // self.set_barcode_widtharray()
         self.update_dataset_check_icon()
         self.update_barcode_mode()
         self.update_barcode_type()

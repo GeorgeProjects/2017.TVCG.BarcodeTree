@@ -1,6 +1,30 @@
-.barcode-g-icon[class~=mouseover-highlight]{
-  fill: white
+.barcode-g-icon[class~=mouseover-highlight] {
+  fill: black !important;
 }
-.barcode-icon-bg{
+.barcode-g-icon[class~=icon-selection-highlight] {
+  fill: black;
+}
+.barcode-g-icon{
+  fill: white;
+}
+.barcode-icon-bg {
   fill: #808080
+}
+.container-bg {
+  fill: white;
+}
+.category-g > .category-bg{
+  fill:white;
+  stroke-width:1;
+  stroke:#dddddd;
+}
+.category-bg[class~=mouseover-highlight]{
+  fill:@category-bg-hovering-color;
+}
+.category-bg[class~=select-highlight]{
+  fill:@category-bg-hovering-color;
+}
+.container-bg{
+  stroke: #eee;
+  stroke-width: 2px;
 }

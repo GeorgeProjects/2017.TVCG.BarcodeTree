@@ -31,6 +31,9 @@
         let brushmove_trigger = function(){}
         let hovering_trigger = function(){}
         let unhovering_trigger = function(){}
+        let pre_highlight_bar = function(){}
+        let highlight_bar = function(){}
+        let un_highlight_bar = function(){}
         let _font_style = '10px sans-serif'
 
       /**
@@ -89,10 +92,11 @@
                       .data([null])
                       .enter()
                       .append('text')
-                      .attr('text-anchor', 'end')
+                      .attr('text-anchor', 'middle')
                       .attr('alignment-baseline', 'hanging')
                       .attr('class', 'x label')
                       .attr('x', innerWidth)
+                      .attr('dy', '0.4em')
                       .attr('fill', 'black')
                       .text(xLabel)
 
@@ -131,7 +135,7 @@
 
                   for(var lI = localBrushStart;lI < localBrushEnd;lI++){
                     var barId = dataset[lI].id
-                    prehighlightBar(barId, svg)
+                    pre_highlight_bar(barId, svg)
                   }
                   brushmove_trigger()
                   if((svg.selectAll('.click-highlight').empty()) && (svg.selectAll('.pre-click-highlight').empty())){
@@ -179,16 +183,32 @@
                       .enter()
                       .append('text')
                       .attr('class', 'y label')
-                      .attr('transform', 'rotate(-90)')
-                      .attr('text-anchor', 'end')
+                      // .attr('transform', 'rotate(-90)')
+                      .attr('text-anchor', 'start')
                       .attr('alignment-baseline', 'hanging')
-                      .attr('dy', '0em')
+                      .attr('dy', '-0.5em')
+                      .attr('dx', '0.5em')
                       .attr('fill', 'black')
                       .text(yLabel)
 
                     yAxis_g_enter.selectAll('text')
                       .style('font', _font_style)
                 }
+                //  首先绘制鼠标悬浮的bar chart
+                g.append('rect')
+                  .attr('class', 'hovering-rect')
+                  .attr('x', 0)
+                  .attr('y', 0)
+                  .attr('height', height + margin.bottom)
+                  .attr('width', 0)
+                  .attr('fill', '#ddd')
+                g.append('rect')
+                  .attr('class', 'compare-based-rect')
+                  .attr('x', 0)
+                  .attr('y', 0)
+                  .attr('height', height + margin.bottom)
+                  .attr('width', 0)
+                  .attr('fill', '#ddd')
               /**
                * 绘制柱状图, enter, exit, update
                */
@@ -206,6 +226,11 @@
                   .on('mouseover', function(d,i){
                     d3.selectAll('.library-bar').classed('hovering-highlight', false)
                     d3.select(this).classed('hovering-highlight', true)
+                    var rectX = (+d3.select(this).attr('x')) - bar_interval
+                  var rectWidth = (+d3.select(this).attr('width')) + bar_interval
+                    g.select('.hovering-rect')
+                      .attr('width', rectWidth)
+                      .attr('x', rectX)
                     var dataObj = dataset[i]
                     hovering_trigger(dataObj)
                   })
@@ -213,15 +238,18 @@
                     d3.select(this).classed('hovering-highlight', false)
                     var dataObj = dataset[i]
                     unhovering_trigger(dataObj)
+                    g.select('.hovering-rect')
+                      .attr('width', 0)
+                      .attr('x', 0)
                   })
                   .on('click', function(d,i){
                     d3.selectAll('.library-bar:not(.click-highlight)').classed('click-unhighlight', true)
                     var barId = d3.select(this).attr('id')
                     if(d3.select(this).classed('click-highlight')){
-                      unhighlightBar(barId, svg)
+                      un_highlight_bar(barId, svg)
                       bar_unclick_handler(barId)
                     }else{
-                      highlightBar(barId, svg)
+                      highlight_bar(barId)
                       //  是否更新barcode的位置
                       var isUpdate = true
                       bar_click_handler(barId, isUpdate)
@@ -243,32 +271,58 @@
         /**
          * 在brush extent的选框没有消失之前, 这些选择都是可以随着brush选框的调节进行变换的
          */
-        function prehighlightBar(barId, svg){
-          svg.select('#' + barId).classed('pre-click-highlight', true)
-          svg.select('#' + barId).classed('unchanged-pre-click-highlight', true)
-          if(!svg.select('#' + barId).classed('click-highlight')){
-            svg.select('#' + barId).classed('click-unhighlight', true)
+        chart.pre_highlight_bar = function(value){
+          if (!arguments.length) return pre_highlight_bar
+          if (typeof(value) != "function") {
+            console.warn("invalid value for brush_trigger", value)
+            return
           }
+          pre_highlight_bar = value
+          return chart
         }
+        // function prehighlightBar(barId, svg) {
+        //   svg.select('#' + barId).classed('pre-click-highlight', true)
+        //   svg.select('#' + barId).classed('unchanged-pre-click-highlight', true)
+        //   if(!svg.select('#' + barId).classed('click-highlight')){
+        //     svg.select('#' + barId).classed('click-unhighlight', true)
+        //   }
+        // }
         /**
          * 点击click或者brush选择bar
          * @param barId - bar的id
          */
-        function highlightBar(barId, svg){
-          svg.select('#' + barId).classed('click-unhighlight', false)
-          svg.select('#' + barId).classed('click-highlight', true)
+        chart.highlight_bar = function(value){
+          if (!arguments.length) return highlight_bar
+          if (typeof(value) != "function") {
+            console.warn("invalid value for brush_trigger", value)
+            return
+          }
+          highlight_bar = value
+          return chart
         }
+        // function highlightBar(barId, svg){
+        //   svg.select('#' + barId).classed('click-unhighlight', false)
+        //   svg.select('#' + barId).classed('click-highlight', true)
+        // }
         /**
          * 点击click取消选择bar
          */
-        function unhighlightBar(barId, svg){
-          svg.select('#' + barId).classed('click-highlight', false)
-          svg.select('#' + barId).classed('pre-click-highlight', false)
-          svg.select('#' + barId).classed('unchanged-pre-click-highlight', true)
-          svg.select('#' + barId).classed('click-unhighlight', true)
-          svg.select('#' + barId).style('fill', null)
+        chart.un_highlight_bar = function(value){
+          if (!arguments.length) return un_highlight_bar
+          if (typeof(value) != "function") {
+            console.warn("invalid value for brush_trigger", value)
+            return
+          }
+          un_highlight_bar = value
+          return chart
         }
-
+        // function unhighlightBar(barId, svg){
+        //   svg.select('#' + barId).classed('click-highlight', false)
+        //   svg.select('#' + barId).classed('pre-click-highlight', false)
+        //   svg.select('#' + barId).classed('unchanged-pre-click-highlight', true)
+        //   svg.select('#' + barId).classed('click-unhighlight', true)
+        //   svg.select('#' + barId).style('fill', null)
+        // }
 
         function clearAllBar(svg){
           svg.select('.extent').attr('x', 0).attr('y', 0).attr('width', 0)
