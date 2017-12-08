@@ -18,6 +18,9 @@
 						<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="subtree-collapse">
 									<i class="fa fa-eject" aria-hidden="true"></i>
 		    </button>
+						<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="subtree-uncollapse">
+									<i class="fa fa-sitemap" aria-hidden="true"></i>
+		    </button>
 		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="subtree-node-focus">
 									<i class="fa fa-eye" aria-hidden="true"></i>
 		    </button>

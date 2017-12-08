@@ -26,6 +26,7 @@ define([
       self.collapsedNodeIdArray = []
       self.tablelensSubtreeArray = []
       self.categoryNodeObjArray = null
+      self.operationItemList = []
       Variables.set('alignedNodeIdArray', self.alignedNodeIdArray)
       //  判断barcode当前的模式, 如果是global模式, 那么需要将barcode中的对齐部分进行改变
       var displayMode = Variables.get('displayMode')
@@ -43,6 +44,47 @@ define([
           alignedNodeCategory: rootCategory
         })
       }
+    },
+    //  在操作的节点数组中增加节点
+    add_operation_item: function (nodeData, barcodeTreeId, srcElement) {
+      var self = this
+      var operationItemList = self.operationItemList
+      var nodeObjId = nodeData.id
+      var nodeObjDepth = nodeData.depth
+      var elementExisted = false
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        var testNodeData = operationItemList[oI].nodeData
+        var testBarcodeTreeId = operationItemList[oI].barcodeTreeId
+        if ((nodeObjId === testNodeData.id) && (nodeObjDepth === testNodeData.depth)) {
+          elementExisted = true
+          break
+        }
+      }
+      if (!elementExisted) {
+        operationItemList.push({'nodeData': nodeData, 'barcodeTreeId': barcodeTreeId, 'srcElement': srcElement})
+      }
+    },
+    //  在操作的节点数组中删除节点
+    remove_operation_item: function (nodeData) {
+      var self = this
+      var operationItemList = self.operationItemList
+      var nodeObjId = nodeData.id
+      var nodeObjDepth = nodeData.depth
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        var testNodeData = operationItemList[oI].nodeData
+        var testBarcodeTreeId = operationItemList[oI].barcodeTreeId
+        if ((nodeObjId === testNodeData.id) && (nodeObjDepth === testNodeData.depth)) {
+          operationItemList.splice(oI, 1)
+          break
+        }
+      }
+      var updateOperationItem = operationItemList[operationItemList.length - 1]
+      return updateOperationItem
+    },
+    //  获取操作的节点数组
+    get_operation_item: function () {
+      var self = this
+      return self.operationItemList
     },
     add_barcode_dataset: function (barcodeModelArray) {
       var self = this
@@ -982,23 +1024,27 @@ define([
       var self = this
       //  在collapsedNodeIdArray中已经存在点击的节点
       var collapsedNodeIdArray = self.collapsedNodeIdArray
+      console.log('collapsedNodeIdArray', collapsedNodeIdArray)
       var nodeDataIdIndex = collapsedNodeIdArray.indexOf(nodeDataId)
       collapsedNodeIdArray.splice(nodeDataIdIndex, 1)
       self.each(function (model) {
         model.uncollapse_subtree(nodeDataId, nodeDataDepth)
       })
-      self.update_barcode_node_attr_array()
-      self.update_all_barcode_view()
-      self.trigger_render_supertree()
     },
     collapse_subtree: function (nodeDataId, nodeDataDepth) {
       var self = this
       //  在collapsedNodeIdArray中不存在点击的节点
       var collapsedNodeIdArray = self.collapsedNodeIdArray
-      collapsedNodeIdArray.push(nodeDataId)
+      if (collapsedNodeIdArray.indexOf(nodeDataId) === -1) {
+        collapsedNodeIdArray.push(nodeDataId)
+      }
       self.each(function (model) {
         model.collapse_subtree(nodeDataId, nodeDataDepth)
       })
+    },
+    //  更新所有的数据和视图
+    update_data_all_view: function () {
+      var self = this
       self.update_barcode_node_attr_array()
       self.update_all_barcode_view()
       self.trigger_render_supertree()
@@ -1020,6 +1066,21 @@ define([
         var collapseNodeDepth = collapsedNodeObjArray[cI].depth
         barcodeModel.collapse_subtree(collapsedNodeId, collapseNodeDepth)
       }
+    },
+    //  获取最上层对齐的父亲节点
+    get_aligned_uppest_parent: function (node_data, operated_tree_id) {
+      var self = this
+      var filterModelArray = self.where({barcodeTreeId: operated_tree_id})
+      if (filterModelArray.length > 0) {
+        var treeDataModel = filterModelArray[0]
+        var fatherCurrentNodes = treeDataModel.find_father_current_nodes(node_data)
+        for (var fI = (fatherCurrentNodes.length - 1); fI >= 1; fI--) {
+          if (self.get_aligned_state(fatherCurrentNodes[fI].id, fatherCurrentNodes[fI].depth)) {
+            return fatherCurrentNodes[fI]
+          }
+        }
+      }
+      return null
     },
     /**
      *  更新barcode节点的属性数组
@@ -1280,17 +1341,13 @@ define([
     //  选择barcode中的某个子树
     subtree_selection_click: function (nodeData, operatedTreeId) {
       var self = this
-      console.log('operatedTreeId', operatedTreeId)
       var filterModelArray = self.where({barcodeTreeId: operatedTreeId})
       if (filterModelArray.length > 0) {
         var operatedModel = filterModelArray[0]
-        console.log('operatedModel', operatedModel)
         var siblingNodes = operatedModel.find_sibling_nodes(nodeData)
-        console.log('siblingNodes', siblingNodes)
         var childrenNodes = operatedModel.find_children_nodes(nodeData)
         self.add_selected_subtree_id(nodeData.id, nodeData.depth, childrenNodes, siblingNodes)
       }
-
     },
     //  取消选择barcode中的节点
     unselection_click_handler: function (nodeData) {

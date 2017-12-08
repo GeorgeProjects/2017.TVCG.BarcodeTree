@@ -51,6 +51,8 @@ define([
       displayMode: 'ORIGINAL',//或者 COMPACT ORIGINAL GLOBAL
       //  当前hover的节点
       currentHoveringBarcodeId: null,
+      //  标记编辑节点的颜色
+      edit_icon_color: 'white',
       //****************************************************
       //  在barcode.collection.view视图中的参数
       // barcodeViewPaddingRight: 20,
