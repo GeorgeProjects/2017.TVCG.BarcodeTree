@@ -1913,7 +1913,6 @@ define([
     //  对于barcode model进行排序
     sort_barcode_model: function (comparedNodeId, parameter) {
       var self = this
-      console.log('sort_barcode_model')
       self.sortExistedConfigObj = {}
       var currentSortExistedConfigObj = self.sortExistedConfigObj
       currentSortExistedConfigObj.comparedNodeId = comparedNodeId
@@ -1987,12 +1986,13 @@ define([
     unset_based_model: function () {
       var self = this
       self.sortSimilarityConfigState = false
+      self.basedModel = null
       self.each(function (model) {
         model.set('compareBased', false)
         model.set('basedModel', null)
         model.set('alignedComparisonResultArray', null)
       })
-      self.trigger_null_color_encoding()
+      // self.trigger_null_color_encoding()
       // self.trigger_barcode_loc()
       self.trigger_update_summary()
       self.trigger_render_supertree()
@@ -2004,7 +2004,6 @@ define([
       var self = this
       var self = this
       self.sortSimilarityConfigState = false
-      self.basedModel = null
       self.reset_select_sequence()
       self.update_barcode_location()
     },
@@ -2031,6 +2030,9 @@ define([
     sort_selected_barcodetree: function () {
       var self = this
       var basedModel = self.basedModel
+      if (basedModel == null) {
+        return
+      }
       var alignedRangeObjArray = null
       if (Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) {
         alignedRangeObjArray = basedModel.get('alignedRangeObjArray')

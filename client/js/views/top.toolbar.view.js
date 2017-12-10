@@ -473,7 +473,9 @@ define([
       var parameter = 'desc'
       var barcodeCollection = self.options.barcodeCollection
       var nodeData = window.aligned_operated_node
-      barcodeCollection.sort_barcode_model(nodeData.id, parameter)
+      if (typeof (nodeData) !== 'undefined') {
+        barcodeCollection.sort_barcode_model(nodeData.id, parameter)
+      }
     },
     //  升序排列
     sort_asc: function () {
@@ -481,7 +483,9 @@ define([
       var parameter = 'asc'
       var barcodeCollection = self.options.barcodeCollection
       var nodeData = window.aligned_operated_node
-      barcodeCollection.sort_barcode_model(nodeData.id, parameter)
+      if (typeof (nodeData) !== 'undefined') {
+        barcodeCollection.sort_barcode_model(nodeData.id, parameter)
+      }
     },
     //  恢复原始序列
     sort_refresh: function () {
@@ -489,12 +493,18 @@ define([
       var barcodeCollection = self.options.barcodeCollection
       barcodeCollection.recover_barcode_model_sequence()
     },
-    // 相似性排序
+    //  相似性排序
+    //  按照barcode比较子树之间的相似性进行排序
     similarity_resorting: function () {
-
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      barcodeCollection.sort_selected_barcodetree()
     },
+    //  恢复barcode按照其选择序列的排序方式
     similarity_refresh: function () {
-
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      barcodeCollection.resort_default_barcodetree()
     },
     similarity_range: function () {
 

@@ -1465,7 +1465,10 @@ define([
               wait = null;
             // euclidean distance
             function dist(a, b) {
-              return Math.sqrt(Math.pow(a[0] - b[0], 2), Math.pow(a[1] - b[1], 2));
+              if ((typeof (a) !== 'undefined') && (typeof (b) !== 'undefined')) {
+                return Math.sqrt(Math.pow(a[0] - b[0], 2), Math.pow(a[1] - b[1], 2));
+              }
+              return 0
             }
 
             selection.on('mousedown', function () {
@@ -1662,7 +1665,10 @@ define([
               wait = null;
             // euclidean distance
             function dist(a, b) {
-              return Math.sqrt(Math.pow(a[0] - b[0], 2), Math.pow(a[1] - b[1], 2));
+              if ((typeof (a) !== 'undefined') && (typeof (b) !== 'undefined')) {
+                return Math.sqrt(Math.pow(a[0] - b[0], 2), Math.pow(a[1] - b[1], 2));
+              }
+              return 0;
             }
 
             selection.on('mousedown', function () {
@@ -2969,7 +2975,7 @@ define([
         self.singleTree.select('.bg').classed('compare-based-selection', true)
       }
       ,
-    //  删除当前的compare_based的标记
+      //  删除当前的compare_based的标记
       remove_compare_based_anchor: function () {
         var self = this
         var treeDataModel = self.model
