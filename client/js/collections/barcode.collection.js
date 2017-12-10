@@ -27,6 +27,7 @@ define([
       self.tablelensSubtreeArray = []
       self.categoryNodeObjArray = null
       self.operationItemList = []
+      self.selectedNodesIdObj = {}
       Variables.set('alignedNodeIdArray', self.alignedNodeIdArray)
       //  判断barcode当前的模式, 如果是global模式, 那么需要将barcode中的对齐部分进行改变
       var displayMode = Variables.get('displayMode')
@@ -45,6 +46,16 @@ define([
         })
       }
     },
+    //  获取当前的状态, 是否存在节点正在对齐的状态
+    get_current_aligned_state: function () {
+      var self = this
+      var alignedNodeIdArray = self.alignedNodeIdArray
+      var alignedState = false
+      if (alignedNodeIdArray.length > 0) {
+        alignedState = true
+      }
+      return alignedState
+    },
     //  在操作的节点数组中增加节点
     add_operation_item: function (nodeData, barcodeTreeId, srcElement) {
       var self = this
@@ -54,7 +65,6 @@ define([
       var elementExisted = false
       for (var oI = 0; oI < operationItemList.length; oI++) {
         var testNodeData = operationItemList[oI].nodeData
-        var testBarcodeTreeId = operationItemList[oI].barcodeTreeId
         if ((nodeObjId === testNodeData.id) && (nodeObjDepth === testNodeData.depth)) {
           elementExisted = true
           break
@@ -72,7 +82,6 @@ define([
       var nodeObjDepth = nodeData.depth
       for (var oI = 0; oI < operationItemList.length; oI++) {
         var testNodeData = operationItemList[oI].nodeData
-        var testBarcodeTreeId = operationItemList[oI].barcodeTreeId
         if ((nodeObjId === testNodeData.id) && (nodeObjDepth === testNodeData.depth)) {
           operationItemList.splice(oI, 1)
           break
@@ -280,6 +289,16 @@ define([
       var self = this
       var superTreeSelectedNodesId = self.superTreeSelectedNodesId
       delete superTreeSelectedNodesId[nodeObjId]
+    },
+    //  清空选择的barcode节点
+    clear_selected_subtree_id: function () {
+      var self = this
+      self.selectedNodesId = {}
+    },
+    //  清空选择的节点序列
+    clear_operation_item: function () {
+      var self = this
+      self.operationItemList = []
     },
     //  在singleview视图中点击barcode节点选中
     add_selected_subtree_id: function (nodeObjId, nodeObjDepth, subtreeNodeIdArray, siblingNodesArray) {
@@ -1352,7 +1371,8 @@ define([
     //  取消选择barcode中的节点
     unselection_click_handler: function (nodeData) {
       var self = this
-      self.remove_selection(nodeData.id)
+      var nodeObjId = nodeData.id
+      self.remove_selection(nodeObjId)
     },
     /**
      * fish eye 布局模式
@@ -1962,6 +1982,33 @@ define([
       // self.trigger_barcode_loc()
     },
     /**
+     *  取消barcode collection中的based model的设置
+     */
+    unset_based_model: function () {
+      var self = this
+      self.sortSimilarityConfigState = false
+      self.each(function (model) {
+        model.set('compareBased', false)
+        model.set('basedModel', null)
+        model.set('alignedComparisonResultArray', null)
+      })
+      self.trigger_null_color_encoding()
+      // self.trigger_barcode_loc()
+      self.trigger_update_summary()
+      self.trigger_render_supertree()
+    },
+    /**
+     *  按照barcodetree选择的顺序重新进行排序, 并且更新位置
+     */
+    resort_default_barcodetree: function () {
+      var self = this
+      var self = this
+      self.sortSimilarityConfigState = false
+      self.basedModel = null
+      self.reset_select_sequence()
+      self.update_barcode_location()
+    },
+    /**
      * 将选中的barcode的model放到collection数组的第一个位置作为比较的based model
      */
     set_based_model: function (barcodeTreeId) {
@@ -1974,6 +2021,16 @@ define([
       basedModel.set('compareBased', true)
       self.basedModel = basedModel
       self.get_comparison_result(basedModel)
+      // self.trigger_barcode_loc()
+      self.trigger_update_summary()
+      self.trigger_render_supertree()
+    },
+    /**
+     * 按照选择的barcodeTree进行排序
+     */
+    sort_selected_barcodetree: function () {
+      var self = this
+      var basedModel = self.basedModel
       var alignedRangeObjArray = null
       if (Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) {
         alignedRangeObjArray = basedModel.get('alignedRangeObjArray')
@@ -1995,9 +2052,6 @@ define([
         self.sort_based_as_first()
       }
       self.update_barcode_location()
-      // self.trigger_barcode_loc()
-      self.trigger_update_summary()
-      self.trigger_render_supertree()
     },
     change_layout_mode: function () {
       var self = this
@@ -2154,25 +2208,6 @@ define([
         .domain([0, selectItemNameArray.length - 1])
         .range([0, 1])
       return colorCompute(colorLinear(barcodeIndex))
-    },
-    /**
-     *
-     */
-    unset_based_model: function () {
-      var self = this
-      self.sortSimilarityConfigState = false
-      self.each(function (model) {
-        model.set('compareBased', false)
-        model.set('basedModel', null)
-        model.set('alignedComparisonResultArray', null)
-      })
-      self.basedModel = null
-      self.reset_select_sequence()
-      self.update_barcode_location()
-      self.trigger_null_color_encoding()
-      // self.trigger_barcode_loc()
-      self.trigger_update_summary()
-      self.trigger_render_supertree()
     },
     /**
      * 获取basedModel对象

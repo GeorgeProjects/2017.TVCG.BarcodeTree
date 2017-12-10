@@ -79,35 +79,110 @@ define([
     onShow: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
+      self.init_slider()
+      self.init_hovering_event()
+    },
+    //  取消button上的事件
+    disable_buttons: function (buttons) {
+      var self = this
+      buttons.prop('disabled', true)
+    },
+    //  增加button上的事件
+    enable_buttons: function (buttons) {
+      var self = this
+      buttons.prop('disabled', false)
+    },
+    //  初始化鼠标hovering的事件
+    init_hovering_event: function () {
+      var self = this
+      //  鼠标hovering在该视图上, 会删除在barcode上hovering的效果
+      $('#top-toolbar-container').on('mouseover', function () {
+        self.trigger_mouseout_event()
+      })
+    },
+    //  初始化sliderbar
+    init_slider: function () {
+      var self = this
+      var maxDepth = Variables.get('maxDepth')
+      var alignedBarcodeLevel = Variables.get('alignedBarcodeLevel')
+      var structureCustomHandle = $('#structure-custom-handle')
+      var alignedLevelText = $('#aligned-level-text')
+      $('#structure-comparison-slider').slider({
+        range: "min",
+        value: alignedBarcodeLevel,
+        min: 0,
+        max: maxDepth,
+        create: function () {
+          structureCustomHandle.text("L" + $(this).slider("value"));
+          alignedLevelText.text("L" + $(this).slider("value"));
+        },
+        slide: function (event, ui) {
+          structureCustomHandle.text("L" + ui.value);
+          alignedLevelText.text("L" + ui.value);
+        }
+      })
+      var similarityHandler = $("#similarity-custom-handle")
+      var similaritySliderText = $("#similarity-slider-text")
+      var selectedSimilarityRange = Variables.get('similarityRange')
+      $("#similarity-slider").slider({
+        min: 0,
+        max: 100,
+        value: selectedSimilarityRange,
+        create: function () {
+          var value = +$(this).slider("value")
+          if (value < 100) {
+            similarityHandler.text(value + "%")
+          } else {
+            similarityHandler.text(value)
+          }
+          similaritySliderText.text(value + "%")
+        },
+        slide: function (event, ui) {
+          var value = ui.value
+          if (value < 100) {
+            similarityHandler.text(value + "%")
+          } else {
+            similarityHandler.text(value)
+          }
+          similaritySliderText.text(value + "%")
+        }
+      });
     },
     // 节点选择
     single_node_selection: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      var nodeData = window.operated_node
-      var operatedTreeId = window.operated_tree_id
-      if ((typeof (nodeData) !== 'undefined') && (typeof (operatedTreeId) !== 'undefined')) {
-        barcodeCollection.node_selection_click(nodeData, operatedTreeId)
+      var operationItemList = barcodeCollection.get_operation_item()
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        var nodeData = operationItemList[oI].nodeData
+        var operatedTreeId = operationItemList[oI].barcodeTreeId
+        if ((typeof (nodeData) !== 'undefined') && (typeof (operatedTreeId) !== 'undefined')) {
+          barcodeCollection.node_selection_click(nodeData, operatedTreeId)
+        }
       }
       self.trigger_mouseout_event()
     },
     subtree_node_selection: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      var nodeData = window.operated_node
-      var operatedTreeId = window.operated_tree_id
-      if ((typeof (nodeData) !== 'undefined') && (typeof (operatedTreeId) !== 'undefined')) {
-        barcodeCollection.subtree_selection_click(nodeData, operatedTreeId)
+      var operationItemList = barcodeCollection.get_operation_item()
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        var nodeData = operationItemList[oI].nodeData
+        var operatedTreeId = operationItemList[oI].barcodeTreeId
+        if ((typeof (nodeData) !== 'undefined') && (typeof (operatedTreeId) !== 'undefined')) {
+          barcodeCollection.subtree_selection_click(nodeData, operatedTreeId)
+        }
       }
       self.trigger_mouseout_event()
     },
     selection_refresh: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      var nodeData = window.operated_node
+      var nodeData = JSON.parse(JSON.stringify(window.operated_node))
       if (typeof (nodeData) !== 'undefined') {
         barcodeCollection.unselection_click_handler(nodeData)
         var selectedObj = barcodeCollection.remove_operation_item(nodeData)
+        self.add_current_selected_icon()
         if (typeof (selectedObj) !== 'undefined') {
           var updatedSrcElement = selectedObj.srcElement
           var updateBarcodeTreeId = selectedObj.barcodeTreeId
@@ -125,6 +200,45 @@ define([
     //  删除barcode的节点上方增加icon
     remove_current_edit_icon: function (src_element) {
       d3.selectAll('.edit-icon').remove()
+    },
+    // 增加当前选择的节点的icon
+    add_current_selected_icon: function () {
+      var self = this
+      var barcodeCollection = window.Datacenter.barcodeCollection
+      var operationItemList = barcodeCollection.get_operation_item()
+      d3.selectAll('.select-icon').remove()
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        var nodeData = operationItemList[oI].nodeData
+        var barcodeTreeId = operationItemList[oI].barcodeTreeId
+        var srcElement = operationItemList[oI].srcElement
+        var nodeObjId = nodeData.id
+        self._add_single_selection_icon(srcElement, barcodeTreeId, nodeObjId)
+      }
+    },
+    // 增加单个当前选择的节点
+    _add_single_selection_icon: function (src_element, barcodeTreeId, nodeObjId) {
+      var nodeX = +d3.select(src_element).attr('x')
+      var nodeWidth = +d3.select(src_element).attr('width')
+      var nodeY = +d3.select(src_element).attr('y')
+      var nodeHeight = +d3.select(src_element).attr('height')
+      var iconSize = nodeWidth > nodeHeight ? nodeHeight : nodeWidth
+      var iconX = nodeX + nodeWidth / 2
+      var iconY = nodeY + nodeHeight / 2
+      var selectIconColor = Variables.get('select_icon_color')
+      d3.select('g#' + barcodeTreeId)
+        .select('#barcode-container')
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .attr('cursor', 'pointer')
+        .attr('class', 'select-icon')
+        .attr('id', nodeObjId)
+        .attr('font-family', 'FontAwesome')
+        .attr('x', iconX)
+        .attr('y', iconY)
+        .text('\uf08d')
+        .style('fill', selectIconColor)
+        .style('font-size', (iconSize + 2) + 'px')
     },
     //  在点击操作的barcode的节点上方增加icon
     add_current_edit_icon: function (src_element, barcodeTreeId) {
@@ -158,7 +272,7 @@ define([
       var nodeData = window.operated_node
       if (typeof (nodeData) !== 'undefined') {
         var operationItemList = barcodeCollection.get_operation_item()
-        for (var oI = 0; oI < operationItemList.length; oI++) {
+        for (var oI = (operationItemList.length - 1); oI >= 0; oI--) {
           var nodeData = operationItemList[oI].nodeData
           barcodeCollection.collapse_subtree(nodeData.id, nodeData.depth)
         }
@@ -178,19 +292,27 @@ define([
     subtree_node_focus: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
+      //  在对齐选中的子树之前, 首先要取消选中的子树的状态, 保证所有的对齐的节点都是选中的
+      // barcodeCollection.clear_selected_subtree_id()
       var operationItemList = barcodeCollection.get_operation_item()
-      var deferObj = $.Deferred()
-      $.when(deferObj)
-        .done(function () {
-          barcodeCollection.update_all_barcode_view()
-          self.trigger_super_view_update()
-          barcodeCollection.update_data_all_view()
-        })
-        .fail(function () {
-          console.log('defer fail')
-        })
-      var beginIndex = 0
-      self._align_single_operation_item(operationItemList, beginIndex, deferObj)
+      if (operationItemList.length !== 0) {
+        //  选择focus的节点进行对齐之后, barcode的config视图中会取消对于节点选择selection, 以及subtree的折叠的事件
+        self.disable_buttons($('#selection-operation-div .config-button'))
+        self.disable_buttons($('#subtree-collapse-operation .config-button'))
+        self.enable_buttons($('#compare-operation-div .config-button'))
+        var deferObj = $.Deferred()
+        $.when(deferObj)
+          .done(function () {
+            barcodeCollection.update_all_barcode_view()
+            self.trigger_super_view_update()
+            barcodeCollection.update_data_all_view()
+          })
+          .fail(function () {
+            console.log('defer fail')
+          })
+        var beginIndex = 0
+        self._align_single_operation_item(operationItemList, beginIndex, deferObj)
+      }
     },
     _align_single_operation_item: function (operation_item_list, operation_index, finish_align_defer) {
       var self = this
@@ -255,6 +377,11 @@ define([
         .done(function () {
           barcodeCollection.update_all_barcode_view()
           self.trigger_super_view_update()
+          var operationItemList = barcodeCollection.get_operation_item()
+          if (operationItemList.length === 0) {
+            self.enable_buttons($('#selection-operation-div .config-button'))
+            self.enable_buttons($('#subtree-collapse-operation .config-button'))
+          }
         })
       self.selection_refresh()
       self._subtree_unalign_handler(nodeData, finishRemoveAlignDeferObj)
@@ -263,12 +390,16 @@ define([
     summary_comparison: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      var nodeData = window.operated_node
-      if (typeof (nodeData) !== 'undefined') {
-        var nodeObjId = nodeData.id
-        self.trigger_show_summary_state(nodeObjId)
-        var changeSummaryState = true
-        barcodeCollection.set_summary_state(nodeObjId, changeSummaryState)
+      var nodeData = null
+      var operationItemList = barcodeCollection.get_operation_item()
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        nodeData = operationItemList[oI].nodeData
+        if (typeof (nodeData) !== 'undefined') {
+          var nodeObjId = nodeData.id
+          self.trigger_show_summary_state(nodeObjId)
+          var changeSummaryState = true
+          barcodeCollection.set_summary_state(nodeObjId, changeSummaryState)
+        }
       }
     },
     //  删除子树比较的summary
@@ -276,44 +407,56 @@ define([
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       var nodeData = window.operated_node
-      if (typeof (nodeData) !== 'undefined') {
-        var nodeObjId = nodeData.id
-        self.trigger_remove_summary_state(nodeObjId)
-        var changeSummaryState = false
-        barcodeCollection.set_summary_state(nodeObjId, changeSummaryState)
+      var operationItemList = barcodeCollection.get_operation_item()
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        var nodeData = operationItemList[oI].nodeData
+        if (typeof (nodeData) !== 'undefined') {
+          var nodeObjId = nodeData.id
+          self.trigger_remove_summary_state(nodeObjId)
+          var changeSummaryState = false
+          barcodeCollection.set_summary_state(nodeObjId, changeSummaryState)
+        }
       }
     },
     //  对于子树进行节点数目的比较
     node_number_comparison: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      var nodeData = window.operated_node
-      if (typeof (nodeData) !== 'undefined') {
-        var nodeObjId = nodeData.id
-        //  当前处于节点没有比较的状态, 需要切换成当前比较的状态
-        var changeNumComparisonState = true
-        barcodeCollection.set_node_num_comparison_state(nodeObjId, changeNumComparisonState)
-        //  重新更新barcode的节点数据, 并且更新视图
-        barcodeCollection.compute_aligned_subtree_range()
-        barcodeCollection.update_all_barcode_view()
-        self.trigger_super_view_update()
+      var nodeData = null
+      var operationItemList = barcodeCollection.get_operation_item()
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        nodeData = operationItemList[oI].nodeData
+        if (typeof (nodeData) !== 'undefined') {
+          var nodeObjId = nodeData.id
+          //  当前处于节点没有比较的状态, 需要切换成当前比较的状态
+          var changeNumComparisonState = true
+          barcodeCollection.set_node_num_comparison_state(nodeObjId, changeNumComparisonState)
+          //  重新更新barcode的节点数据, 并且更新视图
+          barcodeCollection.compute_aligned_subtree_range()
+        }
       }
+      barcodeCollection.update_all_barcode_view()
+      self.trigger_super_view_update()
     },
     //  删除节点数目的比较的功能
     _node_number_comparison: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      var nodeData = window.operated_node
-      if (typeof (nodeData) !== 'undefined') {
-        var nodeObjId = nodeData.id
-        //  当前处于节点没有比较的状态, 需要切换成当前比较的状态
-        var changeNumComparisonState = false
-        barcodeCollection.set_node_num_comparison_state(nodeObjId, changeNumComparisonState)
-        //  重新更新barcode的节点数据, 并且更新视图
-        barcodeCollection.compute_aligned_subtree_range()
-        barcodeCollection.update_all_barcode_view()
-        self.trigger_super_view_update()
+      var nodeData = null
+      var operationItemList = barcodeCollection.get_operation_item()
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        nodeData = operationItemList[oI].nodeData
+        if (typeof (nodeData) !== 'undefined') {
+          var nodeObjId = nodeData.id
+          //  当前处于节点没有比较的状态, 需要切换成当前比较的状态
+          var changeNumComparisonState = false
+          barcodeCollection.set_node_num_comparison_state(nodeObjId, changeNumComparisonState)
+          //  重新更新barcode的节点数据, 并且更新视图
+          barcodeCollection.compute_aligned_subtree_range()
+        }
       }
+      barcodeCollection.update_all_barcode_view()
+      self.trigger_super_view_update()
     },
     structure_comparison: function () {
 
@@ -324,14 +467,27 @@ define([
       self._node_number_comparison()
     },
     // 排序
+    //  降序排列
     sort_desc: function () {
-
+      var self = this
+      var parameter = 'desc'
+      var barcodeCollection = self.options.barcodeCollection
+      var nodeData = window.aligned_operated_node
+      barcodeCollection.sort_barcode_model(nodeData.id, parameter)
     },
+    //  升序排列
     sort_asc: function () {
-
+      var self = this
+      var parameter = 'asc'
+      var barcodeCollection = self.options.barcodeCollection
+      var nodeData = window.aligned_operated_node
+      barcodeCollection.sort_barcode_model(nodeData.id, parameter)
     },
+    //  恢复原始序列
     sort_refresh: function () {
-
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      barcodeCollection.recover_barcode_model_sequence()
     },
     // 相似性排序
     similarity_resorting: function () {

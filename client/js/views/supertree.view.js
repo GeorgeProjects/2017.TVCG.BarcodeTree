@@ -199,7 +199,7 @@ define([
             } else {
               return 'category-bg'
             }
-          })
+          }) // .category-bg在barcode-supertree.less中的第21行
           .attr('id', rootObj.id)
           .attr("x", 0)
           .attr("width", rootObj.textWidth)
@@ -465,7 +465,6 @@ define([
         self.add_single_category_text(rootId)
       }
       for (var aI = 0; aI < alignedRangeObjArray.length; aI++) {
-        console.log('alignedRangeObjArray[aI]', alignedRangeObjArray[aI])
         var rangeStartNodeIndex = alignedRangeObjArray[aI].rangeStartNodeIndex
         var nodeId = barcodeNodeAttrArray[rangeStartNodeIndex].id
         self.add_single_category_text(nodeId)
@@ -933,7 +932,7 @@ define([
         .attr('height', 0)
         .style("fill", self.fill_style_handler.bind(self))
         .on('mouseover', function (d, i) {
-          d3.select(this).classed('sort-hovering-highlight', true)
+          d3.select(this).classed('sort-hovering-highlight', true)//
           // d3.select(this).attr('color', 'red')
         })
         .on('mouseout', function (d, i) {

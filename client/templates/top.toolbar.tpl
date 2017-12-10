@@ -14,36 +14,43 @@
 </span>
 <span id = "subtree-operation-div" class = "config-div">
 		<span class = "operation-label">SUBTREE</span>
-		<span id = "subtree-operation" class="btn-group" role="group">
+		<span id = "subtree-collapse-operation" class="btn-group" role="group">
 						<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="subtree-collapse">
 									<i class="fa fa-eject" aria-hidden="true"></i>
 		    </button>
 						<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="subtree-uncollapse">
 									<i class="fa fa-sitemap" aria-hidden="true"></i>
 		    </button>
+		</span>
+		<span id = "subtree-focus-operation" class="btn-group" role="group">
 		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="subtree-node-focus">
 									<i class="fa fa-eye" aria-hidden="true"></i>
 		    </button>
 		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="subtree-operation-refresh">
-		       <i class="fa fa-refresh" aria-hidden="true"></i>
+		       <i class="fa fa-times" aria-hidden="true"></i>
 		    </button>
 		</span>
 </span>
 <span id = "compare-operation-div" class = "config-div">
 		<span class = "operation-label">COMPARE</span>
 		<span id = "compare-operation" class="btn-group" role="group">
-						<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="summary-comparison">
+						<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="summary-comparison" disabled>
 									<i class="fa fa-align-right" aria-hidden="true"></i>
 		    </button>
-		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="node-number-comparison">
+		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="node-number-comparison" disabled>
 									<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
 		    </button>
-		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="structure-comparison">
-		       <i class="fa icon iconfont icon-comparisonsamenode"></i>
-		    </button>
-		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="refresh-comparison">
+						<button class="btn btn-default btn-lg dropdown-toggle config-button" type="button" id = "structure-comparison" data-toggle="dropdown" aria-label="Right Align" aria-haspopup="true" aria-expanded="false" disabled>
+         <i class="fa icon iconfont icon-comparisonsamenode"></i> <span id = "aligned-level-text"></span> <span class="caret"></span>
+       </button>
+       <div class="dropdown-menu">
+         <span class = "slider-label">ALIGNED LEVEL:</span>
+          <div id="structure-comparison-slider" class = "slider-div"><div id="structure-custom-handle" class="ui-slider-handle"></div></div>
+       </div>
+		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="refresh-comparison" disabled>
 		       <i class="fa fa-refresh" aria-hidden="true"></i>
 		    </button>
+
 		</span>
 </span>
 <span id = "sort-operation-div" class = "config-div">
@@ -66,14 +73,16 @@
 						<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="similarity-resorting">
 									<i class="fa fa-arrow-up" aria-hidden="true"></i>
 		    </button>
-		    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="similarity-refresh">
-		       <i class="fa fa-refresh" aria-hidden="true"></i>
-		    </button>
 		     <button class="btn btn-default btn-lg dropdown-toggle config-button" type="button" id = "similarity-range" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         20%<span class="caret"></span>
+         <span id = "similarity-slider-text"> 20% </span><span class="caret"></span>
        </button>
-       <ul class="dropdown-menu">
-       </ul>
+       <div class="dropdown-menu">
+          <span class = "slider-label">SIMILARITY PERCENTAGE:</span>
+          <div id="similarity-slider" class = "slider-div"><div id="similarity-custom-handle" class="ui-slider-handle"></div></div>
+       </div>
+							<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="similarity-refresh">
+		       <i class="fa fa-refresh" aria-hidden="true"></i>
+		     </button>
 		</span>
 </span>
 <span id = "config-panel" class = "config-div">

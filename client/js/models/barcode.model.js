@@ -304,6 +304,7 @@ define([
         var collapsedNextRootNodeIndex = 0
         var barcodeWidthArray = Variables.get('barcodeWidthArray')
         var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+        var foundClickedNode = false
         if (nodeAttrArray.length === 0) {
           return
         }
@@ -311,9 +312,12 @@ define([
         for (var nI = 0; nI < nodeAttrArray.length; nI++) {
           if ((nodeAttrArray[nI].id === nodeDataId) && (nodeAttrArray[nI].depth === nodeDataDepth)) {
             collapsedRootNodeIndex = nI
+            foundClickedNode = true
             break
           }
         }
+        if (!foundClickedNode)
+          return
         //  第二段依次伸展
         for (var nI = (collapsedRootNodeIndex + 1); nI < nodeAttrArray.length; nI++) {
           if (nodeAttrArray[nI].depth === nodeDataDepth) {
@@ -340,6 +344,9 @@ define([
         //  第三段依次进行变化
         var currentNodeX = nodeAttrArray[collapsedNextRootIndexBefore].x + nodeAttrArray[collapsedNextRootIndexBefore].width + barcodeNodeInterval
         var differenceX = currentNodeX - nodeAttrArray[collapsedNextRootNodeIndex].x
+        if (collapsedNextRootNodeIndex === 0) {
+          differenceX = 0
+        }
         for (var nI = collapsedNextRootNodeIndex; nI < nodeAttrArray.length; nI++) {
           nodeAttrArray[nI].x = nodeAttrArray[nI].x + differenceX
         }
@@ -359,6 +366,7 @@ define([
         var collapsedRootNodeIndex = 0
         var collapsedNextRootNodeIndex = 0
         var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+        var foundClickedNode = false
         if (nodeAttrArray.length === 0) {
           return
         }
@@ -366,9 +374,12 @@ define([
         for (var nI = 0; nI < nodeAttrArray.length; nI++) {
           if ((nodeAttrArray[nI].id === nodeDataId) && (nodeAttrArray[nI].depth === nodeDataDepth)) {
             collapsedRootNodeIndex = nI
+            foundClickedNode = true
             break
           }
         }
+        if (!foundClickedNode)
+          return
         //  第二段依次缩进
         for (var nI = (collapsedRootNodeIndex + 1); nI < nodeAttrArray.length; nI++) {
           if (nodeAttrArray[nI].depth === nodeDataDepth) {
@@ -381,6 +392,10 @@ define([
         //  第三段依次进行变化
         var currentNodeX = nodeAttrArray[collapsedRootNodeIndex].x + nodeAttrArray[collapsedRootNodeIndex].width + barcodeNodeInterval
         var differenceX = currentNodeX - nodeAttrArray[collapsedNextRootNodeIndex].x
+        if (collapsedRootNodeIndex === 0) {
+          differenceX = 0
+        }
+        console.log('differenceX', differenceX)
         for (var nI = collapsedNextRootNodeIndex; nI < nodeAttrArray.length; nI++) {
           nodeAttrArray[nI].x = nodeAttrArray[nI].x + differenceX
         }

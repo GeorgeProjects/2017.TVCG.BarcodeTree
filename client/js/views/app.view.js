@@ -84,6 +84,7 @@ define([
           self.render_histogram_view()
           self.render_single_view()
           self.render_barcode_node_config_view()
+          self.render_barcodetree_view()
         })
         Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_BARCODE_VIEW'], function () {
           self.render_barcodetree_view()

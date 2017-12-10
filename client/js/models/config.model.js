@@ -250,7 +250,10 @@ define([
       'COMPARISON_RESULT_PADDING': 80,//80,
       'SERVER_ADDRESS': window.location.hostname, //  '127.0.0.1'
       'SERVER_PORT': 8081,
+      //  barcode.single.view中动画需要的时间
       'TRANSITON_DURATION': 1000,
+      //  barcode.single.view中结束动画之后增加增加icon需要的时间
+      'WAIT_DURATION': 1500,
       'MOVE_DURATION': 1000,
       'INITIALIZE_DATESET': 'LibraryTree_DailyName',
       'COMPACT_TOLERANCE': 50,

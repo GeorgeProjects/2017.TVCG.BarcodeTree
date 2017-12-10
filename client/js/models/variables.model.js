@@ -53,6 +53,8 @@ define([
       currentHoveringBarcodeId: null,
       //  标记编辑节点的颜色
       edit_icon_color: 'white',
+      //  标记选择节点的颜色
+      select_icon_color: 'white',
       //****************************************************
       //  在barcode.collection.view视图中的参数
       // barcodeViewPaddingRight: 20,
@@ -60,6 +62,10 @@ define([
       barcodeTextPaddingLeft: 15,
       //  barcode的边界宽度
       barcodePaddingLeft: 40,
+      //****************************************************
+      //  top.toolbar.view视图中的参数
+      alignedBarcodeLevel: 0,
+      similarityRange: 0,
       //****************************************************
       'finishInit': false,
       //  whether loading page show
@@ -238,7 +244,6 @@ define([
       var barcodeTreeConfigHeight = self.get('barcodeTreeConfigHeight')
       var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - selectItemNameArray.length
       var updatedHeight = barcodeViewHeight / selectItemNameArray.length
-      console.log('updatedHeight', updatedHeight)
       window.barcodeHeight = updatedHeight > barcodeHeight ? barcodeHeight : new Number(updatedHeight).toFixed(1)
       self.change_barcode_node_config(window.barcodeHeight)
       // window.Datacenter.barcodeCollection.update_height()
