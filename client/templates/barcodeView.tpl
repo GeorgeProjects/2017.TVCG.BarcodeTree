@@ -7,15 +7,15 @@
 	</div>
 </span>
 <div id = 'barcode-config'>
-    <button id = "btn-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title = "Distribution View">
-      <i class="fa fa-chevron-left" aria-hidden="true"></i>
+    <button id = "distribution-view-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title = "Distribution View">
+       <span id = "distribution-view-controller" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
     </button>
     <div id = "barcode-distribution-view" class="content">
     </div>
 </div>
 <div id = 'barcodetree-scrollpanel'>
 		<button id = "supertree-view-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title = "Supertree View">
-		    <i class="fa fa-chevron-down" aria-hidden="true"></i>
+		    <span id = "supertree-state-controller" class="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
 		</button>
 		<div id = 'barcodetree-view'>
 		</div>

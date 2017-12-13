@@ -65,7 +65,7 @@ define([
       //****************************************************
       //  top.toolbar.view视图中的参数
       alignedBarcodeLevel: 0,
-      similarityRange: 0,
+      similarityRange: [0, 0],
       //****************************************************
       'finishInit': false,
       //  whether loading page show

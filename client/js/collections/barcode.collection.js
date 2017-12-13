@@ -799,12 +799,6 @@ define([
           alignedNodeCategory: rootCategory
         })
       }
-      //  根据选择对齐的barcode的节点层级更新当前的对齐层级, 当前的对齐层级是最深的层级
-      var nodeDepth = rootLevel
-      var currentAligneLevel = Variables.get('alignedLevel')
-      if (currentAligneLevel < nodeDepth) {
-        Variables.set('alignedLevel', nodeDepth)
-      }
       window.start_build_supertree_collection529 = new Date()
       window.Datacenter.buildSuperTree(rootId, rootLevel, rootCategory, addedSubtreeDeferObj, alignedLevel)
     },
@@ -2106,6 +2100,7 @@ define([
         return barcodeIndex
       }
     },
+    //  根据barcodeModel与basedBarcodeModel比较的结果进行排序
     sort_accord_similarity: function () {
       var self = this
       self.sortSimilarityConfigState = true
@@ -2114,31 +2109,17 @@ define([
         modelArray.push(model)
       })
       modelArray.sort(function (model_a, model_b) {
-        var nodeDifferenceA = getNodeDifference(model_a)
-        var nodeDifferenceB = getNodeDifference(model_b)
+        var nodeDifferenceA = model_a.get_node_difference()
+        var nodeDifferenceB = model_b.get_node_difference()
         return nodeDifferenceA - nodeDifferenceB
       })
       for (var mI = 0; mI < modelArray.length; mI++) {
         var barcodeTreeId = modelArray[mI].get('barcodeTreeId')
         // var encodedColor = self.get_color_accord_similarity(mI)
         modelArray[mI].set('barcodeIndex', mI)
-        // modelArray[mI].set('barcodeRectBgColor', encodedColor)
       }
       //  有的情况下basedTree没有排在最上方, 所以需要增加一个sort_based_as_first排序
       self.sort_based_as_first()
-      function getNodeDifference(model) {
-        var alignedComparisonResultArray = model.get('alignedComparisonResultArray')
-        var nodeDifference = 0
-        if (alignedComparisonResultArray != null) {
-          for (var aI = 0; aI < alignedComparisonResultArray.length; aI++) {
-            var alignedComparisonResultObj = alignedComparisonResultArray[aI]
-            var addedNodeIdArray = alignedComparisonResultObj.addedNodeIdArray
-            var missedNodeIdArray = alignedComparisonResultObj.missedNodeIdArray
-            nodeDifference = nodeDifference + addedNodeIdArray.length + missedNodeIdArray.length
-          }
-        }
-        return nodeDifference
-      }
     },
     /**
      * 在histogram视图中更新颜色按照相似度进行编码
@@ -2237,6 +2218,31 @@ define([
       var self = this
       self.each(function (model) {
         model.get_single_comparison_result()
+      })
+    },
+    /**
+     *  筛选与当前barcode比较一定相似度范围的barcode
+     */
+    filter_barcode: function (percentage_value) {
+      var self = this
+      var percentageMinValue = percentage_value[0] / 100
+      var percentageMaxValue = percentage_value[1] / 100
+      self.each(function (model) {
+        var nodeDifference = model.get_node_difference()
+        if ((nodeDifference <= percentageMaxValue) && (nodeDifference >= percentageMinValue)) {
+          model.set('filterState', true)
+        } else {
+          model.set('filterState', false)
+        }
+      })
+    },
+    /**
+     *  清空所有筛选的barcode
+     */
+    clear_filter_barcode: function () {
+      var self = this
+      self.each(function (model) {
+        model.set('filterState', false)
       })
     },
     /**

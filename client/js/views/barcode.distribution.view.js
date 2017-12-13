@@ -33,7 +33,6 @@ define([
       var panelHeaderHeight = $('.panel-header').height()
       var panelContentHeight = $('.panel-content').height()
       var distributionHistogramHeight = (barcodeConfigDivHeight - panelHeaderHeight - panelContentHeight) / 5
-      console.log('distributionHistogramHeight', distributionHistogramHeight)
       self.distributionHistogramHeight = distributionHistogramHeight
       var barcodeNodeCollectionObj = Variables.get('barcodeNodeCollectionObj')
       for (var item in barcodeNodeCollectionObj) {
@@ -78,8 +77,6 @@ define([
       var barClass = 'distribution-bar'
       var histogramWidth = distributionHistogramWidth - margin.left - margin.right
       var histogramHeight = distributionHistogramHeight - margin.top - margin.bottom
-      console.log('histogramWidth', histogramWidth)
-      console.log('histogramHeight', histogramHeight)
       var barchart = d3.chart()
         .width(histogramWidth)
         .height(histogramHeight)

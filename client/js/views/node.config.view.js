@@ -52,6 +52,7 @@ define([
       })
       $('#barcode-node-config #config-close').on('click', function () {
         $('#barcode-node-config').css({visibility: 'hidden'})
+        $('#config-operation #node-config-panel-toggle').removeClass('active')
       })
       $('#barcode-node-config').draggable()
       $('#barcode-node-config .panel-header').css('cursor', 'pointer')

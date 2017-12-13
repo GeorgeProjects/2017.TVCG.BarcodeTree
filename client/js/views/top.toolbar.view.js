@@ -104,47 +104,52 @@ define([
     init_slider: function () {
       var self = this
       var maxDepth = Variables.get('maxDepth')
-      var alignedBarcodeLevel = Variables.get('alignedBarcodeLevel')
+      var alignedBarcodeLevel = Variables.get('alignedLevel')
       var structureCustomHandle = $('#structure-custom-handle')
       var alignedLevelText = $('#aligned-level-text')
+      var barcodeCollection = self.options.barcodeCollection
+      alignedLevelText.text("L" + alignedBarcodeLevel)
+      structureCustomHandle.text("L" + alignedBarcodeLevel)
       $('#structure-comparison-slider').slider({
         range: "min",
         value: alignedBarcodeLevel,
-        min: 0,
+        min: alignedBarcodeLevel,
         max: maxDepth,
         create: function () {
-          structureCustomHandle.text("L" + $(this).slider("value"));
-          alignedLevelText.text("L" + $(this).slider("value"));
+          structureCustomHandle.text("L" + $(this).slider("value"))
+          alignedLevelText.text("L" + $(this).slider("value"))
         },
         slide: function (event, ui) {
           structureCustomHandle.text("L" + ui.value);
           alignedLevelText.text("L" + ui.value);
+          Variables.set('alignedLevel', ui.value)
+          barcodeCollection.aligned_current_tree()
         }
       })
-      var similarityHandler = $("#similarity-custom-handle")
+      var similarityMinHandler = $("#similarity-min-handle")
+      var similarityMaxHandler = $("#similarity-max-handle")
       var similaritySliderText = $("#similarity-slider-text")
       var selectedSimilarityRange = Variables.get('similarityRange')
+      console.log('selectedSimilarityRange', selectedSimilarityRange)
       $("#similarity-slider").slider({
+        range: "true",
         min: 0,
         max: 100,
-        value: selectedSimilarityRange,
+        values: selectedSimilarityRange,
         create: function () {
-          var value = +$(this).slider("value")
-          if (value < 100) {
-            similarityHandler.text(value + "%")
-          } else {
-            similarityHandler.text(value)
-          }
-          similaritySliderText.text(value + "%")
+          similarityMinHandler.text(selectedSimilarityRange[0] + "%")
+          similarityMaxHandler.text(selectedSimilarityRange[1] + "%")
+          similaritySliderText.text("0%")
         },
         slide: function (event, ui) {
-          var value = ui.value
-          if (value < 100) {
-            similarityHandler.text(value + "%")
-          } else {
-            similarityHandler.text(value)
+          var value = ui.values
+          similarityMinHandler.text(value[0] + "%")
+          similarityMaxHandler.text(value[1] + "%")
+          similaritySliderText.text(value[0] + "%-" + value[1] + "%")
+          barcodeCollection.filter_barcode(value)
+          if ((value[0] === 0) && (value[1] === 0)) {
+            similaritySliderText.text("0%")
           }
-          similaritySliderText.text(value + "%")
         }
       });
     },
@@ -160,6 +165,8 @@ define([
           barcodeCollection.node_selection_click(nodeData, operatedTreeId)
         }
       }
+      $('#barcode-selection .config-button').removeClass('active')
+      $('#barcode-selection #single-node-selection').addClass('active')
       self.trigger_mouseout_event()
     },
     subtree_node_selection: function () {
@@ -173,6 +180,8 @@ define([
           barcodeCollection.subtree_selection_click(nodeData, operatedTreeId)
         }
       }
+      $('#barcode-selection .config-button').removeClass('active')
+      $('#barcode-selection #subtree-node-selection').addClass('active')
       self.trigger_mouseout_event()
     },
     selection_refresh: function () {
@@ -195,6 +204,7 @@ define([
           delete window.operated_tree_id
         }
       }
+      $('#barcode-selection .config-button').removeClass('active')
       self.trigger_mouseout_event()
     },
     //  删除barcode的节点上方增加icon
@@ -278,6 +288,8 @@ define([
         }
         barcodeCollection.update_data_all_view()
       }
+      $('#subtree-collapse-operation .config-button').removeClass('active')
+      $('#barcode-selection #subtree-collapse').addClass('active')
     },
     subtree_uncollapse: function () {
       var self = this
@@ -288,6 +300,26 @@ define([
         barcodeCollection.uncollapse_subtree(nodeData.id, nodeData.depth)
       }
       barcodeCollection.update_data_all_view()
+      $('#subtree-collapse-operation .config-button').removeClass('active')
+      $('#barcode-selection #subtree-collapse-operation').addClass('active')
+    },
+    //  更新当前对齐的层级
+    update_aligned_level: function () {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      var operationItemList = barcodeCollection.get_operation_item()
+      for (var oI = 0; oI < operationItemList.length; oI++) {
+        if (typeof (operationItemList[oI].nodeData) !== 'undefined') {
+          //  根据选择对齐的barcode的节点层级更新当前的对齐层级, 当前的对齐层级是最深的层级
+          var nodeDepth = operationItemList[oI].nodeData.depth
+          var currentAligneLevel = Variables.get('alignedLevel')
+          if (currentAligneLevel < nodeDepth) {
+            Variables.set('alignedLevel', nodeDepth)
+          }
+        }
+      }
+      //  更新barcode的align的层级
+      self.init_slider()
     },
     subtree_node_focus: function () {
       var self = this
@@ -295,11 +327,16 @@ define([
       //  在对齐选中的子树之前, 首先要取消选中的子树的状态, 保证所有的对齐的节点都是选中的
       // barcodeCollection.clear_selected_subtree_id()
       var operationItemList = barcodeCollection.get_operation_item()
+      self.update_aligned_level()
       if (operationItemList.length !== 0) {
         //  选择focus的节点进行对齐之后, barcode的config视图中会取消对于节点选择selection, 以及subtree的折叠的事件
         self.disable_buttons($('#selection-operation-div .config-button'))
         self.disable_buttons($('#subtree-collapse-operation .config-button'))
+        self.enable_buttons($('#sort-operation-div .config-button'))
         self.enable_buttons($('#compare-operation-div .config-button'))
+        //  disable之后需要取消config button的高亮状态
+        $('#selection-operation-div .config-button').removeClass('active')
+        $('#subtree-collapse-operation .config-button').removeClass('active')
         var deferObj = $.Deferred()
         $.when(deferObj)
           .done(function () {
@@ -377,13 +414,16 @@ define([
         .done(function () {
           barcodeCollection.update_all_barcode_view()
           self.trigger_super_view_update()
-          var operationItemList = barcodeCollection.get_operation_item()
-          if (operationItemList.length === 0) {
-            self.enable_buttons($('#selection-operation-div .config-button'))
-            self.enable_buttons($('#subtree-collapse-operation .config-button'))
-          }
         })
       self.selection_refresh()
+      var operationItemList = barcodeCollection.get_operation_item()
+      if (operationItemList.length === 0) {
+        //  恢复到未选择align subtree时的状态
+        self.enable_buttons($('#selection-operation-div .config-button'))
+        self.enable_buttons($('#subtree-collapse-operation .config-button'))
+        self.disable_buttons($('#compare-operation-div .config-button'))
+        self.disable_buttons($('#sort-operation-div .config-button'))
+      }
       self._subtree_unalign_handler(nodeData, finishRemoveAlignDeferObj)
     },
     // 子树比较
@@ -401,6 +441,7 @@ define([
           barcodeCollection.set_summary_state(nodeObjId, changeSummaryState)
         }
       }
+      $('#compare-operation #summary-comparison').addClass('active')
     },
     //  删除子树比较的summary
     _remove_summary_comparison: function () {
@@ -417,6 +458,7 @@ define([
           barcodeCollection.set_summary_state(nodeObjId, changeSummaryState)
         }
       }
+      $('#compare-operation #summary-comparison').removeClass('active')
     },
     //  对于子树进行节点数目的比较
     node_number_comparison: function () {
@@ -436,6 +478,7 @@ define([
         }
       }
       barcodeCollection.update_all_barcode_view()
+      $('#compare-operation #node-number-comparison').addClass('active')
       self.trigger_super_view_update()
     },
     //  删除节点数目的比较的功能
@@ -456,6 +499,7 @@ define([
         }
       }
       barcodeCollection.update_all_barcode_view()
+      $('#compare-operation #node-number-comparison').removeClass('active')
       self.trigger_super_view_update()
     },
     structure_comparison: function () {
@@ -476,6 +520,8 @@ define([
       if (typeof (nodeData) !== 'undefined') {
         barcodeCollection.sort_barcode_model(nodeData.id, parameter)
       }
+      $('#sort-operation .config-button').removeClass('active')
+      $('#sort-operation #sort-desc').addClass('active')
     },
     //  升序排列
     sort_asc: function () {
@@ -486,12 +532,15 @@ define([
       if (typeof (nodeData) !== 'undefined') {
         barcodeCollection.sort_barcode_model(nodeData.id, parameter)
       }
+      $('#sort-operation .config-button').removeClass('active')
+      $('#sort-operation #sort-asc').addClass('active')
     },
     //  恢复原始序列
     sort_refresh: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       barcodeCollection.recover_barcode_model_sequence()
+      $('#sort-operation .config-button').removeClass('active')
     },
     //  相似性排序
     //  按照barcode比较子树之间的相似性进行排序
@@ -499,12 +548,14 @@ define([
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       barcodeCollection.sort_selected_barcodetree()
+      $('#tree-operation .config-button').removeClass('active')
     },
     //  恢复barcode按照其选择序列的排序方式
     similarity_refresh: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       barcodeCollection.resort_default_barcodetree()
+      $('#tree-operation .config-button').removeClass('active')
     },
     similarity_range: function () {
 
@@ -512,13 +563,15 @@ define([
     // 打开barcode节点的配置视图
     node_config_panel_toggle_handler: function () {
       $('#barcode-node-config').css({visibility: 'visible'})
+      $('#config-operation #node-config-panel-toggle').addClass('active')
     },
     //  打开barcode tree的配置视图
     tree_config_panel_toggle_handler: function () {
       var self = this
       // Variables.set('current_config_barcodeTreeId', barcodeTreeId)
-      self.trigger_update_tree_config_view()
+      // self.trigger_update_tree_config_view()
       $('#tree-config-div').css({visibility: 'visible'})
+      $('#config-operation #tree-config-panel-toggle').addClass('active')
     }
   })
 })

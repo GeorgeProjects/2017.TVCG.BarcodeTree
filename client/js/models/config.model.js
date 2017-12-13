@@ -127,7 +127,7 @@ define([
         //  隐藏loading的标志
         'HIDE_LOADING_ICON': 'hide-loading-icon',
         //***************************
-        //barcode.single视图上发出的信号
+        //  barcode.single视图上发出的信号
         //  渲染覆盖在barcode的上面的带有斜纹的矩形
         'RENDER_HOVER_RECT': 'render-hover-rect',
         //  高亮相关的节点
@@ -156,6 +156,12 @@ define([
         'TRANSITON_ORIGINAL_TO_COMPACT': 'transition-original-to-compact', // para: null
         //  将barcode从compact模式转换为original模式
         'TRANSITON_COMPACT_TO_ORIGINAL': 'transition-compact-to-original', // para: null
+        //***************************
+        //  从tree.config视图中发出的信号
+        //  用户点击attribute按钮时, 用户打开distribution视图
+        'OPEN_DISTRIBUTION_VIEW': 'open-distribution-view',
+        //  用户点击捅破logical按钮时, 用户关闭distribution视图
+        'CLOSE_DISTRIBUTION_VIEW': 'close-distribution-view',
         //*******************************************
         //  删除的属性
         //*******************************************

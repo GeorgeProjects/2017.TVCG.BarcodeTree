@@ -58,7 +58,6 @@ define([
     },
     trigger_higlight_all_related_nodes: function (rootObj) {
       var self = this
-      console.log('trigger_higlight_all_related_nodes')
       Backbone.Events.trigger(Config.get('EVENTS')['HIGHLIGHT_ALL_RELATED_NODE'], {
         'nodeObj': rootObj
       })

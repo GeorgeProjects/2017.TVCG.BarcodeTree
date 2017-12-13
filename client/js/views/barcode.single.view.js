@@ -44,6 +44,7 @@ define([
         self.listenTo(treeDataModel, 'change:viewUpdateSelectionState', self.node_mouseout_handler)
         self.listenTo(treeDataModel, 'change:selectionUpdateValue', self.selection_update_handler)
         // self.listenTo(self.model, 'change:barcodeNodeAttrArray change:barcodeNodeHeight change:barcodeTreeYLocation', self.update_view)//
+        self.listenTo(treeDataModel, 'change:filterState', self.change_filtered_state)
         self.listenTo(treeDataModel, 'change:viewUpdateValue', self.shrink_barcode_tree)
         self.listenTo(treeDataModel, 'change:viewUpdateConcurrentValue', self.render_barcode_tree)
         self.listenTo(treeDataModel, 'change:moveFirstPaddingNextUpdateValue', self.update_aligned_barcode_node_concurrent)
@@ -510,7 +511,7 @@ define([
           .on('mouseover', function () {
             self.unhighlight_barcode_bg()
             d3.select(this).classed('hovering-highlight', true)
-            d3.selectAll('.barcode-node').classed('.mouseover-unhighlight', false)
+            d3.select('#barcodetree-svg').selectAll('.barcode-node').classed('.mouseover-unhighlight', false)
             self.trigger_hovering_event()
             var dayArray = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
             var dateInTip = barcodeTreeId.split('-')[1].replaceAll('_', '/')
@@ -1043,6 +1044,8 @@ define([
           self.update_current_edit_icon()
           //  更新编辑当前align节点的icon
           self.update_aligned_sort_icon()
+          //  更新barcodetree当前标记的icon
+          self.update_compare_based_anchor()
         }, waitTime);
       },
       /**
@@ -1266,6 +1269,19 @@ define([
       }
       ,
       /**
+       * 改变当前filter的model的状态
+       */
+      change_filtered_state: function () {
+        var self = this
+        var treeDataModel = self.model
+        var filterState = treeDataModel.get('filterState')
+        if (filterState) {
+          self.singleTree.select('.bg').classed('barcode-tree-filter', true)
+        } else {
+          self.singleTree.select('.bg').classed('barcode-tree-filter', false)
+        }
+      },
+      /**
        * 点击covered rect节点, 先移动aligned节点, 然后将padding节点移动
        */
       move_aligned_first_stretch_padding_next_update: function () {
@@ -1441,16 +1457,19 @@ define([
             self.trigger_remove_option_button()
           } else {
             if (d3.select(el.srcElement).classed('compare-based-selection')) {
-              // self.trigger_unclick_event()
+              self.trigger_unclick_event()
               self.remove_compare_based_anchor()
               barcodeCollection.unset_based_model(barcodeTreeId)
+              //  删除选择比较的barcodeTree之后, 按照barcode原始的选择序列重新排序
+              barcodeCollection.recover_barcode_model_sequence()
             } else {
               //  点击barcode的背景矩形的响应函数
-              // self.trigger_click_event()
+              self.trigger_click_event()
               self.add_compare_based_anchor()
               barcodeCollection.set_based_model(barcodeTreeId)
             }
           }
+          barcodeCollection.clear_filter_barcode()
         })
         cc.on('dblclick', function (el) {
 
@@ -1648,9 +1667,23 @@ define([
             }
           } else {
             //  在align状态下点击的响应函数
-            window.aligned_operated_node = nodeData
-            window.aligned_operated_tree_id = barcodeTreeId
-            self.add_aligned_sort_icon(srcElement, barcodeTreeId, nodeObjId)
+            var clickedNodeId = nodeData.id
+            var clickedBarcodeTreeId = barcodeTreeId
+            if (typeof (window.aligned_operated_node) === 'undefined') {
+              window.aligned_operated_node = nodeData
+              window.aligned_operated_tree_id = barcodeTreeId
+              self.add_aligned_sort_icon(srcElement, barcodeTreeId, nodeObjId)
+            } else if (!((clickedBarcodeTreeId === window.aligned_operated_tree_id) && (clickedNodeId === nodeData.id))) {
+              window.aligned_operated_node = nodeData
+              window.aligned_operated_tree_id = barcodeTreeId
+              self.add_aligned_sort_icon(srcElement, barcodeTreeId, nodeObjId)
+            } else {
+              delete window.aligned_operated_node
+              delete window.aligned_operated_tree_id
+              self.remove_aligned_sort_icon()
+              //  删除选择对齐的节点之后, 按照barcode原始的选择序列重新排序
+              barcodeCollection.recover_barcode_model_sequence()
+            }
           }
           self.trigger_mouseout_event()
         });
@@ -1699,7 +1732,7 @@ define([
 
         //  删除barcode的节点上方增加icon
         function removeCurrentEditIcon(src_element) {
-          d3.selectAll('.edit-icon').remove()
+          d3.select('#barcodetree-svg').selectAll('.edit-icon').remove()
         }
       }
       ,
@@ -1743,7 +1776,7 @@ define([
         var self = this
         var barcodeCollection = window.Datacenter.barcodeCollection
         var operationItemList = barcodeCollection.get_operation_item()
-        d3.selectAll('.select-icon').remove()
+        d3.select('#barcodetree-svg').selectAll('.select-icon').remove()
         console.log('operationItemList', operationItemList)
         for (var oI = 0; oI < operationItemList.length; oI++) {
           var nodeData = operationItemList[oI].nodeData
@@ -1789,7 +1822,7 @@ define([
         var iconSize = nodeWidth > nodeHeight ? nodeHeight : nodeWidth
         var iconX = nodeX + nodeWidth / 2
         var iconY = nodeY + nodeHeight / 2
-        d3.selectAll('.edit-icon').remove()
+        d3.select('#barcodetree-svg').selectAll('.edit-icon').remove()
         var editIconColor = Variables.get('edit_icon_color')
         d3.select('g#' + barcodeTreeId)
           .select('#barcode-container')
@@ -1831,6 +1864,12 @@ define([
         }
       }
       ,
+      //  删除当前选择的节点的icon
+      remove_aligned_sort_icon: function () {
+        var self = this
+        var barcodeCollection = window.Datacenter.barcodeCollection
+        d3.select('#barcodetree-svg').selectAll('.align-sort-icon').remove()
+      },
       // 增加当前选择的节点的icon
       add_aligned_sort_icon: function (src_element, barcodeTreeId, nodeObjId) {
         var self = this
@@ -1846,7 +1885,7 @@ define([
         var iconSize = nodeWidth > nodeHeight ? nodeHeight : nodeWidth
         var iconX = nodeX + nodeWidth / 2
         var iconY = nodeY + nodeHeight / 2
-        d3.select('g#' + barcodeTreeId).select('.align-sort-icon').remove()
+        d3.select('#barcodetree-svg').selectAll('.align-sort-icon').remove()
         var selectIconColor = Variables.get('select_icon_color')
         d3.select('g#' + barcodeTreeId)
           .select('#barcode-container')
@@ -1888,6 +1927,32 @@ define([
         }
       }
       ,
+      //  更新标记当前选择的基准barcode的icon
+      update_compare_based_anchor: function () {
+        var self = this
+        var treeDataModel = self.model
+        var compareBased = treeDataModel.get('compareBased')
+        var barcodeHeight = treeDataModel.get('barcodeNodeHeight')
+        var barcodeTextPaddingLeft = Variables.get('barcodeTextPaddingLeft')
+        var textPadding = barcodeTextPaddingLeft / 2
+        var fontSizeHeight = barcodeTextPaddingLeft < barcodeHeight ? barcodeTextPaddingLeft : barcodeHeight
+        if (compareBased) {
+          d3.select('#barcodetree-svg').selectAll('.compare-based-text').remove()
+          self.singleTree.append('text')
+            .attr('text-anchor', 'middle')
+            .attr('dominant-baseline', 'middle')
+            .attr('cursor', 'pointer')
+            .attr('class', 'compare-based-text')
+            .attr('font-family', 'FontAwesome')
+            .attr('x', textPadding)
+            .attr('y', barcodeHeight / 2)
+            .text('\uf08d')
+            .style('font-size', fontSizeHeight + 'px')
+          //  改变compared barcodeTree的背景颜色
+          d3.select('#barcodetree-svg').selectAll('.bg').classed('compare-based-selection', false)
+          self.singleTree.select('.bg').classed('compare-based-selection', true)
+        }
+      },
       /**
        *  判断options按钮是否打开的判断函数
        */
@@ -2952,14 +3017,12 @@ define([
       add_compare_based_anchor: function () {
         var self = this
         var treeDataModel = self.model
-        var barcodePaddingLeft = self.barcodePaddingLeft
         var barcodeTextPaddingLeft = Variables.get('barcodeTextPaddingLeft')
         var barcodeHeight = treeDataModel.get('barcodeNodeHeight')
-        var compareBased = treeDataModel.get('compareBased')
         var textPadding = barcodeTextPaddingLeft / 2
         var fontSizeHeight = barcodeTextPaddingLeft < barcodeHeight ? barcodeTextPaddingLeft : barcodeHeight
         //  增加compare based的barcodeTree的pin的标签
-        d3.selectAll('.compare-based-text').remove()
+        d3.select('#barcodetree-svg').selectAll('.compare-based-text').remove()
         self.singleTree.append('text')
           .attr('text-anchor', 'middle')
           .attr('dominant-baseline', 'middle')
@@ -2971,7 +3034,7 @@ define([
           .text('\uf08d')
           .style('font-size', fontSizeHeight + 'px')
         //  改变compared barcodeTree的背景颜色
-        d3.selectAll('.bg').classed('compare-based-selection', false)
+        d3.select('#barcodetree-svg').selectAll('.bg').classed('compare-based-selection', false)
         self.singleTree.select('.bg').classed('compare-based-selection', true)
       }
       ,
@@ -2991,7 +3054,7 @@ define([
        */
       unhighlight_barcode_bg: function () {
         var self = this
-        d3.selectAll('.bg').classed('hovering-highlight', false)
+        d3.select('#barcodetree-svg').selectAll('.bg').classed('hovering-highlight', false)
       }
       ,
       /**

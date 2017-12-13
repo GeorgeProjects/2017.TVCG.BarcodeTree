@@ -569,6 +569,7 @@ define([
       var centerX = barX + barWidth / 2
       var circleYPadding = 3
       var pinSize = barWidth * 2 / 3
+      console.log('select_histogram')
       self.d3el.select('.container')
         .append('text')
         .attr('text-anchor', 'middle')

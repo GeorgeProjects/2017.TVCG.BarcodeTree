@@ -38,6 +38,14 @@ define([
     trigger_update_distribution_view: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_DISTRIBUTION_VIEW'])
     },
+    // send to barcode.view.js
+    trigger_open_distribution_view: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['OPEN_DISTRIBUTION_VIEW'])
+    },
+    // send to barcode.view.js
+    trigger_close_distribution_view: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['CLOSE_DISTRIBUTION_VIEW'])
+    },
     trigger_update_barcode_view: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
       Backbone.Events.trigger(Config.get('EVENTS')['RENDER_SUPERTREE'])
@@ -153,6 +161,7 @@ define([
         $('#attribute-comparison-button').removeClass('active')
         Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
         self.hide_distribution_view_toggle()
+        self.trigger_close_distribution_view()
       })
       $('#attribute-comparison-button').click(function () {
         Variables.set('comparisonMode', Variables.get('ATTRIBUTE'))
@@ -161,6 +170,7 @@ define([
         Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
         // self.render_distribution_histogram()
         self.trigger_update_distribution_view()
+        self.trigger_open_distribution_view()
         self.show_distribution_view_toggle()
       })
       self.render_barcode_tree_config_view()
@@ -173,15 +183,15 @@ define([
       })
     },
     //  隐藏distribution视图的控制按钮
-    hide_distribution_view_toggle: function(){
+    hide_distribution_view_toggle: function () {
       var self = this
-      $('#btn-toggle').css({visibility: 'hidden'})
+      $('#distribution-view-toggle').css({visibility: 'hidden'})
       $('#distribution-histogram-view').css("visibility", "hidden");
     },
     //  显示distribution视图的控制按钮
     show_distribution_view_toggle: function () {
       var self = this
-      $('#btn-toggle').css({visibility: 'visible'})
+      $('#distribution-view-toggle').css({visibility: 'visible'})
       $('#distribution-histogram-view').css("visibility", "visible");
     },
     //  初始化在tree config视图中的lock按钮的状态
@@ -314,6 +324,7 @@ define([
       })
       $('#tree-config-div #config-close').on('click', function () {
         $('#tree-config-div').css({visibility: 'hidden'})
+        $('#config-operation #tree-config-panel-toggle').removeClass('active')
       })
       $('#tree-config-div').draggable()
       $('#tree-config-div .panel-header').css('cursor', 'pointer')

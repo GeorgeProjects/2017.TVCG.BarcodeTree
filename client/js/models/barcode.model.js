@@ -70,6 +70,8 @@ define([
       'moveFirstPaddingNextUpdateValue': 0,
       //  当前的barcode是否是compare-based
       'compareBased': false,
+      //  当前的barcodeModel是否被筛选
+      'filterState': false,
       //  被比较的model
       'basedModel': null,
       //  对齐部分的比较结果
@@ -1911,6 +1913,31 @@ define([
         }
       }
       // self.update_covered_rect_obj(alignedNodeIdArray)
+    },
+    /**
+     * 计算得到barcode与当前的basedBarcodeModel比较的差别大小
+     */
+    get_node_difference: function () {
+      var self = this
+      var alignedComparisonResultArray = self.get('alignedComparisonResultArray')
+      var nodeDifference = 0
+      if (alignedComparisonResultArray != null) {
+        //  因为存在不同的对齐区间
+        var sumAdded = 0
+        var sumMissed = 0
+        var sumSame = 0
+        for (var aI = 0; aI < alignedComparisonResultArray.length; aI++) {
+          var alignedComparisonResultObj = alignedComparisonResultArray[aI]
+          var addedNodeIdArray = alignedComparisonResultObj.addedNodeIdArray
+          sumAdded = sumAdded + addedNodeIdArray.length
+          var missedNodeIdArray = alignedComparisonResultObj.missedNodeIdArray
+          sumMissed = sumMissed + missedNodeIdArray.length
+          var sameNodeIdArray = alignedComparisonResultObj.sameNodeIdArray
+          sumSame = sumSame + sameNodeIdArray.length
+        }
+        nodeDifference = sumSame / (sumMissed + sumAdded + sumSame)
+      }
+      return nodeDifference
     }
     // align_barcode_subtree: function (alignedNodeId, maxMoveX, alignedNodeIdArray) {
     //   var self = this

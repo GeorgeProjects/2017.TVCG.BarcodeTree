@@ -1,6 +1,6 @@
 require.config({
   shim: {
-    'bootstrap': ['jquery', 'Popper'],
+    'bootstrap': ['jquery'],
     'backbone': {
       deps: ['jquery','underscore']
     },
@@ -18,7 +18,6 @@ require.config({
     'jquery': '../bower_components/jquery/dist/jquery.min',
     'jquery-ui': '../bower_components/jquery-ui/jquery-ui',
     'underscore': '../bower_components/underscore/underscore-min',
-    'Popper': '../bower_components/popper/popper.min',
     'bootstrap': '../bower_components/bootstrap/dist/js/bootstrap.min',
     'backbone': '../bower_components/backbone/backbone-min',
     'nprogress': '../bower_components/nprogress/nprogress',

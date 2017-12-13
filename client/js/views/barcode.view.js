@@ -38,16 +38,24 @@ define([
     initialize: function () {
       var self = this
       self.d3el = d3.select(self.el)
-      // self.initEventFunc()
+      self.initEventFunc()
     },
-    // initEventFunc: function () {
-    //   var self = this
-    //   // Backbone.Events.on(Config.get('EVENTS')['UPDATE_BARCODE_VIEW_WIDTH'], function (event) {
-    //   //   var barcodeCollection = self.options.barcodeCollection
-    //   //   var barcodeMaxX = barcodeCollection.get_barcode_nodex_max()
-    //   //   self.update_barcode_width(barcodeMaxX)
-    //   // })
-    // },
+    initEventFunc: function () {
+      var self = this
+      // Backbone.Events.on(Config.get('EVENTS')['UPDATE_BARCODE_VIEW_WIDTH'], function (event) {
+      //   var barcodeCollection = self.options.barcodeCollection
+      //   var barcodeMaxX = barcodeCollection.get_barcode_nodex_max()
+      //   self.update_barcode_width(barcodeMaxX)
+      // })
+      //  打开distribution视图
+      Backbone.Events.on(Config.get('EVENTS')['OPEN_DISTRIBUTION_VIEW'], function (event) {
+        self.open_config_view()
+      })
+      //  关闭distribution视图
+      Backbone.Events.on(Config.get('EVENTS')['CLOSE_DISTRIBUTION_VIEW'], function (event) {
+        self.close_config_view()
+      })
+    },
     trigger_update_barcode_view: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
     },
@@ -72,8 +80,6 @@ define([
       var barcodeCollection = self.options.barcodeCollection
       var categoryModel = self.options.categoryModel
       var supertreeModel = self.options.supertreeModel
-      var barcodetreeViewWidth = Variables.get('barcodetreeViewWidth')
-      var barcodetreeViewHeight = Variables
       //  initBarcodeView的参数
       self.init_barcodeview_para()
       self.init_tooltip()
@@ -109,7 +115,7 @@ define([
       })
       self.showChildView('treeConfigView', treeConfigView)
       //  右侧的控制视图打开按钮的控制函数
-      $('#btn-toggle').click(function () {
+      $('#distribution-view-toggle').click(function () {
         var configPanelState = Variables.get('configPanelState')
         if (configPanelState === 'close') {
           //  当前的状态是关闭, 点击按钮将config panel打开
@@ -160,22 +166,28 @@ define([
     open_config_view: function () {
       var self = this
       var duration = self.duration
-      $('#barcode-config').animate({
-        right: '+=260',
-      }, duration, function () {
-        $('#btn-state-controller').attr('class', 'glyphicon glyphicon-chevron-right')
-      })
-      Variables.set('configPanelState', 'open')
+      var configPanelState = Variables.get('configPanelState')
+      if (configPanelState === 'close') {
+        $('#barcode-config').animate({
+          right: '+=260',
+        }, duration, function () {
+          $('#distribution-view-controller').attr('class', 'glyphicon glyphicon-chevron-right')
+        })
+        Variables.set('configPanelState', 'open')
+      }
     },
     close_config_view: function () {
       var self = this
       var duration = self.duration
-      $('#barcode-config').animate({
-        right: '-=260',
-      }, duration, function () {
-        $('#btn-state-controller').attr('class', 'glyphicon glyphicon-chevron-left')
-      })
-      Variables.set('configPanelState', 'close')
+      var configPanelState = Variables.get('configPanelState')
+      if (configPanelState === 'open') {
+        $('#barcode-config').animate({
+          right: '-=260',
+        }, duration, function () {
+          $('#distribution-view-controller').attr('class', 'glyphicon glyphicon-chevron-left')
+        })
+        Variables.set('configPanelState', 'close')
+      }
     },
     open_supertree_view: function () {
       var self = this
@@ -198,7 +210,7 @@ define([
         $('#supertree-scroll-panel').scrollLeft($(this).scrollLeft())
       })
     },
-    init_view_loc: function(){
+    init_view_loc: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       var barcodeTreeConfigHeight = Variables.get('barcodeTreeConfigHeight')
