@@ -954,6 +954,7 @@ define([
       //  因为打开了superTree view所以barcode的高度进行了压缩, 需要重新更新barcode的位置以及高度
       // self.update_barcode_location()
       //  需要先将padding node所占据的最大的长度计算出来, 然后更新barcode的节点位置, 因为对齐的需要, 对齐节点需要以padding node的最大节点
+      //  在compact的模式下也需要计算padding node所占据的最大的长度, 因为compact模式下的padding node使用锯齿表示, 不同的锯齿的长度是不同的
       self.compute_padding_node_max_length()
       //  更新barcode节点的属性数组
       self.update_barcode_node_attr_array()
@@ -1101,12 +1102,12 @@ define([
     update_barcode_node_attr_array: function () {
       var self = this
       self.each(function (model) {
-        model.update_barcode_node_array()
+        model.update_barcode_node_array() //
         model.update_aligned_barcode_node()
         //  TODO error part
         model.update_unaligned_barcode_node()
         model.update_align_followed_node()
-        // 再次更新padding node的位置
+        // // 再次更新padding node的位置
         model.update_padding_node_location()
         model.get_single_comparison_result()
         // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
@@ -1227,6 +1228,9 @@ define([
         basedPaddingNodeObjArray = basedModel.get('paddingNodeObjArray')
         compactBasedPaddingNodeObjArray = basedModel.get('compactPaddingNodeObjArray')
       }
+      //  初始化paddingNode在compact模式以及非compact模式下节点所占据的最大的长度
+      var maxCompressPaddingNodeDepth = 0
+      var globalCompressPaddingNodeWidth = 0
       self.each(function (model) {
         if (Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) {
           var paddingNodeObjArray = model.get('paddingNodeObjArray')
@@ -1234,6 +1238,15 @@ define([
             if (typeof(paddingNodeObjArray) !== 'undefined') {
               if (paddingNodeObjArray[pI].maxPaddingNodeLength > basedPaddingNodeObjArray[pI].maxPaddingNodeLength) {
                 basedPaddingNodeObjArray[pI].maxPaddingNodeLength = paddingNodeObjArray[pI].maxPaddingNodeLength
+              }
+              if (paddingNodeObjArray[pI].compressPaddingNodeWidth > basedPaddingNodeObjArray[pI].compressPaddingNodeWidth) {
+                basedPaddingNodeObjArray[pI].compressPaddingNodeWidth = paddingNodeObjArray[pI].compressPaddingNodeWidth
+              }
+              if (paddingNodeObjArray[pI].compressPaddingNodeMaxDepth > maxCompressPaddingNodeDepth) {
+                maxCompressPaddingNodeDepth = paddingNodeObjArray[pI].compressPaddingNodeMaxDepth
+              }
+              if (paddingNodeObjArray[pI].compressPaddingNodeWidth > globalCompressPaddingNodeWidth) {
+                globalCompressPaddingNodeWidth = paddingNodeObjArray[pI].compressPaddingNodeWidth
               }
             }
           }
@@ -1245,28 +1258,66 @@ define([
               if (compactPaddingNodeObjArray[pI].maxPaddingNodeLength > compactBasedPaddingNodeObjArray[pI].maxPaddingNodeLength) {
                 compactBasedPaddingNodeObjArray[pI].maxPaddingNodeLength = compactPaddingNodeObjArray[pI].maxPaddingNodeLength
               }
+              if (compactPaddingNodeObjArray[pI].compressPaddingNodeWidth > compactBasedPaddingNodeObjArray[pI].compressPaddingNodeWidth) {
+                compactBasedPaddingNodeObjArray[pI].compressPaddingNodeWidth = compactPaddingNodeObjArray[pI].compressPaddingNodeWidth
+              }
+              if (compactPaddingNodeObjArray[pI].compressPaddingNodeMaxDepth > maxCompressPaddingNodeDepth) {
+                maxCompressPaddingNodeDepth = paddingNodeObjArray[pI].compressPaddingNodeMaxDepth
+              }
+              if (compactPaddingNodeObjArray[pI].compressPaddingNodeWidth > globalCompressPaddingNodeWidth) {
+                globalCompressPaddingNodeWidth = compactPaddingNodeObjArray[pI].compressPaddingNodeWidth
+              }
             }
           }
         }
       })
+      console.log('globalCompressPaddingNodeWidth', globalCompressPaddingNodeWidth)
+      console.log('maxCompressPaddingNodeDepth', maxCompressPaddingNodeDepth)
+      var maxBarcodePaddingNodeWidth = Config.get('MAX_BARCODE_NODE_PADDING')
+      var linearPaddingNodeWidth = d3.scale.linear().domain([0, globalCompressPaddingNodeWidth]).range([0, maxBarcodePaddingNodeWidth])
       self.each(function (model) {
         if (Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) {
           var paddingNodeObjArray = model.get('paddingNodeObjArray')
           for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
             paddingNodeObjArray[pI].maxPaddingNodeLength = basedPaddingNodeObjArray[pI].maxPaddingNodeLength
+            paddingNodeObjArray[pI].compressPaddingNodeWidth = basedPaddingNodeObjArray[pI].compressPaddingNodeWidth
+            paddingNodeObjArray[pI].globalCompressPaddingNodeWidth = globalCompressPaddingNodeWidth
+            paddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = maxCompressPaddingNodeDepth
+            //  计算每个model中的每一个paddingNode的宽度
+            if (paddingNodeObjArray[pI].compressPaddingNodeWidth === 0) { //  说明这是root节点
+              paddingNodeObjArray[pI].realCompressPaddingNodeWidth = window.barcodeWidthArray[0]// 将该padding赋予root节点的宽度
+            } else {
+              paddingNodeObjArray[pI].realCompressPaddingNodeWidth = linearPaddingNodeWidth(paddingNodeObjArray[pI].compressPaddingNodeWidth)
+            }
           }
+          console.log('paddingNodeObjArray', paddingNodeObjArray)
           var _paddingNodeObjArray = model.get('_paddingNodeObjArray')
           for (var pI = 0; pI < _paddingNodeObjArray.length; pI++) {
             _paddingNodeObjArray[pI].maxPaddingNodeLength = basedPaddingNodeObjArray[pI].maxPaddingNodeLength
+            _paddingNodeObjArray[pI].compressPaddingNodeWidth = basedPaddingNodeObjArray[pI].compressPaddingNodeWidth
+            _paddingNodeObjArray[pI].globalCompressPaddingNodeWidth = globalCompressPaddingNodeWidth
+            _paddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = maxCompressPaddingNodeDepth
+            //  计算每个model中的每一个paddingNode的宽度
+            if (_paddingNodeObjArray[pI].compressPaddingNodeWidth === 0) { //  说明这是root节点
+              _paddingNodeObjArray[pI].realCompressPaddingNodeWidth = window.barcodeWidthArray[0]// 将该padding赋予root节点的宽度
+            } else {
+              _paddingNodeObjArray[pI].realCompressPaddingNodeWidth = linearPaddingNodeWidth(_paddingNodeObjArray[pI].compressPaddingNodeWidth)
+            }
           }
         } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           var compactPaddingNodeObjArray = model.get('compactPaddingNodeObjArray')
           for (var pI = 0; pI < compactPaddingNodeObjArray.length; pI++) {
             compactPaddingNodeObjArray[pI].maxPaddingNodeLength = compactBasedPaddingNodeObjArray[pI].maxPaddingNodeLength
+            compactPaddingNodeObjArray[pI].compressPaddingNodeWidth = compactBasedPaddingNodeObjArray[pI].compressPaddingNodeWidth
+            compactPaddingNodeObjArray[pI].globalCompressPaddingNodeWidth = globalCompressPaddingNodeWidth
+            compactPaddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = maxCompressPaddingNodeDepth
           }
           var _compactPaddingNodeObjArray = model.get('_compactPaddingNodeObjArray')
           for (var pI = 0; pI < _compactPaddingNodeObjArray.length; pI++) {
             _compactPaddingNodeObjArray[pI].maxPaddingNodeLength = compactBasedPaddingNodeObjArray[pI].maxPaddingNodeLength
+            _compactPaddingNodeObjArray[pI].compressPaddingNodeWidth = compactBasedPaddingNodeObjArray[pI].compressPaddingNodeWidth
+            _compactPaddingNodeObjArray[pI].globalCompressPaddingNodeWidth = globalCompressPaddingNodeWidth
+            _compactPaddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = maxCompressPaddingNodeDepth
           }
         }
       })
