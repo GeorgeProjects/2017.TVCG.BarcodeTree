@@ -1040,7 +1040,7 @@ define([
             //  根据计算得到的subtreeObjectArray计算paddingnode的宽度
             paddingNodeObjArray[paddingNodeObjArray.length - 1].compressPaddingNodeWidth = computePaddingNodeWidth(subtreeObjectArray)
             //  根据计算得到的subtreeObjectArray计算paddingNode的深度
-            paddingNodeObjArray[paddingNodeObjArray.length - 1].compressPaddingNodeMaxDepth = computePaddingNodeMaxDepth(subtreeObjectArray)
+            paddingNodeObjArray[paddingNodeObjArray.length - 1].compressPaddingNodeMaxHeight = computePaddingNodeMaxHeight(subtreeObjectArray)
             paddingNodeObjArray.push({
               'paddingNodeStartIndex': alignedRangeObjArray[aI].rangeEndNodeIndex + 1,
               'isCompact': true
@@ -1052,7 +1052,7 @@ define([
           //  根据计算得到的subtreeObjectArray计算paddingnode的宽度
           paddingNodeObjArray[paddingNodeObjArray.length - 1].compressPaddingNodeWidth = computePaddingNodeWidth(subtreeObjectArray)
           //  根据计算得到的subtreeObjectArray计算paddingNode的深度
-          paddingNodeObjArray[paddingNodeObjArray.length - 1].compressPaddingNodeMaxDepth = computePaddingNodeMaxDepth(subtreeObjectArray)
+          paddingNodeObjArray[paddingNodeObjArray.length - 1].compressPaddingNodeMaxHeight = computePaddingNodeMaxHeight(subtreeObjectArray)
         } else {
           paddingNodeObjArray = []
         }
@@ -1082,22 +1082,22 @@ define([
       }
 
       //  计算padding节点的深度, 即内部的所有子树的最大的深度
-      function computePaddingNodeMaxDepth(subtreeObjectArray) {
-        var paddingNodeMaxDepth = -Infinity
+      function computePaddingNodeMaxHeight(subtreeObjectArray) {
+        var paddingNodeMaxHeight = -Infinity
         for (var sI = 0; sI < subtreeObjectArray.length; sI++) {
-          var paddingNodeDepth = subtreeObjectArray[sI].subtree_depth
-          if (paddingNodeDepth > paddingNodeMaxDepth) {
-            paddingNodeMaxDepth = paddingNodeDepth
+          var paddingNodeHeight = subtreeObjectArray[sI].subtree_width
+          if (paddingNodeHeight > paddingNodeMaxHeight) {
+            paddingNodeMaxHeight = paddingNodeHeight
           }
         }
-        return paddingNodeMaxDepth
+        return paddingNodeMaxHeight
       }
 
       //  计算padding节点的宽度, 即内部所有的子树的宽度之和
       function computePaddingNodeWidth(subtreeObjectArray) {
         var paddingNodeWidth = 0
         for (var sI = 0; sI < subtreeObjectArray.length; sI++) {
-          paddingNodeWidth = paddingNodeWidth + subtreeObjectArray[sI].subtree_width
+          paddingNodeWidth = paddingNodeWidth + subtreeObjectArray[sI].subtree_depth
         }
         return paddingNodeWidth
       }

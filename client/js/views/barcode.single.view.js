@@ -2277,14 +2277,13 @@ define([
         var barcodeNodeHeight = treeDataModel.get('barcodeNodeHeight') * 0.8
         var paddingNodeObjArray = self.get_padding_node_array()
         var barcodeNodePadding = Config.get('BARCODE_NODE_PADDING')
-        console.log('paddingNodeObjArray', paddingNodeObjArray)
         self.d3el.select('#barcode-container')
           .selectAll('.padding-covered-rect')
           .remove()
         for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
           //  根据paddingNode中的对象构建sawtoothpath对象
           var paddingNodeObj = paddingNodeObjArray[pI]
-          if (paddingNodeObj.compressPaddingNodeWidth !== 0) {
+          if (!((paddingNodeObj.paddingNodeEndIndex === 0) && (paddingNodeObj.paddingNodeStartIndex === 0))) {
             //  说明这个paddingNode节点应该按照锯齿状进行绘制
             appendSawtoothPathPoint(paddingNodeObj, barcodeNodeHeight, pI)
           } else {
@@ -2372,6 +2371,7 @@ define([
 
         //  在对应的位置增加覆盖Root节点的矩形, 矩形上是全白色的
         function appendEmptyWhiteNode(paddingNodeObj, paddingNodeIndex) {
+          self.d3el.select('#barcode-container').select('#covered-rect-' + paddingNodeIndex).remove()
           self.d3el.select('#barcode-container')
             .append('rect')
             .attr('id', 'covered-rect-' + paddingNodeIndex)
@@ -2405,7 +2405,7 @@ define([
         }
 
         //  在对应的位置处增加覆盖barcode的padding部分的锯齿, 计算锯齿部分的锯齿上的点, 并且在path上增加点, 每个点代表的是缩减的subtree
-        function appendSawtoothPathPoint(paddingNodeObj, barcodeNodeHeight, paddingNodeIndex) {
+        function appendSawtoothPathPoint1(paddingNodeObj, barcodeNodeHeight, paddingNodeIndex) {
           var coverRectX = paddingNodeObj.paddingNodeX
           var coverRectY = 0
           var coverRectWidth = paddingNodeObj.realCompressPaddingNodeWidth
@@ -2486,47 +2486,41 @@ define([
             .attr('transform', 'translate(' + coverRectX + ',' + coverRectY + ')')
           return lineFunction(lineData)
         }
-        function appendSawtoothPathPoint1(paddingNodeObj, barcodeNodeHeight, paddingNodeIndex) {
+        function appendSawtoothPathPoint(paddingNodeObj, barcodeNodeHeight, paddingNodeIndex) {
           var coverRectX = paddingNodeObj.paddingNodeX
           var coverRectY = 0
           var coverRectWidth = paddingNodeObj.realCompressPaddingNodeWidth
           var maxBarcodePaddingNodeWidth = Config.get('MAX_BARCODE_NODE_PADDING')
           var globalCompressPaddingNodeWidth = paddingNodeObj.globalCompressPaddingNodeWidth
           var globalCompressPaddingNodeMaxHeight = paddingNodeObj.globalCompressPaddingNodeMaxHeight
-          var maxSawtoothTreeHeight = (barcodeNodeHeight / 2) // 计算这个值作为sawtooth glyph中的height的最大值
-          var linearPaddingNodeHeight = d3.scale.linear().domain([0, globalCompressPaddingNodeMaxHeight]).range([0, maxSawtoothTreeHeight])
+          var maxSawtoothTreeHeight = barcodeNodeHeight // 计算这个值作为sawtooth glyph中的height的最大值
+          var linearPaddingNodeHeight = d3.scale.linear().domain([0, globalCompressPaddingNodeMaxHeight]).range([maxSawtoothTreeHeight/3, maxSawtoothTreeHeight])
           var linearPaddingNodeWidth = d3.scale.linear().domain([0, globalCompressPaddingNodeWidth]).range([0, maxBarcodePaddingNodeWidth])
           var subtreeObjectArray = paddingNodeObj.subtreeObjectArray
           var subtreeTriangleArray = []
           var subtreeX = 0
           var x = 0, y = 0
           //  第一次append节点, 锯齿的第一个最低端的节点
-          var lineData = [];
           for (var sI = 0; sI < subtreeObjectArray.length; sI++) {
+            var lineData = [];
             var subtreeObj = subtreeObjectArray[sI]
             var subtreeDepth = subtreeObj.subtree_depth
             var subtreeWidth = subtreeObj.subtree_width
+            var triangleHeight = linearPaddingNodeHeight(subtreeWidth)
+            var triangleYBegin = (barcodeNodeHeight - triangleHeight) / 2
             var subtreeBalance = subtreeObj.subtree_balance
-            var vertexY = barcodeNodeHeight * subtreeBalance / (1 + subtreeBalance)
-            lineData.push({x: subtreeX, y:vertexY})
-            // x = x + halfSubtreeWidth
-            y = y + linearPaddingNodeHeight(subtreeDepth)
-            //  第二次append节点, 锯齿的最尖端的节点
-            lineData.push({'x': x, 'y': y})
-            x = x + linearPaddingNodeWidth(subtreeWidth) * 1 / (1 + subtreeBalance)
-            y = y - linearPaddingNodeHeight(subtreeDepth)
-            //  第三次append节点, 锯齿的第二个最低端的节点
-            lineData.push({'x': x, 'y': y})
+            var triangleVertexY = triangleYBegin + triangleHeight * subtreeBalance / (1 + subtreeBalance)
+            var triangleYEnd = triangleYBegin + triangleHeight
+            lineData.push({x: subtreeX, y:triangleVertexY})
+            var triangleWidth = linearPaddingNodeWidth(subtreeDepth)
+            subtreeX = subtreeX + triangleWidth
+            lineData.push({x: subtreeX, y:triangleYEnd})
+            lineData.push({x: subtreeX, y:triangleYBegin})
+            subtreeX = subtreeX - triangleWidth
+            lineData.push({x: subtreeX, y:triangleVertexY})
+            subtreeTriangleArray.push(lineData)
+            subtreeX = subtreeX + triangleWidth
           }
-          //  根据lineData中的点的坐标 增加剩余的点的坐标
-          for (var lI = (lineData.length - 1); lI >= 0; lI--) {
-            var linePointY = lineData[lI].y
-            var symmetryPointY = barcodeNodeHeight - linePointY
-            var linePointX = lineData[lI].x
-            lineData.push({'x': linePointX, 'y': symmetryPointY})
-          }
-          //  在锯齿的后面补充(0, 0)的节点
-          lineData.push({'x': 0, 'y': 0})
           //  构建sawtooth path的函数
           var lineFunction = d3.svg.line()
             .x(function (d) {
@@ -2546,29 +2540,25 @@ define([
           //  在subtree-sawtooth-bg的g中增加背景矩形
           var subtreeSawtoothBgX = 0
           for (var sI = 0; sI < subtreeObjectArray.length; sI++) {
-            var subtreeSawtoothBgWidth = linearPaddingNodeWidth(subtreeObjectArray[sI].subtree_width)
+            var subtreeSawtoothBgWidth = linearPaddingNodeWidth(subtreeObjectArray[sI].subtree_depth)
             self.d3el.select('#barcode-container')
               .select('#padding-node-' + paddingNodeIndex)
               .append('rect')
-              .attr('x', subtreeSawtoothBgX)
-              .attr('y', 0)
-              .attr('height', barcodeNodeHeight)
-              .attr('width', subtreeSawtoothBgWidth)
-              .attr("fill", "black")
+              .attr('id', 'tooth-bg-' + sI)
+              .attr('x', subtreeSawtoothBgX - 1)
+              .attr('y', -1)
+              .attr('height', barcodeNodeHeight + 2)
+              .attr('width', subtreeSawtoothBgWidth + 2)
+              .attr("fill", "white")
             subtreeSawtoothBgX = subtreeSawtoothBgX + subtreeSawtoothBgWidth
+            self.d3el.select('#barcode-container')
+              .select('#padding-node-' + paddingNodeIndex)
+              .append('path')
+              .attr('id', 'padding-node-' + paddingNodeIndex + '-tooth-' + sI)
+              .attr('class', 'tooth')
+              .attr("d", lineFunction(subtreeTriangleArray[sI]))
+              .attr("fill", "black")
           }
-          self.d3el.select('#barcode-container')
-            .select('#padding-saw-tooth-' + paddingNodeIndex).remove()
-          self.d3el.select('#barcode-container')
-            .append("path")
-            .attr('id', 'padding-saw-tooth-' + paddingNodeIndex)
-            .attr('class', 'padding-saw-tooth')
-            .attr("d", lineFunction(lineData))
-            .attr("stroke", "white")
-            .attr("stroke-width", 2)
-            .attr("fill", "white")
-            .attr('transform', 'translate(' + coverRectX + ',' + coverRectY + ')')
-          return lineFunction(lineData)
         }
         //  covered rect上的mouseover的handler
         function covered_mouseover_handler() {

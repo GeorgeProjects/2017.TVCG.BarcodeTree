@@ -1229,7 +1229,7 @@ define([
         compactBasedPaddingNodeObjArray = basedModel.get('compactPaddingNodeObjArray')
       }
       //  初始化paddingNode在compact模式以及非compact模式下节点所占据的最大的长度
-      var maxCompressPaddingNodeDepth = 0
+      var globalCompressPaddingNodeHeightMax = 0
       var globalCompressPaddingNodeWidth = 0
       self.each(function (model) {
         if (Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) {
@@ -1242,8 +1242,8 @@ define([
               if (paddingNodeObjArray[pI].compressPaddingNodeWidth > basedPaddingNodeObjArray[pI].compressPaddingNodeWidth) {
                 basedPaddingNodeObjArray[pI].compressPaddingNodeWidth = paddingNodeObjArray[pI].compressPaddingNodeWidth
               }
-              if (paddingNodeObjArray[pI].compressPaddingNodeMaxDepth > maxCompressPaddingNodeDepth) {
-                maxCompressPaddingNodeDepth = paddingNodeObjArray[pI].compressPaddingNodeMaxDepth
+              if (paddingNodeObjArray[pI].compressPaddingNodeMaxHeight > globalCompressPaddingNodeHeightMax) {
+                globalCompressPaddingNodeHeightMax = paddingNodeObjArray[pI].compressPaddingNodeMaxHeight
               }
               if (paddingNodeObjArray[pI].compressPaddingNodeWidth > globalCompressPaddingNodeWidth) {
                 globalCompressPaddingNodeWidth = paddingNodeObjArray[pI].compressPaddingNodeWidth
@@ -1261,8 +1261,8 @@ define([
               if (compactPaddingNodeObjArray[pI].compressPaddingNodeWidth > compactBasedPaddingNodeObjArray[pI].compressPaddingNodeWidth) {
                 compactBasedPaddingNodeObjArray[pI].compressPaddingNodeWidth = compactPaddingNodeObjArray[pI].compressPaddingNodeWidth
               }
-              if (compactPaddingNodeObjArray[pI].compressPaddingNodeMaxDepth > maxCompressPaddingNodeDepth) {
-                maxCompressPaddingNodeDepth = paddingNodeObjArray[pI].compressPaddingNodeMaxDepth
+              if (compactPaddingNodeObjArray[pI].compressPaddingNodeMaxHeight > globalCompressPaddingNodeHeightMax) {
+                globalCompressPaddingNodeHeightMax = paddingNodeObjArray[pI].compressPaddingNodeMaxHeight
               }
               if (compactPaddingNodeObjArray[pI].compressPaddingNodeWidth > globalCompressPaddingNodeWidth) {
                 globalCompressPaddingNodeWidth = compactPaddingNodeObjArray[pI].compressPaddingNodeWidth
@@ -1272,7 +1272,7 @@ define([
         }
       })
       console.log('globalCompressPaddingNodeWidth', globalCompressPaddingNodeWidth)
-      console.log('maxCompressPaddingNodeDepth', maxCompressPaddingNodeDepth)
+      console.log('globalCompressPaddingNodeHeightMax', globalCompressPaddingNodeHeightMax)
       var maxBarcodePaddingNodeWidth = Config.get('MAX_BARCODE_NODE_PADDING')
       var linearPaddingNodeWidth = d3.scale.linear().domain([0, globalCompressPaddingNodeWidth]).range([0, maxBarcodePaddingNodeWidth])
       self.each(function (model) {
@@ -1282,7 +1282,7 @@ define([
             paddingNodeObjArray[pI].maxPaddingNodeLength = basedPaddingNodeObjArray[pI].maxPaddingNodeLength
             paddingNodeObjArray[pI].compressPaddingNodeWidth = basedPaddingNodeObjArray[pI].compressPaddingNodeWidth
             paddingNodeObjArray[pI].globalCompressPaddingNodeWidth = globalCompressPaddingNodeWidth
-            paddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = maxCompressPaddingNodeDepth
+            paddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = globalCompressPaddingNodeHeightMax
             //  计算每个model中的每一个paddingNode的宽度
             if (paddingNodeObjArray[pI].compressPaddingNodeWidth === 0) { //  说明这是root节点
               paddingNodeObjArray[pI].realCompressPaddingNodeWidth = window.barcodeWidthArray[0]// 将该padding赋予root节点的宽度
@@ -1296,7 +1296,7 @@ define([
             _paddingNodeObjArray[pI].maxPaddingNodeLength = basedPaddingNodeObjArray[pI].maxPaddingNodeLength
             _paddingNodeObjArray[pI].compressPaddingNodeWidth = basedPaddingNodeObjArray[pI].compressPaddingNodeWidth
             _paddingNodeObjArray[pI].globalCompressPaddingNodeWidth = globalCompressPaddingNodeWidth
-            _paddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = maxCompressPaddingNodeDepth
+            _paddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = globalCompressPaddingNodeHeightMax
             //  计算每个model中的每一个paddingNode的宽度
             if (_paddingNodeObjArray[pI].compressPaddingNodeWidth === 0) { //  说明这是root节点
               _paddingNodeObjArray[pI].realCompressPaddingNodeWidth = window.barcodeWidthArray[0]// 将该padding赋予root节点的宽度
@@ -1310,7 +1310,7 @@ define([
             compactPaddingNodeObjArray[pI].maxPaddingNodeLength = compactBasedPaddingNodeObjArray[pI].maxPaddingNodeLength
             compactPaddingNodeObjArray[pI].compressPaddingNodeWidth = compactBasedPaddingNodeObjArray[pI].compressPaddingNodeWidth
             compactPaddingNodeObjArray[pI].globalCompressPaddingNodeWidth = globalCompressPaddingNodeWidth
-            compactPaddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = maxCompressPaddingNodeDepth
+            compactPaddingNodeObjArray[pI].globalCompressPaddingNodeMaxHeight = globalCompressPaddingNodeHeightMax
           }
           var _compactPaddingNodeObjArray = model.get('_compactPaddingNodeObjArray')
           for (var pI = 0; pI < _compactPaddingNodeObjArray.length; pI++) {
