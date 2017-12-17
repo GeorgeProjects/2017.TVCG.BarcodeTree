@@ -150,6 +150,8 @@ define([
         'REMOVE_SUMMARY_STATE': 'remove-summary-state',
         //  展示总结的柱状图
         'SHOW_SUMMARY_STATE': 'show-summary-state',
+        //  更新align部分的subtree
+        'UPDATE_FOCUS_SUBTREE': 'update-focus-subtree',
         //***************************
         //  从toolbar视图中发出的信号
         //  将barcode从original模式转换为compact模式
@@ -187,7 +189,6 @@ define([
         'UPDATE_SUMMARY': 'update-summary',
         //  增加barcode model
         'ADD_MODEL': 'add-model',
-
         //  改变barcode的宽度
         'CHANGE_BARCODE_WIDTH': 'render-barcode-width-controller',
         //  绘制barcode
@@ -249,7 +250,7 @@ define([
       'COMPACT_NUM': 5,
       'BARCODE_NODE_GAP': 2,
       'BARCODE_NODE_PADDING': 80,
-      'MAX_BARCODE_NODE_PADDING': 200,
+      'MAX_BARCODE_NODE_PADDING': 150,
       'NAVBAR_HEIGHT': 30,
       'TOOLTIP_TRIANGLE_HEIGHT': 10,
       'TOOLTIP_HEIGHT': 30,

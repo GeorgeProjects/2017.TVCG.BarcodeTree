@@ -62,6 +62,8 @@ define([
       barcodeTextPaddingLeft: 15,
       //  barcode的边界宽度
       barcodePaddingLeft: 40,
+      //  最大的subtree的sawtooth的宽度
+      globalCompressPaddingNodeWidth: null, // 初始值是null
       //****************************************************
       //  top.toolbar.view视图中的参数
       alignedBarcodeLevel: 0,

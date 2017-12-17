@@ -195,6 +195,10 @@ define([
           'nodeObjId': nodeObjId
         })
       },
+      //  更新对齐的子树部分
+      trigger_update_focus_subtree: function (nodeObjId) {
+        Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_FOCUS_SUBTREE'])
+      },
       //  初始化鼠标事件
       initMouseoverEvent: function () {
         var self = this
@@ -344,7 +348,7 @@ define([
         }
 
         function showTooltip(nodeObj, nodeIndex) {
-          self.node_mouseover_handler(nodeObj, nodeIndex, self)
+          self.node_mouseover_handler(nodeObj, self)
         }
       },
       //  获取当前的barcodeTree的展示状态
@@ -680,7 +684,7 @@ define([
           })
           .style("cursor", "pointer")
           .on('mouseover', function (d, i) {
-            self.node_mouseover_handler(d, i, self)
+            self.node_mouseover_handler(d, self)
           })
           .on('mouseout', function (d, i) {
           })
@@ -798,7 +802,7 @@ define([
           })
           .style("cursor", "pointer")
           .on('mouseover', function (d, i) {
-            self.node_mouseover_handler(d, i, self)
+            self.node_mouseover_handler(d, self)
           })
           .on('click', function (d, i) {
             // self.node_click_handler(d)
@@ -904,7 +908,7 @@ define([
             return self.fill_handler(d, i, self)
           })
           .on('mouseover', function (d, i) {
-            self.node_mouseover_handler(d, i, self)
+            self.node_mouseover_handler(d, self)
           })
           .on('click', function (d, i) {
             // self.node_click_handler(d, i, self)
@@ -1378,7 +1382,6 @@ define([
             .attr('id', barcodeTreeId)
             .attr("d", lineFunction(lineData))
             .attr("stroke", "black")
-            .attr("stroke-width", 2)
             .attr('transform', 'translate(' + triangleSvgX + ',' + triangleSvgY + ')')
         }
 
@@ -1562,6 +1565,20 @@ define([
         barcodeCollection.collapse_subtree(nodeData.id, nodeData.depth)
       }
       ,
+      //  barcode的子树的triangle点击的handler
+      subtree_triangle_click_handler: function (subtree_root_id) {
+        var self = this
+        var treeDataModel = self.model
+        var barcodeCollection = window.Datacenter.barcodeCollection
+        var barcodeTreeId = treeDataModel.get('barcodeTreeId')
+        var srcElement = d3.select('#barcodetree-svg').select('#' + barcodeTreeId).select('#' + subtree_root_id).node()
+        var nodeData = treeDataModel.get_barcode_node(subtree_root_id)
+        barcodeCollection.node_selection_click(nodeData, barcodeTreeId)
+        barcodeCollection.add_operation_item(nodeData, barcodeTreeId, srcElement)
+        window.operated_node = nodeData
+        window.operated_tree_id = barcodeTreeId
+
+      },
       /**
        * 在barcode的节点上增加点击与双击的事件
        */
@@ -2128,7 +2145,7 @@ define([
        * @param d i globalObj
        * @returns {boolean}
        */
-      node_mouseover_handler: function (d, i, globalObj) {
+      node_mouseover_handler: function (d, globalObj) {
         var self = this
         var tipValue = null
         var treeDataModel = self.model
@@ -2486,6 +2503,7 @@ define([
             .attr('transform', 'translate(' + coverRectX + ',' + coverRectY + ')')
           return lineFunction(lineData)
         }
+
         function appendSawtoothPathPoint(paddingNodeObj, barcodeNodeHeight, paddingNodeIndex) {
           var coverRectX = paddingNodeObj.paddingNodeX
           var coverRectY = 0
@@ -2494,7 +2512,7 @@ define([
           var globalCompressPaddingNodeWidth = paddingNodeObj.globalCompressPaddingNodeWidth
           var globalCompressPaddingNodeMaxHeight = paddingNodeObj.globalCompressPaddingNodeMaxHeight
           var maxSawtoothTreeHeight = barcodeNodeHeight // 计算这个值作为sawtooth glyph中的height的最大值
-          var linearPaddingNodeHeight = d3.scale.linear().domain([0, globalCompressPaddingNodeMaxHeight]).range([maxSawtoothTreeHeight/3, maxSawtoothTreeHeight])
+          var linearPaddingNodeHeight = d3.scale.linear().domain([0, globalCompressPaddingNodeMaxHeight]).range([maxSawtoothTreeHeight / 3, maxSawtoothTreeHeight])
           var linearPaddingNodeWidth = d3.scale.linear().domain([0, globalCompressPaddingNodeWidth]).range([0, maxBarcodePaddingNodeWidth])
           var subtreeObjectArray = paddingNodeObj.subtreeObjectArray
           var subtreeTriangleArray = []
@@ -2506,18 +2524,33 @@ define([
             var subtreeObj = subtreeObjectArray[sI]
             var subtreeDepth = subtreeObj.subtree_depth
             var subtreeWidth = subtreeObj.subtree_width
+            var subtreeCompleted = subtreeObj.completed
+            var withRoot = subtreeObj.with_root
             var triangleHeight = linearPaddingNodeHeight(subtreeWidth)
             var triangleYBegin = (barcodeNodeHeight - triangleHeight) / 2
-            var subtreeBalance = subtreeObj.subtree_balance
+            var subtreeBalance = 1  // subtreeObj.subtree_balance
             var triangleVertexY = triangleYBegin + triangleHeight * subtreeBalance / (1 + subtreeBalance)
             var triangleYEnd = triangleYBegin + triangleHeight
-            lineData.push({x: subtreeX, y:triangleVertexY})
             var triangleWidth = linearPaddingNodeWidth(subtreeDepth)
-            subtreeX = subtreeX + triangleWidth
-            lineData.push({x: subtreeX, y:triangleYEnd})
-            lineData.push({x: subtreeX, y:triangleYBegin})
-            subtreeX = subtreeX - triangleWidth
-            lineData.push({x: subtreeX, y:triangleVertexY})
+            if ((!withRoot) && (!subtreeCompleted)) {
+              var leftSide = triangleHeight / 2
+              var triangleVertexTopY = triangleYBegin + (triangleHeight - leftSide) * subtreeBalance / (1 + subtreeBalance)
+              lineData.push({x: subtreeX, y: triangleVertexTopY})
+              var triangleVertexBottomY = triangleVertexTopY + leftSide
+              lineData.push({x: subtreeX, y: triangleVertexBottomY})
+              subtreeX = subtreeX + triangleWidth / 2
+              lineData.push({x: subtreeX, y: triangleYEnd})
+              lineData.push({x: subtreeX, y: triangleYBegin})
+              subtreeX = subtreeX - triangleWidth / 2
+              lineData.push({x: subtreeX, y: triangleVertexTopY})
+            } else {
+              lineData.push({x: subtreeX, y: triangleVertexY})
+              subtreeX = subtreeX + triangleWidth
+              lineData.push({x: subtreeX, y: triangleYEnd})
+              lineData.push({x: subtreeX, y: triangleYBegin})
+              subtreeX = subtreeX - triangleWidth
+            }
+            lineData.push({x: subtreeX, y: triangleVertexY})
             subtreeTriangleArray.push(lineData)
             subtreeX = subtreeX + triangleWidth
           }
@@ -2541,6 +2574,7 @@ define([
           var subtreeSawtoothBgX = 0
           for (var sI = 0; sI < subtreeObjectArray.length; sI++) {
             var subtreeSawtoothBgWidth = linearPaddingNodeWidth(subtreeObjectArray[sI].subtree_depth)
+            var subtreeRootId = subtreeObjectArray[sI].subtreeRootId
             self.d3el.select('#barcode-container')
               .select('#padding-node-' + paddingNodeIndex)
               .append('rect')
@@ -2554,24 +2588,35 @@ define([
             self.d3el.select('#barcode-container')
               .select('#padding-node-' + paddingNodeIndex)
               .append('path')
-              .attr('id', 'padding-node-' + paddingNodeIndex + '-tooth-' + sI)
+              .attr('id', subtreeRootId)
               .attr('class', 'tooth')
               .attr("d", lineFunction(subtreeTriangleArray[sI]))
               .attr("fill", "black")
+              .on('mouseover', function () {
+                var mouseoverNodeId = d3.select(this).attr('id')
+                covered_mouseover_handler(mouseoverNodeId)
+              })
+              .on('mouseout', function () {
+                var mouseoverNodeId = d3.select(this).attr('id')
+                covered_mouseout_handler(mouseoverNodeId)
+              })
+              .on('click', function () {
+                var clickNodeId = d3.select(this).attr('id')
+                self.subtree_triangle_click_handler(clickNodeId)
+                //  更新align的barcode的子树部分
+                self.trigger_update_focus_subtree()
+              })
           }
         }
-        //  covered rect上的mouseover的handler
-        function covered_mouseover_handler() {
 
+        //  covered rect上的mouseover的handler
+        function covered_mouseover_handler(subtreeRootId) {
+          var barcodeNodeObj = treeDataModel.get_barcode_node(subtreeRootId)
+          self.node_mouseover_handler(barcodeNodeObj, self)
         }
 
         //  covered rect上的mouseout的handler
-        function covered_mouseout_handler() {
-
-        }
-
-        //  covered rect的click的handler
-        function covered_click_handler() {
+        function covered_mouseout_handler(subtreeRootId) {
 
         }
       },
@@ -2624,13 +2669,22 @@ define([
         self.d3el.selectAll('.link-circle').remove()
         self.d3el.selectAll('.node-link').remove()
         self.d3el.selectAll('.children-highlight').style('fill', function (d, i) {
-          return self.fill_handler(d, i, self)
+          if (typeof (d) !== 'undefined') {
+            return self.fill_handler(d, i, self)
+          } else {
+            return null
+          }
         })
         self.d3el.selectAll('.father-highlight').style('fill', function (d, i) {
-          return self.fill_handler(d, i, self)
+          if (typeof (d) !== 'undefined') {
+            return self.fill_handler(d, i, self)
+          } else {
+            return null
+          }
         })
         self.d3el.selectAll('.sibling-highlight').classed('sibling-highlight', false)
         self.d3el.selectAll('.barcode-node').classed('unhighlight', false)
+        self.d3el.selectAll('.tooth').classed('unhighlight', false)
         //  更新原始的barcodeTree以及superTree中选择的节点
         self.highlight_selection_supertree_selection_nodes()
       }
@@ -2656,6 +2710,7 @@ define([
       unhighlightNodes: function () {
         var self = this
         self.d3el.selectAll('.barcode-node').classed('unhighlight', true)
+        self.d3el.selectAll('.tooth').classed('unhighlight', true)
       }
       ,
       /*
@@ -2665,15 +2720,15 @@ define([
         var self = this
         var currentSiblingNodesArray = []
         for (var sI = 0; sI < siblingNodesArray.length; sI++) {
-          var currentSiblingNode = self.findCurrentNodeObj(siblingNodesArray[sI])
+          var currentSiblingNode = self.findSiblingCurrentNodeObj(siblingNodesArray[sI])
           if (currentSiblingNode != null) {
             currentSiblingNodesArray.push(currentSiblingNode)
           }
         }
         for (var sI = 0; sI < currentSiblingNodesArray.length; sI++) {
-          self.d3el.select('#' + currentSiblingNodesArray[sI].id)
+          self.d3el.selectAll('#' + currentSiblingNodesArray[sI].id)
             .classed('sibling-highlight', true)
-          self.d3el.select('#' + currentSiblingNodesArray[sI].id)
+          self.d3el.selectAll('#' + currentSiblingNodesArray[sI].id)
             .classed('unhighlight', true)
         }
       }
@@ -2689,7 +2744,26 @@ define([
         var barcodeNodeColorArray = Variables.get('barcodeNodeColorArray')
         var beginX = 0
         var endX = 0
+        //  在非对齐的情况下也要将节点进行高亮
         var currentFatherNodesArray = []
+        for (var fI = 0; fI < fatherNodesArray.length; fI++) {
+          var currentFatherNode = self.findSiblingCurrentNodeObj(fatherNodesArray[fI])
+          if (currentFatherNode != null) {
+            currentFatherNodesArray.push(currentFatherNode)
+          }
+        }
+        for (var fI = 0; fI < currentFatherNodesArray.length; fI++) {
+          if (currentFatherNodesArray[fI].width !== 0) {
+            var fatherNodeDepth = currentFatherNodesArray[fI].depth
+            self.d3el.select('#' + currentFatherNodesArray[fI].id)
+              .classed('father-highlight', true)
+              .style('fill', barcodeNodeColorArray[fatherNodeDepth])
+            self.d3el.selectAll('#' + currentFatherNodesArray[fI].id)// 需要对于当前鼠标hover的节点取消高亮
+              .classed('unhighlight', false)
+          }
+        }
+        //  只有在对齐的情况下才会绘制从根节点到当前节点的连接线
+        currentFatherNodesArray = []
         for (var fI = 0; fI < fatherNodesArray.length; fI++) {
           var currentFatherNode = self.findCurrentNodeObj(fatherNodesArray[fI])
           if (currentFatherNode != null) {
@@ -2721,14 +2795,8 @@ define([
           .attr('y2', lineY)
         for (var fI = 0; fI < currentFatherNodesArray.length; fI++) {
           if (currentFatherNodesArray[fI].width !== 0) {
-            var fatherNodeDepth = currentFatherNodesArray[fI].depth
             var circleX = currentFatherNodesArray[fI].x + currentFatherNodesArray[fI].width / 2
             var circleY = barcodeNodeHeight / 2
-            self.d3el.select('#' + currentFatherNodesArray[fI].id)
-              .classed('father-highlight', true)
-              .style('fill', barcodeNodeColorArray[fatherNodeDepth])
-            self.d3el.select('#' + currentFatherNodesArray[fI].id)
-              .classed('unhighlight', false)
             self.d3el.select('#barcode-container')
               .append('circle')
               .attr('class', 'link-circle')
@@ -2782,6 +2850,19 @@ define([
         return null
       }
       ,
+      findSiblingCurrentNodeObj: function (nodeObj) {
+        var self = this
+        var treeDataModel = self.model
+        var barcodeNodeAttrArray = self.get_barcode_node_array()
+        var alignedRangeObjArray = self.get_aligned_range_array()
+        var paddingNodeObjArray = self.get_padding_node_array()
+        for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
+          if ((barcodeNodeAttrArray[bI].depth === nodeObj.depth) && (barcodeNodeAttrArray[bI].id === nodeObj.id) && (barcodeNodeAttrArray[bI].existed)) {//&& (self.isBelongAligned(bI, alignedRangeObjArray, paddingNodeObjArray))
+            return barcodeNodeAttrArray[bI]
+          }
+        }
+        return null
+      },
       /**
        * 高亮节点的总函数, 在这个对象中调用高亮孩子节点, 父亲等路径节点, 兄弟节点等节点
        * @param findingNodesObj: 传入的是找到的节点对象

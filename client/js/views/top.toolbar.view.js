@@ -52,6 +52,14 @@ define([
     initialize: function () {
       var self = this
       self.d3el = d3.select(self.el)
+      self.initEvent()
+    },
+    //  initEvent
+    initEvent: function () {
+      var self = this
+      Backbone.Events.on(Config.get('EVENTS')['UPDATE_FOCUS_SUBTREE'], function () {
+        self.subtree_node_focus()
+      })
     },
     trigger_mouseout_event: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['NODE_MOUSEOUT'])
@@ -130,7 +138,6 @@ define([
       var similarityMaxHandler = $("#similarity-max-handle")
       var similaritySliderText = $("#similarity-slider-text")
       var selectedSimilarityRange = Variables.get('similarityRange')
-      console.log('selectedSimilarityRange', selectedSimilarityRange)
       $("#similarity-slider").slider({
         range: "true",
         min: 0,
@@ -351,6 +358,7 @@ define([
         self._align_single_operation_item(operationItemList, beginIndex, deferObj)
       }
     },
+    //
     _align_single_operation_item: function (operation_item_list, operation_index, finish_align_defer) {
       var self = this
       if (operation_index === operation_item_list.length) {
