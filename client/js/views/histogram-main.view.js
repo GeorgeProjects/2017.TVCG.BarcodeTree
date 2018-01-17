@@ -57,6 +57,18 @@ define([
         var barcodeTreeId = event.barcodeTreeId
         self.unselect_histogram(barcodeTreeId)
       })
+      //  鼠标在comparisonview中点击选中barcode广播的事件
+      Backbone.Events.on(Config.get('EVENTS')['SET_SELECT_BARCODE_EVENT'], function (event) {
+        console.log('SET_SELECT_BARCODE_EVENT')
+        var barcodeTreeId = event.barcodeTreeId
+        self.set_select_histogram(barcodeTreeId)
+      })
+      //  鼠标在comparisonview中点击取消选中barcode广播的事件
+      Backbone.Events.on(Config.get('EVENTS')['SET_UNSELECT_BARCODE_EVENT'], function (event) {
+        console.log('SET_UNSELECT_BARCODE_EVENT')
+        var barcodeTreeId = event.barcodeTreeId
+        self.set_unselect_histogram(barcodeTreeId)
+      })
       //
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_HISTOGRAM_ENCODE'], function (event) {
         var colorEncodingObj = event.colorEncodingObj
@@ -71,6 +83,24 @@ define([
       //  用户点击clear all的按钮, 清空选中所有的element
       Backbone.Events.on(Config.get('EVENTS')['CLEAR_ALL'], function (event) {
         self.clear_all_items()
+      })
+      //  点击某个group之后,选择group中的BArcodeTree
+      Backbone.Events.on(Config.get('EVENTS')['SELECT_GROUP_BARCODETREE'], function (event) {
+        var selectionArray = event.selectionArray
+        self.set_unselect_all_histogram()
+        for (var sI = 0; sI < selectionArray.length; sI++) {
+          self.set_select_histogram(selectionArray[sI])
+        }
+      })
+      //  点击某个选择的group之后, 取消选择group中的BarcodeTree
+      Backbone.Events.on(Config.get('EVENTS')['UNSELECT_GROUP_BARCODETREE'], function () {
+        self.set_unselect_all_histogram()
+      })
+      //  点击某个选择的group之后, 取消选择group中的BarcodeTree
+      Backbone.Events.on(Config.get('EVENTS')['REMOVE_SELECTION'], function (event) {
+        var barId = event.barcodeTreeId
+        console.log('barId', barId)
+        self.cancel_selection_highlight(barId)
       })
     },
     //  选择数据之后,数据无法马上显示,可以展示loading的icon
@@ -107,6 +137,51 @@ define([
     trigger_close_supertree: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['CLOSE_SUPER_TREE'])
     },
+    //  更新选择的list
+    trigger_update_selection_list: function () {
+      var self = this
+      var selectionList = self.get_selection_list()
+      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_SELECTION_LIST'], {
+        selectionList: selectionList
+      })
+    },
+    get_selection_list: function () {
+      var self = this
+      var selectionList = []
+      //  记录不同日期的个数的对象
+      var dayRecordObj = {}
+      var selectionBarcodeObject = Variables.get('selectionBarcodeObject')
+      var selectItemNameArray = Variables.get('selectItemNameArray')
+      var dayIdArray = ['mon', 'tues', 'wedn', 'thurs', 'fri', 'satur', 'sun']
+      var dayNameArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+      for (var sI = 0; sI < selectItemNameArray.length; sI++) {
+        if (selectItemNameArray[sI].indexOf('-') !== -1) {
+          var date = selectItemNameArray[sI].split('-')[1].replaceAll('_', '-')
+        } else {
+          var date = selectItemNameArray[sI]
+        }
+        var curDay = new Date(date).getDay()
+        var dayItemId = dayIdArray[curDay]
+        var dayItemName = dayNameArray[curDay]
+        //  初始化selectionBarcodeObject
+        if (typeof (selectionBarcodeObject[dayItemId]) === 'undefined') {
+          selectionBarcodeObject[dayItemId] = [selectItemNameArray[sI]]
+        } else {
+          selectionBarcodeObject[dayItemId].push(selectItemNameArray[sI])
+        }
+        //  初始化dayObj
+        if (typeof (dayRecordObj[dayItemId]) === 'undefined') {
+          dayRecordObj[dayItemId] = {'dayId': dayItemId, 'dayNum': 1, 'dayName': dayItemName}
+        } else {
+          dayRecordObj[dayItemId].dayNum = dayRecordObj[dayItemId].dayNum + 1
+        }
+      }
+      //  将dayRecordObj转换为selectionList
+      for (var item in dayRecordObj) {
+        selectionList.push(dayRecordObj[item])
+      }
+      return selectionList
+    },
     /**
      * 初始化视图中的svg,包括大小,位置
      */
@@ -120,7 +195,11 @@ define([
         .on('click', function () {
           self.trigger_option_button()
         })
-      var margin = {top: 10, right: 15, bottom: 20, left: 30}
+      var marginTop = window.rem_px * 1.5
+      var marginRight = window.rem_px
+      var marginBottom = window.rem_px * 2
+      var marginLeft = window.rem_px * 3
+      var margin = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft}
       var histogramWidth = divWidth - margin.left - margin.right
       var histogramHeight = divHeight - margin.top - margin.bottom
       //  增加histogram的高度, 用于计算整个histogram的纵向的scale
@@ -175,9 +254,6 @@ define([
         }
         histogramDataArray[hI].id = fileInfoData[hI]['name']
         histogramDataObj[histogramDataArray[hI].id] = histogramDataArray[hI]
-        if (typeof (histogramDataArray[hI].id) === 'undefined') {
-          console.log('name', fileInfoData[hI]['name'])
-        }
       }
       self.histogramDataArray = histogramDataArray
       self.histogramDataObj = histogramDataObj
@@ -190,8 +266,14 @@ define([
       var yTicksFormatArray = histogramDataObject.yTicksFormatArray
       var xTicksValueArray = histogramDataObject.xTicksValueArray
       var xTicksFormatArray = histogramDataObject.xTicksFormatArray
+      //  在brush开始的时候首先将之前选择的barcode的pre-click-highlight取消
+      var brushstart = function () {
+        d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
+          .classed('pre-click-highlight', false)
+      }
       //  brushend 方法在brush结束之后显示icon list
       var brushend = function () {
+        self.brushSelectionItems()
         var icons = []
         icons.push({
           icon: 'fa-check',
@@ -206,6 +288,16 @@ define([
             }
           }
         })
+        icons.push({
+          icon: 'fa-times',
+          title: 'all',
+          activeClass: 'inactive',
+          id: 'confirmation',
+          click: function () {
+            self.brushUnSelectionItems()
+            self.remove_all_click_unhighlight()
+          }
+        })
         for (var i = 0; i < 7; ++i) {
           var day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
           icons.push({
@@ -217,6 +309,7 @@ define([
             click: function () {
               var btn_day = this.day
               var selectionArray = []
+              //  删除选中范围内的该天的barcodeTree
               if (d3.select('#' + day[this.day]).classed('active')) {
                 d3.select(self.el).selectAll('.library-bar.unchanged-pre-click-highlight')
                   .each(function (d, i) {
@@ -225,14 +318,20 @@ define([
                       var date = id.split('-')[1].replaceAll('_', '-')
                       var cur_day = new Date(date).getDay()
                       if (cur_day == btn_day) {
-                        d3.select(this)
-                          .classed('pre-click-highlight', false)
+                        d3.select(this).classed('click-unhighlight', true)
+                        d3.select(this).classed('pre-click-highlight', false)
+                        d3.select(this).classed('click-highlight', false)
                         d3.select(this).style('fill', null)
+                        var unselectedItemsArray = []
+                        var itemId = d3.select(this).attr('id')
+                        unselectedItemsArray.push(itemId)
+                        self.unSelectBarItem(unselectedItemsArray)
                       }
                     }
                   })
                 d3.select('#' + day[this.day]).classed('active', false)
               } else if (!d3.select('#' + day[this.day]).classed('active')) {
+                //  增加选中范围内的该天的barcodeTree
                 d3.select(self.el).selectAll('.library-bar.unchanged-pre-click-highlight')
                   .each(function (d, i) {
                     var id = d3.select(this).attr('id')
@@ -240,24 +339,16 @@ define([
                       var date = id.split('-')[1].replaceAll('_', '-')
                       var cur_day = new Date(date).getDay()
                       if (cur_day == btn_day) {
-                        d3.select(this)
-                          .classed('pre-click-highlight', true)
+                        d3.select(this).classed('pre-click-highlight', true)
                       }
                     }
                   })
+                self.brushSelectionItems()
                 d3.select('#' + day[this.day]).classed('active', true)
               }
             }
           })
         }
-        icons.push({
-          icon: 'fa-eyedropper',
-          title: 'color',
-          activeClass: 'active',
-          click: function () {
-            console.log('show color palette')
-          }
-        })
         var d3_extent = d3.select(self.el).select('.extent')
         var jquery_extent = $('.extent')
         if (jquery_extent.data('d3_menu') === undefined) {
@@ -279,7 +370,7 @@ define([
       }
       //  再次点击histogram上面的bar取消选中调用的函数
       var unSelectBarItem = function (barId) {
-        self.unSelectBarItem(barId)
+        self.unSelectBarItem([barId])
       }
       //  鼠标移开bar节点的时候所调用的函数
       var unhoveringBarItem = function (d) {
@@ -332,9 +423,12 @@ define([
         .bar_click_handler(selectBarItem)
         .bar_unclick_handler(unSelectBarItem)
         .xLabel('#Date')
+        .xLabel_location('.90em')
+        .xLabel_text_anchor('end')
         .yLabel('#log(num)')
         .bar_interval(0.5)
         .brush_trigger(brushend)
+        .brush_start_trigger(brushstart)
         .brushmove_trigger(brushmove)
         .hovering_trigger(hoveringBarItem)
         .unhovering_trigger(unhoveringBarItem)
@@ -397,7 +491,7 @@ define([
       function flipTooltipTop() {
         var navbarHeight = Config.get('NAVBAR_HEIGHT')
         var tooltipTriangleHeight = Config.get('TOOLTIP_TRIANGLE_HEIGHT')
-        var tooltipHeight = Config.get('TOOLTIP_HEIGHT')
+        var tooltipHeight = $(".d3-histogram-tip").height() //Config.get('TOOLTIP_HEIGHT')
         var d3TipTop = $(".d3-histogram-tip").position().top
         var d3TipBottom = d3TipTop + tooltipHeight
         if (d3TipTop < navbarHeight) {
@@ -411,6 +505,7 @@ define([
       var self = this
       var selectedItemArray = [barId]
       self.requestData(selectedItemArray)
+      self.trigger_update_selection_list()
     },
     //  brush之后对于brush范围内的节点进行高亮
     prehighlightBar: function (barId) {
@@ -419,6 +514,13 @@ define([
       self.d3el.select('#' + barId).classed('unchanged-pre-click-highlight', true)
       if (!self.d3el.select('#' + barId).classed('click-highlight')) {
         self.d3el.select('#' + barId).classed('click-unhighlight', true)
+      }
+    },
+    //  在clickhighlight的节点为空时, 清空所有的click unhighlight的节点
+    remove_all_click_unhighlight: function () {
+      var self = this
+      if (self.d3el.selectAll('.click-highlight').empty()) {
+        self.d3el.selectAll('.library-bar').classed('click-unhighlight', false)
       }
     },
     //  取消对于上方histogram中选中的bar的高亮
@@ -437,21 +539,33 @@ define([
       self.d3el.select('#' + barId).classed('click-highlight', true)
     },
     //  unclick的时候发生的事件
-    unSelectBarItem: function (barId) {
+    unSelectGroupBarItem: function (barId) {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      self.remove_item_and_model(barId)
-      barcodeCollection.update_barcode_view()
+      barcodeCollection.remove_item_and_model(barId)
+      barcodeCollection.update_after_remove_models()
+      barcodeCollection.update_data_all_view()
     },
-    //  根据barcode的id在barcode collection和selectItem数组中删除对应的barcode
-    remove_item_and_model: function (barId) {
+    //  unclick的时候发生的事件
+    unSelectBarItem: function (barIdArray) {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      var selectItemNameArray = Variables.get('selectItemNameArray')
-      var itemIndex = selectItemNameArray.indexOf(barId)
-      selectItemNameArray.splice(itemIndex, 1)
-      barcodeCollection.remove_barcode_dataset(barId)
-      // self.trigger_super_view_update()
+      for (var bI = 0; bI < barIdArray.length; bI++) {
+        var barId = barIdArray[bI]
+        barcodeCollection.remove_item_and_model(barId)
+      }
+      window.Variables.update_barcode_attr()
+      barcodeCollection.update_after_remove_models()
+      //  传递信号, 在服务器端更新dataCenter删除选中的item数组, 进而更新superTree
+      window.Datacenter.request_remove_item(barIdArray)
+    },
+    //  取消某一个histogram中的bar的高亮
+    cancel_selection_highlight: function (barId) {
+      var self = this
+      self.d3el.select('#' + barId)
+        .classed('click-highlight', false)
+        .classed('pre-click-highlight', false)
+        .classed('click-unhighlight', true)
     },
     //  从dataCenter中请求数据
     requestData: function (selectedItemsArray) {
@@ -463,9 +577,8 @@ define([
         }
       }
       window.Variables.update_barcode_attr()
-      var url = 'barcode_original_data'
       var displayMode = Variables.get('displayMode')
-      window.Datacenter.requestDataCenter(url, selectedItemsArray)
+      window.Datacenter.requestDataCenter(selectedItemsArray)
       window.request_barcode_time_histogram435 = new Date()
     },
     //  点击brush上面的确认按钮, 表示选中brush的部分
@@ -473,11 +586,18 @@ define([
       var self = this
       var highlightNum = d3.select(self.el).selectAll('.library-bar.pre-click-highlight')[0].length - 1
       var selectedItemsArray = []
+      var existedSelectItemNameArray = Variables.get('selectItemNameArray')
       var selectedItemColorObj = {}
       d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
         .each(function (d, i) {
           var itemId = d3.select(this).attr('id')
-          selectedItemsArray.push(itemId)
+          if (existedSelectItemNameArray.indexOf(itemId) === -1) {
+            selectedItemsArray.push(itemId)
+          }
+          var selectionColor = Variables.get('selectionColor')
+          if (selectionColor != null) {
+            d3.select(this).style('fill', selectionColor)
+          }
           d3.select(this).classed('click-unhighlight', false)
           d3.select(this).classed('click-highlight', true)
           var color = d3.select(this).style('fill')
@@ -488,6 +608,28 @@ define([
         })
       Variables.set('selectedItemColorObj', selectedItemColorObj)
       self.requestData(selectedItemsArray)
+      self.trigger_update_selection_list()
+      //  在brush完成之后, 将Variable中的selectionColor设置为null
+      Variables.set('selectionColor', null)
+      $('#color-picker').css('background-color', 'white')
+      // d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
+      //   .classed('pre-click-highlight', false)
+      // self.clear_brush_range_rect()
+      // var selectItemNameArray = Variables.get('selectItemNameArray')
+    },
+    //  点击brush上面的删除按钮, 表示删除选中brush的部分
+    brushUnSelectionItems: function () {
+      var self = this
+      var unselectedItemsArray = []
+      d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
+        .each(function (d, i) {
+          var itemId = d3.select(this).attr('id')
+          unselectedItemsArray.push(itemId)
+          d3.select(this).classed('click-unhighlight', true)
+          d3.select(this).classed('click-highlight', false)
+          d3.select(this).style('fill', null)
+        })
+      self.unSelectBarItem(unselectedItemsArray)
       d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
         .classed('pre-click-highlight', false)
       self.clear_brush_range_rect()
@@ -555,6 +697,53 @@ define([
         .attr('width', 0)
     },
     /**
+     * 取消选择当前所有的barcodeTree
+     */
+    set_unselect_all_histogram: function () {
+      var self = this
+      self.d3el.selectAll('.set-selection').each(function () {
+        var barcodeTreeId = d3.select(this).attr('id')
+        self.set_unselect_histogram(barcodeTreeId)
+      })
+      self.d3el.selectAll('.set-selection-text').remove()
+    },
+    /**
+     * 响应来自于barcode-view的点击取消选中的事件
+     * @param barcodeTreeId
+     */
+    set_unselect_histogram: function (barcodeTreeId) {
+      var self = this
+      self.d3el.select('#' + barcodeTreeId).classed('set-selection', false)
+      self.d3el.select('.container').select('#' + barcodeTreeId + '-set-selection').remove()
+    },
+    /**
+     * 响应来自于barcode-view中的点击选中事件作为几个操作元素的事件
+     */
+    set_select_histogram: function (barcodeTreeId) {
+      var self = this
+      self.d3el.select('#' + barcodeTreeId).classed('set-selection', true)
+      var histogramHeight = self.histogramHeight
+      var barWidth = +self.d3el.select('#' + barcodeTreeId).attr('width')
+      var barHeight = +self.d3el.select('#' + barcodeTreeId).attr('height')
+      var barX = +self.d3el.select('#' + barcodeTreeId).attr('x')
+      var centerX = barX + barWidth / 2
+      var circleYPadding = 3
+      var pinSize = barWidth * 2 / 3
+      self.d3el.select('.container')
+        .append('text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .attr('cursor', 'pointer')
+        .attr('class', 'set-selection-text')
+        .attr('id', barcodeTreeId + '-set-selection')
+        .attr('font-family', 'FontAwesome')
+        .attr('x', centerX)
+        .attr('y', histogramHeight - barHeight - circleYPadding - barWidth / 2)
+        .attr('width', pinSize)
+        .attr('height', pinSize)
+        .text('\uf067')
+    },
+    /**
      * 响应来自于barcode-view中的点击取消选中事件
      */
     select_histogram: function (barcodeTreeId) {
@@ -563,29 +752,30 @@ define([
       self.d3el.select('.container').selectAll('.compare-based-text').remove()
       self.d3el.select('#' + barcodeTreeId).classed('compare-based-selection', true)
       var histogramHeight = self.histogramHeight
-      var barWidth = +self.d3el.select('#' + barcodeTreeId).attr('width')
-      var barHeight = +self.d3el.select('#' + barcodeTreeId).attr('height')
-      var barX = +self.d3el.select('#' + barcodeTreeId).attr('x')
-      var centerX = barX + barWidth / 2
-      var circleYPadding = 3
-      var pinSize = barWidth * 2 / 3
-      console.log('select_histogram')
-      self.d3el.select('.container')
-        .append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .attr('cursor', 'pointer')
-        .attr('class', 'compare-based-text')
-        .attr('font-family', 'FontAwesome')
-        .attr('x', centerX)
-        .attr('y', histogramHeight - barHeight - circleYPadding - barWidth / 2)
-        .attr('width', pinSize)
-        .attr('height', pinSize)
-        .text('\uf08d')
-      self.d3el.select('.container')
-        .select('.compare-based-rect')
-        .attr('x', barX)
-        .attr('width', barWidth)
+      if (!self.d3el.select('#' + barcodeTreeId).empty()) {
+        var barWidth = +self.d3el.select('#' + barcodeTreeId).attr('width')
+        var barHeight = +self.d3el.select('#' + barcodeTreeId).attr('height')
+        var barX = +self.d3el.select('#' + barcodeTreeId).attr('x')
+        var centerX = barX + barWidth / 2
+        var circleYPadding = 3
+        var pinSize = barWidth * 2 / 3
+        self.d3el.select('.container')
+          .append('text')
+          .attr('text-anchor', 'middle')
+          .attr('dominant-baseline', 'middle')
+          .attr('cursor', 'pointer')
+          .attr('class', 'compare-based-text')
+          .attr('font-family', 'FontAwesome')
+          .attr('x', centerX)
+          .attr('y', histogramHeight - barHeight - circleYPadding - barWidth / 2)
+          .attr('width', pinSize)
+          .attr('height', pinSize)
+          .text('\uf08d')
+        self.d3el.select('.container')
+          .select('.compare-based-rect')
+          .attr('x', barX)
+          .attr('width', barWidth)
+      }
     },
     /**
      *  响应来自于barcode-view的hovering事件
@@ -597,19 +787,21 @@ define([
       var barClass = histogramDataObject.className
       self.d3el.selectAll('.' + barClass).classed('hovering-highlight', false)
       self.d3el.select('#' + barcodeTreeId).classed('hovering-highlight', true)
-      var barX = +self.d3el.select('#' + barcodeTreeId).attr('x')
-      var barWidth = +self.d3el.select('#' + barcodeTreeId).attr('width')
-      self.d3el.select('.container')
-        .select('.hovering-rect')
-        .attr('x', barX)
-        .attr('width', barWidth)
-      var histogramDataObj = self.histogramDataObj
-      var nodeData = histogramDataObj[barcodeTreeId]
-      if (typeof (nodeData.id) !== 'undefined') {
-        // self.show_tip(nodeData)
-        var tipValue = "<span id='tip-content-empty' style='position:relative;'><span id='vertical-center'></span></span>"
-        histogramTip.show(tipValue, document.getElementById(barcodeTreeId))
-        $('.d3-histogram-tip-flip').removeClass('d3-histogram-tip-flip').addClass('d3-histogram-tip')
+      if (!self.d3el.select('#' + barcodeTreeId).empty()) {
+        var barX = +self.d3el.select('#' + barcodeTreeId).attr('x')
+        var barWidth = +self.d3el.select('#' + barcodeTreeId).attr('width')
+        self.d3el.select('.container')
+          .select('.hovering-rect')
+          .attr('x', barX)
+          .attr('width', barWidth)
+        var histogramDataObj = self.histogramDataObj
+        var nodeData = histogramDataObj[barcodeTreeId]
+        if (typeof (nodeData.id) !== 'undefined') {
+          // self.show_tip(nodeData)
+          var tipValue = "<span id='tip-content-empty' style='position:relative;'><span id='vertical-center'></span></span>"
+          histogramTip.show(tipValue, document.getElementById(barcodeTreeId))
+          $('.d3-histogram-tip-flip').removeClass('d3-histogram-tip-flip').addClass('d3-histogram-tip')
+        }
       }
     },
     /**
@@ -641,6 +833,7 @@ define([
      */
     clear_all_items: function () {
       var self = this
+      //  删除barcode collection中所有的model
       var selectItemNameArray = Variables.get('selectItemNameArray')
       //  取消当前的高亮
       for (var sI = 0; sI < selectItemNameArray.length; sI++) {
@@ -652,8 +845,7 @@ define([
       //  重置barcode collection中的所有参数
       var barcodeCollection = self.options.barcodeCollection
       barcodeCollection.reset_all_barcode_collection_parameter()
-      //  删除barcode collection中所有的model
-      barcodeCollection.reset()
+      barcodeCollection.clear_all()
       //  上面的循环不能同时删除selectItemNameArray中的元素, 同时遍历;所以先按照selectItemNameArray中的元素删除, 然后进行遍历
       Variables.set('selectItemNameArray', [])
       //  清空brush的范围的矩形

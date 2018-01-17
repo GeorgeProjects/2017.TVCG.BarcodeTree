@@ -1,32 +1,26 @@
 #tree-config-div {
-  position: absolute;
-  min-width: 200px;
-  min-height: 270px;
-  //height: 30%;
-  top: 20%;
-  left: 20%;
-  background-color: #ffffff;
-  border: 1px solid #eee;
-  visibility: hidden;
+  .tree-config-label {
+    font-size: @config-font-size;
+  }
   .panel-header {
-    margin-bottom: 10px;
+    margin-bottom: 2rem;
     #node-label {
       font-weight: bold;
-      padding-top: 5px;
-      padding-left: 5px;
-      padding-bottom: 5px;
+      padding-top: 0.5rem;
+      padding-left: 0.5rem;
+      padding-bottom: 0.5rem;
       background-color: #eeeeee;
     }
     hr {
       //margin-top: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
       border: 0;
       border-top: 1px solid #eee;
     }
     #control-panel {
       position: relative;
       float: right;
-      right: 5px;
+      right: 0.5rem;
       top: 0%;
     }
     #config-minimize {
@@ -37,28 +31,50 @@
     }
   }
   .panel-content {
-    padding-right: 10px;
-    padding-left: 10px;
-
+    padding-right: 1rem;
+    padding-left: 1rem;
+    #align-controller-container {
+      margin-top: 5px;
+    }
     #level-controller {
       font-weight: bold;
     }
     #align-controller {
+      margin-top: 5px;
       font-weight: bold;
     }
     #display-controller {
-      //margin-top: 20px;
+      margin-top: 5px;
       font-weight: bold;
       .display-mode {
-        padding-top: 5px;
-        padding-bottom: 5px;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
       }
     }
-    .mode-button {
-      padding: 4px 6px;
+    #comparison-controller {
+      font-weight: bold;
+      margin-top: 5px;
+    }
+    #barcode-layout-mode {
+      .mode-button {
+        padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+      }
+    }
+    #barcode-display-mode {
+      .mode-button {
+        padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+      }
+    }
+    #barcode-comparison-mode {
+      .mode-button {
+        padding: 0.2rem 0.4rem 0.2rem 0.4rem;
+      }
     }
     .level-btn {
-      padding: 4px 8.5px;
+      padding: @level-btn-padding;
+    }
+    #refresh-display-level, #refresh-aligned-level {
+      padding: 0.3rem 0.5rem;
     }
     .sort-button {
       fill: #ddd;
@@ -69,15 +85,10 @@
     .sort-button[class~=hovering-highlight] {
       fill: black !important;
     }
-    #refresh-display-level {
-      padding: 4px 8.5px;
-    }
-    #refresh-aligned-level {
-      padding: 4px 8.5px;
-    }
+
   }
   #distribution-content {
-    margin-top: -18px;
+    margin-top: -1.8rem;
     #distribution-histogram {
       font-weight: bold;
     }

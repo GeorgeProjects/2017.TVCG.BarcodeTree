@@ -25,7 +25,7 @@
 
         let brush_trigger = function(d3_event, brushed_bar_sel) {}
 
-        let _font_style = '10px sans-serif'
+        let _font_style = '1rem sans-serif'
 
         //判断区间[x1,x2]与[bound1,bound2]的交集长度是否超过[x1,x2]长度的一半
         let _overhalf = function(x1, x2, bound1, bound2) {
@@ -97,6 +97,7 @@
                         .attr('dx', '2.5em')
                         .attr('x', innerWidth)
                         .attr('fill', 'black')
+                        .attr('text-anchor', 'end')
                         .text(xLabel)
 
                     xAxis_g_enter.selectAll('text')
@@ -125,6 +126,7 @@
                         .attr('transform', 'rotate(-90)')
                         .attr('dy', '-3.5em')
                         .attr('fill', 'black')
+                        .attr('text-anchor', 'end')
                         .text(yLabel)
 
                     yAxis_g_enter.selectAll('text')

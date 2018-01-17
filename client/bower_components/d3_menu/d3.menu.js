@@ -99,7 +99,7 @@
                 .enter()
                 .append('div')
                 .attr('id', d => d.id)
-                .attr('class', d => 'fa fa-fw ' + d.icon + ' ' + d.activeClass)
+                .attr('class', d => 'fa fa-fw menu-label ' + d.icon + ' ' + d.activeClass)
                 .attr('title', d => d.title)
                 .on('click', d => d.click())
                 .text(d => d.text)

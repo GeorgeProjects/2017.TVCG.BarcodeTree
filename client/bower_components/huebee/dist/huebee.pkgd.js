@@ -910,7 +910,7 @@ proto.setTexts = function() {
   for ( var i=0; i < this.setTextElems.length; i++ ) {
     var elem = this.setTextElems[i];
     var property = elem.nodeName == 'INPUT' ? 'value' : 'textContent';
-    elem[ property ] = this.color;
+    // elem[ property ] = this.color;
   }
 };
 

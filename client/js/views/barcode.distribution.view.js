@@ -29,10 +29,13 @@ define([
     },
     render_distribution_histogram: function () {
       var self = this
+      var barcodeCollection = self.options.barcodeCollection
       var barcodeConfigDivHeight = $('#barcode-distribution-view').height()
-      var panelHeaderHeight = $('.panel-header').height()
-      var panelContentHeight = $('.panel-content').height()
-      var distributionHistogramHeight = (barcodeConfigDivHeight - panelHeaderHeight - panelContentHeight) / 5
+      var panelHeaderHeight = $('#barcode-distribution-view .panel-header').height()
+      var distributionHistogramHeight = (barcodeConfigDivHeight - panelHeaderHeight) / 5
+      if (distributionHistogramHeight < 90) {
+        distributionHistogramHeight = 90
+      }
       self.distributionHistogramHeight = distributionHistogramHeight
       var barcodeNodeCollectionObj = Variables.get('barcodeNodeCollectionObj')
       for (var item in barcodeNodeCollectionObj) {
@@ -68,28 +71,60 @@ define([
     add_distribution_histogram: function (distribution_level, raw_data_array) {
       var self = this
       var intervals = 100
+      intervals = raw_data_array.max() > intervals ? raw_data_array.max() : intervals
       var eachIntervalRange = self.get_each_interval_range(raw_data_array, intervals)
       var histogramDataArray = self.get_distribution_histogram(raw_data_array, intervals, eachIntervalRange)
       var divId = 'distribution-level-' + distribution_level
       var distributionHistogramWidth = +$('#distribution-content').width()
       var distributionHistogramHeight = +self.distributionHistogramHeight
-      var margin = {top: 20, right: 10, bottom: 20, left: 20}
+      var margin = {top: 20, right: 10, bottom: 20, left: 30}
       var barClass = 'distribution-bar'
       var histogramWidth = distributionHistogramWidth - margin.left - margin.right
       var histogramHeight = distributionHistogramHeight - margin.top - margin.bottom
+      var histogramDataTicksRealMax = histogramDataArray.length * eachIntervalRange
+      var rangeNum = 2
+      var xDisplayTicksValueArray = self._get_display_ticks_value_array(histogramDataTicksRealMax, rangeNum)
+      var xTicksValueArray = []
+      for (var tI = 0; tI < xDisplayTicksValueArray.length; tI++) {
+        xTicksValueArray.push(Math.round(xDisplayTicksValueArray[tI] / eachIntervalRange))
+      }
+      //  计算distribution柱状图的y轴的ticks
+      var maxHistogramData = 0
+      for (var hI = 0; hI < histogramDataArray.length; hI++) {
+        var histogramValue = histogramDataArray[hI].y
+        if (histogramValue > maxHistogramData) {
+          maxHistogramData = histogramValue
+        }
+      }
+      //  basedInterval是10的倍数, 但是tick的间隔可以是多个20, 30, rangeNum设置具体的ticks的数值
+      var rangeNum = 4
+      var yTicksValueArray = []
+      //  这个地方的判断使用等号, 因为传入的distribution_level不是数值类型
+      if (distribution_level == 1) {
+        var basedPowerNumber = 0
+        yTicksValueArray = self._get_display_ticks_value_array(maxHistogramData, rangeNum, basedPowerNumber)
+      } else {
+        yTicksValueArray = self._get_display_ticks_value_array(maxHistogramData, rangeNum)
+      }
+      var xLabel = null
+      if (distribution_level === 'ratio') {
+        xLabel = '#' + distribution_level
+      } else {
+        xLabel = '#l-' + distribution_level
+      }
       var barchart = d3.chart()
         .width(histogramWidth)
         .height(histogramHeight)
         // .margin(margin)
         .bar_class(barClass)
         .xTickNum(10)
-        .xLabel('#level-' + distribution_level)
+        .xLabel(xLabel)
         .yLabel('#count')
         .margin(margin)
-        .x_ticks_value([])
-        .x_ticks_format([])
-        .y_ticks_value([])
-        .y_ticks_format([])
+        .x_ticks_value(xTicksValueArray)
+        .x_ticks_format(xDisplayTicksValueArray)
+        .y_ticks_value(yTicksValueArray)
+        .y_ticks_format(yTicksValueArray)
         .bar_interval(0.5)
         .x_interval(eachIntervalRange)
         .distributionLevel(String(distribution_level))
@@ -119,14 +154,77 @@ define([
           .call(barchart)
       }
     },
+    _get_same_attribute: function (data_array) {
+      var self = this
+      var standardValue = 0
+      var sameJudgement = true
+      for (var dI = 0; dI < data_array.length; dI++) {
+        if (data_array[dI].y !== 0) {
+          standardValue = data_array[dI].y
+          break
+        }
+      }
+      for (var dI = 0; dI < data_array.length; dI++) {
+        var value = data_array[dI].y
+        if (value !== 0) {
+          if (value !== standardValue) {
+            sameJudgement = false
+          }
+        }
+      }
+      return sameJudgement
+    },
+    _get_display_ticks_value_array: function (max_value, range_num, based_power_num) {
+      var basedPowerNumber = 0
+      if (typeof (based_power_num) !== 'undefined') {
+        basedPowerNumber = based_power_num
+      } else {
+        for (var range_power = -2; range_power < 3; range_power++) {
+          if ((max_value > (2 * Math.pow(10, range_power))) && (max_value <= (2 * Math.pow(10, range_power + 1)))) {
+            basedPowerNumber = range_power
+            break
+          }
+        }
+      }
+      var basedNumber = Math.pow(10, basedPowerNumber)
+      var range_num = Math.round((max_value / basedNumber) / 5)
+      range_num = range_num < 1 ? 1 : range_num
+      var ticksInterval = basedNumber * range_num
+      var histogramDataTicksNum = Math.floor(max_value / ticksInterval)
+      //  计算distribution柱状图的x轴的ticks
+      var xDisplayTicksValueArray = []
+      for (var tI = 1; tI <= histogramDataTicksNum; tI++) {
+        var ticksNum = Math.round(tI * ticksInterval * 100) / 100
+        xDisplayTicksValueArray.push(ticksNum)
+      }
+      return xDisplayTicksValueArray
+    },
     brush_trigger: function (real_brush_start, real_brush_end, distribution_level) {
       var self = this
       var barcodeNodeCollectionObjWithId = Variables.get('barcodeNodeCollectionObjWithId')
       var barcodeNodeArray = barcodeNodeCollectionObjWithId[distribution_level]
-      var highlightObjArray = new Array()
+      var highlightObjArray = Variables.get('brushHighlightObjArray')
       for (var bI = 0; bI < barcodeNodeArray.length; bI++) {
         if ((barcodeNodeArray[bI].value >= real_brush_start) && (barcodeNodeArray[bI].value <= real_brush_end)) {
           highlightObjArray.push(barcodeNodeArray[bI])
+        }
+      }
+      if (distribution_level === 'ratio') {
+        for (var hI = 0; hI < highlightObjArray.length; hI++) {
+          if (!(((highlightObjArray[hI].value) >= real_brush_start) && ((highlightObjArray[hI].value) <= real_brush_end))) {
+            highlightObjArray.splice(hI, 1)
+            hI = hI - 1
+          }
+        }
+      }
+      //  删除当前高亮数组中不满足条件的元素
+      for (var hI = 0; hI < highlightObjArray.length; hI++) {
+        var nodeDepth = highlightObjArray[hI].nodeId.getDepthFromId()
+        if (nodeDepth == distribution_level) {
+          if (!(((highlightObjArray[hI].value) >= real_brush_start) && ((highlightObjArray[hI].value) <= real_brush_end))) {
+            highlightObjArray.splice(hI, 1)
+            hI = hI - 1
+          }
         }
       }
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_FILTERING_HIGHLIGHT_NODES'], {
@@ -136,13 +234,14 @@ define([
     },
     get_each_interval_range: function (raw_data_array, intervals) {
       var maxNum = raw_data_array.max()
-      var minNum = raw_data_array.min()
+      var minNum = 0
       var eachIntervalRange = (maxNum - minNum) / intervals
       return eachIntervalRange
     },
     get_distribution_histogram: function (raw_data_array, intervals, eachIntervalRange) {
       var histogramDataArray = []
-      for (var hI = 0; hI < intervals; hI++) {
+      var distributionRangeMax = intervals + intervals * 0.1
+      for (var hI = 0; hI <= distributionRangeMax; hI++) {
         histogramDataArray[hI] = {}
         histogramDataArray[hI].x1 = hI
         histogramDataArray[hI].x2 = (hI + 1)

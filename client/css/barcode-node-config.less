@@ -1,32 +1,23 @@
 #barcode-node-config {
-  position: absolute;
-  min-width: 200px;
-  min-height: 245px;
-  //height: 30%;
-  top: 20%;
-  left: 20%;
-  background-color: #ffffff;
-  border: 1px solid #eee;
-  visibility: hidden;
   .panel-header {
-    margin-bottom: 20px;
+    margin-bottom: 2rem;
     #node-label {
       font-weight: bold;
-      padding-top: 5px;
-      padding-left: 5px;
-      padding-bottom: 5px;
+      padding-top: 0.5rem;
+      padding-left: 0.5rem;
+      padding-bottom: 0.5rem;
       background-color: #eeeeee;
     }
     hr {
       //margin-top: 20px;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
       border: 0;
       border-top: 1px solid #eee;
     }
     #control-panel {
       position: relative;
       float: right;
-      right: 5px;
+      right: 0.5rem;
       top: 0%;
     }
     #config-minimize {
@@ -38,8 +29,24 @@
   }
   .panel-content {
     width: 100%;
-    padding-left: 5%;
+    padding-left: 10%;
     padding-right: 5%;
+    .slider-container {
+      width: 100%;
+      padding-bottom: 2.5rem;
+      .ui-slider-handle {
+        text-align: center;
+        padding-top: 0.1rem;
+      }
+      .slider-div {
+        padding-left: 0;
+        padding-right: 0;
+      }
+      .slider-label {
+        float: right;
+        font-size: @config-font-size;
+      }
+    }
     .range-label {
       width: 100%;
       font-size: 1em;

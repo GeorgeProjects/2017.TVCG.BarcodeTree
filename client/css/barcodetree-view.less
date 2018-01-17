@@ -1,0 +1,169 @@
+#barcodetree-view {
+  #barcodetree-svg {
+    //  barcode上增加icon
+    .icon {
+      width: 1rem;
+      height: 1rem;
+      vertical-align: -0.15rem;
+      fill: currentColor;
+      overflow: hidden;
+    }
+    rect.bg {
+      stroke: #ddd;
+      stroke-width: 0.25px;
+    }
+    rect.bg-odd {
+      fill: #fff; //#f9f9f9
+    }
+    rect.bg-even {
+      fill: #fff;
+    }
+    .bg[class~=hovering-highlight] {
+      //stroke: #1F77B4;
+      //stroke-width: 2;
+      //stroke-alignment: outside;
+      fill: #efefef;
+    }
+    .bg[class~=set-operation] {
+      fill: #f3f3f3;
+    }
+    .bg[class~=compare-based-selection] {
+      //stroke: #1F77B4;
+      //stroke-width: 2;
+      //stroke-alignment: outside;
+      fill: #efefef;
+    }
+    .bg[class~=set-operation-selection-selection] {
+      //stroke: #1F77B4;
+      //stroke-width: 2;
+      //stroke-alignment: outside;
+      fill: #efefef;
+    }
+    .bg[class~=barcode-tree-filter] {
+      fill: #efefef;
+    }
+    .barcode-node {
+      fill: @barcode-node-color;
+    }
+
+    .barcode-node.node-existed {
+      fill: @barcode-node-color;
+    }
+
+    .collapse-triangle {
+      fill: @barcode-node-color;
+    }
+
+    .tooth {
+      fill: @barcode-node-color;
+    }
+
+    .barcode-node.node-none {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .barcode-node.node-missed {
+      fill: white !important;
+      stroke: #aaa !important;
+      stroke-width: 0.15rem !important;
+    }
+
+    .barcode-node.node-missed-wide {
+      fill: white !important;
+      stroke: #aaa !important;
+      stroke-width: 0.15rem !important;
+    }
+
+    .barcode-node.node-missed-narrow {
+      fill: #ccc !important;
+      //stroke: gray !important;
+      //stroke-width: 1px !important;
+    }
+
+    .barcode-node[class~=selection-unhighlight] {
+      opacity: 0.2;
+    }
+
+    .barcode-node.selection-sibling-highlight[class~=selection-unhighlight] {
+      opacity: 0.4;
+    }
+
+    .barcode-node[class~=selection-highlight], .supertree-icicle-node[class~=selection-highlight] {
+      opacity: 1;
+    }
+
+    .barcode-node[class~=unhighlight], .tooth[class~=unhighlight] {
+      opacity: 0.2;
+    }
+
+    .barcode-node.sibling-highlight[class~=unhighlight], .tooth.sibling-highlight[class~=unhighlight] {
+      opacity: 0.4;
+    }
+
+    .barcode-node[class~=sort-hovering-highlight] {
+      //fill: #1F77B4;
+      stroke: #1f77b4 !important;
+      stroke-width: 0.15rem;
+    }
+
+    .barcode-node[class~=sort-selection-highlight], .padding-covered-rect[class~=sort-selection-highlight] {
+      //fill: #1f77b3 !important;
+      stroke: #1f77b4 !important;
+      stroke-width: 0.15rem;
+    }
+
+    .barcode-node[class~=father-highlight], .supertree-icicle-node[class~=father-highlight] {
+      //fill: #1F77B4;
+    }
+
+    .tooth[class~=current-highlight] {
+      fill: black;
+    }
+
+    .barcode-node[class~=children-highlight], .supertree-icicle-node[class~=children-highlight] {
+      //fill: #a6cee3;
+    }
+
+    .barcode-node[class~=added-node-highlight] {
+      fill: #a1d76a !important
+    }
+
+    .barcode-node[class~=missed-node-highlight] {
+      stroke: #e9a3c9 !important;
+      stroke-width: 0.15rem;
+    }
+
+    .barcode-node[class~=same-node-highlight] {
+      fill: black !important
+    }
+
+    .barcode-node[class~=sibling-highlight], .tooth[class~=sibling-highlight], .supertree-icicle-node[class~=sibling-highlight] {
+      fill: #d8b365 !important; //#5B647C//#d8b365;//#b2df8a;
+    }
+
+    .barcode-node[class~=selection-sibling-highlight], .tooth[class~=selection-sibling-highlight], .supertree-icicle-node[class~=selection-sibling-highlight] {
+      fill: #d8b365;
+    }
+
+    .covered-rect[class~=mouseover-highlight] {
+      fill: none
+    }
+
+    .padding-covered-rect[class~=mouseover-highlight] {
+      stroke: 0.1rem black;
+    }
+
+    .link-circle {
+      fill: black;
+    }
+
+    .node-link {
+      stroke: #4d4d4d;
+    }
+
+    .opacity-bg {
+      opacity: 0;
+    }
+  }
+}

@@ -13,6 +13,8 @@
           yTickNum = null,
           xTickNum = null,
           xLabel = '',
+          xLabel_location = '-1.5em',
+          xLabel_text_anchor = 'middle',
           yLabel = '',
           enable_brush = true,
           bar_interval = 0,
@@ -28,13 +30,14 @@
           distribution_level = null
 
         let brush_trigger = function(d3_event, brushed_bar_sel) {}
+        let brush_start_trigger = function(d3_event, brushed_bar_sel) {}
         let brushmove_trigger = function(){}
         let hovering_trigger = function(){}
         let unhovering_trigger = function(){}
         let pre_highlight_bar = function(){}
         let highlight_bar = function(){}
         let un_highlight_bar = function(){}
-        let _font_style = '10px sans-serif'
+        let _font_style = '1rem sans-serif'
 
       /**
        * 渲染柱状图的函数
@@ -92,11 +95,11 @@
                       .data([null])
                       .enter()
                       .append('text')
-                      .attr('text-anchor', 'middle')
-                      .attr('alignment-baseline', 'hanging')
+                      .attr('text-anchor', xLabel_text_anchor)
+                      .attr('alignment-baseline', 'middle')
                       .attr('class', 'x label')
                       .attr('x', innerWidth)
-                      .attr('dy', '0.4em')
+                      .attr('dy', xLabel_location)
                       .attr('fill', 'black')
                       .text(xLabel)
 
@@ -122,6 +125,7 @@
 
                 function brushstart(){
                   //  下一次brush开始时作为选择的barchart的确定
+                  brush_start_trigger()
                 }
 
                 function brushmove(){
@@ -219,7 +223,7 @@
                   .attr('id', function(d, i){
                     return d.id
                   })
-                  .attr('x', d => x(d.x1))
+                  .attr('x', d => x(d.x1) + 1)
                   .attr('width', d => x(d.x2 - d.x1) - bar_interval)
                   .attr('y', d => y(d.y))
                   .attr('height', d => innerHeight - y(d.y))
@@ -261,7 +265,7 @@
               bars.exit().remove()
               bars.transition()
                   .duration(duration)
-                  .attr('x', d => x(d.x1))
+                  .attr('x', d => x(d.x1) + 1)
                   .attr('width', d => x(d.x2 - d.x1) - bar_interval)
                   .attr('y', d => y(d.y))
                   .attr('height', d => innerHeight - y(d.y))
@@ -440,6 +444,26 @@
             return chart
         }
 
+        chart.xLabel_location = function(value){
+          if (!arguments.length) return xLabel_location
+            if (typeof(value) != 'string') {
+                console.warn('invalid value for xLabel', value)
+                return
+            }
+            xLabel_location = value
+            return chart
+        }
+
+        chart.xLabel_text_anchor = function(value){
+          if (!arguments.length) return xLabel_text_anchor
+            if (typeof(value) != 'string') {
+                console.warn('invalid value for xLabel', value)
+                return
+            }
+            xLabel_text_anchor = value
+            return chart
+        }
+
         chart.yLabel = function(value) {
             if (!arguments.length) return yLabel
             if (typeof(value) != 'string') {
@@ -458,6 +482,16 @@
             }
             brush_trigger = value
             return chart
+        }
+
+        chart.brush_start_trigger = function(value){
+          if (!arguments.length) return brush_start_trigger
+          if (typeof(value) != "function") {
+            console.warn("invalid value for brush_start_trigger", value)
+            return
+          }
+          brush_start_trigger = value
+          return chart
         }
 
         chart.brushmove_trigger = function(value) {

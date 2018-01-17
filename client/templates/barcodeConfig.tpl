@@ -13,17 +13,17 @@
             <div id = "display-controller-container" class = "level-controller-container">
                 <div id = "level-controller">Displayed Levels:</div>
                 <div id = "display-level-control" class="btn-toolbar level-control" role="toolbar">
-                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-1">1</span>
-                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-2">2</span>
-                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-3">3</span>
-                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-4">4</span>
-                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-5">5</span>
+                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-1"><span class="tree-config-label">1</span></span>
+                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-2"><span class="tree-config-label">2</span></span>
+                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-3"><span class="tree-config-label">3</span></span>
+                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-4"><span class="tree-config-label">4</span></span>
+                    <span type="button" class="btn level-btn btn-default btn-lg active" id="btn-5"><span class="tree-config-label">5</span></span>
                     <span type="button" class="btn btn-default btn-lg" id="refresh-display-level">
-                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                        <i class="fa fa-refresh" id="refresh-display-text"></i>
                     </span>
                 </div>
             </div>
-            <div id = "align-controller-container" class = "level-controller-container">
+            <!--<div id = "align-controller-container" class = "level-controller-container">
                 <div id = "align-controller">Aligned Levels:</div>
                 <div id = "align-level-control" class="btn-toolbar level-control" role="toolbar">
                     <span type="button" class="btn level-btn btn-default btn-lg" id="btn-1">1</span>
@@ -32,42 +32,35 @@
                     <span type="button" class="btn level-btn btn-default btn-lg" id="btn-4">4</span>
                     <span type="button" class="btn level-btn btn-default btn-lg" id="btn-5">5</span>
                     <span type="button" class="btn btn-default btn-lg" id="refresh-aligned-level">
-                        <span class="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-refresh" aria-hidden="true" id="refresh-aligned-text"></span>
                     </span>
                 </div>
-            </div>
+            </div>-->
             <div id = "align-controller">Layout Mode:</div>
             <div id = "barcode-layout-mode" class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-lg mode-button active" aria-label="Left Align" id="union-layout-button">
-                  <i class="icon iconfont icon-UnionLayout" id = "union-layout"></i> Union
+                <button type="button" class="btn btn-default btn-lg mode-button active" aria-label="Left Align" id="original-layout-button">
+																			<i class="fa icon iconfont icon-tree-uncollapse1"></i> <span class="tree-config-label">original</span>
                 </button>
-                <button type="button" class="btn btn-default btn-lg mode-button" aria-label="Right Align" id="fisheye-layout-button">
-                  <i class="icon iconfont icon-FishEyeLayout" id = "fisheye-layout"></i> FishEye
+                <button type="button" class="btn btn-default btn-lg mode-button" aria-label="Left Align" id="union-layout-button">
+                  <i class="fa icon iconfont icon-UnionLayout1" id = "union-layout"></i> <span class="tree-config-label">fit on screen</span>
                 </button>
             </div>
             <div id = "display-controller">Display Mode:</div>
             <div id = "barcode-display-mode" class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-lg mode-button active" aria-label="Left Align" id="lock-controller">
-                  <i class="fa fa-unlock" aria-hidden="true"></i>
-                  <!-- <i class="fa fa-unlock" aria-hidden="true"></i> -->
-                </button>
                 <button type="button" class="btn btn-default btn-lg mode-button active" aria-label="Left Align" id="original-display-button">
-                  <i class="fa fa-pause" aria-hidden="true" id = "original-display"></i> Original
+                  <i class="fa icon iconfont icon-tree-uncollapse1"></i> <span class="tree-config-label">original</span>
                 </button>
                 <button type="button" class="btn btn-default btn-lg mode-button" aria-label="Right Align" id="compact-display-button">
-                  <i class="fa fa-th-large" aria-hidden="true" id = "compact-display"></i> Compact
-                </button>
-                <button type="button" class="btn btn-default btn-lg mode-button" aria-label="Right Align" id="global-display-button">
-                  <i class="fa fa-th" aria-hidden="true" id = "compact-display"></i> Global
+                  <i class="fa fa-th-large" aria-hidden="true" id = "compact-display"></i> <span class="tree-config-label">compact</span>
                 </button>
             </div>
-            <div id = "display-controller">Comparison Mode:</div>
-            <div id = "barcode-display-mode" class="btn-group" role="group">
+            <div id = "comparison-controller">Comparison Mode:</div>
+            <div id = "barcode-comparison-mode" class="btn-group" role="group">
                 <button type="button" class="btn btn-default btn-lg mode-button active" aria-label="Left Align" id="topological-comparison-button">
-                  <i class="fa fa-sitemap" aria-hidden="true"></i> Topological
+                  <i class="fa icon iconfont icon-tree-uncollapse1"></i> <span class="tree-config-label">original</span>
                 </button>
                 <button type="button" class="btn btn-default btn-lg mode-button" aria-label="Right Align" id="attribute-comparison-button">
-                  <i class="fa fa-line-chart" aria-hidden="true"></i> Attribute
+                  <i class="fa icon iconfont icon-tree-attribute"></i> <span class="tree-config-label">attribute</span>
                 </button>
             </div>
         </div>

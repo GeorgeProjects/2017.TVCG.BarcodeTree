@@ -27,7 +27,6 @@ define([
     initialize: function (options) {
       //  初始化的时候请求一个默认的数据
       var self = this
-      console.log('self', self.init_events)
       self.init_events()
       var divWidth = $('#single-barcode-tree-view').width()
       var divHeight = $('#single-barcode-tree-view').height()

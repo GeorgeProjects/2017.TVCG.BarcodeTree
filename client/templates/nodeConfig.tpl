@@ -9,4 +9,37 @@
         <hr>
     </div>
     <div class = "panel-content" id = "barcode-node-config-content">
+          <!--<div id = "height-slider-container" class = "slider-container">
+             <div id="height-control-slider" class = "slider-div col-md-8">
+                 <div id="height-handle" class="ui-slider-handle">
+                 </div>
+             </div>
+             <div class="slider-label col-md-4">height</div>
+          </div>
+          <div id = "width-1-slider-container" class = "slider-container">
+              <div id="width-1-control-slider" class = "width-control-slider slider-div col-md-8">
+                  <div id="width-1-handle" class="ui-slider-handle">
+                  </div>
+              </div>
+              <div class="slider-label col-md-4">level1</div>
+          </div>
+          <div id = "width-1-slider-container" class = "slider-container">
+              <div id="width-1-control-slider" class = "width-control-slider slider-div col-md-8">
+                  <div id="width-1-handle" class="ui-slider-handle">
+                  </div>
+              </div>
+              <div class="slider-label col-md-4">level1</div>
+          </div>
+           <div id = "width-2-slider-container" class = "slider-container">
+               <div id="width-2-control-slider" class = "width-control-slider slider-div col-md-8">
+                   <div id="width-2-handle" class="ui-slider-handle">
+                   </div>
+               </div>
+               <div class="slider-label col-md-4">level2</div>
+           </div>-->
+       <!--<div id="width-1-control-slider" class = "width-control-slider slider-div"><div id="width-1-handle" class="ui-slider-handle"></div></div>
+       <div id="width-2-control-slider" class = "width-control-slider slider-div"><div id="width-2-handle" class="ui-slider-handle"></div></div>
+       <div id="width-3-control-slider" class = "width-control-slider slider-div"><div id="width-3-handle" class="ui-slider-handle"></div></div>
+       <div id="width-4-control-slider" class = "width-control-slider slider-div"><div id="width-4-handle" class="ui-slider-handle"></div></div>-->
+
     </div>

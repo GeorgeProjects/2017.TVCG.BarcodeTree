@@ -3,10 +3,10 @@
     <div id = "histogram-main-panel"></div>
     <div id = "histogram-control-panel">
         <button type="button" class="btn btn-default" id="clear-all">
-            <i class="fa  fa-refresh" aria-hidden="true"></i>
+            <i id="remove-all-text" class="fa  fa-times" aria-hidden="true"></i>
         </button>
         <button type="button" class="btn btn-default color-button" id="color-picker">
-            <i class="fa fa-pencil" aria-hidden="true"></i>
+            <i id="color-picker-text" class="fa fa-eyedropper" aria-hidden="true"></i>
         </button>
     </div>
 </div>

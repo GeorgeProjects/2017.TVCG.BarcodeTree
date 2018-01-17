@@ -89,6 +89,9 @@ define([
         Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_BARCODE_VIEW'], function () {
           self.render_barcodetree_view()
         })
+        Backbone.Events.on(Config.get('EVENTS')['RESET_SELECTION_COLOR'], function (event) {
+          self.reset_color_button()
+        })
         // var defaultSettings = Config.get('DEFAULT_SETTINGS')
         // var windowHeight = $('body').width()
         // var barcodeHeight = windowHeight / 30
@@ -97,34 +100,65 @@ define([
         //  获取整个视图的宽度与高度, 初始化控制barcode的表现的参数, 包括barcode的高度,宽度,interval,字体的大小
         var viewWidth = $(document).width()
         var viewHeight = $(document).height()
+        init_font_size(viewWidth)
         Datacenter.start(viewWidth, viewHeight)
         // window.barcodeHeight = barcodeHeight
         //  初始化选择颜色的工具
         var elem = document.querySelector('#color-picker')
         var hueb = new Huebee(elem, {})
         hueb.on('change', function (color, hue, sat, lum) {
-          resetColorButton()
-          resetCurrentPreClick(color)
+          resetColorButton(color)
+          Variables.set('selectionColor', color)
+          // resetCurrentPreClick(color)
         })
       })
-      function resetCurrentPreClick(color) {
-        self.set_preclick_color(color)
+      //  初始化视图中的font-size
+      function init_font_size(view_width) {
+        window.rem_px = view_width / 160
+        document.getElementsByTagName('html')[0].style.fontSize = window.rem_px + 'px';
       }
-      function resetColorButton() {
-        $('#color-picker').html('<span class="glyphicon glyphicon-pencil jscolor" aria-hidden="true"></span>')
-        $('#color-picker').css("background-color", "")
+
+      //  之前的设定是预先选择一定的barcode的histogram, 然后选择颜色就可以支持在预先选择的barcode上面增加颜色
+      // function resetCurrentPreClick(color) {
+      //   self.set_preclick_color(color)
+      //   // var selectionColor =
+      // }
+      function resetColorButton(color) {
+        $('#color-picker').css("background-color", color)
       }
+    },
+    //  重置color button的颜色
+    reset_color_button: function () {
+      $('#color-picker').css('background-color', 'white')
     },
     init_common_func: function () {
       String.prototype.replaceAll = function (find, replace) {
         var str = this
         return str.replace(new RegExp(find.replace(/[-\/\\^$*+?!.()><|[\]{}]/g, '\\$&'), 'g'), replace)
       }
+      String.prototype.getDepthFromId = function (find, replace) {
+        var str = this
+        return (+str.split('-')[1])
+      }
       Array.prototype.max = function () {
         return Math.max.apply(null, this);
       }
       Array.prototype.min = function () {
         return Math.min.apply(null, this);
+      }
+      Array.prototype.samewith = function (array2) {
+        if (this.length !== array2.length) {
+          return false
+        }
+        if (((typeof (array2)) === 'undefined') || (array2 == null)) {
+          return false
+        }
+        for (var tI = 0; tI < this.length; tI++) {
+          if (this[tI] !== array2[tI]) {
+            return false
+          }
+        }
+        return true
       }
       Date.prototype.getDifference = function (date2) {
         var date1 = this

@@ -10,6 +10,125 @@ String.prototype.replaceAll = function (find, replace) {
   var str = this
   return str.replace(new RegExp(find.replace(/[-\/\\^$*+?!.()><|[\]{}]/g, '\\$&'), 'g'), replace)
 }
+//  ===================================================================
+/**
+ * loadOriginalSingleData
+ * para:treeObj - 从文件中读取得到的树对象
+ *      barcodeWidthArray - barcode不同深度的节点对应的宽度
+ *      fileObjData - 记录关于一个树对象的file对象
+ */
+function loadOriginalSingleData(linearTreeNodeArray, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval) {
+  var treeNodeArray = linearTreeNodeArray
+  var treeNodeLocArray = computeOriginalNodeLocation(treeNodeArray, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval)
+  return treeNodeLocArray
+}
+/**
+ * 对于tree线性化返回的是节点数据,标记barcode中节点的大小, 位置等属性
+ */
+function treeLinearization(treeObj, initDepth) {
+  var treeNodeArray = []
+
+  function is_numeric(str) {
+    return /^\d+$/.test(str)
+  }
+
+  function zFill(str) {
+    var pad = "000"
+    var ans = str + pad.substring(0, pad.length - str.length)
+    return ans
+  }
+
+  function innerLinearizeTreeObj(treeObj, depth, treeNodeArray) {
+    var nodeName = treeObj.name
+    var categoryName = treeObj.categoryName
+    if (typeof (nodeName) === 'undefined') {
+      nodeName = ""
+    }
+    if (is_numeric(nodeName)) {
+      nodeName = zFill(nodeName)
+    } else {
+      nodeName = transfrom_name_id(nodeName)
+    }
+    depth = +depth
+    treeObj.id = nodeName
+    treeObj.index = 'node-' + depth + '-' + nodeName
+    treeObj.depth = +depth
+    treeNodeArray.push(treeObj)
+    if ((typeof (treeObj.children) !== 'undefined') && (treeObj.children != null)) {
+      depth = depth + 1
+      if (depth < 4) {
+        for (var cI = 0; cI < treeObj.children.length; cI++) {
+          if (treeObj.children[cI] != null) {
+            innerLinearizeTreeObj(treeObj.children[cI], depth, treeNodeArray)
+          }
+        }
+      }
+    }
+    return
+  }
+
+  var depth = initDepth
+  if (treeObj != null) {
+    innerLinearizeTreeObj(treeObj, depth, treeNodeArray)
+  }
+  return treeNodeArray
+}
+/**
+ *  对于线性化的节点数组, 数组中的每个节点存在节点中的状态描述
+ *  根据数组计算原始状态的barcode的每个节点的位置以及大小
+ */
+function computeOriginalNodeLocation(treeNodeArray, widthArray, selectedLevels, barcodeHeight, barcodeNodeInterval) {
+  var xLoc = 0
+  var treeNodeLocArray = []
+  for (var i = 0; i < treeNodeArray.length; i++) {
+    var treeNodeObj = treeNodeArray[i]
+    var depth = treeNodeObj.depth
+    var treeNodeLocObj = {}
+    var rectWidth = widthArray[depth]
+    xLoc = +xLoc.toFixed(2)
+    treeNodeLocObj.x = xLoc
+    treeNodeLocObj.y = 0
+    treeNodeLocObj.category = treeNodeObj.id
+    treeNodeLocObj.categoryName = treeNodeObj.categoryName
+    treeNodeLocObj.id = treeNodeObj.index
+    treeNodeLocObj.depth = depth
+    treeNodeLocObj.width = 0
+    treeNodeLocObj.height = barcodeHeight
+    treeNodeLocObj.maxnum = treeNodeObj.maxnum
+    treeNodeLocObj.num = treeNodeObj.num
+    if (selectedLevels.indexOf(depth) !== -1) {
+      treeNodeLocObj.width = rectWidth
+      if (widthArray[depth] !== 0) {
+        xLoc = xLoc + widthArray[depth] + barcodeNodeInterval
+      }
+    }
+    treeNodeLocArray.push(treeNodeLocObj)
+  }
+  return treeNodeLocArray
+}
+/**
+ * 根据传入的subtreeObject的数组, 构建superTree
+ */
+function buildUnionTree(subtreeObjArray) {
+  var superTree = null
+  //   完全合并所有的子树
+  for (var sI = 0; sI < subtreeObjArray.length; sI++) {
+    superTree = mergeTwoTreeObj(superTree, subtreeObjArray[sI])
+  }
+  return superTree
+}
+/**
+ * 根据传入的subtreeObject的数组, 构建具有最多子树节点的数组, 只是对齐到某一层, 后面的层级不保持对齐的状态
+ */
+function buildMaxTree(subtreeObjArray, alignedLevel) {
+  var maxNodeNumTree = null
+  //   合并所有的子树中的最大的子树, 仅仅对齐到某一层级
+  for (var sI = 0; sI < subtreeObjArray.length; sI++) {
+    maxNodeNumTree = findMaxNodeNumTree(maxNodeNumTree, subtreeObjArray[sI], alignedLevel)
+  }
+  return maxNodeNumTree
+}
+//  ===================================================================
 /**
  * 去除name中的符号, 仅保留字符, 可以成为id
  * @param fatherNameLabel
@@ -75,29 +194,6 @@ function has_elements(nodeArray, fatherNameLabel, depth) {
   }
 }
 
-/**
- * loadOriginalSingleData
- * para:treeObj - 从文件中读取得到的树对象
- *      barcodeWidthArray - barcode不同深度的节点对应的宽度
- *      fileObjData - 记录关于一个树对象的file对象
- */
-function loadOriginalSingleData(treeObj, barcodeWidthArray, fileObjData, selectedLevels, barcodeHeight, barcodeNodeInterval) {
-  var treeNodeArray = []
-  var initDepth = 0
-  sortChildren(treeObj)
-  addSubtreeDepth(treeObj, initDepth)
-  var treeNodeArray = treeLinearization(treeObj, initDepth)
-  fileObjData['treeNodeArray'] = treeNodeArray
-  var treeNodeObj = {}
-  for (var tI = 0; tI < treeNodeArray.length; tI++) {
-    var index = treeNodeArray[tI].index
-    treeNodeObj[index] = treeNodeArray[tI]
-  }
-  fileObjData['treeNodeObj'] = treeNodeObj
-  var treeNodeLocArray = computeOriginalNodeLocation(treeNodeArray, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval)
-  fileObjData['treeNodeLocArray'] = treeNodeLocArray
-  return treeNodeLocArray
-}
 /**
  *  传递treeObject计算compact模式下的节点数组
  *  首先将tree object按照节点内部的children计算compact模式, 即将具有相似结构的children的孩子节点删除;
@@ -183,8 +279,10 @@ function transformFileNameArrayToCompactFileObj(fileNameArray, existedFileObj, s
   var treeObjArray = []
   for (var fI = 0; fI < fileNameArray.length; fI++) {
     var dataItemNameWithOptions = fileNameArray[fI] + 'compact-' + selectedLevelStr
-    var treeNodeObj = existedFileObj[dataItemNameWithOptions]['treeNodeObj']
-    treeObjArray.push(treeNodeObj)
+    if (typeof(existedFileObj[dataItemNameWithOptions]) !== 'undefined') {
+      var treeNodeObj = existedFileObj[dataItemNameWithOptions]['treeNodeObj']
+      treeObjArray.push(treeNodeObj)
+    }
   }
   return treeObjArray
 }
@@ -249,6 +347,7 @@ function getCompactSuperTreeNodeFromTreeObjArray(treeObjArray, barcodeWidthArray
   }
   return compactSuperTreeObj
 }
+
 /**
  * getSuperTreeNodeFromTreeObjArray
  * @param treeObjArray
@@ -294,7 +393,6 @@ function getSuperTreeNodeFromTreeObjArray(treeObjArray, barcodeWidthArray, barco
   //  首先对于树对象的孩子节点按照其索引值大小进行排序, 线性化的过程与孩子节点在数组中的顺序相关
   sortChildren(superTree)
   sortChildren(maxNodeNumTree)
-  console.log('rootId', rootId)
   //  对于树对象进行线性化得到节点序列
   var superTreeNodeArray = treeLinearization(superTree, initDepth)
   // console.log('superTreeNodeArray', superTreeNodeArray)
@@ -448,13 +546,13 @@ function computeCompactNodeLocation(compactTreeNodeArray, barcodeHeight, barcode
  * 传递用户选择的树的名称数组, 对于选择的树建立superTree并且返回superTree的节点数组
  */
 function getSuperTreeNodes(fileNameArray, existedFileObj, selectedLevelStr, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel, compactNum, barcodeNodeInterval) {
-  var treeObjArray = transformFileNameArrayToFileObj(fileNameArray, existedFileObj, selectedLevelStr)
-  var compactTreeObjArray = transformFileNameArrayToCompactFileObj(fileNameArray, existedFileObj, selectedLevelStr)
+  // var treeObjArray = transformFileNameArrayToFileObj(fileNameArray, existedFileObj, selectedLevelStr)
+  // var compactTreeObjArray = transformFileNameArrayToCompactFileObj(fileNameArray, existedFileObj, selectedLevelStr)
   var originalSuperTreeObj = getSuperTreeNodeFromTreeObjArray(treeObjArray, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel, barcodeNodeInterval)
-  var compactSuperTreeObj = getCompactSuperTreeNodeFromTreeObjArray(compactTreeObjArray, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel, compactNum, barcodeNodeInterval)
+  // var compactSuperTreeObj = getCompactSuperTreeNodeFromTreeObjArray(compactTreeObjArray, barcodeWidthArray, barcodeHeight, selectedLevels, rootId, rootLevel, alignedLevel, compactNum, barcodeNodeInterval)
   return {
     'originalSuperTreeObj': originalSuperTreeObj,
-    'compactSuperTreeObj': compactSuperTreeObj
+    // 'compactSuperTreeObj': compactSuperTreeObj
   }
 }
 /**
@@ -474,7 +572,7 @@ function compute_aligned_max_subtree_width(maxNodeNumTreeNodeLocArray, barcodeWi
   var maxSubtreeWidth = 0
   rootLevel = +rootLevel
   globalAlignedLevel = +globalAlignedLevel
-  var alignedLevel = rootLevel > globalAlignedLevel?rootLevel:globalAlignedLevel
+  var alignedLevel = rootLevel > globalAlignedLevel ? rootLevel : globalAlignedLevel
   var alignedNodeWidth = barcodeWidthArray[alignedLevel]
   if ((alignedLevel + 1) < barcodeWidthArray.length) {
     if (barcodeWidthArray[alignedLevel + 1] !== 0) {
@@ -510,22 +608,6 @@ function compute_max_subtree_width(maxNodeNumTreeNodeLocArray, barcodeWidthArray
     }
   }
   return maxSubtreeWidth
-}
-/**
- * 向树中增加节点的深度信息, 增加depth属性, 表示的是树中节点的深度
- */
-function addSubtreeDepth(treeObj, initDepth) {
-  innerAddSubtreeDepth(treeObj, initDepth)
-  function innerAddSubtreeDepth(treeObj, initDepth) {
-    treeObj.depth = initDepth
-    var treeChildren = treeObj.children
-    if (typeof (treeChildren) !== 'undefined') {
-      for (var cI = 0; cI < treeChildren.length; cI++) {
-        var childrenObj = treeChildren[cI]
-        innerAddSubtreeDepth(childrenObj, initDepth + 1)
-      }
-    }
-  }
 }
 /**
  *
@@ -614,6 +696,9 @@ function findCompactMaxNodeNumTree(treeObj1, treeObj2, alignedLevel) {
       for (var i = 0; i < treeObj2.children.length; i++) {
         var findObj = false
         var childrenName = treeObj2.children[i].name
+        if (typeof (superTreeObj.children) === 'undefined') {
+          superTreeObj.children = []
+        }
         for (var j = 0; j < superTreeObj.children.length; j++) {
           var superTreeObjName = superTreeObj.children[j].name
           if (childrenName === superTreeObjName) {
@@ -657,6 +742,7 @@ function findMaxNodeNumTree(treeObj1, treeObj2, alignedLevel) {
     var superTreeObj = {}
     superTreeObj['name'] = treeObj1['name']
     superTreeObj['num'] = treeObj1['num']
+    superTreeObj['categoryName'] = treeObj1['categoryName']
     superTreeObj['subtreeWidth'] = treeObj1['subtreeWidth']
     superTreeObj['depth'] = treeObj1['depth']
     if (typeof (treeObj1.children) !== 'undefined') {
@@ -673,24 +759,29 @@ function findMaxNodeNumTree(treeObj1, treeObj2, alignedLevel) {
         for (var i = 0; i < treeObj2.children.length; i++) {
           var findObj = false
           var childrenName = treeObj2.children[i].name
-          for (var j = 0; j < superTreeObj.children.length; j++) {
-            var superTreeObjName = superTreeObj.children[j].name
-            if (childrenName === superTreeObjName) {
-              //  寻找孩子的节点数目/占空间部分最大的子树, 其实对齐的是找到的空间部分最大的子树, 也就是该superTreeObj的下一个层级的节点
-              // if (alignedLevel <= (superTreeObj.depth + 1)) {
-              //   var superTreeChildWidth = superTreeObj.children[ j ].subtreeWidth
-              //   var mergedTreeChildWidth = treeObj2.children[ i ].subtreeWidth
-              //   if (mergedTreeChildWidth > superTreeChildWidth) {
-              //     superTreeObj.children[ j ] = JSON.parse(JSON.stringify(treeObj2.children[ i ]))
-              //   }
-              // } else {
-              superTreeObj.children[j] = findMaxNodeNumTree(superTreeObj.children[j], treeObj2.children[i], alignedLevel)
-              // }
-              findObj = true
+          if (typeof (superTreeObj.children) !== 'undefined') {
+            for (var j = 0; j < superTreeObj.children.length; j++) {
+              var superTreeObjName = superTreeObj.children[j].name
+              if (childrenName === superTreeObjName) {
+                //  寻找孩子的节点数目/占空间部分最大的子树, 其实对齐的是找到的空间部分最大的子树, 也就是该superTreeObj的下一个层级的节点
+                // if (alignedLevel <= (superTreeObj.depth + 1)) {
+                //   var superTreeChildWidth = superTreeObj.children[ j ].subtreeWidth
+                //   var mergedTreeChildWidth = treeObj2.children[ i ].subtreeWidth
+                //   if (mergedTreeChildWidth > superTreeChildWidth) {
+                //     superTreeObj.children[ j ] = JSON.parse(JSON.stringify(treeObj2.children[ i ]))
+                //   }
+                // } else {
+                superTreeObj.children[j] = findMaxNodeNumTree(superTreeObj.children[j], treeObj2.children[i], alignedLevel)
+                // }
+                findObj = true
+              }
             }
           }
           if (!findObj) {
             var addedObj = JSON.parse(JSON.stringify(treeObj2.children[i]))
+            if (typeof (superTreeObj.children) === 'undefined') {
+              superTreeObj.children = []
+            }
             superTreeObj.children.push(addedObj)
           }
           var treeObj2SubtreeWidth = 0
@@ -705,18 +796,107 @@ function findMaxNodeNumTree(treeObj1, treeObj2, alignedLevel) {
   }
 }
 /**
+ * 计算两个树的补集
+ */
+function complementTwoTreeObj(treeObj1, treeObj2) {
+  if ((treeObj1 == null) || (typeof(treeObj1) === 'undefined')) {
+    return null
+  } else if ((treeObj2 == null) || (typeof (treeObj2) === 'undefined')) {
+    return null
+  } else {
+    var superTreeObj = {}
+    superTreeObj['name'] = treeObj1['name']
+    superTreeObj['categoryName'] = treeObj1['categoryName']
+    if (typeof (treeObj1.children) !== 'undefined') {
+      superTreeObj.children = treeObj1.children
+      if (typeof (superTreeObj.children) === 'undefined') {
+        superTreeObj.children = []
+      }
+    }
+    if (typeof(superTreeObj.children) !== 'undefined') {
+      for (var j = 0; j < superTreeObj.children.length; j++) {
+        var superTreeObjName = superTreeObj.children[j].name
+        var nodeExisted = false
+        for (var i = 0; i < treeObj2.children.length; i++) {
+          var childrenName = treeObj2.children[i].name
+          if (superTreeObjName === childrenName) {
+            var interactSuperTree = interactTwoTreeObj(superTreeObj.children[j], treeObj2.children[i])
+            superTreeObj.children.splice(j, 1, interactSuperTree)
+            nodeExisted = true
+          }
+        }
+        if (nodeExisted) {
+          superTreeObj.children.splice(j, 1)
+          j = j - 1
+        }
+      }
+    } else {
+      superTreeObj.children = []
+    }
+    return superTreeObj
+  }
+  return
+}
+/**
+ *  计算两个树的交集
+ */
+function interactTwoTreeObj(treeObj1, treeObj2) {
+  if ((treeObj1 == null) || (typeof(treeObj1) === 'undefined')) {
+    return null
+  } else if ((treeObj2 == null) || (typeof (treeObj2) === 'undefined')) {
+    return null
+  } else {
+    var superTreeObj = {}
+    superTreeObj['name'] = treeObj1['name']
+    superTreeObj['categoryName'] = treeObj1['categoryName']
+    if (typeof (treeObj1.children) !== 'undefined') {
+      superTreeObj.children = treeObj1.children
+      if (typeof (superTreeObj.children) === 'undefined') {
+        superTreeObj.children = []
+      }
+    }
+    if (typeof(superTreeObj.children) !== 'undefined') {
+      for (var j = 0; j < superTreeObj.children.length; j++) {
+        var superTreeObjName = superTreeObj.children[j].name
+        var nodeExisted = false
+        for (var i = 0; i < treeObj2.children.length; i++) {
+          var childrenName = treeObj2.children[i].name
+          if (superTreeObjName === childrenName) {
+            var interactSuperTree = interactTwoTreeObj(superTreeObj.children[j], treeObj2.children[i])
+            superTreeObj.children.splice(j, 1, interactSuperTree)
+            nodeExisted = true
+          }
+        }
+        if (!nodeExisted) {
+          superTreeObj.children.splice(j, 1)
+          j = j - 1
+        }
+      }
+    } else {
+      superTreeObj.children = []
+    }
+    return superTreeObj
+  }
+  return
+}
+/**
  *  合并两个树,得到合并之后的树的结构
  */
 function mergeTwoTreeObj(treeObj1, treeObj2) {
   if ((treeObj1 == null) || (typeof(treeObj1) === 'undefined')) {
-    treeObj2['maxnum'] = treeObj2['num']
-    return treeObj2
+    if (typeof (treeObj2) !== 'undefined') {
+      treeObj2['maxnum'] = treeObj2['num']
+      return treeObj2
+    }
   } else if ((treeObj2 == null) || (typeof (treeObj2) === 'undefined')) {
-    treeObj1['maxnum'] = treeObj1['num']
-    return treeObj1
+    if (typeof (treeObj1) !== 'undefined') {
+      treeObj1['maxnum'] = treeObj1['num']
+      return treeObj1
+    }
   } else {
     var superTreeObj = {}
     superTreeObj['name'] = treeObj1['name']
+    superTreeObj['categoryName'] = treeObj1['categoryName']
     superTreeObj['num'] = treeObj1['num']
     var treeObj1MaxNum = 0
     var treeObj2MaxNum = 0
@@ -731,15 +911,11 @@ function mergeTwoTreeObj(treeObj1, treeObj2) {
       treeObj2MaxNum = +treeObj2['num']
     }
     superTreeObj['maxnum'] = treeObj1MaxNum > treeObj2MaxNum ? treeObj1MaxNum : treeObj2MaxNum
-    superTreeObj['exist_array'] = treeObj1['exist_array']
     if (typeof (treeObj1.children) !== 'undefined') {
       superTreeObj.children = treeObj1.children
       if (typeof (superTreeObj.children) === 'undefined') {
         superTreeObj.children = []
       }
-    }
-    for (var item in treeObj2['exist_array']) {
-      superTreeObj['exist_array'][item] = treeObj2['exist_array'][item]
     }
     var nodeExist = false
     if (typeof (treeObj2.children) !== 'undefined') {
@@ -773,6 +949,22 @@ function mergeTwoTreeObj(treeObj1, treeObj2) {
   return
 }
 /**
+ *  想读取的树的对象中增加节点数量的属性
+ */
+function _add_node_num(fileObject) {
+  if (typeof (fileObject.children) !== 'undefined') {
+    var sumNodeNum = 0
+    for (var fI = 0; fI < fileObject.children.length; fI++) {
+      _add_node_num(fileObject.children[fI])
+      sumNodeNum = sumNodeNum + fileObject.children[fI].nodeNum
+    }
+    fileObject.nodeNum = sumNodeNum
+  } else {
+    fileObject.nodeNum = 1
+  }
+  return
+}
+/**
  * 对于对象形式的树的孩子节点label大小进行排序
  * @param tree: 对象形式的树
  */
@@ -788,7 +980,6 @@ function sortCompactChildren(tree, selectedLevels) {
       // })
       for (var i = 0; i < tree.children.length; i++) {
         innerSortCompactChildren(tree.children[i], selectedLevels)
-        console.log('selectedLevels', selectedLevels)
       }
     }
   }
@@ -815,25 +1006,6 @@ function sortCompactChildren(tree, selectedLevels) {
   }
 }
 
-/**
- * 对于对象形式的树的孩子节点label大小进行排序
- * @param tree: 对象形式的树
- */
-function sortChildren(tree) {
-  innerSortChildren(tree)
-  function innerSortChildren(tree) {
-    if (typeof (tree.children) !== 'undefined') {
-      tree.children.sort(function (a, b) {
-        var aName = a.name
-        var bName = b.name
-        return aName - bName
-      })
-      for (var i = 0; i < tree.children.length; i++) {
-        innerSortChildren(tree.children[i])
-      }
-    }
-  }
-}
 
 /**
  *
@@ -876,50 +1048,7 @@ function compactTreeLinearization(treeObj, initDepth) {
   innerLinearizeTreeObj(treeObj, depth, treeNodeArray)
   return treeNodeArray
 }
-/**
- * 对于tree线性化返回的是节点数据,标记barcode中节点的大小, 位置等属性
- */
-function treeLinearization(treeObj, initDepth) {
-  var treeNodeArray = []
 
-  function is_numeric(str) {
-    return /^\d+$/.test(str)
-  }
-
-  function zFill(str) {
-    var pad = "000"
-    var ans = str + pad.substring(0, pad.length - str.length)
-    return ans
-  }
-
-  function innerLinearizeTreeObj(treeObj, depth, treeNodeArray) {
-    var nodeName = treeObj.name
-    if (typeof (nodeName) === 'undefined') {
-      nodeName = ""
-    }
-    if (is_numeric(nodeName)) {
-      nodeName = zFill(nodeName)
-    } else {
-      nodeName = transfrom_name_id(nodeName)
-    }
-    depth = +depth
-    treeObj.id = nodeName
-    treeObj.index = 'node-' + depth + '-' + nodeName
-    treeObj.depth = +depth
-    treeNodeArray.push(treeObj)
-    if ((typeof (treeObj.children) !== 'undefined') && (treeObj.children != null)) {
-      depth = depth + 1
-      for (var cI = 0; cI < treeObj.children.length; cI++) {
-        innerLinearizeTreeObj(treeObj.children[cI], depth, treeNodeArray)
-      }
-    }
-    return
-  }
-
-  var depth = initDepth
-  innerLinearizeTreeObj(treeObj, depth, treeNodeArray)
-  return treeNodeArray
-}
 
 /**
  *  对于线性化的节点数组, 数组中的每个节点存在节点中的状态描述
@@ -927,7 +1056,6 @@ function treeLinearization(treeObj, initDepth) {
  */
 function computeOriginalNodeLocation(treeNodeArray, widthArray, selectedLevels, barcodeHeight, barcodeNodeInterval) {
   var xLoc = 0
-  var perGapWidth = PER_GAP_WIDTH
   var treeNodeLocArray = []
   for (var i = 0; i < treeNodeArray.length; i++) {
     var treeNodeObj = treeNodeArray[i]
@@ -938,26 +1066,21 @@ function computeOriginalNodeLocation(treeNodeArray, widthArray, selectedLevels, 
     treeNodeLocObj.x = xLoc
     treeNodeLocObj.y = 0
     treeNodeLocObj.category = treeNodeObj.id
+    treeNodeLocObj.categoryName = treeNodeObj.categoryName
     treeNodeLocObj.id = treeNodeObj.index
     treeNodeLocObj.depth = depth
     treeNodeLocObj.width = 0
     treeNodeLocObj.height = barcodeHeight
     treeNodeLocObj.maxnum = treeNodeObj.maxnum
-    // if (typeof(treeNodeObj.maxnum) === 'undefined') {
-    //   treeNodeLocObj.maxnum = treeNodeObj.num
-    // } else {
-    //   treeNodeLocObj.maxnum = treeNodeObj.maxnum
-    // }
     treeNodeLocObj.num = treeNodeObj.num
+    treeNodeLocObj.nodeNum = treeNodeObj.nodeNum
     if (selectedLevels.indexOf(depth) !== -1) {
       treeNodeLocObj.width = rectWidth
       if (widthArray[depth] !== 0) {
         xLoc = xLoc + widthArray[depth] + barcodeNodeInterval
       }
     }
-    // if (selectedLevels.indexOf(depth) !== -1) {
     treeNodeLocArray.push(treeNodeLocObj)
-    // }
   }
   return treeNodeLocArray
 }
@@ -967,17 +1090,17 @@ function computeOriginalNodeLocation(treeNodeArray, widthArray, selectedLevels, 
  * @param compactDepth
  * @param tolerance
  */
-function compactDepthTreeAddTemplateTree (tree, compactDepth, tolerance, selectedLevels) {
+function compactDepthTreeAddTemplateTree(tree, compactDepth, tolerance, selectedLevels) {
   //  在树的叶节点中的children属性才为undefined, 被压缩节点的children属性为null
   if ((typeof (tree.children) !== 'undefined') && (tree.children !== null)) {
     if (tree.depth >= compactDepth) {
       for (var i = 0; i < tree.children.length; i++) {
         //  遍历树中的所有孩子节点, 将其中的重复的节点进行压缩
-        if (((typeof(tree.children[ i ]) !== 'undefined')) && (tree.children[ i ] !== null) && (tree.children[ i ].compactAttr !== ABSOLUTE_COMPACT_FATHER)) { //  对于已经被压缩过的节点不再以此节点为基准进行压缩
+        if (((typeof(tree.children[i]) !== 'undefined')) && (tree.children[i] !== null) && (tree.children[i].compactAttr !== ABSOLUTE_COMPACT_FATHER)) { //  对于已经被压缩过的节点不再以此节点为基准进行压缩
           //  先判断以某一个节点为基准, 该节点是否存在重复节点
           var existRepeat = false
           if ((i + 1) < tree.children.length) {
-            var twoTreeDistance = treeDistance(tree.children[ i ], tree.children[ i + 1 ], selectedLevels)
+            var twoTreeDistance = treeDistance(tree.children[i], tree.children[i + 1], selectedLevels)
             if (twoTreeDistance <= tolerance) {
               existRepeat = true
             }
@@ -988,26 +1111,26 @@ function compactDepthTreeAddTemplateTree (tree, compactDepth, tolerance, selecte
            *  如果不存在重复节点, 那么不需要添加模板节点, 而把 **这个节点** 的isCompact属性赋值为 false
            */
           if (existRepeat) {
-            var addedObject = clone(tree.children[ i ])
+            var addedObject = clone(tree.children[i])
             addIsCompactToNodes(false, addedObject)
             addedObject.name = 'template-' + Math.round(Math.random() * 10000)
             addCompactAttr(addedObject, TEMPLATE)
             tree.children.splice(i, 0, addedObject)
-            tree.children[ i ].isCompact = false
+            tree.children[i].isCompact = false
           } else {
-            tree.children[ i ].isCompact = false
+            tree.children[i].isCompact = false
           }
           existRepeat = false
           //  再次遍历树的孩子节点, 对于孩子节点中重复的节点进行压缩, 具体是将children赋值为null
           //  children的值存储在_children属性中记录, 同时这个节点以及其子节点的isCompact属性赋值为true
           for (var j2 = (i + 1); j2 < tree.children.length; j2++) {
-            var twoTreeDistance = treeDistance(tree.children[ i ], tree.children[ j2 ], selectedLevels)
+            var twoTreeDistance = treeDistance(tree.children[i], tree.children[j2], selectedLevels)
             if (twoTreeDistance <= tolerance) {
               // if (typeof (tree.children[ j2 ].children) !== 'undefined') {
-              addIsCompactToNodes(true, tree.children[ j2 ])
-              addCompactAttr(tree.children[ j2 ], ABSOLUTE_COMPACT_CHILDREN)
-              tree.children[ j2 ].compactAttr = ABSOLUTE_COMPACT_FATHER
-              modifyChildren2_Children(tree.children[ j2 ])
+              addIsCompactToNodes(true, tree.children[j2])
+              addCompactAttr(tree.children[j2], ABSOLUTE_COMPACT_CHILDREN)
+              tree.children[j2].compactAttr = ABSOLUTE_COMPACT_FATHER
+              modifyChildren2_Children(tree.children[j2])
             } else {
               break
             }
@@ -1017,8 +1140,8 @@ function compactDepthTreeAddTemplateTree (tree, compactDepth, tolerance, selecte
     }
     //  递归的调用这个函数, 对于子树压缩, 添加模板节点, 并且增加是否收缩的属性
     for (var k = 0; k < tree.children.length; k++) {
-      if ((tree.children[ k ].compactAttr !== ABSOLUTE_COMPACT_FATHER) && (tree.children[ k ].compactAttr !== TEMPLATE)) {
-        compactDepthTreeAddTemplateTree(tree.children[ k ], compactDepth, tolerance, selectedLevels)
+      if ((tree.children[k].compactAttr !== ABSOLUTE_COMPACT_FATHER) && (tree.children[k].compactAttr !== TEMPLATE)) {
+        compactDepthTreeAddTemplateTree(tree.children[k], compactDepth, tolerance, selectedLevels)
       }
     }
   }
@@ -1156,9 +1279,57 @@ function treeDistance(rootA, rootB, selectedLevels) {
   var ted = ed.ted(rootA, rootB, children, insert, remove, update)
   return ted.distance
 }
-
+/**
+ * 对于对象形式的树的孩子节点label大小进行排序
+ * @param tree: 对象形式的树
+ */
+function sortChildren(tree) {
+  innerSortChildren(tree)
+  function innerSortChildren(tree) {
+    if (tree != null) {
+      if (typeof (tree.children) !== 'undefined') {
+        tree.children.sort(function (a, b) {
+          var aName = a.name
+          var bName = b.name
+          return aName - bName
+        })
+        for (var i = 0; i < tree.children.length; i++) {
+          innerSortChildren(tree.children[i])
+        }
+      }
+    }
+  }
+}
+/**
+ * 向树中增加节点的深度信息, 增加depth属性, 表示的是树中节点的深度
+ */
+function addSubtreeDepth(treeObj, initDepth) {
+  innerAddSubtreeDepth(treeObj, initDepth)
+  function innerAddSubtreeDepth(treeObj, initDepth) {
+    treeObj.depth = initDepth
+    var treeChildren = treeObj.children
+    if (typeof (treeChildren) !== 'undefined') {
+      for (var cI = 0; cI < treeChildren.length; cI++) {
+        var childrenObj = treeChildren[cI]
+        innerAddSubtreeDepth(childrenObj, initDepth + 1)
+      }
+    }
+  }
+}
+exports.interactTwoTreeObj = interactTwoTreeObj
+exports.complementTwoTreeObj = complementTwoTreeObj
+exports.mergeTwoTreeObj = mergeTwoTreeObj
 exports.loadOriginalSingleData = loadOriginalSingleData
 exports.loadCompactSingleData = loadCompactSingleData
 exports.getSuperTreeNodes = getSuperTreeNodes
 exports.getSuperTreeNodeFromTreeObjArray = getSuperTreeNodeFromTreeObjArray
 exports.getTreeObjectIdArray = getTreeObjectIdArray
+exports.buildUnionTree = buildUnionTree
+exports.buildMaxTree = buildMaxTree
+
+exports.addNodeNum = _add_node_num
+exports.addSubtreeDepth = addSubtreeDepth
+exports.sortChildren = sortChildren
+exports.treeLinearization = treeLinearization
+exports.computeOriginalNodeLocation = computeOriginalNodeLocation
+exports.compute_max_subtree_width = compute_max_subtree_width

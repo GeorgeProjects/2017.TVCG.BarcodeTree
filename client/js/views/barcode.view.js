@@ -55,6 +55,14 @@ define([
       Backbone.Events.on(Config.get('EVENTS')['CLOSE_DISTRIBUTION_VIEW'], function (event) {
         self.close_config_view()
       })
+      //  打开supertree视图
+      Backbone.Events.on(Config.get('EVENTS')['OPEN_SUPER_TREE'], function (event) {
+        self.open_supertree_view()
+      })
+      //  关闭supertree视图
+      Backbone.Events.on(Config.get('EVENTS')['CLOSE_SUPER_TREE'], function (event) {
+        self.close_supertree_view()
+      })
     },
     trigger_update_barcode_view: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
@@ -130,10 +138,11 @@ define([
         var superTreeViewState = Variables.get('superTreeViewState')
         if (superTreeViewState) {
           //  当前的状态是打开的状态, 转变成关闭的状态
-          self.close_supertree_view()
+          self.trigger_close_supertree()
         } else {
           //  当前的状态是关闭的状态, 转变成打开的状态
           self.open_supertree_view()
+          self.trigger_open_supertree()
         }
       })
       // //  将打开按钮锁定按钮
@@ -166,10 +175,11 @@ define([
     open_config_view: function () {
       var self = this
       var duration = self.duration
+      var barcodeDistributionViewWidth = +$('#barcode-distribution-view').width()
       var configPanelState = Variables.get('configPanelState')
       if (configPanelState === 'close') {
         $('#barcode-config').animate({
-          right: '+=260',
+          right: '+=' + barcodeDistributionViewWidth,
         }, duration, function () {
           $('#distribution-view-controller').attr('class', 'glyphicon glyphicon-chevron-right')
         })
@@ -179,25 +189,26 @@ define([
     close_config_view: function () {
       var self = this
       var duration = self.duration
+      var barcodeDistributionViewWidth = +$('#barcode-distribution-view').width()
       var configPanelState = Variables.get('configPanelState')
       if (configPanelState === 'open') {
         $('#barcode-config').animate({
-          right: '-=260',
+          right: '-=' + barcodeDistributionViewWidth,
         }, duration, function () {
           $('#distribution-view-controller').attr('class', 'glyphicon glyphicon-chevron-left')
         })
         Variables.set('configPanelState', 'close')
       }
     },
+    //  打开supertree视图
     open_supertree_view: function () {
       var self = this
-      self.trigger_open_supertree()
       window.Variables.update_barcode_attr()
       $('#supertree-state-controller').attr('class', 'glyphicon glyphicon-chevron-up')
     },
+    //  关闭supertree视图
     close_supertree_view: function () {
       var self = this
-      self.trigger_close_supertree()
       window.Variables.update_barcode_attr()
       $('#supertree-state-controller').attr('class', 'glyphicon glyphicon-chevron-down')
     },
@@ -213,13 +224,16 @@ define([
     init_view_loc: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
-      var barcodeTreeConfigHeight = Variables.get('barcodeTreeConfigHeight')
-      var toolbarHistogramHeight = +$('#barcode-view').css('top').replace('px', '')
+      var histogramHeightRem = Variables.get('histogramHeightRem')
+      var toolbarHistogramHeight = histogramHeightRem * window.rem_px
       var barcodePaddingLeft = Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft')
-      $('#top-toolbar-container').css('height', barcodeTreeConfigHeight + 'px')
-      $('#top-toolbar-container').css('padding-left', barcodePaddingLeft + 'px')
-      $('#supertree-view-toggle').css('top', (toolbarHistogramHeight + barcodeTreeConfigHeight) + 'px')
-      $('#barcodetree-scrollpanel').css('top', barcodeTreeConfigHeight + 'px')
+      var barcodeTreeConfigHeight = $('#top-toolbar-container').height()
+      var toolbarViewDivHeight = +$('#toolbar-view-div').height()
+      var histogramViewHeight = +$('#histogram-view').height()
+      var topToolbarViewHeight = +$('#top-toolbar-container').height()
+      // $('#top-toolbar-container').css('height', barcodeTreeConfigHeight + 'px')
+      console.log('toolbarHistogramHeight + barcodeTreeConfigHeight', toolbarViewDivHeight + histogramViewHeight + topToolbarViewHeight)
+      $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + topToolbarViewHeight) + 'px')
     }
     // ,
     // update_barcode_width: function (barcodeMaxX) {

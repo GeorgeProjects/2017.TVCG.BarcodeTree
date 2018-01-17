@@ -1,7 +1,62 @@
-@toolbar-view_height: 30px;
+//Overall的设置
+@font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 
+@toolbar-view_height: 2rem;
+@toolbar-view_padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+@toolbar-view_font-size: 1rem;
 
-@font-family1: Microsoft Yahei;
+@toolbar-a_min-height: @toolbar-view_height;
+@toolbar-a_padding-top: 0.5rem;
+@toolbar-a_padding-bottom: 0.5rem;
+@toolbar-a_line-height: 1rem;
+
+// histogram视图上的参数
+@histogram-view_top: @toolbar-view_height;
+@histogram-view_height: 12rem;
+// barcode comparison视图上的top
+@barcode-view_top: @histogram-view_height + @toolbar-view_height;
+@toolbar-view_line-height: 1rem;
+
+//  top toolbar视图的高度, top toolbar包含在barcode视图中
+@top-toolbar-container_height: 3.2rem;
+@top-toolbar-container_inline-height: 2.8rem;
+@top-toolbar-container_padding-left: 2rem;
+@top-toolbar-container_padding-left: 1rem;
+@top-toolbar-container_padding-top: 1/20rem;
+@btn-group_margin-right: 2.5rem;
+@config-button_padding: 0.45rem 0.45rem 0.4rem 0.45rem;
+@config-button-similarity-sort_padding: 0.45rem 0.6rem 0.4rem 0.6rem;
+@fa_font-size: 1.6rem;
+@confirm-check_font-size: 12px;
+@remove-cross_font-size: 12px;
+@level-btn-padding: 0.3rem 0.6rem;
+
+//  config视图的参数
+@config-font-size: 1.2rem;
+
+//  这部分现在还没有太用到
+@slider-div_margin: 1rem 1rem 2rem 1rem;
+@slider-label_margin-left: 2rem;
+@list-container-scroll_max-height: 20rem;
+@list-container-scroll_min-height: 15rem;
+@subtree-operation-refresh_padding: 0.45rem 0.6rem 0.4rem 0.45rem;
+
+//  supertree视图的 top数值
+@supertree-scroll-panel_top: @top-toolbar-container_height;
+
+//  barcodetree-scrollpanel 的top的数值
+@barcodetree-scrollpanel_top: @top-toolbar-container_height;
+
+//  barcode-main.less && barcode-supertree.less
+@barcode-node-color: #808080;
+
+// 单个barcodeTree视图上的高度
+@barcode-single-view_top: 2.5rem;
+@barcode-mode-config-view_top: 6rem;
+@barcode-mode-config-view_width: 6%;
+@half-view_width: (100% - @barcode-mode-config-view_width)/2; // singleTree视图将视图分为barcodetree和node-link tree
+@single-nodelink-tree-view_left: @barcode-mode-config-view_width + @half-view_width;
+
 @box-shadow-style: 0 0 3px #c8c8c8;
 @toolbar-color: #fafafa;
 @border: 1px solid rgba(200, 200, 200, 0.5);
@@ -22,23 +77,15 @@
 @toolbar-view_top: 0px;
 @toolbar-view_width: 100%;
 @toolbar-view_navbar-border-radius: 0px;
-@toolbar-view_padding: 6px 5px 5px 5px;
-@toolbar-view_font-size: 13px;
 @toolbar-container_margin-right: 0px;
 @toolbar-container_margin-left: 0px;
 @toolbar-container_width: 100%;
-@toolbar-a_padding-top: 6px;
-@toolbar-a_padding-bottom: 5px;
 // the SingleBarcodeView
 @barcode-mode-config-view_left: 0%;
-@barcode-mode-config-view_width: 6%;
-@half-view_width: (100% - @barcode-mode-config-view_width)/2;
-@single-nodelink-tree-view_left: @barcode-mode-config-view_width + @half-view_width;
 //the content view width of the view
 @content-view_width: 100%;
 //the histogram view settings
 @histogram-view_top: @toolbar-view_height;
-@histogram-view_height: 15%;
 @histogram-view_bottom: ~"calc(15% + 35px)"; //20% is the height of the histogram-view
 @histogram-view_width: 100%;
 
@@ -55,7 +102,6 @@
 @his-info_left: @his-main_width;
 @his-info_right: 0%;
 
-@barcode-view_top: @histogram-view_bottom;
 @barcode-view_width: @content-view_width;
 @barcode-view_bottom: 0%;
 //barcode toolbar panel settings
@@ -93,7 +139,7 @@
 //barcode scroll panel setting, this is the parent node of the barcode container
 @barcode-panel-scroll_width: @content-view_width;
 @barcode-panel-scroll_height: 100%; //~"calc(100% - 30px)";
-@barcode-panel-scroll_top: @barcode-height;// @around-height;
+@barcode-panel-scroll_top: @barcode-height; // @around-height;
 @barcode-panel-scroll-left: 0%;
 @barcode-panel-scroll-right: @around-height;
 @barcode-panel-scroll-bottom: @around-height;

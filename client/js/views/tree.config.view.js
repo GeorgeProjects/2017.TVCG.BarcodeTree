@@ -102,48 +102,50 @@ define([
         var finishRequestDataDefer = $.Deferred()
         window.Datacenter.requestDataCenter(url, selectItemNameArray)
       })
-      $('#align-level-control>.level-btn').click(function () {
-        if (Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) {
-          var level = +$(this).text()
-          var realLevel = level - 1
-          self.activeAlignedLevel(level)
-          Variables.set('alignedLevel', realLevel)
-          barcodeCollection.aligned_current_tree()
-        } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
-          var selectedLevels = Variables.get('selectedLevels')
-          if (selectedLevels.length !== 0) {
-            var level = +selectedLevels.max() + 1
-            var realLevel = level - 1
-            self.activeAlignedLevel(level)
-            Variables.set('alignedLevel', realLevel)
-            barcodeCollection.aligned_current_tree()
-          }
-        }
-      })
+      // $('#align-level-control>.level-btn').click(function () {
+      //   if (Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) {
+      //     var level = +$(this).text()
+      //     var realLevel = level - 1
+      //     self.activeAlignedLevel(level)
+      //     Variables.set('alignedLevel', realLevel)
+      //     barcodeCollection.aligned_current_tree()
+      //   } else if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
+      //     var selectedLevels = Variables.get('selectedLevels')
+      //     if (selectedLevels.length !== 0) {
+      //       var level = +selectedLevels.max() + 1
+      //       var realLevel = level - 1
+      //       self.activeAlignedLevel(level)
+      //       Variables.set('alignedLevel', realLevel)
+      //       barcodeCollection.aligned_current_tree()
+      //     }
+      //   }
+      // })
       //  如果defaultBarcodeMode是compact类型, 则需要根据selectedLevels计算alignedLevel
       //  将计算的结果更新到barcode.conifg.view中进行显示
-      if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
-        if (selectedLevels.length !== 0) {
-          var alignedLevel = +selectedLevels.max() + 1
-          var realLevel = alignedLevel - 1
-          Variables.set('alignedLevel', realLevel)
-          self.activeAlignedLevel(alignedLevel)
-        }
-      }
-      Backbone.Events.on(Config.get('EVENTS')['UPDATE_ALIGN_LEVEL'], function (event) {
-        var alignedLevel = event.thisNodeObj
-        self.activeAlignedLevel(alignedLevel)
-      })
-      $('#fisheye-layout-button').click(function () {
-        $('#fisheye-layout-button').addClass('active')
-        $('#union-layout-button').removeClass('active')
-        Variables.set('layoutMode', 'FISHEYE')
+      // if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
+      //   if (selectedLevels.length !== 0) {
+      //     var alignedLevel = +selectedLevels.max() + 1
+      //     var realLevel = alignedLevel - 1
+      //     Variables.set('alignedLevel', realLevel)
+      //     self.activeAlignedLevel(alignedLevel)
+      //   }
+      // }
+      // Backbone.Events.on(Config.get('EVENTS')['UPDATE_ALIGN_LEVEL'], function (event) {
+      //   var alignedLevel = event.thisNodeObj
+      //   self.activeAlignedLevel(alignedLevel)
+      // })
+      $('#original-layout-button').click(function () {
+        $('#barcode-layout-mode .mode-button').removeClass('active')
+        $('#original-layout-button').addClass('active')
+        Variables.set('layoutMode', 'ORIGINAL')
+        window.Variables.update_barcode_attr()
         barcodeCollection.change_layout_mode()
       })
       $('#union-layout-button').click(function () {
-        $('#fisheye-layout-button').removeClass('active')
+        $('#barcode-layout-mode .mode-button').removeClass('active')
         $('#union-layout-button').addClass('active')
         Variables.set('layoutMode', 'UNION')
+        window.Variables.update_barcode_attr()
         barcodeCollection.change_layout_mode()
       })
       $('#original-display-button').click(function () {
@@ -156,7 +158,9 @@ define([
         self.changeDisplayMode2Global()
       })
       $('#topological-comparison-button').click(function () {
-        Variables.set('comparisonMode', Variables.get('TOPOLOGICAL'))
+        var barcodeTreeGlobalParas = Variables.get('BARCODETREE_GLOBAL_PARAS')
+        var barcodeTreeComparisonMode = Config.get('BARCODETREE_COMPARISON_MODE')
+        barcodeTreeGlobalParas['Comparison_Mode'] = barcodeTreeComparisonMode['TOPOLOGY']
         $('#topological-comparison-button').addClass('active')
         $('#attribute-comparison-button').removeClass('active')
         Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
@@ -164,12 +168,15 @@ define([
         self.trigger_close_distribution_view()
       })
       $('#attribute-comparison-button').click(function () {
-        Variables.set('comparisonMode', Variables.get('ATTRIBUTE'))
+        var barcodeTreeGlobalParas = Variables.get('BARCODETREE_GLOBAL_PARAS')
+        var barcodeTreeComparisonMode = Config.get('BARCODETREE_COMPARISON_MODE')
+        barcodeTreeGlobalParas['Comparison_Mode'] = barcodeTreeComparisonMode['ATTRIBUTE']
         $('#topological-comparison-button').removeClass('active')
         $('#attribute-comparison-button').addClass('active')
         Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
         // self.render_distribution_histogram()
-        self.trigger_update_distribution_view()
+        // self.trigger_update_distribution_view()
+        window.Datacenter.barcodeCollection.update_barcode_node_collection_obj()
         self.trigger_open_distribution_view()
         self.show_distribution_view_toggle()
       })
@@ -186,13 +193,13 @@ define([
     hide_distribution_view_toggle: function () {
       var self = this
       $('#distribution-view-toggle').css({visibility: 'hidden'})
-      $('#distribution-histogram-view').css("visibility", "hidden");
+      $('#distribution-histogram-view').css({visibility: 'hidden'});
     },
     //  显示distribution视图的控制按钮
     show_distribution_view_toggle: function () {
       var self = this
       $('#distribution-view-toggle').css({visibility: 'visible'})
-      $('#distribution-histogram-view').css("visibility", "visible");
+      $('#distribution-histogram-view').css({visibility: 'visible'});
     },
     //  初始化在tree config视图中的lock按钮的状态
     init_locked_state: function () {
@@ -238,10 +245,10 @@ define([
         window.Datacenter.barcodeCollection.update_single_barcode_mode(Config.get('CONSTANT').GLOBAL)
         window.Datacenter.barcodeCollection.update_single_barcode_view()
       }
-      var alignedLevel = 0
-      Variables.set('alignedLevel', alignedLevel)
-      var realLevel = alignedLevel + 1
-      self.activeAlignedLevel(realLevel)
+      // var alignedLevel = 0
+      // Variables.set('alignedLevel', alignedLevel)
+      // var realLevel = alignedLevel + 1
+      // self.activeAlignedLevel(realLevel)
     },
     //  将barcode的模式转变成compact模式
     changeDisplayMode2Compact: function () {
@@ -258,12 +265,12 @@ define([
         window.Datacenter.barcodeCollection.update_single_barcode_mode(Config.get('CONSTANT').COMPACT)
         window.Datacenter.barcodeCollection.update_single_barcode_view()
       }
-      if (selectedLevels.length !== 0) {
-        var alignedLevel = +selectedLevels.max() + 1
-        var realLevel = alignedLevel - 1
-        Variables.set('alignedLevel', realLevel)
-        self.activeAlignedLevel(alignedLevel)
-      }
+      // if (selectedLevels.length !== 0) {
+      //   var alignedLevel = +selectedLevels.max() + 1
+      //   var realLevel = alignedLevel - 1
+      //   Variables.set('alignedLevel', realLevel)
+      //   self.activeAlignedLevel(alignedLevel)
+      // }
     },
     //  将barcode的模式转变成original模式
     changeDisplayMode2Original: function () {
@@ -280,10 +287,10 @@ define([
         window.Datacenter.barcodeCollection.update_single_barcode_mode(Config.get('CONSTANT').ORIGINAL)
         window.Datacenter.barcodeCollection.update_single_barcode_view()
       }
-      var alignedLevel = 0
-      Variables.set('alignedLevel', alignedLevel)
-      // var realLevel = alignedLevel + 1
-      self.activeAlignedLevel(alignedLevel)
+      // var alignedLevel = 0
+      // Variables.set('alignedLevel', alignedLevel)
+      // // var realLevel = alignedLevel + 1
+      // self.activeAlignedLevel(alignedLevel)
     },
     //  更新barcode config视图中的按钮的状态
     update_tree_config_view: function () {
@@ -343,16 +350,6 @@ define([
         if ((typeof(dataValueArray) !== 'undefined') && (dataValueArray.length !== 0)) {
           self.add_distribution_histogram(distribution_level, dataValueArray)
         }
-      }
-    },
-    /**
-     * 根据对齐层级的数值更新对齐层级的具体显示
-     * @param level
-     */
-    activeAlignedLevel: function (level) {
-      $('#align-level-control>.btn').removeClass('active')
-      for (var lI = level; lI >= 0; lI--) {
-        $('#align-level-control>#btn-' + lI).addClass('active')
       }
     },
     /**

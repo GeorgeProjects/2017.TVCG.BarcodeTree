@@ -19,6 +19,29 @@ define([
         'PhylogeneticTree_Name': 'PhylogeneticTree',
         'DirectoryTree_Name': 'DirectoryTree'
       },
+      BARCODETREE_VIEW_SETTING: {
+        ICON_WAIT_DURATION: 1000,// 需要将barcode变换完成之后再绘制icon, 所以时间是需要比bar
+        COMPARISON_RESULT_PADDING: 50,
+        BARCODE_NODE_PADDING_LENGTH: 30
+      },
+      BARCODETREE_STATE: {
+        BARCODETREE_NODE_SELECTION: 'NODE',// 需要将barcode变换完成之后再绘制icon, 所以时间是需要比bar
+        BARCODETREE_SUBTREE_SELECTION: 'SUBTREE',
+        BARCODETREE_NODENUMBER_SORT: 'NODENUMBER',
+        BARCODETREE_ATTRIBUTE_SORT: 'ATTRIBUTE',
+        BARCODETREE_SIMILARITY_SORT: 'SIMILARITY',
+      },
+      BARCODETREE_MODEL_SETTING:{
+        ALIGN_START: 'aligned-start',
+        ALIGN_RANGE: 'aligned-range',
+        PADDING_RANGE: 'padding-range',
+        PADDING_BEGIN: 'padding-begin'
+      },
+      BARCODETREE_COMPARISON_MODE:{
+        ATTRIBUTE: 'ATTRIBUTE',
+        TOPOLOGY: 'TOPOLOGY'
+      },
+      BARCODETREE_TOOLTIP_ENABLE: true,
       //  展示barcode的不同状态, 包括原始状态, compact状态, global的状态
       'CONSTANT': {
         'ORIGINAL': 'ORIGINAL',
@@ -32,7 +55,9 @@ define([
         //  barcode tree中选择的不同状态
         'NODE': 'NODE',
         'SUBTREE': 'SUBTREE',
-        'NOT_SELECTED': 'NOT_SELECTED'
+        'NOT_SELECTED': 'NOT_SELECTED',
+        'NODE_SELECTION': 'NODE',
+        'SUBTREE_SELECTION': 'SUBTREE'
       },
       'BARCODE_COLOR': {
         'ROOT_COLOR': '#000000',
@@ -72,6 +97,11 @@ define([
       },
       'EVENTS': {
         //*******************************************
+        //  向barcode节点中增加locked aligned的class
+        'ADD_LOCKED_ALIGN_CLASS': 'add-locked-align-class',
+        //  删除barcode节点中的locked aligned的class
+        'REMOVE_LOCKED_ALIGN_CLASS': 'remove-locked-align-class',
+        // ====================================================================
         //  设置选择的颜色
         'SET_PRECLICK_COLOR': 'set-preclick-color',
         'UPDATE_DISTRIBUTION_VIEW': 'update-distribution-view',
@@ -80,7 +110,8 @@ define([
         'UPDATE_BARCODE_VIEW_WIDTH': 'update-barcode-view-width',
         //  选中视图中的所有元素
         'SELECT_ALL': 'select-all',
-
+        //  在barcodeComparison视图中删除一个barcodeTree
+        'REMOVE_SELECTION': 'remove-selection',
         //  渲染supertree
         'RENDER_SUPERTREE': 'render-supertree',
         //  渲染histogram视图
@@ -126,6 +157,8 @@ define([
         'SHOW_LOADING_ICON': 'show-loading-icon',
         //  隐藏loading的标志
         'HIDE_LOADING_ICON': 'hide-loading-icon',
+        //  更新superTree视图中的aligned icon
+        'UPDATE_ALIGNED_ICON': 'update-aligned-icon',
         //***************************
         //  barcode.single视图上发出的信号
         //  渲染覆盖在barcode的上面的带有斜纹的矩形
@@ -136,6 +169,10 @@ define([
         'UNSELECT_BARCODE_EVENT': 'unselect-barcode',
         //  在barcodeview里点击未选中的barcode选中barcode
         'SELECT_BARCODE_EVENT': 'select-barcode',
+        //  在barcodeview里点击选中的barcode选中取消barcode进行集合操作
+        'SET_UNSELECT_BARCODE_EVENT': 'set-unselect-barcode-event',
+        //  在barcodeview里点击未选中的barcode选中barcode进行集合操作
+        'SET_SELECT_BARCODE_EVENT': 'set-select-barcode-event',
         //  鼠标从某个barcode上面移开广播的事件
         'UN_HOVERING_BARCODE_EVENT': 'unhovering-barcode',
         //  鼠标悬浮在某个barcode上面广播的事件
@@ -164,6 +201,14 @@ define([
         'OPEN_DISTRIBUTION_VIEW': 'open-distribution-view',
         //  用户点击捅破logical按钮时, 用户关闭distribution视图
         'CLOSE_DISTRIBUTION_VIEW': 'close-distribution-view',
+        // **************************
+        //  从top.config.view视图发出的信号
+        //  点击未选择的barcode的group, 选择该group中的barcodeTree
+        'SELECT_GROUP_BARCODETREE': 'select-group-barcodetree',
+        //  点击已选择的barcode的group, 取消选择该group中的barcodeTree
+        'UNSELECT_GROUP_BARCODETREE': 'unselect-group-barcodetree',
+        //  更新选择的barcodeTree的list
+        'UPDATE_SELECTION_LIST': 'update-selection-list',
         //*******************************************
         //  删除的属性
         //*******************************************
@@ -249,13 +294,12 @@ define([
       'BARCODE_ALIGNED_NODE_GAP': 0,//15
       'COMPACT_NUM': 5,
       'BARCODE_NODE_GAP': 2,
-      'BARCODE_NODE_PADDING': 80,
-      'MAX_BARCODE_NODE_PADDING': 150,
+      'MAX_BARCODE_NODE_PADDING': 300,
       'NAVBAR_HEIGHT': 30,
       'TOOLTIP_TRIANGLE_HEIGHT': 10,
       'TOOLTIP_HEIGHT': 30,
       //  比较结果柱状图的宽度
-      'COMPARISON_RESULT_PADDING': 80,//80,
+      'COMPARISON_RESULT_PADDING': 50,//80,
       'SERVER_ADDRESS': window.location.hostname, //  '127.0.0.1'
       'SERVER_PORT': 8081,
       //  barcode.single.view中动画需要的时间

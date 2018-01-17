@@ -22,28 +22,36 @@ define([
       self.listenTo(this.collection, 'add', self.add)
       self.listenTo(this.collection, 'remove', self.remove)
       self.listenTo(Variables, 'change:barcodeNodexMaxX', self.update_barcode_view_width)
-      Backbone.Events.on(Config.get('EVENTS')[ 'UPDATE_BARCODE_ATTR' ], function (event) {
+      self.listenTo(Variables, 'change:barcodeNodeyMaxY', self.update_barcode_view_height)
+      Backbone.Events.on(Config.get('EVENTS')['UPDATE_BARCODE_ATTR'], function (event) {
         // self.update_barcode_attr()
       })
-      Backbone.Events.on(Config.get('EVENTS')[ 'RESET_BARCODE_ATTR' ], function (event) {
+      Backbone.Events.on(Config.get('EVENTS')['RESET_BARCODE_ATTR'], function (event) {
         self.reset_barcode_attr()
       })
-      Backbone.Events.on(Config.get('EVENTS')[ 'SHOW_LOADING_ICON' ], function (event) {
+      Backbone.Events.on(Config.get('EVENTS')['SHOW_LOADING_ICON'], function (event) {
         self.show_loading_icon()
       })
-      Backbone.Events.on(Config.get('EVENTS')[ 'HIDE_LOADING_ICON' ], function (event) {
+      Backbone.Events.on(Config.get('EVENTS')['HIDE_LOADING_ICON'], function (event) {
         self.hide_loading_icon()
       })
       //  鼠标悬浮在barcode上面广播的事件
-      Backbone.Events.on(Config.get('EVENTS')[ 'HOVERING_BARCODE_EVENT' ], function (event) {
+      Backbone.Events.on(Config.get('EVENTS')['HOVERING_BARCODE_EVENT'], function (event) {
         var barcodeTreeId = event.barcodeTreeId
         self.hovering_barcode(barcodeTreeId)
       })
       //  鼠标从barcode上面移开广播的事件
-      Backbone.Events.on(Config.get('EVENTS')[ 'UN_HOVERING_BARCODE_EVENT' ], function (event) {
+      Backbone.Events.on(Config.get('EVENTS')['UN_HOVERING_BARCODE_EVENT'], function (event) {
         self.unhovering_barcode()
       })
     },
+    //  更新barcode视图的高度
+    update_barcode_view_height: function () {
+      var self = this
+      var barcodeNodeYMaxY = Variables.get('barcodeNodeyMaxY')
+      $('#barcodetree-view').height(barcodeNodeYMaxY)
+    },
+    //  更新barcode视图的宽度
     update_barcode_view_width: function () {
       var self = this
       var barcodeTreeContainerWidth = +$('#barcodetree-scrollpanel').width()
@@ -61,6 +69,9 @@ define([
         barcodetreeViewWidth = barcodeTreeContainerWidth > barcodeNodexMaxX ? barcodeTreeContainerWidth : barcodeNodexMaxX
       }
       $('#barcodetree-view').width(barcodetreeViewWidth)
+      if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
+        $('#barcodetree-scrollpanel').css({'overflow-x': 'hidden'})
+      }
       $('#supertree-view').width(barcodetreeViewWidth)
       d3.selectAll('.bg').attr('width', barcodetreeViewWidth)
       d3.select('.container-bg').attr('width', barcodetreeViewWidth)

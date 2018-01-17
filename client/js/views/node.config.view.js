@@ -65,14 +65,14 @@ define([
       var iconSize = getIconSize()
       var iconId = 'level-width-lock'
       var iconSpanId = 'level-width-lock-span'
-      var containerId = 'barcode-node-config'
-      //  计算lock图标的y位置
+      var containerId = 'barcode-node-config-content'
+      // 计算lock图标的y位置
       var lockYLocation = _compute_lock_y_location(iconSize)
       //  计算lock图标的x位置
       var lockXLocation = _compute_lock_x_location()
       //  在config的视图中增加lock周围的连接线
-      appendLockLine()
-      //  在config的视图中增加lock图标
+      // appendLockLine()
+      // //  在config的视图中增加lock图标
       appendLockIcon(iconId, iconSpanId, containerId)
       //  改变lock图标的位置
       changeIconLocation(iconSpanId, lockXLocation, lockYLocation)
@@ -82,6 +82,7 @@ define([
       addClickEvent2Icon(iconId)
       //  在slidebar的控制框中增加监听函数
       addSlideBarEvent()
+      initSliderBarEvent()
 
       //  改变lock图标的大小
       function getIconSize() {
@@ -90,6 +91,51 @@ define([
         //  魔法数字
         var iconSize = barcodeNodeConfigHeight / 12
         return iconSize
+      }
+
+      function initSliderBarEvent() {
+        //  初始化height的controller
+        var heightControllerName = Config.get('HEIGHT_CONTROL_NAME')
+        var barcodeHeightValue = +Variables.get('barcodeHeight')
+        var barcodeNodeHeightMinValue = Variables.get('barcodeNodeHeightMinValue')
+        var barcodeNodeHeightMaxValue = Variables.get('barcodeNodeHeightMaxValue')
+        _init_controller_slider(heightControllerName, barcodeHeightValue, barcodeNodeHeightMinValue, barcodeNodeHeightMaxValue, heightChangeHandler)
+        //  初始化width的controller
+        var widthArrayControllerNamePrefix = Config.get('WIDTH_ARRAY_CONTROL_NAME_PREFIX')
+        var barcodeWidthArray = get_width_controller()
+        var barcodeNodeWidthMinValue = Variables.get('barcodeNodeWidthMinValue')
+        var barcodeNodeWidthMaxValue = Variables.get('barcodeNodeWidthMaxValue')
+        for (var wI = 0; wI < barcodeWidthArray.length; wI++) {
+          var realLevel = wI + 1
+          var widthControllerName = widthArrayControllerNamePrefix + realLevel
+          var barcodeWidthValue = barcodeWidthArray[wI]
+          _init_controller_slider(widthControllerName, barcodeWidthValue, barcodeNodeWidthMinValue, barcodeNodeWidthMaxValue, widthChangeHandler)
+        }
+        //  初始化interval的controller
+        var intervalControllerName = Config.get('INTERVAL_CONTROL_NAME')
+        var barcodeNodeIntervalValue = Variables.get('barcodeNodeInterval')
+        var barcodeNodeIntervalMinValue = Variables.get('barcodeNodeIntervalMinValue')
+        var barcodeNodeIntervalMaxValue = Variables.get('barcodeNodeIntervalMaxValue')
+        _init_controller_slider(intervalControllerName, barcodeNodeIntervalValue, barcodeNodeIntervalMinValue, barcodeNodeIntervalMaxValue, intervalChangeHandler)
+      }
+
+      function _init_controller_slider(item_name, itemValue, minValue, maxValue, handler) {
+        var controllerHanlder = $("#" + item_name + "-handler")
+        $("#" + item_name + "-control-slider").slider({
+          min: minValue,
+          max: maxValue,
+          value: itemValue,
+          range: "min",
+          create: function () {
+            controllerHanlder.text($(this).slider("value"))
+          },
+          slide: function (event, ui) {
+            var value = +ui.value
+            controllerHanlder.text(value);
+            var id = $(this).attr('id').replace('-control-slider', '')
+            handler(value, id)
+          }
+        })
       }
 
       //  在slidebar的控制框中增加监听函数
@@ -120,17 +166,12 @@ define([
       }
 
       // 改变barcode高度的监听函数
-      function heightChangeHandler(value) {
-        var oldValue = Variables.get('barcodeHeight')
-        var minHeight = 1
-        if (value >= minHeight) {
-          Variables.set('barcodeHeight', value)
-          //  trigger change height
-          Datacenter.barcodeCollection.change_barcode_heigth()
-        } else {
-          var heightControllerName = 'height'
-          $("#range-input-" + heightControllerName).val(oldValue)
-        }
+      function heightChangeHandler(value, id) {
+        var barcodeNodeHeightMinValue = Variables.get('barcodeNodeHeightMinValue')
+        Variables.set('barcodeHeight', value)
+        //  trigger change height
+        window.barcodeHeight = value
+        Datacenter.barcodeCollection.change_barcode_height()
       }
 
       //  改变barcode宽度的监听函数
@@ -152,7 +193,7 @@ define([
               originalBarcodeWidthArray[bI] = originalBarcodeWidthArray[bI] + changes
               var widthArrayControllerNamePrefix = Config.get('WIDTH_ARRAY_CONTROL_NAME_PREFIX')
               var realLevel = bI + 1
-              $("#range-input-" + widthArrayControllerNamePrefix + realLevel).val(barcodeWidthArray[bI])
+              $("#" + widthArrayControllerNamePrefix + realLevel + '-control-slider').slider("value", barcodeWidthArray[bI]);
             }
             //  trigger change width
             Datacenter.barcodeCollection.change_barcode_width()
@@ -160,33 +201,14 @@ define([
             $('#' + id).val(oldValue)
           }
         } else {
-          var oldValue = barcodeWidthArray[levelofArray]
-          var minValue = 0
-          var maxValue = barcodeWidthArray[barcodeWidthArray.length - 1]
-          if (levelofArray === (barcodeWidthArray.length - 1)) {
-            minValue = 0
-          } else {
-            minValue = barcodeWidthArray[levelofArray + 1]
-          }
-          if (levelofArray === 0) {
-            // TODO
-            maxValue = maxWidthValue
-          } else {
-            maxValue = barcodeWidthArray[levelofArray - 1]
-          }
-          if ((value >= minValue) && (value <= maxValue)) {
-            originalBarcodeWidthArray[levelofArray] = value
-            $('#' + id).val(value)
-            //  trigger change width
-            Datacenter.barcodeCollection.change_barcode_width()
-          } else {
-            $('#' + id).val(oldValue)
-          }
+          originalBarcodeWidthArray[levelofArray] = value
+          //  trigger change width
+          Datacenter.barcodeCollection.change_barcode_width()
         }
       }
 
       // 改变barcode interval大小的监听函数
-      function intervalChangeHandler(value) {
+      function intervalChangeHandler(value, id) {
         var oldValue = Variables.get('barcodeNodeInterval')
         var minInterval = 1
         if (value >= minInterval) {
@@ -220,9 +242,11 @@ define([
       }
 
       function _append_controller(controller_name, controller_value) {
-        // console.log('controller_name', "<label class = \"range-label\" id = \"range-label-" + controller_name + "\"><input class = \"range-input\" type=\"number\" name=\"" + controller_name + "\" value=\"" + controller_value + "\"> <code class = \"range-code\">" + controller_name + "</code></label><br>")
-        $('#barcode-node-config-content').append("<label class = \"range-label\" id = \"range-label-" + controller_name + "\"><input class = \"range-input\" id = \"range-input-" + controller_name + "\" type=\"number\" name=\"" + controller_name + "\" value=\"" + controller_value + "\"> <code class = \"range-code\">" + controller_name + "</code></label><br>")
-        // $('#barcode-node-config.panel-content').append("<span id = " + iconSpanId + " style=\"position:absolute;\"><i id = " + iconId + " class=\"fa fa-lock\" class=\"fa fa-lock\" aria-hidden=\"true\"></i>" + "</span>")
+        var containerId = controller_name + '-slider-container'
+        var sliderId = controller_name + '-control-slider'
+        var handlerId = controller_name + '-handler'
+        var height_slider_container = "<div id = \"" + containerId + "\" class = \"slider-container\"> <div id=\"" + sliderId + "\" class = \"slider-div col-md-8\"> <div id=\"" + handlerId + "\" class=\"ui-slider-handle\"> </div> </div> <div class=\"slider-label col-md-4\">" + controller_name + "</div></div>"
+        $('#barcode-node-config-content').append(height_slider_container)
       }
 
       //  根据当前显示的barcode的层级决定barcode的宽度数据
@@ -242,15 +266,14 @@ define([
       function _compute_lock_y_location(icon_size) {
         var barcodeWidthArray = get_width_controller()
         var barcodeWidthLength = barcodeWidthArray.length
-        var lockYLocation = 0
         // lock图标的y位置是所有层级的中心, 所以需要计算最上方的层级label和最下方的层级label, 进而计算他们的中心的y位置
         var middleIndex1 = 1
         var middleIndex2 = barcodeWidthLength
-        var rangeLabelLevel2Top = $('#range-label-level' + middleIndex1).position().top
-        var rangeLabelLevel2Height = $('#range-label-level' + middleIndex1).height()
-        var rangeLabelLevel3Top = $('#range-label-level' + middleIndex2).position().top
-        var rangeLabelLevel3Height = $('#range-label-level' + middleIndex2).height()
-        lockYLocation = ((rangeLabelLevel2Top + rangeLabelLevel2Height / 2) + (rangeLabelLevel3Top + rangeLabelLevel3Height / 2)) / 2 - icon_size / 2
+        var lockLocationYPadding = 10
+        var rangeLabelLevel2Top = $('#level' + middleIndex1 + '-slider-container').position().top
+        var rangeLabelLevel3Top = $('#level' + middleIndex2 + '-slider-container').position().top
+        var rangeLabelLevel3Height = $('#level' + middleIndex2 + '-slider-container').height()
+        var lockYLocation = (rangeLabelLevel2Top + rangeLabelLevel3Top + rangeLabelLevel3Height) / 2 - rangeLabelLevel3Height + lockLocationYPadding
         return lockYLocation
       }
 
@@ -258,7 +281,7 @@ define([
       function _compute_lock_x_location() {
         //  lock的位置是在config视图的右侧, 根据测试是在0.9的位置处
         //  魔法数字
-        var lockXLocation = $('#barcode-node-config').width()
+        var lockXLocation = $('#barcode-node-config').width() * 0.87
         return lockXLocation
       }
 
@@ -274,8 +297,8 @@ define([
         var rangeLabelLevelEndTop = $('#range-label-level' + barcodeWidthLength).position().top
         var rangeLabelLevelEndHeight = $('#range-label-level' + barcodeWidthLength).height()
         var endLineY = rangeLabelLevelEndTop + rangeLabelLevelEndHeight / 2
-        var startXLoc = $('#barcode-node-config').width() * 0.9
-        var endXLoc = $('#barcode-node-config').width() * 1.03
+        var startXLoc = $('#barcode-node-config').width() * 0.8
+        var endXLoc = $('#barcode-node-config').width() * 0.9
         var lineLengthHorizontal = endXLoc - startXLoc
         var lineLengthVertical = endLineY - startLineY
         var iconSize = getIconSize()

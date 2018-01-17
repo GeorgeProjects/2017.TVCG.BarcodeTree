@@ -8,7 +8,49 @@ define([
 
   window.Variables = new (Backbone.Model.extend({
     defaults: {
-      //****************************************************
+      BARCODETREE_GLOBAL_PARAS: {
+        Selection_State: 'NODE', //'SUBTREE'
+        Subtree_Compact: false, //subbarcodeTree是否是comapct的展示模式
+        Align_State: false, //subbarcodeTree是否是comapct的展示模式
+        Comparison_Result_Display: false, //  展示barcodeTree的比较结果
+        Max_Real_Level: 3,
+        Align_Lock: false,
+        Sort_Option: 'NODENUMBER',//'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
+        Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
+      },
+      //  barcode的高度与barcode的container的占比, barcodeHeight传递到服务器端需要增加一定的比例, 因为barcode的节点的上部分与下部分都是存在一定的间隙
+      barcodeHeightRatio: 0.8,
+      //  barcode的柱状图的高度占比
+      barcodeHistogramRatio: 0.6,
+      //  刷选高亮的节点对象数组
+      brushHighlightObjArray: new Array(),
+      //  barcodeTree中节点的最小值
+      MIN_HEIGHT: 0,
+      //  power的参数
+      POW_EXPONENT: 0.4,
+      //  标记各层的bar的宽度
+      barcodeWidthArray: [18, 12, 8, 4, 1],
+      //  barcode节点的最小宽度
+      barcodeNodeWidthMinValue: 2,
+      //  barcode节点的最大宽度
+      barcodeNodeWidthMaxValue: 40,
+      //  改变之间的状态的属性: 各层的bar的宽度
+      barcodeWidthArray_previous: [18, 12, 8, 4, 1],
+      //  barcode的节点之间的间距
+      barcodeNodeInterval: 3,
+      //  改变之间的状态的属性: barcode的节点之间的间距
+      barcodeNodeInterval_previous: 3,
+      //  barcode节点间距的最小值
+      barcodeNodeIntervalMinValue: 2,
+      //  barcode节点间距的最大值
+      barcodeNodeIntervalMaxValue: 10,
+      //  标记barcode的高度
+      barcodeHeight: 40,
+      //  标记barcode的最大高度
+      barcodeNodeHeightMinValue: 10,
+      //  标记barcode的最小高度
+      barcodeNodeHeightMaxValue: 100,
+      //  =======================================================
       //  当前渲染的barcode数据集
       currentDataSetName: 'DailyRecordTree',
       //  当前的barcode比较视图的宽度
@@ -17,14 +59,17 @@ define([
       barcodetreeViewHeight: 0,
       //  barcode的最大的宽度
       barcodeNodexMaxX: 0,
+      //  barcode的最大的高度
+      barcodeNodeyMaxY: 0,
       //  barcode视图的margin
       comparisonViewMargin: {left: 30, right: 50},
       //  对齐的节点
       alignedLevel: 0,
       //  标记不同的barcode背景颜色的对象
       selectedItemColorObj: {},
+      //  默认的barcode的颜色
+      defaultBarcodeColor: 'rgb(128, 128, 128)',
       //  barcode的比较模式
-      comparisonMode: 'TOPOLOGICAL', //'TOPOLOGICAL' 'ATTRIBUTE'
       TOPOLOGICAL: 'TOPOLOGICAL',
       ATTRIBUTE: 'ATTRIBUTE',
       //  当前对齐的barcode的范围的节点属性值分布对象
@@ -55,41 +100,51 @@ define([
       edit_icon_color: 'white',
       //  标记选择节点的颜色
       select_icon_color: 'white',
+      //  用于计算barcode collection视图的高度
+      barcodeViewPaddingBottom: 5,
+      //  barcodeTree在Original模式下的最小的高度
+      minimumRatio: 0.6,
       //****************************************************
       //  在barcode.collection.view视图中的参数
       // barcodeViewPaddingRight: 20,
       //  barcode的前的label距离barcode左边界的宽度
       barcodeTextPaddingLeft: 15,
       //  barcode的边界宽度
-      barcodePaddingLeft: 40,
+      barcodePaddingLeft: 45,
       //  最大的subtree的sawtooth的宽度
       globalCompressPaddingNodeWidth: null, // 初始值是null
+      //  barcode视图中最大的sawtooth的长度
+      maxBarcodePaddingNodeWidth: 300,
       //****************************************************
       //  top.toolbar.view视图中的参数
       alignedBarcodeLevel: 0,
       similarityRange: [0, 0],
+      //  新增的barcode group的数量
+      addedGroupNum: 0,
+      //  表示当前是否处于选择barcode的状态
+      selectionState: false,
+      //  选择的集合操作的barcode的数组
+      selectionBarcodeObject: {},
+      //  当前是否处于选择状态, dropdown的视图的对应操作是不同的, 当closable为true时, 表示点击可以关闭, false表示点击无法关闭
+      closable: true,
+      //  当前处于的选择状态, 选择节点还是选择一个子树
+      nodeSubtreeSelectionState: 'NODE',
+      //****************************************************
+      //  柱状图中的颜色
+      selectionColor: null,
+      histogramHeightRem: 14,
       //****************************************************
       'finishInit': false,
       //  whether loading page show
       'loading': true,
       //在histogram上选中的item的数组
       'selectItemNameArray': [],
+      //  集合操作得到的barcode的列表
+      'setOperationArray': [],
       //  width同步进行变化状态
       'changeMeanTime': true,
-      //  标记各层的bar的宽度
-      'barcodeWidthArray': [18, 12, 8, 4, 1],
-      //  改变之间的状态的属性: 各层的bar的宽度
-      'barcodeWidthArray_previous': [18, 12, 8, 4, 1],
-      //  标记barcode的高度
-      barcodeHeight: 40,
-      //  改变之间的状态的属性: barcode的节点之间的间距
-      barcodeNodeInterval_previous: 3,
-      //  barcode的节点之间的间距
-      barcodeNodeInterval: 3,
       //  在fish eye模式下不同的barcode类型的高度的数量
       'differentHeightNumber': 20,
-      //  barcodeHeight传递到服务器端需要增加一定的比例, 因为barcode的节点的上部分与下部分都是存在一定的间隙
-      'barcodeHeightRatio': 0.8,
       //  最小的barcode的高度
       'minBarcodeHeight': 2,
       //  最大的barcode的宽度
@@ -164,7 +219,7 @@ define([
       //  取"sum_flowSize"或"nonvirtual_sum_node"
       'histogramValueDim': 'sum_flowSize',
       //  barcode布局的方法
-      'layoutMode': 'UNION', //或者FISHEYE
+      'layoutMode': 'ORIGINAL', //或者FISHEYE或者ORIGINAL
       //  barcode的margin对象
       barcodeMargin: {top: 0, left: 1 / 25, bottom: 1 / 90, right: 0},
       //  datelinechart的margin对象
@@ -240,13 +295,36 @@ define([
     update_barcode_attr: function () {
       var self = this
       var selectItemNameArray = self.get('selectItemNameArray')
+      var setOperationArray = self.get('setOperationArray')
       var barcodeHeight = self.get('barcodeHeight')
       var compactNum = self.get('compactNum')
       var superTreeHeight = +$('#supertree-scroll-panel').height()
       var barcodeTreeConfigHeight = self.get('barcodeTreeConfigHeight')
-      var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - selectItemNameArray.length
-      var updatedHeight = barcodeViewHeight / selectItemNameArray.length
-      window.barcodeHeight = updatedHeight > barcodeHeight ? barcodeHeight : new Number(updatedHeight).toFixed(1)
+      var barcodeViewPaddingBottom = self.get('barcodeViewPaddingBottom')
+      var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - barcodeViewPaddingBottom
+      var updatedHeight = barcodeViewHeight / (selectItemNameArray.length + setOperationArray.length)
+      var minimumRatio = Variables.get('minimumRatio')
+      //  根据当前barcode的不同的模式变换barcode的高度
+      if (Variables.get('layoutMode') === 'ORIGINAL') {
+        //  当前的barcode是original的模式, 按照原始的barcode的高度进行绘制
+        if (updatedHeight < barcodeHeight * minimumRatio) {
+          // 如果增加了barcode之后, 更新的barcode高度小于barcode高度的一半, 那么仍然按照原始barcode高度的一半进行设置
+          window.barcodeHeight = barcodeHeight * minimumRatio
+        } else {
+          // 如果增加了barcode之后, 更新的barcode高度没有那么小, 那就就按照更新的barcode高度进行计算
+          //  当然barcode的高度也不能过于大, 最大的高度即为默认的barcode的高度 barcodeHeight
+          window.barcodeHeight = updatedHeight > barcodeHeight ? barcodeHeight : updatedHeight.toFixed(2)
+        }
+        if (updatedHeight < barcodeHeight) {//  理论计算小于实际的barcode的高度, 那么应该是存在scrollBar
+          $('#barcodetree-scrollpanel').css({'overflow-y': 'auto'})
+        } else {
+          $('#barcodetree-scrollpanel').css({'overflow-y': 'hidden'})
+        }
+      } else {
+        //  当前的barcode是非original的模式
+        window.barcodeHeight = updatedHeight > barcodeHeight ? barcodeHeight : updatedHeight.toFixed(2)
+        $('#barcodetree-scrollpanel').css({'overflow-y': 'hidden'})
+      }
       self.change_barcode_node_config(window.barcodeHeight)
       // window.Datacenter.barcodeCollection.update_height()
       // window.Datacenter.barcodeCollection.update_barcode_location()

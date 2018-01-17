@@ -39,13 +39,12 @@ define([
     //  程序的默认状态, 由config中的变量控制
     start: function (viewWidth, viewHeight) {
       var self = this
-      console.log('viewWidth:' + viewWidth + ",viewHeight:" + viewHeight)
       self.init_dataset_mode(viewWidth, viewHeight)
       var histogramModel = self.histogramModel
       // //  获取category dataset 当鼠标mouseover的时候得到barcode的名称
       // var categoryModel = self.categoryModel
       var barcodeCollection = self.barcodeCollection
-      self.request_category_dataset()
+      // self.request_category_dataset()
       self.request_histogram_dataset()
       // histogramModel.request_histogram_dataset()
       barcodeCollection.request_barcode_dataset()
@@ -63,16 +62,33 @@ define([
       var widthRatio = viewWidth / initWidth
       var defaultDataSetName = defaultSettings.default_dataset
       var defaultBarcodeMode = defaultSettings.default_mode
-      console.log('widthRatio', widthRatio)
       var defaultBarcodeWidthArray = defaultSettings.default_width_array
-      console.log('defaultSettings.barcode_node_interval', defaultSettings.barcode_node_interval)
+      //  根据width ratio计算与width ratio相关的变量
       var defaultBarcodeNodeInterval = widthRatio > 1 ? Math.round(defaultSettings.barcode_node_interval * widthRatio) : defaultSettings.barcode_node_interval
       for (var dI = 0; dI < defaultBarcodeWidthArray.length; dI++) {
         defaultBarcodeWidthArray[dI] = Math.round(defaultBarcodeWidthArray[dI] * widthRatio)
       }
+      var MAX_BARCODE_NODE_PADDING = Config.get('MAX_BARCODE_NODE_PADDING')
+      var defaultBarcodeTreeConfigHeight = Variables.get('barcodeTreeConfigHeight')
+      var defaultSuperTreeHeight = Variables.get('superTreeHeight')
+      var maxBarcodePaddingNodeWidth = MAX_BARCODE_NODE_PADDING * widthRatio
       defaultSettings.original_width_array = JSON.parse(JSON.stringify(defaultBarcodeWidthArray))
+      //  根据计算得到的height ratio计算与height ratio相关的变量
       var defaultHeight = Math.round(defaultSettings.default_barcode_height * heightRatio)
       var defaultSelectedLevels = defaultSettings.default_selected_levels
+      var barcodeTreeConfigHeight = defaultBarcodeTreeConfigHeight * widthRatio
+      Variables.set('barcodeTreeConfigHeight', barcodeTreeConfigHeight)
+      var defaultBarcodeTextPaddingLeft = Variables.get('barcodeTextPaddingLeft')
+      var barcodeTextPaddingLeft = defaultBarcodeTextPaddingLeft * widthRatio
+      Variables.set('barcodeTextPaddingLeft', barcodeTextPaddingLeft)
+      var defaultBarcodePaddingLeft = Variables.get('barcodePaddingLeft')
+      var barcodePaddingLeft = defaultBarcodePaddingLeft * widthRatio
+      Variables.set('barcodePaddingLeft', barcodePaddingLeft)
+      var superTreeHeight = defaultSuperTreeHeight * heightRatio * 0.8
+      Variables.set('superTreeHeight', superTreeHeight)
+      var defaultComparisonResultPadding = Config.get('COMPARISON_RESULT_PADDING')
+      var comparisonResultPadding = defaultComparisonResultPadding * widthRatio
+      Config.set('COMPARISON_RESULT_PADDING', comparisonResultPadding)
       var compactNum = defaultSettings.compact_num
       Variables.set('barcodeMode', defaultBarcodeMode)
       Variables.set('currentDataSetName', defaultDataSetName)
@@ -81,6 +97,7 @@ define([
       Variables.set('selectedLevels', defaultSelectedLevels)
       Variables.set('compactNum', compactNum)
       Variables.set('barcodeNodeInterval', defaultBarcodeNodeInterval)
+      Variables.set('maxBarcodePaddingNodeWidth', maxBarcodePaddingNodeWidth)
       //  初始化barcodeViewPaddingRight, 在不同的屏幕上的padding right是不同的
       //TODO
       window.barcodeMode = defaultBarcodeMode
@@ -157,36 +174,12 @@ define([
      */
     request_histogram_dataset: function () {
       var self = this
-      var histogramModel = self.histogramModel
       var url = 'file_name'
       var formData = {
         'DataSetName': Variables.get('currentDataSetName')
       }
       var requestHistogramSuccessFunc = function (result) {
-        result.fileInfo = histogramModel.sort_higtogram_array_accord_time(result.fileInfo)
-        result.minValue = histogramModel.get_min_value(result.fileInfo)
-        result.maxValue = histogramModel.get_max_value(result.fileInfo)
-        //  TODO 这个地方会修改成按照文件里面的属性决定scale的类型
-        result.scaleType = 'linear'//'log'
-        //  y轴上的标注
-        var hundredNum = +Math.ceil((+result.maxValue) / 100)
-        var yTicksValueArray = []
-        for (var hI = 1; hI < hundredNum; hI++) {
-          yTicksValueArray.push(hI * 100)
-        }
-        result.yTicksValueArray = yTicksValueArray//[ 100, 1000, result.maxValue ]
-        result.yTicksFormatArray = yTicksValueArray//[ '0.1k', '1k', '6k' ]
-        //  x轴上的标注
-        result.xTicksValueArray = [5, 36, 66, 98, 128, 159, 189, 220, 252, 283]
-        result.xTicksFormatArray = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
-        result.className = 'barcodetree-class'
-        //  设置读取数据的相应属性, maxDepth - 树的最大深度, fileInfo - 树的基本信息
-        histogramModel.set('histogramDataObject', result)
-        Variables.set('maxDepth', result.maxDepth)
-        //  在得到了barcode的最大深度之后, 需要初始化barcode不同层级节点的颜色
-        window.Variables.initNodesColor()
-        //  trigger 渲染histogram的信号, histogram-main视图中会渲染得到相应的结果
-        histogramModel.trigger_render_signal()
+        self.request_histogram_handler(result)
       }
       self.requestDataFromServer(url, formData, requestHistogramSuccessFunc)
     },
@@ -254,12 +247,111 @@ define([
       }
       self.requestDataFromServer(url, formData, originalDatasuccessFunc)
     },
+    //  去除selectedItemArray数组中的组合的id, 因为这些在背后的requestData中找不到
+    remove_group_id: function (selectedItemsArray) {
+      var self = this
+      var selectedItemsArray = JSON.parse(JSON.stringify(selectedItemsArray))
+      for (var sI = 0; sI < selectedItemsArray.length; sI++) {
+        var selectedItem = selectedItemsArray[sI]
+        if (selectedItem.substring(0, 5) === 'group') {
+          selectedItemsArray.splice(sI, 1)
+        }
+      }
+      return selectedItemsArray
+    },
+    //  获取交集的原始的Barcode的数据
+    requestAndDataCenter: function (selectedItemsArray, groupId) {
+      var self = this
+      var barcodeCollection = self.barcodeCollection
+      var url = 'and_operation_result'
+      var operationType = 'and'
+      groupId = groupId + '_' + operationType
+      var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
+      var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+      var removedSelectedItemsArray = self.remove_group_id(selectedItemsArray)
+      var formData = {
+        'dataItemNameArray': removedSelectedItemsArray,
+        'dataSetName': window.dataSetName,
+        'barcodeWidthArray': window.barcodeWidthArray,
+        'barcodeNodeInterval': barcodeNodeInterval,
+        'barcodeHeight': window.barcodeHeight * barcodeHeightRatio,
+        'selectedLevels': window.selectedLevels,
+        'compactNum': window.compactNum,
+        'maxDepth': Variables.get('maxDepth'),
+        'groupId': groupId
+      }
+      var originalDatasuccessFunc = function (result) {
+        self.and_operation_handler(result, removedSelectedItemsArray, operationType)
+      }
+      if (!barcodeCollection.set_operation_results_existed(removedSelectedItemsArray, operationType)) {
+        self.requestDataFromServer(url, formData, originalDatasuccessFunc)
+      }
+    },
+    //  获取并集的原始的Barcode的数据
+    requestOrDataCenter: function (selectedItemsArray, groupId) {
+      var self = this
+      var url = 'or_operation_result'
+      var operationType = 'or'
+      groupId = groupId + '_' + operationType
+      var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
+      var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+      var removedSelectedItemsArray = self.remove_group_id(selectedItemsArray)
+      var formData = {
+        'dataItemNameArray': removedSelectedItemsArray,
+        'dataSetName': window.dataSetName,
+        'barcodeWidthArray': window.barcodeWidthArray,
+        'barcodeNodeInterval': barcodeNodeInterval,
+        'barcodeHeight': window.barcodeHeight * barcodeHeightRatio,
+        'selectedLevels': window.selectedLevels,
+        'compactNum': window.compactNum,
+        'maxDepth': Variables.get('maxDepth'),
+        'groupId': groupId
+      }
+      var originalDatasuccessFunc = function (result) {
+        self.or_operation_handler(result, removedSelectedItemsArray, operationType)
+      }
+      if (!self.barcodeCollection.set_operation_results_existed(removedSelectedItemsArray, operationType)) {
+        self.requestDataFromServer(url, formData, originalDatasuccessFunc)
+      }
+    },
+    //  获取补集的原始的Barcode的数据
+    requestComplementDataCenter: function (selectedItemsArray, groupId) {
+      var self = this
+      var url = 'complement_operation_result'
+      var operationType = 'complement'
+      groupId = groupId + '_' + operationType
+      var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
+      var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+      var removedSelectedItemsArray = self.remove_group_id(selectedItemsArray)
+      var formData = {
+        'dataItemNameArray': removedSelectedItemsArray,
+        'dataSetName': window.dataSetName,
+        'barcodeWidthArray': window.barcodeWidthArray,
+        'barcodeNodeInterval': barcodeNodeInterval,
+        'barcodeHeight': window.barcodeHeight * barcodeHeightRatio,
+        'selectedLevels': window.selectedLevels,
+        'compactNum': window.compactNum,
+        'maxDepth': Variables.get('maxDepth'),
+        'groupId': groupId
+      }
+      var originalDatasuccessFunc = function (result) {
+        self.complement_operation_handler(result, removedSelectedItemsArray, operationType)
+      }
+      var complementCriteriaNum = 2
+      //  如果当前选择的barcodeTree的个数为2, 那么可以在barcodeTree之间完成补集的操作
+      if (removedSelectedItemsArray.length === complementCriteriaNum) {
+        if (!self.barcodeCollection.set_operation_results_existed(removedSelectedItemsArray, operationType)) {
+          self.requestDataFromServer(url, formData, originalDatasuccessFunc)
+        }
+      }
+    },
     /**
      * 在histogram-main中调用这个方法, 主要用于获取BarcodeTree的节点数组, 包括节点上的属性
      * @param url
      * @param selectedItemsArray
      */
-    requestDataCenter: function (url, selectedItemsArray, alignExistTree) {
+    requestDataCenter: function (selectedItemsArray, alignExistTree) {
+      var url = 'barcode_original_data'
       var self = this
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
@@ -274,82 +366,7 @@ define([
         'maxDepth': Variables.get('maxDepth')
       }
       var originalDatasuccessFunc = function (result) {
-        var treeNodeObject = result.treeNodeObject
-        var compactTreeNodeArrayObj = result.compactTreeNodeArrayObj
-        var selectItemNameArray = Variables.get('selectItemNameArray')
-        var addedBarcodeModelArray = []
-        //  将展示全部的barcode压缩到屏幕的范围内
-        self.transformBarcodeWidth2ViewWidth(result.categoryNodeObjArray)
-        //  按照每个barcode中存在的节点修改categoryTree节点的存在与否
-        for (var item in treeNodeObject) {
-          //  1. 对于全局的categoryNodeObj的处理
-          var categoryNodeObjArray = JSON.parse(JSON.stringify(result.categoryNodeObjArray))
-          var categoryNodeObj = self.transfromNodeArray2NodeObj(categoryNodeObjArray)
-          var barcodeNodeAttrArray = treeNodeObject[item]
-          for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-            barcodeNodeAttrArray[bI].existed = true
-            var nodeId = barcodeNodeAttrArray[bI].id
-            var nodeNum = barcodeNodeAttrArray[bI].num
-            if (typeof (categoryNodeObj[nodeId]) !== 'undefined') {
-              categoryNodeObj[nodeId].existed = true
-              categoryNodeObj[nodeId].num = nodeNum
-            }
-          }
-          //  2. 对于普通模式下的barcodeNodeObj的处理
-          var alignedBarcodeNodeAttrArray = JSON.parse(JSON.stringify(barcodeNodeAttrArray))
-          var barcodeIndex = selectItemNameArray.indexOf(item)
-          var barcodeNodeHeight = window.barcodeHeight
-          //  传递两个相同的节点数组barcodeNodeAttrArray和alignedBarcodeNodeAttrArray是因为用户在交互过程中需要改变节点数组中的值,
-          //  而原始的数组维护了一个原始的数值
-          var barcodeBgColor = null
-          var selectedItemColorObj = Variables.get('selectedItemColorObj')
-          if (typeof (selectedItemColorObj) !== 'undefined') {
-            if (typeof (selectedItemColorObj[item]) !== 'undefined') {
-              barcodeBgColor = selectedItemColorObj[item]
-            }
-          }
-          //  3. 对于compact模式下的barcode的处理
-          var compactBarcodeNodeAttrArray = compactTreeNodeArrayObj[item]['compact-level-0']
-          for (var bI = 0; bI < compactBarcodeNodeAttrArray.length; bI++) {
-            compactBarcodeNodeAttrArray[bI].existed = true
-          }
-          var compactAlignedBarcodeNodeAttrArray = JSON.parse(JSON.stringify(compactBarcodeNodeAttrArray))
-          self.barcodeCollection.remove_barcode_dataset(item, alignExistTree)
-          // if (filteredModel.length === 0) {
-          var barcodeModel = new BarcodeModel({
-            'barcodeTreeId': item,
-            'displayMode': Variables.get('displayMode'),
-            'barcodeNodeAttrArray': barcodeNodeAttrArray,
-            'categoryNodeObjArray': categoryNodeObjArray,
-            'alignedBarcodeNodeAttrArray': alignedBarcodeNodeAttrArray,
-            'compactBarcodeNodeAttrArray': compactBarcodeNodeAttrArray,
-            'compactAlignedBarcodeNodeAttrArray': compactAlignedBarcodeNodeAttrArray,
-            'barcodeNodeHeight': barcodeNodeHeight,
-            'barcodeIndex': barcodeIndex,
-            'originalBarcodeIndex': barcodeIndex,
-            'barcodeRectBgColor': barcodeBgColor,
-            'sumAttributeValue': barcodeNodeAttrArray[0].num
-          })
-          addedBarcodeModelArray.push(barcodeModel)
-          // } else {
-          //   filteredModel[0].set('barcodeNodeAttrArray', barcodeNodeAttrArray)
-          //   filteredModel[0].set('alignedBarcodeNodeAttrArray', alignedBarcodeNodeAttrArray)
-          //   filteredModel[0].set('compactBarcodeNodeAttrArray', compactBarcodeNodeAttrArray)
-          //   filteredModel[0].set('compactAlignedBarcodeNodeAttrArray', compactAlignedBarcodeNodeAttrArray)
-          //   filteredModel[0].reset_node_obj_array()
-          // }
-        }
-        // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
-        window.get_barcode_time_datacenter303 = new Date()
-        var loadOriginalDataTime = window.get_barcode_time_datacenter303.getDifference(window.request_barcode_time_histogram435)
-        console.log('window.get_barcode_time_datacenter303', loadOriginalDataTime)
-        self.barcodeCollection.set_category_nodeobj_array(categoryNodeObjArray)
-        self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
-        // window.Variables.update_barcode_attr()
-        // self.barcodeCollection.trigger_barcode_view_render_update()
-        // self.barcodeCollection.update_barcode_height()
-        // self.barcodeCollection.align_added_model()
-        self.trigger_hide_loading_icon()
+        self.original_tree_object_request_handler(result)
       }
       self.requestDataFromServer(url, formData, originalDatasuccessFunc)
     },
@@ -487,24 +504,14 @@ define([
         }
         var supertreeNodeObj = JSON.parse(JSON.stringify(result.treeNodeObject))
         var compactSuperTreeNodeLocObj = JSON.parse(JSON.stringify(result.compactTreeNodeArrayObj))
-        console.log('supertreeNodeObj', supertreeNodeObj)
-        console.log('compactSuperTreeNodeLocObj', compactSuperTreeNodeLocObj)
         //
         self.barcodeCollection.remove_barcode_subtree(rootId, rootCategory, rootLevel, supertreeNodeObj, compactSuperTreeNodeLocObj)
         deferObj.resolve()
       }
       self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
     },
-    /**
-     * 在barcode.single.view中被调用, 主要是在选定根节点之后构建superTree
-     * @param url
-     * @param selectedItemsArray
-     * @param rootId
-     * @param rootLevel
-     * @param rootCategory
-     * @param maxX
-     */
-    buildSuperTree: function (rootId, rootLevel, rootCategory, deferObj, alignedLevel) {
+    //  在barcode.single.view中被调用, 主要是在选定根节点之后构建superTree
+    buildSuperTree: function (rootId, rootLevel, rootCategory, subtreeObjArray, alignedLevel, deferObj) {
       var self = this
       var url = 'build_super_tree'
       var selectedItemsArray = Variables.get('selectItemNameArray')
@@ -513,6 +520,7 @@ define([
       var compactNum = window.compactNum
       var formData = {
         'dataItemNameArray': selectedItemsArray,
+        'subtreeObjArray': subtreeObjArray,
         'dataSetName': window.dataSetName,
         'barcodeWidthArray': window.barcodeWidthArray,
         'barcodeHeight': window.barcodeHeight * barcodeHeightRatio,
@@ -520,46 +528,32 @@ define([
         'barcodeNodeInterval': barcodeNodeInterval,
         'rootId': rootId,
         'rootLevel': rootLevel,
+        'maxLevel': Variables.get('maxDepth'),
         'alignedLevel': alignedLevel,
         'compactNum': compactNum
       }
       var buildSuperTreeSuccessFunc = function (result) {
-        /**
-         * 计算得到替换的节点数组
-         * superTreeNodeLocArray - 计算当前的树中的某一部分子树的superTree
-         * maxNodeNumTreeNodeLocArray - 根据当前的alignedlevel, 计算得到当前选中的树中某一部分子树的具有最大的节点数量部分的合并
-         */
-        if (typeof (result.treeNodeObject.originalSuperTreeObj) === 'undefined') {
-          deferObj.resolve()
-        }
-        var superTreeNodeArray = result.treeNodeObject.originalSuperTreeObj.superTreeNodeLocArray
-        var maxNodeNumTreeNodeLocArray = result.treeNodeObject.originalSuperTreeObj.maxNodeNumTreeNodeLocArray
-        var compactSuperTreeNodeLocArray = result.treeNodeObject.compactSuperTreeObj.compactSuperTreeNodeLocArray
-        var compactMaxNodeNumTreeNodeLocArray = result.treeNodeObject.compactSuperTreeObj.compactMaxNodeNumTreeNodeLocArray
-        /**
-         * 新增加的barcode-node中的existed属性都设置为false, 需要根据对齐的层级将existed属性重新设置为true
-         */
-        for (var tI = 0; tI < superTreeNodeArray.length; tI++) {
-          superTreeNodeArray[tI].existed = false
-        }
-        for (var tI = 0; tI < compactSuperTreeNodeLocArray.length; tI++) {
-          compactSuperTreeNodeLocArray[tI].existed = false
-        }
-        self.barcodeCollection.update_barcode_subtree(rootId, rootCategory, rootLevel, superTreeNodeArray, maxNodeNumTreeNodeLocArray, compactSuperTreeNodeLocArray, compactMaxNodeNumTreeNodeLocArray)
-        deferObj.resolve()
+        self.build_super_tree_handler(rootId, rootLevel, rootCategory, result, deferObj)
       }
       self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
     },
-    /**
-     * 与服务器端通信的方法, 在dataCenter.model中被调用
-     * @param Url
-     * @param formData
-     * @param originalDatasuccessFunc
-     */
+    //  删除选中的某个元素的handler
+    request_remove_item: function (removedSelectedItemsArray) {
+      var self = this
+      var url = 'remove_from_super_tree'
+      var formData = {
+        'removedDataItemNameArray': removedSelectedItemsArray,
+        'dataSetName': window.dataSetName
+      }
+      var buildSuperTreeSuccessFunc = function () {
+        console.log('globalSuperTreeUpdate successfully!')
+      }
+      self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
+    },
+    //  与服务器端通信的方法, 在dataCenter.model中被调用
     requestDataFromServer: function (Url, formData, originalDatasuccessFunc) {
       var self = this
       var barcodeTreeId = formData.dataItemName
-      var finishInitEvent = 'finish-read-' + barcodeTreeId
       $.ajax({
         url: Url,
         type: 'POST',
@@ -573,6 +567,198 @@ define([
           console.log('error', result) // Optional
         }
       })
+    },
+    /**
+     * 更新barcodeTree中的节点的排列顺序
+     */
+    update_barcode_tree_sequence: function (collectionAlignedObjPercentageArrayObjArray) {
+      var self = this
+      var url = 'update_barcode_tree_sequence'
+      var selectedItemsArray = Variables.get('selectItemNameArray')
+      var formData = {
+        'alignedObjPercentageArrayObjArray': collectionAlignedObjPercentageArrayObjArray,
+        'dataItemNameArray': selectedItemsArray
+      }
+      var buildSuperTreeSuccessFunc = function (result) {
+      }
+      self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
+    },
+    build_super_tree_handler: function (rootId, rootLevel, rootCategory, result, deferObj) {
+      var self = this
+      /**
+       * 计算得到替换的节点数组
+       * superTreeNodeLocArray - 计算当前的树中的某一部分子树的superTree
+       * maxNodeNumTreeNodeLocArray - 根据当前的alignedlevel, 计算得到当前选中的树中某一部分子树的具有最大的节点数量部分的合并
+       */
+      if (typeof (result.treeNodeObject.originalSuperTreeObj) === 'undefined') {
+        deferObj.resolve()
+      }
+      var superTreeNodeArray = result.treeNodeObject.superTreeNodeLocArray
+      var maxNodeNumTreeNodeLocArray = result.treeNodeObject.maxNodeNumTreeNodeLocArray
+      /**
+       * 新增加的barcode-node中的existed属性都设置为false, 需要根据对齐的层级将existed属性重新设置为true
+       */
+      for (var tI = 0; tI < superTreeNodeArray.length; tI++) {
+        superTreeNodeArray[tI].existed = false
+      }
+      self.barcodeCollection.update_barcode_subtree_aligned_part(rootId, rootCategory, rootLevel, superTreeNodeArray, maxNodeNumTreeNodeLocArray)
+      deferObj.resolve()
+    },
+    //  原始数据的处理函数
+    original_tree_object_request_handler: function (result) {
+      var self = this
+      var originalTreeObjObject = result.originalTreeObjObject
+      var treeNodeArrayObject = result.treeNodeArrayObject
+      var selectItemNameArray = Variables.get('selectItemNameArray')
+      var addedBarcodeModelArray = []
+      //  将展示全部的barcode压缩到屏幕的范围内
+      for (var item in treeNodeArrayObject) {
+        //  1. 对于全局的categoryNodeObj的处理
+        var barcodeNodeAttrArray = treeNodeArrayObject[item]
+        var alignedBarcodeNodeAttrArray = JSON.parse(JSON.stringify(barcodeNodeAttrArray))
+        var originalTreeObj = originalTreeObjObject[item]
+        var barcodeModel = new BarcodeModel({
+          'barcodeTreeId': item,
+          'barcodeNodeAttrArray': barcodeNodeAttrArray,
+          'alignedBarcodeNodeAttrArray': alignedBarcodeNodeAttrArray,
+          'originalTreeObj': originalTreeObj
+        })
+        barcodeModel.initialize()
+        addedBarcodeModelArray.push(barcodeModel)
+      }
+      // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
+      window.get_barcode_time_datacenter303 = new Date()
+      var loadOriginalDataTime = window.get_barcode_time_datacenter303.getDifference(window.request_barcode_time_histogram435)
+      self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
+      self.trigger_hide_loading_icon()
+    },
+    //
+    add_to_set_operation_array: function (item, operationType) {
+      var setOperationArray = Variables.get('setOperationArray')
+      var operationBarcodeModelId = item + '-' + operationType
+      setOperationArray.push(operationBarcodeModelId)
+    },
+    //  并集操作的handler
+    or_operation_handler: function (result, orSelectedItemsArray, operationType) {
+      var self = this
+      var originalTreeObjObject = result.originalTreeObjObject
+      var treeNodeArrayObject = result.treeNodeArrayObject
+      var selectItemNameArray = Variables.get('selectItemNameArray')
+      var addedBarcodeModelArray = []
+      //  将展示全部的barcode压缩到屏幕的范围内
+      for (var item in treeNodeArrayObject) {
+        //  1. 对于全局的categoryNodeObj的处理
+        var barcodeNodeAttrArray = treeNodeArrayObject[item]
+        var originalTreeObj = originalTreeObjObject[item]
+        var barcodeModel = new BarcodeModel({
+          'barcodeModelType': operationType,
+          'barcodeTreeId': item,
+          'barcodeIndex': -1,
+          'barcodeNodeAttrArray': barcodeNodeAttrArray,
+          'originalTreeObj': originalTreeObj,
+          'itemArray': orSelectedItemsArray,
+          'operationType': operationType
+        })
+        barcodeModel.initialize()
+        addedBarcodeModelArray.push(barcodeModel)
+        self.add_to_set_operation_array(item, operationType)
+      }
+      // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
+      window.get_barcode_time_datacenter303 = new Date()
+      var loadOriginalDataTime = window.get_barcode_time_datacenter303.getDifference(window.request_barcode_time_histogram435)
+      self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
+      self.trigger_hide_loading_icon()
+    },
+    //  获取histogram数据的后续处理函数
+    request_histogram_handler: function (result) {
+      var self = this
+      var histogramModel = self.histogramModel
+      result.fileInfo = histogramModel.sort_higtogram_array_accord_time(result.fileInfo)
+      result.minValue = histogramModel.get_min_value(result.fileInfo)
+      result.maxValue = histogramModel.get_max_value(result.fileInfo)
+      //  TODO 这个地方会修改成按照文件里面的属性决定scale的类型
+      result.scaleType = 'linear'//'log'
+      //  y轴上的标注
+      var hundredNum = +Math.ceil((+result.maxValue) / 100)
+      var yTicksValueArray = []
+      for (var hI = 1; hI < hundredNum; hI++) {
+        yTicksValueArray.push(hI * 100)
+      }
+      result.yTicksValueArray = yTicksValueArray//[ 100, 1000, result.maxValue ]
+      result.yTicksFormatArray = yTicksValueArray//[ '0.1k', '1k', '6k' ]
+      //  x轴上的标注
+      result.xTicksValueArray = [5, 36, 66, 98, 128, 159, 189, 220, 252, 283]
+      result.xTicksFormatArray = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+      result.className = 'barcodetree-class'
+      //  设置读取数据的相应属性, maxDepth - 树的最大深度, fileInfo - 树的基本信息
+      histogramModel.set('histogramDataObject', result)
+      Variables.set('maxDepth', result.maxDepth)
+      //  在得到了barcode的最大深度之后, 需要初始化barcode不同层级节点的颜色
+      window.Variables.initNodesColor()
+      //  trigger 渲染histogram的信号, histogram-main视图中会渲染得到相应的结果
+      histogramModel.trigger_render_signal()
+    },
+    //  交集操作的handler
+    and_operation_handler: function (result, andSelectedItemsArray, operationType) {
+      var self = this
+      var originalTreeObjObject = result.originalTreeObjObject
+      var treeNodeArrayObject = result.treeNodeArrayObject
+      var selectItemNameArray = Variables.get('selectItemNameArray')
+      var addedBarcodeModelArray = []
+      //  将展示全部的barcode压缩到屏幕的范围内
+      for (var item in treeNodeArrayObject) {
+        //  1. 对于全局的categoryNodeObj的处理
+        var barcodeNodeAttrArray = treeNodeArrayObject[item]
+        var originalTreeObj = originalTreeObjObject[item]
+        var barcodeModel = new BarcodeModel({
+          'barcodeModelType': operationType,
+          'barcodeTreeId': item,
+          'barcodeIndex': -1,
+          'barcodeNodeAttrArray': barcodeNodeAttrArray,
+          'originalTreeObj': originalTreeObj,
+          'itemArray': andSelectedItemsArray,
+          'operationType': operationType
+        })
+        barcodeModel.initialize()
+        addedBarcodeModelArray.push(barcodeModel)
+        self.add_to_set_operation_array(item, operationType)
+      }
+      // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
+      window.get_barcode_time_datacenter303 = new Date()
+      var loadOriginalDataTime = window.get_barcode_time_datacenter303.getDifference(window.request_barcode_time_histogram435)
+      self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
+      self.trigger_hide_loading_icon()
+    },
+    //  补集操作的handler
+    complement_operation_handler: function (result, complementSelectedItemsArray, operationType) {
+      var self = this
+      var originalTreeObjObject = result.originalTreeObjObject
+      var treeNodeArrayObject = result.treeNodeArrayObject
+      var selectItemNameArray = Variables.get('selectItemNameArray')
+      var addedBarcodeModelArray = []
+      //  将展示全部的barcode压缩到屏幕的范围内
+      for (var item in treeNodeArrayObject) {
+        //  1. 对于全局的categoryNodeObj的处理
+        var barcodeNodeAttrArray = treeNodeArrayObject[item]
+        var originalTreeObj = originalTreeObjObject[item]
+        var barcodeModel = new BarcodeModel({
+          'barcodeModelType': operationType,
+          'barcodeTreeId': item,
+          'barcodeIndex': -1,
+          'barcodeNodeAttrArray': barcodeNodeAttrArray,
+          'originalTreeObj': originalTreeObj,
+          'itemArray': complementSelectedItemsArray,
+          'operationType': operationType
+        })
+        barcodeModel.initialize()
+        addedBarcodeModelArray.push(barcodeModel)
+        self.add_to_set_operation_array(item, operationType)
+      }
+      // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
+      window.get_barcode_time_datacenter303 = new Date()
+      var loadOriginalDataTime = window.get_barcode_time_datacenter303.getDifference(window.request_barcode_time_histogram435)
+      self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
+      self.trigger_hide_loading_icon()
     }
   }))()
   return window.Datacenter
