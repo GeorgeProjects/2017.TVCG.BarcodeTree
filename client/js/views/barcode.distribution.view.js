@@ -32,12 +32,18 @@ define([
       var barcodeCollection = self.options.barcodeCollection
       var barcodeConfigDivHeight = $('#barcode-distribution-view').height()
       var panelHeaderHeight = $('#barcode-distribution-view .panel-header').height()
-      var distributionHistogramHeight = (barcodeConfigDivHeight - panelHeaderHeight) / 5
+      var barcodeNodeCollectionObj = Variables.get('barcodeNodeCollectionObj')
+      var histogramViewNum = 0
+      for (var item in barcodeNodeCollectionObj) {
+        histogramViewNum = histogramViewNum + 1
+      }
+      var distributionHistogramHeight = (barcodeConfigDivHeight - panelHeaderHeight - window.rem_px * 2) / histogramViewNum
+      var distributionMarginBottom = 10
+      distributionHistogramHeight = distributionHistogramHeight - distributionMarginBottom
       if (distributionHistogramHeight < 90) {
         distributionHistogramHeight = 90
       }
       self.distributionHistogramHeight = distributionHistogramHeight
-      var barcodeNodeCollectionObj = Variables.get('barcodeNodeCollectionObj')
       for (var item in barcodeNodeCollectionObj) {
         var distribution_level = item
         var dataValueArray = barcodeNodeCollectionObj[item]
@@ -77,7 +83,7 @@ define([
       var divId = 'distribution-level-' + distribution_level
       var distributionHistogramWidth = +$('#distribution-content').width()
       var distributionHistogramHeight = +self.distributionHistogramHeight
-      var margin = {top: 20, right: 10, bottom: 20, left: 30}
+      var margin = {top: 20, right: 10, bottom: 25, left: 30}
       var barClass = 'distribution-bar'
       var histogramWidth = distributionHistogramWidth - margin.left - margin.right
       var histogramHeight = distributionHistogramHeight - margin.top - margin.bottom

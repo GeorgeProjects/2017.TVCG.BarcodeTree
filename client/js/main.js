@@ -35,6 +35,7 @@ require.config({
     'iconfont': '../icon_library/iconfont',
     'rangeslider': '../bower_components/rangeslider/dist/rangeslider',
     'huebee': '../bower_components/huebee/dist/huebee.pkgd',
+    'sweetalert': '../bower_components/sweetalert/dist/sweetalert.min',
     // templates path
     'templates': '../templates',
     'communicator': 'controller/communicator',

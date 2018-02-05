@@ -15,9 +15,9 @@ var handlerBuildSuperTree = function (request, response) {
   var rootLevel = +reqBody.rootLevel
   var maxLevel = +reqBody.maxLevel
   var alignedLevel = reqBody.alignedLevel
+  var originalSequenceState = reqBody.originalSequenceState
   var displayMode = reqBody.displayMode
   var compactNum = reqBody.compactNum
-
   //  将barcodeWidth的数组内部的元素转换为数字
   for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
     barcodeWidthArray[bI] = +barcodeWidthArray[bI]
@@ -51,13 +51,15 @@ var handlerBuildSuperTree = function (request, response) {
     var unionTree = hierarchicalDataProcessor.buildUnionTree(JSON.parse(JSON.stringify(subtreeObjArray)))
     var maxNumTree = hierarchicalDataProcessor.buildMaxTree(JSON.parse(JSON.stringify(subtreeObjArray)), alignedLevel)
     //  向子树中增加节点的nodenum属性
-    hierarchicalDataProcessor.addNodeNum(unionTree)
-    hierarchicalDataProcessor.addNodeNum(maxNumTree)
+    hierarchicalDataProcessor.add_node_num(unionTree)
+    hierarchicalDataProcessor.add_node_num(maxNumTree)
   }
   var initDepth = rootLevel
-  var superTreeNodeLocArray = get_node_location_array(unionTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval)
+  var superTreeNodeLocArray = get_node_location_array(unionTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState)
+  // console.log('59 superTreeNodeLocArray', superTreeNodeLocArray)
   // console.log('superTreeNodeLocArray', superTreeNodeLocArray)
-  var maxNodeNumTreeNodeLocArray = get_node_location_array(maxNumTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval)
+  var maxNodeNumTreeNodeLocArray = get_node_location_array(maxNumTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState)
+  // console.log('59 maxNodeNumTreeNodeLocArray', maxNodeNumTreeNodeLocArray)
   var maxSubtreeWidth = hierarchicalDataProcessor.compute_max_subtree_width(maxNodeNumTreeNodeLocArray, barcodeWidthArray, barcodeNodeInterval)
   superTreeNodeLocArray[0].subtreeWidth = maxSubtreeWidth
   maxNodeNumTreeNodeLocArray[0].subtreeWidth = maxSubtreeWidth
@@ -68,10 +70,10 @@ var handlerBuildSuperTree = function (request, response) {
   }
   sendTreeNodeArray(superTreeObj)
   //  根据层次结构数据的对象计算得到带有位置属性的节点数组
-  function get_node_location_array(tree_obj, init_depth, barcode_width_array, selected_levels, barcode_height, barcode_node_interval) {
+  function get_node_location_array(tree_obj, init_depth, barcode_width_array, selected_levels, barcode_height, barcode_node_interval, originalSequenceState) {
     hierarchicalDataProcessor.sortChildren(tree_obj)
     //  对于树对象进行线性化得到节点序列
-    var treeNodeArray = hierarchicalDataProcessor.treeLinearization(tree_obj, init_depth)
+    var treeNodeArray = hierarchicalDataProcessor.treeLinearization(tree_obj, init_depth, originalSequenceState)
     //  根据线性化的节点序列得到节点的位置属性
     var superTreeNodeLocArray = hierarchicalDataProcessor.computeOriginalNodeLocation(treeNodeArray, barcode_width_array, selected_levels, barcode_height, barcode_node_interval)
     return superTreeNodeLocArray

@@ -1669,7 +1669,14 @@ define([
       if (typeof (treeDataModel) === 'undefined') {
         return barcodeNodeAttrArray
       }
-      barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
+      if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
+        //  切换到原始的barcodeTree的compact的显示模式
+        var compactBarcodeNodeAttrArrayObj = treeDataModel.get('compactBarcodeNodeAttrArrayObj')
+        barcodeNodeAttrArray = compactBarcodeNodeAttrArrayObj['compact-0']
+      } else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) || ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL))) {
+        //  切换到原始的barcodeTree的显示模式
+        barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
+      }
       return barcodeNodeAttrArray
     },
     //  获取supertree视图中的align的节点

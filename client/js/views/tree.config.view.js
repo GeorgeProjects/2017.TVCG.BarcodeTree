@@ -50,6 +50,9 @@ define([
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
       Backbone.Events.trigger(Config.get('EVENTS')['RENDER_SUPERTREE'])
     },
+    trigger_update_animated_barcode_view: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_ANIATION_BARCODE_VIEW'])
+    },
     initEvent: function () {
       var self = this
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_TREE_CONFIG_VIEW'], function (event) {
@@ -86,12 +89,10 @@ define([
           }
           $('#display-level-control>#btn-' + labelLevel).addClass('active')
         }
-        var url = 'barcode_original_data'
-        var selectedItemsArray = Variables.get('selectItemNameArray')
         self.changeBarcodeWidthBySelectLevels()
         //  用户选择节点之后, 对于当前展示的节点进行更新
         // barcodeCollection.update_displayed_level()
-        window.Datacenter.updateDateCenter(url, selectedItemsArray)
+        window.Datacenter.updateDateCenter()
       })
       $('#refresh-aligned-level').click(function () {
         window.Datacenter.barcodeCollection.reset_attribute()
@@ -140,6 +141,8 @@ define([
         Variables.set('layoutMode', 'ORIGINAL')
         window.Variables.update_barcode_attr()
         barcodeCollection.change_layout_mode()
+        //  更新在具有attribute的情况下的barcode节点高度
+        barcodeCollection.update_attribute_height()
       })
       $('#union-layout-button').click(function () {
         $('#barcode-layout-mode .mode-button').removeClass('active')
@@ -147,15 +150,14 @@ define([
         Variables.set('layoutMode', 'UNION')
         window.Variables.update_barcode_attr()
         barcodeCollection.change_layout_mode()
+        //  更新在具有attribute的情况下的barcode节点高度
+        barcodeCollection.update_attribute_height()
       })
       $('#original-display-button').click(function () {
         self.changeDisplayMode2Original()
       })
       $('#compact-display-button').click(function () {
         self.changeDisplayMode2Compact()
-      })
-      $('#global-display-button').click(function () {
-        self.changeDisplayMode2Global()
       })
       $('#topological-comparison-button').click(function () {
         var barcodeTreeGlobalParas = Variables.get('BARCODETREE_GLOBAL_PARAS')
@@ -230,47 +232,14 @@ define([
         }
       })
     },
-    //  将barcode的模式转变成global模式
-    changeDisplayMode2Global: function () {
-      var self = this
-      $('#compact-display-button').removeClass('active')
-      $('#original-display-button').removeClass('active')
-      $('#global-display-button').addClass('active')
-      var barcodeTreeIsLocked = Variables.get('barcodeTreeIsLocked')
-      if (barcodeTreeIsLocked) {
-        Variables.set('displayMode', Config.get('CONSTANT').GLOBAL)
-        window.Datacenter.barcodeCollection.update_all_barcode_mode(Config.get('CONSTANT').GLOBAL)
-        self.trigger_update_barcode_view()
-      } else {
-        window.Datacenter.barcodeCollection.update_single_barcode_mode(Config.get('CONSTANT').GLOBAL)
-        window.Datacenter.barcodeCollection.update_single_barcode_view()
-      }
-      // var alignedLevel = 0
-      // Variables.set('alignedLevel', alignedLevel)
-      // var realLevel = alignedLevel + 1
-      // self.activeAlignedLevel(realLevel)
-    },
     //  将barcode的模式转变成compact模式
     changeDisplayMode2Compact: function () {
       var self = this
       $('#compact-display-button').addClass('active')
       $('#original-display-button').removeClass('active')
       $('#global-display-button').removeClass('active')
-      var barcodeTreeIsLocked = Variables.get('barcodeTreeIsLocked')
-      if (barcodeTreeIsLocked) {
-        Variables.set('displayMode', Config.get('CONSTANT').COMPACT)
-        window.Datacenter.barcodeCollection.update_all_barcode_mode(Config.get('CONSTANT').COMPACT)
-        self.trigger_update_barcode_view()
-      } else {
-        window.Datacenter.barcodeCollection.update_single_barcode_mode(Config.get('CONSTANT').COMPACT)
-        window.Datacenter.barcodeCollection.update_single_barcode_view()
-      }
-      // if (selectedLevels.length !== 0) {
-      //   var alignedLevel = +selectedLevels.max() + 1
-      //   var realLevel = alignedLevel - 1
-      //   Variables.set('alignedLevel', realLevel)
-      //   self.activeAlignedLevel(alignedLevel)
-      // }
+      Variables.set('displayMode', Config.get('CONSTANT').COMPACT)
+      self.trigger_update_animated_barcode_view()
     },
     //  将barcode的模式转变成original模式
     changeDisplayMode2Original: function () {
@@ -278,19 +247,8 @@ define([
       $('#original-display-button').addClass('active')
       $('#compact-display-button').removeClass('active')
       $('#global-display-button').removeClass('active')
-      var barcodeTreeIsLocked = Variables.get('barcodeTreeIsLocked')
-      if (barcodeTreeIsLocked) {
-        Variables.set('displayMode', Config.get('CONSTANT').ORIGINAL)
-        window.Datacenter.barcodeCollection.update_all_barcode_mode(Config.get('CONSTANT').ORIGINAL)
-        self.trigger_update_barcode_view()
-      } else {
-        window.Datacenter.barcodeCollection.update_single_barcode_mode(Config.get('CONSTANT').ORIGINAL)
-        window.Datacenter.barcodeCollection.update_single_barcode_view()
-      }
-      // var alignedLevel = 0
-      // Variables.set('alignedLevel', alignedLevel)
-      // // var realLevel = alignedLevel + 1
-      // self.activeAlignedLevel(alignedLevel)
+      Variables.set('displayMode', Config.get('CONSTANT').ORIGINAL)
+      self.trigger_update_animated_barcode_view()
     },
     //  更新barcode config视图中的按钮的状态
     update_tree_config_view: function () {

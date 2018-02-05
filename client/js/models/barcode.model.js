@@ -226,8 +226,10 @@ define([
         var alignedNodeId = alignedNodeIndexObjArray[aI].id
         var alignedNodeIndex = alignedNodeIndexObjArray[aI].index
         var alignedNodeDepth = alignedNodeIndexObjArray[aI].depth
-        var nextPercentageArrayObj = self.get_aligned_level_next_exist_percentage_array(alignedNodeId, alignedNodeIndex, alignedNodeDepth, barcodeNodeAttrArray, alignedLevel)
-        alignedObjPercentageArray.push(nextPercentageArrayObj)
+        var nextPercentageArrayObjArray = self.get_aligned_level_next_exist_percentage_array(alignedNodeId, alignedNodeIndex, alignedNodeDepth, barcodeNodeAttrArray, alignedLevel)
+        for (var nI = 0; nI < nextPercentageArrayObjArray.length; nI++) {
+          alignedObjPercentageArray.push(nextPercentageArrayObjArray[nI])
+        }
       }
       var alignedObjPercentageArrayObj = {
         barcodeTreeId: barcodeTreeId,
@@ -489,28 +491,79 @@ define([
       }
       return alignedNodeIndexObjArray
     },
+    // /**
+    //  * 获取aligned层次的下一层的percentage的值
+    //  */
+    // get_aligned_level_next_exist_percentage_array: function (alignedNodeId, alignedNodeIndex, alignedNodeDepth, barcodeNodeAttrArray, alignedLevel) {
+    //   var self = this
+    //   var nextPercentageArrayObj = {}
+    //   var nextPercentageArray = []
+    //   var alignedNodeObj = barcodeNodeAttrArray[alignedNodeIndex]
+    //   var alignedNodeObjLevel = alignedNodeObj.depth
+    //   for (var resortingLevel = (alignedNodeObjLevel + 1); resortingLevel < alignedLevel; resortingLevel++) {
+    //     for (var bI = alignedNodeIndex; bI < barcodeNodeAttrArray.length; bI++) {
+    //       var barcodeNode = barcodeNodeAttrArray[bI]
+    //       if ((barcodeNode.depth <= alignedNodeDepth) && (barcodeNode.id !== alignedNodeId)) {
+    //         break
+    //       }
+    //       if (barcodeNode.depth === resortingLevel) {
+    //         nextPercentageArray.push({
+    //           barcodeNode_id: barcodeNode.id,
+    //           existed_percentage: barcodeNode.existed_percentage
+    //         })
+    //       }
+    //     }
+    //   }
+    //   nextPercentageArrayObj.nextPercentageArray = nextPercentageArray
+    //   nextPercentageArrayObj.alignedNodeId = alignedNodeId
+    //   return nextPercentageArrayObj
+    // },
     /**
      * 获取aligned层次的下一层的percentage的值
      */
     get_aligned_level_next_exist_percentage_array: function (alignedNodeId, alignedNodeIndex, alignedNodeDepth, barcodeNodeAttrArray, alignedLevel) {
       var self = this
-      var nextPercentageArrayObj = {}
-      var nextPercentageArray = []
-      for (var bI = alignedNodeIndex; bI < barcodeNodeAttrArray.length; bI++) {
-        var barcodeNode = barcodeNodeAttrArray[bI]
-        if ((barcodeNode.depth <= alignedNodeDepth) && (barcodeNode.id !== alignedNodeId)) {
-          break
-        }
-        if (barcodeNode.depth === alignedLevel) {
-          nextPercentageArray.push({
+      var nextPercentageArrayObjArray = []
+      if (alignedNodeDepth === alignedLevel) {
+        var barcodeNode = barcodeNodeAttrArray[alignedNodeIndex]
+        nextPercentageArrayObjArray.push({
+          alignedNodeId: barcodeNode.id,
+          nextPercentageArray: [{
             barcodeNode_id: barcodeNode.id,
             existed_percentage: barcodeNode.existed_percentage
-          })
+          }]
+        })
+      } else {
+        //  从对齐节点的下一层节点开始依次到toptoolbar视图上控制的对齐节点为止
+        for (var innerAlignedNodeLevel = alignedNodeDepth; innerAlignedNodeLevel < alignedLevel; innerAlignedNodeLevel++) {
+          //  innerAligned的层级所表示的是以此为根的节点的层级
+          var resortingLevel = innerAlignedNodeLevel + 1
+          for (var bI = alignedNodeIndex; bI < barcodeNodeAttrArray.length; bI++) {
+            var barcodeNode = barcodeNodeAttrArray[bI]
+            if ((barcodeNode.depth <= alignedNodeDepth) && (barcodeNode.id !== alignedNodeId)) {
+              break
+            }
+            if (barcodeNode.depth === innerAlignedNodeLevel) {
+              nextPercentageArrayObjArray.push({
+                alignedNodeId: barcodeNode.id,
+                nextPercentageArray: []
+              })
+            }
+            if (barcodeNode.depth === resortingLevel) {
+              var nextPercentageArray = nextPercentageArrayObjArray[nextPercentageArrayObjArray.length - 1].nextPercentageArray
+              var barcodeNodeExistedPercentage = barcodeNode.existed_percentage
+              if (typeof (barcodeNodeExistedPercentage) === 'undefined') {
+                barcodeNodeExistedPercentage = 0
+              }
+              nextPercentageArray.push({
+                barcodeNode_id: barcodeNode.id,
+                existed_percentage: barcodeNodeExistedPercentage
+              })
+            }
+          }
         }
       }
-      nextPercentageArrayObj.nextPercentageArray = nextPercentageArray
-      nextPercentageArrayObj.alignedNodeId = alignedNodeId
-      return nextPercentageArrayObj
+      return nextPercentageArrayObjArray
     },
     /**
      * 计算每个barcode对齐的节点范围以及节点对齐的长度
@@ -1409,7 +1462,7 @@ define([
           break
         }
       }
-      if (typeof (subtreeRangeObjArray[subtreeRangeObjArray.length - 1]) === 'undefined') {
+      if (typeof (subtreeRangeObjArray[subtreeRangeObjArray.length - 1]) !== 'undefined') {
         if (typeof (subtreeRangeObjArray[subtreeRangeObjArray.length - 1].subtreeEndX) === 'undefined') {
           subtreeRangeObjArray[subtreeRangeObjArray.length - 1].subtreeEndX = barcodeNodeAttrArray[barcodeNodeAttrArray.length - 1].x + barcodeNodeAttrArray[barcodeNodeAttrArray.length - 1].width
         }
@@ -1560,7 +1613,14 @@ define([
     //  获取当前使用的barcode节点数组
     get_barcode_node_array: function () {
       var self = this
-      var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+      if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
+        //  切换到原始的barcodeTree的compact的显示模式
+        var compactBarcodeNodeAttrArrayObj = self.get('compactBarcodeNodeAttrArrayObj')
+        var barcodeNodeAttrArray = compactBarcodeNodeAttrArrayObj['compact-0']
+      } else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) || ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL))) {
+        //  切换到原始的barcodeTree的显示模式
+        var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+      }
       return barcodeNodeAttrArray
     },
     //  根据node的id获取node的index
@@ -1822,8 +1882,6 @@ define([
       uncollapse_subtree_location(barcodeNodeAttrArray, nodeDataId, nodeDataDepth)
       var alignedBarcodeNodeAttrArray = self.get('alignedBarcodeNodeAttrArray')
       uncollapse_subtree_location(alignedBarcodeNodeAttrArray, nodeDataId, nodeDataDepth)
-      var compactBarcodeNodeAttrArray = self.get('compactBarcodeNodeAttrArray')
-      uncollapse_subtree_location(compactBarcodeNodeAttrArray, nodeDataId, nodeDataDepth)
 
       function uncollapse_subtree_location(nodeAttrArray, nodeDataId, nodeDataDepth) {
         var collapsedRootNodeIndex = 0

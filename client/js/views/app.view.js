@@ -55,6 +55,7 @@ define([
       //  因此在视图的整个初始化过程中有两个阶段, 一个阶段是在从服务器端获取数据的统计信息, (即柱状图的相关数据)之后, 开始渲染视图
       //  另一个阶段是将部分barcode绘制好之后,停止视图的加载条
       $(document).ready(function () {
+        $('#loading').css({visibility: 'visible'})
         // self.listenTo(Variables, 'change:loading', function (model, loading) {
         //   if (loading) {
         //     $('#loading').removeClass('hidden')
@@ -79,7 +80,9 @@ define([
           $('#loading').addClass('hidden')
           window.NProgress.done()
         })
+        //  此时加载完成histogram视图, 表示预处理工作也已经完成
         Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_HISTOGRAM_VIEW'], function () {
+          $('#loading').css({visibility: 'hidden'})
           self.render_toolbar_view()
           self.render_histogram_view()
           self.render_single_view()

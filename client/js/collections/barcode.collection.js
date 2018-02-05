@@ -54,16 +54,6 @@ define([
         })
       }
     },
-    //  判断是否存在align的节点
-    is_exist_align_part: function () {
-      var self = this
-      var alignedNodeObjArray = self.alignedNodeObjArray
-      if (alignedNodeObjArray.length > 0) {
-        return true
-      } else {
-        return false
-      }
-    },
     //  清空所有的barcodeModel
     clear_all: function () {
       var self = this
@@ -276,8 +266,17 @@ define([
       if (!elementExisted) {
         operationItemList.push({'nodeData': nodeData, 'barcodeTreeId': barcodeTreeId, 'srcElement': srcElement})
       }
-    }
-    ,
+    },
+    //  判断是否存在align的节点
+    is_exist_align_part: function () {
+      var self = this
+      var alignedNodeObjArray = self.alignedNodeObjArray
+      if (alignedNodeObjArray.length > 0) {
+        return true
+      } else {
+        return false
+      }
+    },
     //  判断当前点击的节点是否是在unaligned状态下点击的节点
     is_exist_unaligned_item: function (nodeData, barcodeTreeId, srcElement) {
       var self = this
@@ -293,8 +292,21 @@ define([
         }
       }
       return elementExisted
-    }
-    ,
+    },
+    //  判断选择节点的对象是否为空
+    is_selected_node_empty: function () {
+      var self = this
+      var selectedNodesIdObj = self.selectedNodesId
+      var itemNum = 0
+      for (var item in selectedNodesIdObj) {
+        itemNum = itemNum + 1
+      }
+      if (itemNum === 0) {
+        return true
+      } else {
+        return false
+      }
+    },
     //  记录选择的unaligned的item
     add_unaligned_item: function (nodeData, barcodeTreeId, srcElement) {
       var self = this
@@ -408,6 +420,11 @@ define([
       self.updateBarcodeNodeyMaxY()
       //  增加barcode之后, 更新节点属性值的分布的对象
       self.update_barcode_node_collection_obj()
+      //  在对齐现有的节点之前需要将Node_Arrangement的参数设置为false
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      $('#node-arrangement').removeClass('active')
+      BarcodeGlobalSetting['Node_Arrangement'] = false
+      //  接着进行节点顺序的重新排列
       if (BARCODETREE_GLOBAL_PARAS.Align_State) {
         self.align_node_in_selected_list()
       }
@@ -418,6 +435,8 @@ define([
       //   var sortExistedConfigObj = self.sortExistedConfigObj
       //   self.sort_barcode_model(sortExistedConfigObj.comparedNodeId, sortExistedConfigObj.parameter)
       // }
+      //  恢复到原始的barcodeTree的排列顺序, 并且更新barcodeTree的视图
+      self.recover_barcode_model_sequence()
       self.uniform_layout()
       self.trigger_render_supertree()
       // //  更新supertree视图中的节点位置和文本
@@ -514,7 +533,7 @@ define([
         var cloneMaxNodeNumTreeNodeLocArray = JSON.parse(JSON.stringify(maxNodeNumTreeNodeLocArray))
         barcodeModel.update_single_barcode_subtree(rootId, rootCategory, rootLevel, cloneSubtreeNodeArray, cloneMaxNodeNumTreeNodeLocArray)
       })
-      //  更新barcodeTree的节点之间的排列顺序
+      //  更新barcodeTree的节点之间的裴烈顺序
       var collectionAlignedObjPercentageArrayObjArray = self.collectionAlignedObjPercentageArrayObjArray
       window.Datacenter.update_barcode_tree_sequence(collectionAlignedObjPercentageArrayObjArray)
     }
@@ -685,8 +704,11 @@ define([
      **/
     update_barcode_node_attr_array: function () {
       var self = this
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       self.each(function (model) {
+        // if (!BarcodeGlobalSetting['Node_Arrangement']) {
         model.update_barcode_node_array()
+        // }
         model.update_aligned_barcode_node()
         model.update_unaligned_barcode_node()
         model.update_align_followed_node()
@@ -820,6 +842,8 @@ define([
      */
     subtree_node_focus: function (selectedAlignedItemList) {
       var self = this
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      var Node_Arrangement_State = BarcodeGlobalSetting['Node_Arrangement']
       //  判断是否所有选中的节点都已经处于对齐的状态
       var alignedSubtreeArray = self.get_aligned_subtree()
       for (var oI = 0; oI < selectedAlignedItemList.length; oI++) {
@@ -930,9 +954,11 @@ define([
     _subtree_unalign_handler: function (nodeData, finishRemoveAlignDeferObj) {
       var self = this
       var alignedLevel = Variables.get('alignedLevel')
-      self.remove_unaligned_item(nodeData)
-      self.remove_operation_item(nodeData)
-      self.remove_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishRemoveAlignDeferObj)
+      var selectedAlignedItemList = [{nodeData: nodeData}]
+      self.remove_aligned_part(selectedAlignedItemList)
+      // self.remove_unaligned_item(nodeData)
+      // self.remove_operation_item(nodeData)
+      // self.remove_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishRemoveAlignDeferObj)
     }
     ,
     /**
@@ -1030,10 +1056,10 @@ define([
       self.remove_aligned_part(selectedAlignedItemList)
       if (findNodeDataIdIndex !== -1) {
         self.update_data_all_view()
+        self.trigger_render_supertree()
       }
       delete selectedNodesIdObj[nodeObjId]
-    }
-    ,
+    },
     /**
      * 判断一个节点是否在选择的节点数组范围之内
      */
@@ -1072,6 +1098,22 @@ define([
     get_aligned_tree_selected_node: function () {
       var self = this
       return self.alignedTreeSelectedNodesIdObj
+    },
+    /**
+     * 判断是否选择排序的节点为空
+     */
+    is_aligned_selected_node_empty: function () {
+      var self = this
+      var alignedSelectNodeNum = 0
+      var alignedTreeSelectedNodesIdObj = self.alignedTreeSelectedNodesIdObj
+      for (var aItem in alignedTreeSelectedNodesIdObj) {
+        alignedSelectNodeNum = alignedSelectNodeNum + 1
+      }
+      if (alignedSelectNodeNum !== 0) {
+        return false
+      } else {
+        return true
+      }
     },
     /**
      *  判断一个节点是否在选择的节点数组范围之内
@@ -1538,6 +1580,15 @@ define([
       }
     }
     ,
+    /**
+     * 更新所有的barcodeModel中的节点的高度
+     */
+    update_attribute_height: function () {
+      var self = this
+      self.each(function (model) {
+        model.add_attribute_height()
+      })
+    },
     /**
      *
      * @param nodeObjId
@@ -2171,11 +2222,6 @@ define([
           for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
             barcodeNodeAttrArray[bI].height = barcodeOriginalNodeHeight
           }
-          //  改变global的节点数组的节点的高度
-          var categoryNodeObjArray = treeDataModel.get('categoryNodeObjArray')
-          for (var bI = 0; bI < categoryNodeObjArray.length; bI++) {
-            categoryNodeObjArray[bI].height = barcodeOriginalNodeHeight
-          }
           //  改变barcode的compact模式的节点数组的节点的高度
           var compactBarcodeNodeAttrArray = treeDataModel.get('compactBarcodeNodeAttrArray')
           for (var cI = 0; cI < compactBarcodeNodeAttrArray.length; cI++) {
@@ -2397,6 +2443,20 @@ define([
     //   self.update_barcode_location()
     //   self.trigger_barcode_loc()
     // },
+    sort_vertical_barcode_model: function (barcodeTreeVerticalSequence) {
+      var self = this
+      console.log('barcodeTreeVerticalSequence', barcodeTreeVerticalSequence)
+      self.each(function (model) {
+        var barcodeTreeId = model.get('barcodeTreeId')
+        var barcodeTreeIndex = barcodeTreeVerticalSequence.indexOf(barcodeTreeId)
+        model.set('barcodeIndex', barcodeTreeIndex)
+      })
+      self.uniform_layout()
+    },
+    /**
+     *
+     * @param sort_para
+     */
     sort_whole_barcode_model: function (sort_para) {
       var self = this
       var modelArray = []

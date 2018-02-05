@@ -176,6 +176,8 @@ define([
       var self = this
       var duration = self.duration
       var barcodeDistributionViewWidth = +$('#barcode-distribution-view').width()
+      console.log('barcodeDistributionViewWidth', barcodeDistributionViewWidth)
+      console.log('em barcodeDistributionViewWidth', window.rem_px * 20)
       var configPanelState = Variables.get('configPanelState')
       if (configPanelState === 'close') {
         $('#barcode-config').animate({

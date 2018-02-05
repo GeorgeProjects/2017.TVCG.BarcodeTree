@@ -17,7 +17,10 @@ define([
         Align_Lock: false,
         Sort_Option: 'NODENUMBER',//'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
+        Node_Arrangement: false
       },
+      //  当前的barcode是否经过了mouseover
+      mouseover_state: true,
       //  barcode的高度与barcode的container的占比, barcodeHeight传递到服务器端需要增加一定的比例, 因为barcode的节点的上部分与下部分都是存在一定的间隙
       barcodeHeightRatio: 0.8,
       //  barcode的柱状图的高度占比

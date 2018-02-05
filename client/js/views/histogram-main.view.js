@@ -576,6 +576,10 @@ define([
           selectItemNameArray.push(selectedItemsArray[sI])
         }
       }
+      //  在获取新的barcodeTree时, 需要将当前的模式变成original
+      if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
+        Variables.set('displayMode', Config.get('CONSTANT').ORIGINAL)
+      }
       window.Variables.update_barcode_attr()
       var displayMode = Variables.get('displayMode')
       window.Datacenter.requestDataCenter(selectedItemsArray)

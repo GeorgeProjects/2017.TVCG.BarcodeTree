@@ -1,7 +1,7 @@
 var hierarchicalDataProcessor = require('../processor/signaltree_processor')
 var dataCenter = require('../dataCenter/dataCenter')
 var clone = require('clone')
-
+var ITERATION_NUM = 200
 var updateBarcodeTreeSequence = function (request, response) {
   var reqBody = request.body
   var alignedObjPercentageArrayObjArray = reqBody.alignedObjPercentageArrayObjArray
@@ -40,20 +40,16 @@ var updateBarcodeTreeSequence = function (request, response) {
     rowSequenceSame = is_sequence_same(previousRowSequence, currentRowSequence)
     columnSequenceSame = is_sequence_obj_same(previousColumnSequence, currentColumnSequence)
     interateNum = interateNum + 1
-    if (interateNum > 100) {
+
+    if (interateNum > ITERATION_NUM) {
       break
     }
-    if ((interateNum > 500) && (interateNum < 510)) {
-      console.log('rowSequenceSame', rowSequenceSame)
-      console.log('columnSequenceSame', columnSequenceSame)
-      console.log('currentRowSequence', currentRowSequence)
-      console.log('previousRowSequence', previousRowSequence)
-      console.log('currentColumnSequence', currentColumnSequence)
-      console.log('previousColumnSequence', previousColumnSequence)
-    }
-    console.log('interateNum', interateNum)
   }
-
+  var currentColumnSequence = get_column_sequence(alignedObjPercentageArrayObjArray)
+  var currentRowSequence = get_row_sequence(alignedObjPercentageArrayObjArray)
+  //  在dataCenter中设置currentColumnSequence
+  dataCenter.set_column_sorting_sequence(currentColumnSequence)
+  dataCenter.set_row_sorting_sequence(currentRowSequence)
   sendTreeNodeArray(alignedObjPercentageArrayObjArray, alignedNodeObjRecordingValue)
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(alignedObjPercentageArrayObjArray, alignedNodeObjRecordingValue) {

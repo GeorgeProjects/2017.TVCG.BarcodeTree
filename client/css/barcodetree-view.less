@@ -63,16 +63,22 @@
       visibility: hidden;
     }
 
+    .barcode-node.template {
+      opacity: 0.4;
+      stroke: black !important;
+      stroke-width: 0.05rem !important;
+    }
+
     .barcode-node.node-missed {
       fill: white !important;
       stroke: #aaa !important;
-      stroke-width: 0.15rem !important;
+      stroke-width: 0.05rem !important;
     }
 
     .barcode-node.node-missed-wide {
       fill: white !important;
       stroke: #aaa !important;
-      stroke-width: 0.15rem !important;
+      stroke-width: 0.1rem !important;
     }
 
     .barcode-node.node-missed-narrow {
@@ -93,24 +99,28 @@
       opacity: 1;
     }
 
-    .barcode-node[class~=unhighlight], .tooth[class~=unhighlight] {
+    .barcode-node[class~=distribution-unhighlight] {
+      opacity: 0.1;
+    }
+
+    .barcode-node[class~=unhighlight], .tooth[class~=unhighlight], .collapse-triangle[class~=unhighlight], .stat-summary[class~=unhighlight] {
       opacity: 0.2;
     }
 
-    .barcode-node.sibling-highlight[class~=unhighlight], .tooth.sibling-highlight[class~=unhighlight] {
+    .barcode-node.sibling-highlight[class~=unhighlight], .tooth.sibling-highlight[class~=unhighlight], .collapse-triangle.sibling-highlight[class~=unhighlight] {
       opacity: 0.4;
     }
 
     .barcode-node[class~=sort-hovering-highlight] {
       //fill: #1F77B4;
       stroke: #1f77b4 !important;
-      stroke-width: 0.15rem;
+      stroke-width: 0.1rem;
     }
 
     .barcode-node[class~=sort-selection-highlight], .padding-covered-rect[class~=sort-selection-highlight] {
       //fill: #1f77b3 !important;
       stroke: #1f77b4 !important;
-      stroke-width: 0.15rem;
+      stroke-width: 0.1rem;
     }
 
     .barcode-node[class~=father-highlight], .supertree-icicle-node[class~=father-highlight] {
@@ -131,14 +141,15 @@
 
     .barcode-node[class~=missed-node-highlight] {
       stroke: #e9a3c9 !important;
-      stroke-width: 0.15rem;
+      stroke-width: 0.05rem;
+      opacity: 0.4;
     }
 
     .barcode-node[class~=same-node-highlight] {
       fill: black !important
     }
 
-    .barcode-node[class~=sibling-highlight], .tooth[class~=sibling-highlight], .supertree-icicle-node[class~=sibling-highlight] {
+    .barcode-node[class~=sibling-highlight], .tooth[class~=sibling-highlight], .supertree-icicle-node[class~=sibling-highlight], .collapse-triangle[class~=sibling-highlight] {
       fill: #d8b365 !important; //#5B647C//#d8b365;//#b2df8a;
     }
 

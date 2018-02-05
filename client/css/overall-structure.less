@@ -16,6 +16,30 @@ body {
   width: 100%;
   height: 100%;
   line-height: 1;
+  //  加载视图的css属性值
+  .loading {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    visibility: hidden;
+    .back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
+      opacity: 1;
+    }
+
+    .logo {
+      position: absolute;
+      margin: 5rem auto;
+      font-size:3.5rem;
+      text-align: center;
+      left: 45%;
+      top: 40%;
+    }
+  }
   .navbar {
     margin-bottom: 0px;
   }
@@ -27,7 +51,7 @@ body {
     background-color: rgba(100, 100, 100, 0.2);
   }
   //  对于视图中的toolbar上面的倒三角大小统一进行设定
-  .caret#adaptive  {
+  .caret#adaptive {
     border-width: 0.5rem 0.5rem 0;
   }
   //  对于视图中的所有button进行设置
@@ -216,7 +240,7 @@ body {
           border: solid 1px #ccc;
           border-radius: 0 0 0 4px;
           height: 100%;
-          min-width: 20rem;
+          width: 20rem;
           overflow-x: hidden;
           overflow-y: auto;
           padding: 1.5rem;

@@ -101,6 +101,10 @@ define([
         'ADD_LOCKED_ALIGN_CLASS': 'add-locked-align-class',
         //  删除barcode节点中的locked aligned的class
         'REMOVE_LOCKED_ALIGN_CLASS': 'remove-locked-align-class',
+        //  切换到节点的非resorting状态
+        'CHANGE_TO_NOT_RESORTING': 'change-to-not-resorting',
+        //  切换到节点的resorting状态
+        'CHANGE_TO_RESORTING':'change-to-resorting',
         // ====================================================================
         //  设置选择的颜色
         'SET_PRECLICK_COLOR': 'set-preclick-color',
@@ -209,6 +213,10 @@ define([
         'UNSELECT_GROUP_BARCODETREE': 'unselect-group-barcodetree',
         //  更新选择的barcodeTree的list
         'UPDATE_SELECTION_LIST': 'update-selection-list',
+        //  barcode视图发生变化, 重新绘制barcode视图
+        'UPDATE_BARCODE_VIEW': 'update-barcode-view',
+        //  使用animation 更新barcode视图
+        'UPDATE_ANIATION_BARCODE_VIEW': 'update_animation-barcode-view',
         //*******************************************
         //  删除的属性
         //*******************************************
@@ -226,8 +234,6 @@ define([
         'RENDER_UPLOAD_NODELINK_TREE': 'render-upload-nodelink-tree',
         //  单树模式下, 上传完成之后开始渲染barcodetree
         'RENDER_UPLOAD_BARCODE_TREE': 'render-upload-barcode-tree',
-        //  barcode视图发生变化, 重新绘制barcode视图
-        'UPDATE_BARCODE_VIEW': 'update-barcode-view',
         //  更新barcode的位置
         'UPDATE_BARCODE_LOC': 'update-barcode-loc',
         //  更新barcode比较的summary

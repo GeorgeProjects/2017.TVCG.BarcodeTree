@@ -101,6 +101,7 @@
                       .attr('x', innerWidth)
                       .attr('dy', xLabel_location)
                       .attr('fill', 'black')
+                      .attr('text-anchor', 'end')
                       .text(xLabel)
 
                     xAxis_g_enter.selectAll('text')

@@ -674,13 +674,14 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
   handle['query'] = handleQuery
   handle['/file_name'] = handlerObj['/file_name']
   handle['/barcode_original_data'] = handlerObj['/barcode_original_data']
+  handle['/barcode_compact_data'] = handlerObj['/barcode_compact_data']
   handle['/and_operation_result'] = handlerObj['/and_operation_result']
   handle['/or_operation_result'] = handlerObj['/or_operation_result']
   handle['/complement_operation_result'] = handlerObj['/complement_operation_result']
-  handle['/barcode_compact_data'] = handleCompactData
   handle['/build_super_tree'] = handlerObj['/build_super_tree']
   handle['/remove_from_super_tree'] = handlerObj['/remove_from_super_tree']
   handle['/update_barcode_tree_sequence'] = handlerObj['/update_barcode_tree_sequence']
+  handle['/update_barcode_tree_vertical_sequence'] = handlerObj['/update_barcode_tree_vertical_sequence']
   handle['/remove_super_tree'] = removeSuperTree
   handle['/treeobject_to_nodelist'] = handleTreeObjToNodeList
   handle['/category_name'] = handleCategoryName

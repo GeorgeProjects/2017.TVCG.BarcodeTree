@@ -17,7 +17,7 @@ app.use(multer({dest: '/tmp/'}).array('image'))
 function initialize(router) {
   app.use('/', router)
   var address = '0.0.0.0'
-  var port = 13353
+  var port = 13350
   var server = http.createServer(app).listen(port, address)
   console.log('listen ' + address + ':' + port + '......')
   return server

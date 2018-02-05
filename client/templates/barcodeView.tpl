@@ -7,7 +7,7 @@
 	    </div>
 	</div>
 <div id = 'barcode-config'>
-    <button id = "distribution-view-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title = "Distribution View">
+    <button id = "distribution-view-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title="Distribution View">
        <span id = "distribution-view-controller" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
     </button>
     <div id = "barcode-distribution-view" class="content">
