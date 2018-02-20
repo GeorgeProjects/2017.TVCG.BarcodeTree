@@ -741,6 +741,7 @@ define([
       self.updateBarcodeNodexMaxX()
       self.updateBarcodeNodeyMaxY()
       self.update_all_barcode_view()
+      console.log('trigger_render_supertree')
       self.trigger_render_supertree()
     },
     /**
@@ -811,6 +812,7 @@ define([
           alignedNodeObjArray.splice(unalignedNodeObjIndex, 1)
         }
       }
+      self.update_aligned_level()
       self.compute_aligned_subtree_range()
       self.update_data_all_view()
       //  从alignedNodeObjArray获取unAlignedNodeId的index值
@@ -822,8 +824,22 @@ define([
         }
         return -1
       }
-    }
-    ,
+    },
+    //  更新对齐的层级
+    update_aligned_level: function () {
+      var self = this
+      var alignedLevel = 0
+      var alignedNodeObjArray = self.alignedNodeObjArray
+      console.log('alignedNodeObjArray', alignedNodeObjArray)
+      for (var aI = 0; aI < alignedNodeObjArray.length; aI++) {
+        var alignedNodeId = alignedNodeObjArray[aI].alignedNodeId
+        var alignedNodeLevel = alignedNodeObjArray[aI].alignedNodeLevel
+        if (alignedNodeLevel > alignedLevel) {
+          alignedLevel = alignedNodeLevel
+        }
+      }
+      Variables.set('alignedLevel', alignedLevel)
+    },
     /**
      * 根据在selectNodeId中的节点得到需要对齐的节点的列表
      */
@@ -1902,6 +1918,7 @@ define([
           }
         }
       }
+
       //  更新所有global的paddingNode的subtree 的范围
       function update_min_max_range(single_subtree_range_obj, global_subtree_range_obj) {
         var singleCompressNodeStartX = single_subtree_range_obj.realCompressNodeStartX

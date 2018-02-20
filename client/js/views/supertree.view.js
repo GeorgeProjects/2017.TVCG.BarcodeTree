@@ -585,24 +585,24 @@ define([
           maxLevel = level
         }
       }
-      self.d3el.select('#barcode-container').select('.level-g').remove()
+      self.d3el.select('#barcode-container').selectAll('.level-g').remove()
       var alignedLevel = Variables.get('alignedLevel')
       if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
         alignedLevel = window.barcodeWidthArray.max()
       }
       d3.selectAll('.level-g').remove()
-      console.log('allAlignedNodesObj', allAlignedNodesObj)
       for (var item in allAlignedNodesObj) {
         var alignedNodeArray = allAlignedNodesObj[item]
         item = +item
         for (var aI = 0; aI < alignedNodeArray.length; aI++) {
           var nodeId = alignedNodeArray[aI].id
-          console.log('nodeId', nodeId)
           append_icicle(item, nodeId, levelNodeHeight, alignedNodeArray[aI])
           if (item === maxLevel) {
             var underLevel = maxLevel + 1
             if (underLevel < maxSelectedLevel) {
               //  判断aligned level是否align到当前的层级, 即underLevel
+              console.log('alignedLevel', alignedLevel)
+              console.log('underLevel', underLevel)
               if (alignedLevel < underLevel) {
                 //  如果没有align到当前的层级, 那么就在underLevel层级下面增加表示比例的proportion icicle
                 append_proportion_icicle(underLevel, nodeId, levelNodeHeight, alignedNodeArray[aI])
@@ -639,7 +639,6 @@ define([
         init_icicle_level_g(node_level, level_node_height)
         //  计算最大的BarcodeTree的width大小
         var icicleNodeObject = barcodeCollection.get_max_barcode_node_width(node_id, node_level, alignedNodeObj)
-        console.log('icicleNodeObject', icicleNodeObject)
         var icicleNodeX = icicleNodeObject.x
         var icicleNodeWidth = icicleNodeObject.width
         if (self.d3el.select('#barcode-container').select('#level-' + node_level).select('#' + node_id).empty()) {
@@ -681,6 +680,7 @@ define([
         var upperLevelIcicleNodeWidth = upperLevelIcicleNodeObject.width
         //  计算得到不同的subtree所占的比例, 如果是在attribute的状态下, 得到的是属性值的比例, 在topology的状态下, 得到的是节点数目的比例
         var barcodeSubtreeProportionArray = barcodeCollection.get_barcode_proportion(node_id)
+        console.log('barcodeSubtreeProportionArray', barcodeSubtreeProportionArray)
         init_icicle_level_g(node_level, level_node_height)
         //  计算最大的BarcodeTree的width大小
         var proportionIcicleNodes = self.d3el.select('#barcode-container')
@@ -856,6 +856,7 @@ define([
       if (typeof (treeDataModel) === 'undefined') {
         return
       }
+      console.log('add_single_category_text')
       var barcodeTreeId = treeDataModel.get('barcodeTreeId')
       var barcodePaddingTop = self.barcodePaddingTop
       var barcodePaddingLeft = self.barcodePaddingLeft
@@ -891,11 +892,14 @@ define([
             nodeObject.textWidth = rectWidth
           }
           d3.select(this.parentNode).select('.category-text#' + rectId).remove()
+          console.log('rectId', rectId)
+          console.log('rectX', rectX)
+          console.log('this.parentNode', d3.select(this.parentNode))
           d3.select(this.parentNode)
             .append("text")
             .attr('class', 'category-text')
             .attr('id', rectId)
-            .attr("x", rectX + rectWidth / 2)
+            .attr("x", rectX + rectWidth / 2)//
             .attr("y", rectY + rectHeight / 2)
             .attr("font-family", "FontAwesome")
             .attr('text-anchor', 'middle')
