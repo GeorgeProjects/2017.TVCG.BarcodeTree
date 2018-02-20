@@ -661,6 +661,13 @@ define([
           for (var aI = 0; aI < alignedRangeObjArray.length; aI++) {
             // if(alignedRangeObjArray[aI].empty)
             paddingNodeObjArray[paddingNodeObjArray.length - 1].paddingNodeEndIndex = alignedRangeObjArray[aI].rangeStartNodeIndex - 1
+            //  ==================================
+            // var subtreeObjectArray = self.sawtooth_parser(paddingNodeObjArray[paddingNodeObjArray.length - 1], barcodeNodeAttrArray)
+            // paddingNodeObjArray[paddingNodeObjArray.length - 1].subtreeObjectArray = subtreeObjectArray
+            // //  根据计算得到的subtreeObjectArray计算paddingnode的宽度
+            // paddingNodeObjArray[paddingNodeObjArray.length - 1].compressPaddingNodeWidth = computePaddingNodeWidth(subtreeObjectArray)
+
+            //  ==================================
             if ((alignedRangeObjArray[aI].rangeEndNodeIndex + 1) < barcodeNodeAttrArray.length) {
               paddingNodeObjArray.push({
                 'paddingNodeStartIndex': alignedRangeObjArray[aI].rangeEndNodeIndex + 1,
@@ -1514,6 +1521,7 @@ define([
       var self = this
       var paddingNodeRightLoc = 0
       var paddingSubtreeRangeObject = self.get('paddingSubtreeRangeObject')
+      console.log('paddingSubtreeRangeObject', paddingSubtreeRangeObject)
       if (nodeLevel === 0) {
         paddingNodeRightLoc = get_global_max_end_x(paddingSubtreeRangeObject)
       } else {

@@ -755,12 +755,16 @@ define([
         var elementExisted = true
         //  判断当前点击的过程中是否处于对齐的状态
         if (!BarcodeGlobalSetting['Align_Lock']) {
-          if (!barcodeCollection.in_selected_array(barcodeTreeId, nodeObjId)) {// 判断该节点是否已经被选择
+          //  当前点击的节点不属于aligned的范围
+          if (!barcodeCollection.in_selected_array(barcodeTreeId, nodeObjId)) {
+            // 判断该节点是否已经被选择
+            console.log('not_in_selected_array')
             var siblingNodesArray = treeDataModel.find_sibling_nodes(nodeData)
             var childrenNodesArray = treeDataModel.find_children_nodes(nodeData)
             barcodeCollection.add_selected_node(barcodeTreeId, nodeObjId, nodeObjDepth, nodeObjCategory, siblingNodesArray, childrenNodesArray)
             elementExisted = false
           } else {
+            console.log('in_selected_array')
             barcodeCollection.remove_selected_node(nodeObjId, nodeObjDepth, barcodeTreeId)
             elementExisted = true
           }

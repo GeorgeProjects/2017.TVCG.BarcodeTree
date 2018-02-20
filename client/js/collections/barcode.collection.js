@@ -200,15 +200,20 @@ define([
       //  根据节点的id计算节点最大的宽度值, 以及最右侧的位置
       self.each(function (model) {
         var barcodeRightLoc = 0, barcodeLeftLoc = 0
+        //  判断这个对齐的对象是否准确的已知节点的边界
         if (alignedNodeObj.accurate_subtree) {
+          //  如果节点的边界是准确的
           barcodeRightLoc = model.get_right_loc(nodeId, nodeLevel)
           barcodeLeftLoc = model.get_left_loc(nodeId, nodeLevel)
         } else {
-          barcodeRightLoc = model.get_padding_node_right_loc(alignedNodeObj.accurate_subtree_id, nodeLevel)
+          //  如果节点的边界是不准确的
+          // barcodeRightLoc = model.get_padding_node_right_loc(alignedNodeObj.accurate_subtree_id, nodeLevel)
           var accurateBarcodeRightLoc = model.get_right_loc(nodeId, nodeLevel)
           //  在计算superTree的节点右侧的边界时, 需要判断选择精确地边界还是有paddingNode的glyph确定的边界, 因为有可能用户展开最右侧的glyph从而得到精确的节点
-          barcodeRightLoc = barcodeRightLoc > accurateBarcodeRightLoc ? barcodeRightLoc : accurateBarcodeRightLoc
-          barcodeLeftLoc = model.get_padding_node_left_loc(alignedNodeObj.accurate_subtree_id, nodeLevel)
+          // barcodeRightLoc = barcodeRightLoc > accurateBarcodeRightLoc ? barcodeRightLoc : accurateBarcodeRightLoc
+          barcodeRightLoc = accurateBarcodeRightLoc
+          // barcodeLeftLoc = model.get_padding_node_left_loc(alignedNodeObj.accurate_subtree_id, nodeLevel)
+          barcodeLeftLoc = model.get_left_loc(nodeId, nodeLevel)
         }
         if (barcodeRightLoc > barcodeMaxRightLoc) {
           barcodeMaxRightLoc = barcodeRightLoc
@@ -533,9 +538,11 @@ define([
         var cloneMaxNodeNumTreeNodeLocArray = JSON.parse(JSON.stringify(maxNodeNumTreeNodeLocArray))
         barcodeModel.update_single_barcode_subtree(rootId, rootCategory, rootLevel, cloneSubtreeNodeArray, cloneMaxNodeNumTreeNodeLocArray)
       })
-      //  更新barcodeTree的节点之间的裴烈顺序
+      //  更新barcodeTree的节点之间的排列顺序
       var collectionAlignedObjPercentageArrayObjArray = self.collectionAlignedObjPercentageArrayObjArray
-      window.Datacenter.update_barcode_tree_sequence(collectionAlignedObjPercentageArrayObjArray)
+      if (typeof (collectionAlignedObjPercentageArrayObjArray) === 'undefined') {
+        window.Datacenter.update_barcode_tree_sequence(collectionAlignedObjPercentageArrayObjArray)
+      }
     }
     ,
     /**
@@ -908,8 +915,6 @@ define([
     _align_single_operation_item: function (operation_item_list, operation_index, finish_align_defer) {
       var self = this
       var alignedLevel = Variables.get('alignedLevel')
-      // console.log('operation_index', operation_index)
-      // console.log('operation_item_list.length', operation_item_list.length)
       if ((operation_index === operation_item_list.length) || (operation_item_list.length === 0)) {
         finish_align_defer.resolve()
         return
@@ -933,18 +938,20 @@ define([
         $.when(finishRemoveAlignDeferObj)
           .done(function () {
             // 已经删除了上层的对齐部分的节点, 下面就是对齐当前的节点
+            // var finishAlignDeferObj = $.Deferred()
+            // $.when(finishAlignDeferObj)
+            //   .done(function () {
             var finishAlignDeferObj = $.Deferred()
             $.when(finishAlignDeferObj)
               .done(function () {
-                var finishAlignDeferObj = $.Deferred()
-                $.when(finishAlignDeferObj)
-                  .done(function () {
-                    self._align_single_operation_item(operation_item_list, (operation_index + 1), finish_align_defer)
-                  })
-                self.add_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishAlignDeferObj)
+                console.log('_align_single_operation_item', operation_item_list)
+                self._align_single_operation_item(operation_item_list, (operation_index + 1), finish_align_defer)
               })
+            self.add_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishAlignDeferObj)
+            // })
           })
         self._subtree_unalign_handler(alignedUpperParent, finishRemoveAlignDeferObj)
+        self.remove_selected_node(alignedUpperParent.id, alignedUpperParent.depth)
       }
     }
     ,
@@ -956,6 +963,7 @@ define([
       var alignedLevel = Variables.get('alignedLevel')
       var selectedAlignedItemList = [{nodeData: nodeData}]
       self.remove_aligned_part(selectedAlignedItemList)
+      finishRemoveAlignDeferObj.resolve()
       // self.remove_unaligned_item(nodeData)
       // self.remove_operation_item(nodeData)
       // self.remove_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishRemoveAlignDeferObj)
@@ -1894,7 +1902,6 @@ define([
           }
         }
       }
-
       //  更新所有global的paddingNode的subtree 的范围
       function update_min_max_range(single_subtree_range_obj, global_subtree_range_obj) {
         var singleCompressNodeStartX = single_subtree_range_obj.realCompressNodeStartX

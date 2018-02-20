@@ -176,8 +176,6 @@ define([
       var self = this
       var duration = self.duration
       var barcodeDistributionViewWidth = +$('#barcode-distribution-view').width()
-      console.log('barcodeDistributionViewWidth', barcodeDistributionViewWidth)
-      console.log('em barcodeDistributionViewWidth', window.rem_px * 20)
       var configPanelState = Variables.get('configPanelState')
       if (configPanelState === 'close') {
         $('#barcode-config').animate({
@@ -234,7 +232,6 @@ define([
       var histogramViewHeight = +$('#histogram-view').height()
       var topToolbarViewHeight = +$('#top-toolbar-container').height()
       // $('#top-toolbar-container').css('height', barcodeTreeConfigHeight + 'px')
-      console.log('toolbarHistogramHeight + barcodeTreeConfigHeight', toolbarViewDivHeight + histogramViewHeight + topToolbarViewHeight)
       $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + topToolbarViewHeight) + 'px')
     }
     // ,

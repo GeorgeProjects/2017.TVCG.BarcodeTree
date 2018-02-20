@@ -591,11 +591,13 @@ define([
         alignedLevel = window.barcodeWidthArray.max()
       }
       d3.selectAll('.level-g').remove()
+      console.log('allAlignedNodesObj', allAlignedNodesObj)
       for (var item in allAlignedNodesObj) {
         var alignedNodeArray = allAlignedNodesObj[item]
         item = +item
         for (var aI = 0; aI < alignedNodeArray.length; aI++) {
           var nodeId = alignedNodeArray[aI].id
+          console.log('nodeId', nodeId)
           append_icicle(item, nodeId, levelNodeHeight, alignedNodeArray[aI])
           if (item === maxLevel) {
             var underLevel = maxLevel + 1
@@ -637,6 +639,7 @@ define([
         init_icicle_level_g(node_level, level_node_height)
         //  计算最大的BarcodeTree的width大小
         var icicleNodeObject = barcodeCollection.get_max_barcode_node_width(node_id, node_level, alignedNodeObj)
+        console.log('icicleNodeObject', icicleNodeObject)
         var icicleNodeX = icicleNodeObject.x
         var icicleNodeWidth = icicleNodeObject.width
         if (self.d3el.select('#barcode-container').select('#level-' + node_level).select('#' + node_id).empty()) {
