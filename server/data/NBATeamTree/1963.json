@@ -1,0 +1,131 @@
+{
+  "Eastern": [
+    {
+      "teamScore": "113.0",
+      "playersObjArray": [
+        {
+          "pts": "19.9",
+          "name": "John Havlicek"
+        },
+        {
+          "pts": "19.4",
+          "name": "Sam Jones"
+        },
+        {
+          "pts": "16.5",
+          "name": "Tom Heinsohn"
+        },
+        {
+          "pts": "15.0",
+          "name": "Bill Russell"
+        },
+        {
+          "pts": "11.4",
+          "name": "Tom Sanders"
+        },
+        {
+          "pts": "9.8",
+          "name": "Willie Naulls"
+        },
+        {
+          "pts": "8.6",
+          "name": "Frank Ramsey"
+        },
+        {
+          "pts": "8.2",
+          "name": "K.C. Jones"
+        },
+        {
+          "pts": "6.7",
+          "name": "Clyde Lovellette"
+        },
+        {
+          "pts": "3.3",
+          "name": "Larry Siegfried"
+        },
+        {
+          "pts": "2.5",
+          "name": "Jim Loscutoff"
+        },
+        {
+          "pts": "1.3",
+          "name": "Johnny McCarthy"
+        }
+      ],
+      "teamName": "Boston_Celtics"
+    }
+  ],
+  "Western": [
+    {
+      "teamScore": "111.9",
+      "playersObjArray": [
+        {
+          "pts": "27.0",
+          "name": "Walt Bellamy"
+        },
+        {
+          "pts": "20.8",
+          "name": "Terry Dischinger"
+        },
+        {
+          "pts": "17.3",
+          "name": "Gus Johnson"
+        },
+        {
+          "pts": "14.4",
+          "name": "Rod Thorn"
+        },
+        {
+          "pts": "10.3",
+          "name": "Si Green"
+        },
+        {
+          "pts": "9.2",
+          "name": "Kevin Loughery"
+        },
+        {
+          "pts": "6.3",
+          "name": "Don Kojis"
+        },
+        {
+          "pts": "5.2",
+          "name": "Bill McGill"
+        },
+        {
+          "pts": "4.5",
+          "name": "Charlie Hardnett"
+        },
+        {
+          "pts": "4.2",
+          "name": "Gene Shue"
+        },
+        {
+          "pts": "3.7",
+          "name": "Barney Cable"
+        },
+        {
+          "pts": "2.7",
+          "name": "Larry Staverman"
+        },
+        {
+          "pts": "2.1",
+          "name": "Larry Comley"
+        },
+        {
+          "pts": "2.0",
+          "name": "Roger Strickland"
+        },
+        {
+          "pts": "1.0",
+          "name": "Mel Peterson"
+        },
+        {
+          "pts": "0.8",
+          "name": "Paul Hogue"
+        }
+      ],
+      "teamName": "Baltimore_Bullets"
+    }
+  ],
+  "year": 1963
+}

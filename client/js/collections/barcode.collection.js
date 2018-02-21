@@ -560,7 +560,6 @@ define([
           // window.Datacenter.barcodeCollection.update_all_barcode_view()
           finishAlignDeferObj.resolve()
           window.finish_build_supertree_collection511 = new Date()
-          console.log('build supertree', window.finish_build_supertree_collection511.getDifference(window.start_build_supertree_collection529))
         })
         .fail(function () {
           console.log('defer fail')
@@ -741,7 +740,6 @@ define([
       self.updateBarcodeNodexMaxX()
       self.updateBarcodeNodeyMaxY()
       self.update_all_barcode_view()
-      console.log('trigger_render_supertree')
       self.trigger_render_supertree()
     },
     /**
@@ -830,7 +828,6 @@ define([
       var self = this
       var alignedLevel = 0
       var alignedNodeObjArray = self.alignedNodeObjArray
-      console.log('alignedNodeObjArray', alignedNodeObjArray)
       for (var aI = 0; aI < alignedNodeObjArray.length; aI++) {
         var alignedNodeId = alignedNodeObjArray[aI].alignedNodeId
         var alignedNodeLevel = alignedNodeObjArray[aI].alignedNodeLevel
@@ -939,6 +936,7 @@ define([
       var barcodeTreeId = operation_item_list[operation_index].barcodeTreeId
       self.uncollapse_subtree(nodeData.id, nodeData.depth)
       var alignedUpperParent = self.get_aligned_uppest_parent(nodeData, barcodeTreeId)
+      var alignedChildren = self.get_aligned_children(nodeData)
       //  如果对齐状态的最上层父亲节点为空, 那么直接对齐当前的子树
       if (alignedUpperParent == null) {
         var finishAlignDeferObj = $.Deferred()
@@ -948,29 +946,113 @@ define([
           })
         //  具体对齐选中的子树
         self.add_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishAlignDeferObj)
-      } else {
-        //  如果对齐状态的最上层父亲节点不为空, 那么要首先删除该节点的对齐状态, 保证程序的顺序执行, 使用defer进行控制
-        var finishRemoveAlignDeferObj = $.Deferred()
-        $.when(finishRemoveAlignDeferObj)
-          .done(function () {
-            // 已经删除了上层的对齐部分的节点, 下面就是对齐当前的节点
-            // var finishAlignDeferObj = $.Deferred()
-            // $.when(finishAlignDeferObj)
-            //   .done(function () {
-            var finishAlignDeferObj = $.Deferred()
-            $.when(finishAlignDeferObj)
-              .done(function () {
-                console.log('_align_single_operation_item', operation_item_list)
-                self._align_single_operation_item(operation_item_list, (operation_index + 1), finish_align_defer)
-              })
-            self.add_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishAlignDeferObj)
-            // })
-          })
-        self._subtree_unalign_handler(alignedUpperParent, finishRemoveAlignDeferObj)
-        self.remove_selected_node(alignedUpperParent.id, alignedUpperParent.depth)
       }
-    }
-    ,
+      // else {
+      //   //  如果对齐状态的最上层父亲节点不为空, 那么要首先删除该节点的对齐状态, 保证程序的顺序执行, 使用defer进行控制
+      //   var finishRemoveAlignDeferObj = $.Deferred()
+      //   $.when(finishRemoveAlignDeferObj)
+      //     .done(function () {
+      //       // 已经删除了上层的对齐部分的节点, 下面就是对齐当前的节点
+      //       // var finishAlignDeferObj = $.Deferred()
+      //       // $.when(finishAlignDeferObj)
+      //       //   .done(function () {
+      //       var finishAlignDeferObj = $.Deferred()
+      //       $.when(finishAlignDeferObj)
+      //         .done(function () {
+      //           console.log('_align_single_operation_item', operation_item_list)
+      //           self._align_single_operation_item(operation_item_list, (operation_index + 1), finish_align_defer)
+      //         })
+      //       self.add_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishAlignDeferObj)
+      //       // })
+      //     })
+      //   self._subtree_unalign_handler(alignedUpperParent, finishRemoveAlignDeferObj)
+      //   self.remove_selected_node(alignedUpperParent.id, alignedUpperParent.depth)
+      // }
+    },
+    //  获取最上层对齐的父亲节点
+    get_aligned_uppest_parent: function (node_data, operated_tree_id) {
+      var self = this
+      var filterModelArray = self.where({barcodeTreeId: operated_tree_id})
+      if (filterModelArray.length > 0) {
+        var treeDataModel = filterModelArray[0]
+        var fatherCurrentNodes = treeDataModel.find_father_current_nodes(node_data)
+        for (var fI = (fatherCurrentNodes.length - 1); fI >= 1; fI--) {
+          if (self.get_aligned_state(fatherCurrentNodes[fI].id, fatherCurrentNodes[fI].depth)) {
+            return fatherCurrentNodes[fI]
+          }
+        }
+      }
+      return null
+    },
+    //  获取下层的孩子节点
+    get_aligned_children: function (node_data) {
+      var self = this
+      var nodeDataId = node_data.id
+      var alignedNodeIdArray = self.alignedNodeIdArray
+      if (nodeDataId === 'node-0-root') {
+
+      } else {
+        for (var aI = 0; aI < alignedNodeIdArray.length; aI++) {
+          var singleAlignedNodeId = alignedNodeIdArray[aI]
+          if (nodeDataId !== singleAlignedNodeId) {
+            if (self.is_first_node_parent(nodeDataId, singleAlignedNodeId)) {
+              console.log('singleAlignedNodeId', singleAlignedNodeId)
+            }
+          }
+        }
+      }
+    },
+    //  判断第一个节点是否是第二个节点的父亲
+    is_first_node_parent: function (parentNodeId, childNodeId) {
+      var self = this
+      var parentNodeIdArray = self._transform_node_id_node_id_array(parentNodeId)
+      var childNodeIdArray = self._transform_node_id_node_id_array(childNodeId)
+      if (parentNodeId === 'node-0-root') {
+        return true
+      }
+      for (var cI = 0; cI < parentNodeIdArray.length; cI++) {
+        if ((parentNodeIdArray[cI] === childNodeIdArray[cI]) || ((parentNodeIdArray[cI] === "0") && (childNodeIdArray[cI] !== "0"))) {
+          //  满足是parent节点的条件
+        } else {
+          //  不满足是parent节点的条件
+          return false
+        }
+      }
+      if (childNodeId === parentNodeId) {
+        return false
+      }
+      return true
+    },
+    //  判断第二个节点是否是第一个节点的父亲
+    is_second_node_parent: function (childNodeId, parentNodeId) {
+      var self = this
+      var parentNodeIdArray = self._transform_node_id_node_id_array(parentNodeId)
+      var childNodeIdArray = self._transform_node_id_node_id_array(childNodeId)
+      if (parentNodeId === 'node-0-root') {
+        return true
+      }
+      for (var cI = 0; cI < parentNodeIdArray.length; cI++) {
+        if ((parentNodeIdArray[cI] === childNodeIdArray[cI]) || ((parentNodeIdArray[cI] === "0") && (childNodeIdArray[cI] !== "0"))) {
+          //  满足是parent节点的条件
+        } else {
+          //  不满足是parent节点的条件
+          return false
+        }
+      }
+      if (childNodeId === parentNodeId) {
+        return false
+      }
+      return true
+    },
+    //  将节点的id转换成节点的id的character的数组
+    _transform_node_id_node_id_array: function (node_data_id) {
+      var self = this
+      var nodeDataIdArray = node_data_id.split('-')
+      var nodeDataId = nodeDataIdArray[nodeDataIdArray.length - 1]
+      //  选择的节点的id数组
+      var nodeDataIdArray = nodeDataId.split('')
+      return nodeDataIdArray
+    },
     /**
      * 取消barcode中的某个子树对齐
      */
@@ -1001,6 +1083,18 @@ define([
       var self = this
       var selectedNodesIdObj = self.selectedNodesId
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      //  判断是否是父亲节点或者是孩子节点
+      // for (var sItem in selectedNodesIdObj) {
+      //   //  点击的节点是否是之前选择的节点的父亲
+      //   var isParent = self.is_first_node_parent(nodeObjId, sItem)
+      //   //  点击的节点是否是之前选择的节点的孩子
+      //   var isChild = self.is_second_node_parent(nodeObjId, sItem)
+      //   if (isParent || isChild) {
+      //     //  如果其中一个节点是点击节点的孩子或者父亲, 那么删除之前存在的该节点
+      //     console.log('delete item', sItem)
+      //     delete selectedNodesIdObj[sItem]
+      //   }
+      // }
       //  该节点之前没有被选择, 如果选择的是不同的barcodeTree的相同的节点, 那么选择会被自动的更新
       selectedNodesIdObj[nodeObjId] = {
         barcodeTreeId: barcodeTreeId,
@@ -1070,6 +1164,27 @@ define([
       return foundObj
     }
     ,
+    //  删除交叉部分的节点的对齐情况
+    remove_crossed_node_alignment: function (nodeData) {
+      var self = this
+      var nodeObjId = nodeData.id
+      var selectedNodesIdObj = self.selectedNodesId
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      //  判断是否是父亲节点或者是孩子节点
+      for (var sItem in selectedNodesIdObj) {
+        //  点击的节点是否是之前选择的节点的父亲
+        var isParent = self.is_first_node_parent(nodeObjId, sItem)
+        //  点击的节点是否是之前选择的节点的孩子
+        var isChild = self.is_second_node_parent(nodeObjId, sItem)
+        if (isParent || isChild) {
+          //  如果其中一个节点是点击节点的孩子或者父亲, 那么删除之前存在的该节点
+          var nodeObjId = sItem
+          var nodeObjDepth = selectedNodesIdObj[sItem].nodeObjDepth
+          self.remove_selected_node(nodeObjId, nodeObjDepth)
+          // delete selectedNodesIdObj[sItem]
+        }
+      }
+    },
     //  删除其中某一个选择的节点
     remove_selected_node: function (nodeObjId, nodeObjDepth) {
       var self = this
@@ -1181,7 +1296,6 @@ define([
      *  删除在aligned状态下的新增加的选择的节点
      */
     remove_aligned_selected_node: function (nodeObjId) {
-      console.log('nodeObjId', nodeObjId)
       var self = this
       var alignedTreeSelectedNodesIdObj = self.alignedTreeSelectedNodesIdObj
       delete alignedTreeSelectedNodesIdObj[nodeObjId]
@@ -2011,22 +2125,6 @@ define([
       self.each(function (model) {
         model.collapse_subtree(nodeDataId, nodeDataDepth)
       })
-    }
-    ,
-    //  获取最上层对齐的父亲节点
-    get_aligned_uppest_parent: function (node_data, operated_tree_id) {
-      var self = this
-      var filterModelArray = self.where({barcodeTreeId: operated_tree_id})
-      if (filterModelArray.length > 0) {
-        var treeDataModel = filterModelArray[0]
-        var fatherCurrentNodes = treeDataModel.find_father_current_nodes(node_data)
-        for (var fI = (fatherCurrentNodes.length - 1); fI >= 1; fI--) {
-          if (self.get_aligned_state(fatherCurrentNodes[fI].id, fatherCurrentNodes[fI].depth)) {
-            return fatherCurrentNodes[fI]
-          }
-        }
-      }
-      return null
     }
     ,
     update_click_covered_rect_attr_array: function () {
