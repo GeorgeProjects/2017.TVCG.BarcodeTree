@@ -225,6 +225,10 @@ define([
         }
       })
       var barcodeMaxWidth = barcodeMaxRightLoc - barcodeMinLeftLoc
+      //  保证冰柱图的宽度barcodeMaxWidth不为0
+      if (barcodeMaxWidth < 0) {
+        barcodeMaxWidth = 0
+      }
       var icicleNodeObject = {x: barcodeMinLeftLoc, width: barcodeMaxWidth}
       return icicleNodeObject
     },
@@ -1002,6 +1006,13 @@ define([
         }
       }
     },
+    //  判断一个character是否是'A'或者'0', 进而验证是否是父亲节点
+    is_character_zero_A: function (character) {
+      var self = this
+      if ((character === "0") || (character === "A")) {
+        return true
+      }
+    },
     //  判断第一个节点是否是第二个节点的父亲
     is_first_node_parent: function (parentNodeId, childNodeId) {
       var self = this
@@ -1011,7 +1022,7 @@ define([
         return true
       }
       for (var cI = 0; cI < parentNodeIdArray.length; cI++) {
-        if ((parentNodeIdArray[cI] === childNodeIdArray[cI]) || ((parentNodeIdArray[cI] === "0") && (childNodeIdArray[cI] !== "0"))) {
+        if ((parentNodeIdArray[cI] === childNodeIdArray[cI]) || ((self.is_character_zero_A(parentNodeIdArray[cI])) && (!self.is_character_zero_A(childNodeIdArray[cI])))) {
           //  满足是parent节点的条件
         } else {
           //  不满足是parent节点的条件
@@ -1032,7 +1043,7 @@ define([
         return true
       }
       for (var cI = 0; cI < parentNodeIdArray.length; cI++) {
-        if ((parentNodeIdArray[cI] === childNodeIdArray[cI]) || ((parentNodeIdArray[cI] === "0") && (childNodeIdArray[cI] !== "0"))) {
+        if ((parentNodeIdArray[cI] === childNodeIdArray[cI]) || ((self.is_character_zero_A(parentNodeIdArray[cI])) && (!self.is_character_zero_A(childNodeIdArray[cI])))) {
           //  满足是parent节点的条件
         } else {
           //  不满足是parent节点的条件
@@ -1050,7 +1061,8 @@ define([
       var nodeDataIdArray = node_data_id.split('-')
       var nodeDataId = nodeDataIdArray[nodeDataIdArray.length - 1]
       //  选择的节点的id数组
-      var nodeDataIdArray = nodeDataId.split('')
+      var splitCharacter = window.split_character
+      var nodeDataIdArray = nodeDataId.split(splitCharacter)
       return nodeDataIdArray
     },
     /**

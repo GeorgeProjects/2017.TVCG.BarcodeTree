@@ -18,11 +18,12 @@ define([
     defaults: {
       'histogramDataObject': {},
     },
-    initialize: function () {},
+    initialize: function () {
+    },
     trigger_render_signal: function (dataSetName) {
       // trigger出的信号所表示的含义是已经完成了对于histogram数据的准备, 接下来app.view中开始调用render_histogram_view进行渲染
-      Backbone.Events.trigger(Config.get('EVENTS')[ 'BEGIN_RENDER_HISTOGRAM_VIEW' ])
-      Backbone.Events.trigger('render-barcode-width-controller', { dataSetName: dataSetName })
+      Backbone.Events.trigger(Config.get('EVENTS')['BEGIN_RENDER_HISTOGRAM_VIEW'])
+      Backbone.Events.trigger('render-barcode-width-controller', {dataSetName: dataSetName})
     },
     // request_histogram_dataset: function () {
     //   var self = this
@@ -98,10 +99,26 @@ define([
        * 将文件名称转换为文件名的数字
        * @param fileName, 读取的文件名称, sample: recordTree-2015_07_06-2015_07_06
        */
-      function transformFileNameToDate (fileName) {
-        var date = fileName.split('-')[ 1 ]
-        var dateInt = +(date.replace('_', '').replace('_', ''))
-        return dateInt
+      function transformFileNameToDate(fileName) {
+        var currentDataSetName = Variables.get('currentDataSetName')
+        if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+          return libraryTreeTransform(fileName)
+        } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
+          return NBATreeTransfrom(fileName)
+        }
+        //  对于图书馆的树的转换函数
+        function libraryTreeTransform(fileName) {
+          var date = fileName.split('-')[1]
+          var dateInt = +(date.replace('_', '').replace('_', ''))
+          return dateInt
+        }
+
+        //  对于NBA的树的转换函数
+        function NBATreeTransfrom(fileName) {
+          var yearStr = fileName.replace('tree', '')
+          var yearInt = +yearStr
+          return yearInt
+        }
       }
     },
     /**
@@ -111,8 +128,8 @@ define([
      *  ......
      * ]
      */
-    get_min_value: function(selectionBarArray){
-      var minValue = d3.min(selectionBarArray, function(d){
+    get_min_value: function (selectionBarArray) {
+      var minValue = d3.min(selectionBarArray, function (d) {
         return d.num
       })
       return minValue
@@ -124,11 +141,53 @@ define([
      *  ......
      * ]
      */
-    get_max_value: function(selectionBarArray){
-      var maxValue = d3.max(selectionBarArray, function(d){
+    get_max_value: function (selectionBarArray) {
+      var maxValue = d3.max(selectionBarArray, function (d) {
         return d.num
       })
       return maxValue
+    },
+    /**
+     * y轴上的标注
+     */
+    get_y_ticks_value: function (maxValue) {
+      //  确定了tick的数量为5, 下面就是确定tick的间隔, 而且我们需要保证tick为整数, 整十数, 或者整百数
+      var ticksNum = 5
+      var averageNum = maxValue / ticksNum
+      if (averageNum < 10) {
+        //  ticks是整数, 将averageNum变到最近的整数上
+        averageNum = Math.round(averageNum)
+      } else if ((averageNum > 10) && (averageNum < 100)) {
+        //  ticks是整十数, 将averageNum变到最近的整十数上
+        averageNum = Math.round(averageNum / 10) * 10
+      } else if (averageNum > 100) {
+        //  ticks是整百数, 将averageNum变到最近的整百数上
+        averageNum = Math.round(averageNum / 100) * 100
+      }
+      var yTicksValueArray = []
+      for (var hI = 1; hI < ticksNum; hI++) {
+        yTicksValueArray.push(hI * averageNum)
+      }
+      return yTicksValueArray
+    },
+    /**
+     *  x轴上的标注的对象
+     */
+    get_x_ticks_object: function(){
+      var currentDataSetName = Variables.get('currentDataSetName')
+      if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+        var xTicksObject = {
+          xTicksValueArray: [5, 36, 66, 98, 128, 159, 189, 220, 252, 283],
+          xTicksFormatArray: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+        }
+        return xTicksObject
+      } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
+        var xTicksObject = {
+          xTicksValueArray: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70],
+          xTicksFormatArray: ['1950', '1955', '1960', '1965', '1970', '1975', '1980', '1985', '1990', '1995', '2000', '2005', '2010', '2015']
+        }
+        return xTicksObject
+      }
     }
   })
 })

@@ -59,7 +59,6 @@ define([
       })
       //  鼠标在comparisonview中点击选中barcode广播的事件
       Backbone.Events.on(Config.get('EVENTS')['SET_SELECT_BARCODE_EVENT'], function (event) {
-        console.log('SET_SELECT_BARCODE_EVENT')
         var barcodeTreeId = event.barcodeTreeId
         self.set_select_histogram(barcodeTreeId)
       })
@@ -148,37 +147,40 @@ define([
     get_selection_list: function () {
       var self = this
       var selectionList = []
-      //  记录不同日期的个数的对象
-      var dayRecordObj = {}
-      var selectionBarcodeObject = Variables.get('selectionBarcodeObject')
-      var selectItemNameArray = Variables.get('selectItemNameArray')
-      var dayIdArray = ['mon', 'tues', 'wedn', 'thurs', 'fri', 'satur', 'sun']
-      var dayNameArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-      for (var sI = 0; sI < selectItemNameArray.length; sI++) {
-        if (selectItemNameArray[sI].indexOf('-') !== -1) {
-          var date = selectItemNameArray[sI].split('-')[1].replaceAll('_', '-')
-        } else {
-          var date = selectItemNameArray[sI]
+      var currentDataSetName = Variables.get('currentDataSetName')
+      if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+        //  记录不同日期的个数的对象
+        var dayRecordObj = {}
+        var selectionBarcodeObject = Variables.get('selectionBarcodeObject')
+        var selectItemNameArray = Variables.get('selectItemNameArray')
+        var dayIdArray = ['mon', 'tues', 'wedn', 'thurs', 'fri', 'satur', 'sun']
+        var dayNameArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        for (var sI = 0; sI < selectItemNameArray.length; sI++) {
+          if (selectItemNameArray[sI].indexOf('-') !== -1) {
+            var date = selectItemNameArray[sI].split('-')[1].replaceAll('_', '-')
+          } else {
+            var date = selectItemNameArray[sI]
+          }
+          var curDay = new Date(date).getDay()
+          var dayItemId = dayIdArray[curDay]
+          var dayItemName = dayNameArray[curDay]
+          //  初始化selectionBarcodeObject
+          if (typeof (selectionBarcodeObject[dayItemId]) === 'undefined') {
+            selectionBarcodeObject[dayItemId] = [selectItemNameArray[sI]]
+          } else {
+            selectionBarcodeObject[dayItemId].push(selectItemNameArray[sI])
+          }
+          //  初始化dayObj
+          if (typeof (dayRecordObj[dayItemId]) === 'undefined') {
+            dayRecordObj[dayItemId] = {'dayId': dayItemId, 'dayNum': 1, 'dayName': dayItemName}
+          } else {
+            dayRecordObj[dayItemId].dayNum = dayRecordObj[dayItemId].dayNum + 1
+          }
         }
-        var curDay = new Date(date).getDay()
-        var dayItemId = dayIdArray[curDay]
-        var dayItemName = dayNameArray[curDay]
-        //  初始化selectionBarcodeObject
-        if (typeof (selectionBarcodeObject[dayItemId]) === 'undefined') {
-          selectionBarcodeObject[dayItemId] = [selectItemNameArray[sI]]
-        } else {
-          selectionBarcodeObject[dayItemId].push(selectItemNameArray[sI])
+        //  将dayRecordObj转换为selectionList
+        for (var item in dayRecordObj) {
+          selectionList.push(dayRecordObj[item])
         }
-        //  初始化dayObj
-        if (typeof (dayRecordObj[dayItemId]) === 'undefined') {
-          dayRecordObj[dayItemId] = {'dayId': dayItemId, 'dayNum': 1, 'dayName': dayItemName}
-        } else {
-          dayRecordObj[dayItemId].dayNum = dayRecordObj[dayItemId].dayNum + 1
-        }
-      }
-      //  将dayRecordObj转换为selectionList
-      for (var item in dayRecordObj) {
-        selectionList.push(dayRecordObj[item])
       }
       return selectionList
     },
@@ -298,56 +300,60 @@ define([
             self.remove_all_click_unhighlight()
           }
         })
-        for (var i = 0; i < 7; ++i) {
-          var day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-          icons.push({
-            title: day[i],
-            text: day[i][0],
-            id: day[i],
-            activeClass: 'active',
-            day: i,
-            click: function () {
-              var btn_day = this.day
-              var selectionArray = []
-              //  删除选中范围内的该天的barcodeTree
-              if (d3.select('#' + day[this.day]).classed('active')) {
-                d3.select(self.el).selectAll('.library-bar.unchanged-pre-click-highlight')
-                  .each(function (d, i) {
-                    var id = d3.select(this).attr('id')
-                    if (typeof(id) !== 'undefined') {
-                      var date = id.split('-')[1].replaceAll('_', '-')
-                      var cur_day = new Date(date).getDay()
-                      if (cur_day == btn_day) {
-                        d3.select(this).classed('click-unhighlight', true)
-                        d3.select(this).classed('pre-click-highlight', false)
-                        d3.select(this).classed('click-highlight', false)
-                        d3.select(this).style('fill', null)
-                        var unselectedItemsArray = []
-                        var itemId = d3.select(this).attr('id')
-                        unselectedItemsArray.push(itemId)
-                        self.unSelectBarItem(unselectedItemsArray)
+        //  在brush的选项按钮列表中增加星期的选择
+        var currentDataSetName = Variables.get('currentDataSetName')
+        if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+          for (var i = 0; i < 7; ++i) {
+            var day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            icons.push({
+              title: day[i],
+              text: day[i][0],
+              id: day[i],
+              activeClass: 'active',
+              day: i,
+              click: function () {
+                var btn_day = this.day
+                var selectionArray = []
+                //  删除选中范围内的该天的barcodeTree
+                if (d3.select('#' + day[this.day]).classed('active')) {
+                  d3.select(self.el).selectAll('.library-bar.unchanged-pre-click-highlight')
+                    .each(function (d, i) {
+                      var id = d3.select(this).attr('id')
+                      if (typeof(id) !== 'undefined') {
+                        var date = id.split('-')[1].replaceAll('_', '-')
+                        var cur_day = new Date(date).getDay()
+                        if (cur_day == btn_day) {
+                          d3.select(this).classed('click-unhighlight', true)
+                          d3.select(this).classed('pre-click-highlight', false)
+                          d3.select(this).classed('click-highlight', false)
+                          d3.select(this).style('fill', null)
+                          var unselectedItemsArray = []
+                          var itemId = d3.select(this).attr('id')
+                          unselectedItemsArray.push(itemId)
+                          self.unSelectBarItem(unselectedItemsArray)
+                        }
                       }
-                    }
-                  })
-                d3.select('#' + day[this.day]).classed('active', false)
-              } else if (!d3.select('#' + day[this.day]).classed('active')) {
-                //  增加选中范围内的该天的barcodeTree
-                d3.select(self.el).selectAll('.library-bar.unchanged-pre-click-highlight')
-                  .each(function (d, i) {
-                    var id = d3.select(this).attr('id')
-                    if (typeof(id) !== 'undefined') {
-                      var date = id.split('-')[1].replaceAll('_', '-')
-                      var cur_day = new Date(date).getDay()
-                      if (cur_day == btn_day) {
-                        d3.select(this).classed('pre-click-highlight', true)
+                    })
+                  d3.select('#' + day[this.day]).classed('active', false)
+                } else if (!d3.select('#' + day[this.day]).classed('active')) {
+                  //  增加选中范围内的该天的barcodeTree
+                  d3.select(self.el).selectAll('.library-bar.unchanged-pre-click-highlight')
+                    .each(function (d, i) {
+                      var id = d3.select(this).attr('id')
+                      if (typeof(id) !== 'undefined') {
+                        var date = id.split('-')[1].replaceAll('_', '-')
+                        var cur_day = new Date(date).getDay()
+                        if (cur_day == btn_day) {
+                          d3.select(this).classed('pre-click-highlight', true)
+                        }
                       }
-                    }
-                  })
-                self.brushSelectionItems()
-                d3.select('#' + day[this.day]).classed('active', true)
+                    })
+                  self.brushSelectionItems()
+                  d3.select('#' + day[this.day]).classed('active', true)
+                }
               }
-            }
-          })
+            })
+          }
         }
         var d3_extent = d3.select(self.el).select('.extent')
         var jquery_extent = $('.extent')
@@ -453,15 +459,26 @@ define([
     //  展示histogram视图中的tip
     show_tip: function (d) {
       var self = this
-      var barId = d.id
-      var date = barId.split('-')[1].replaceAll('_', '/')
-      var dayArray = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-      var barValue = d.y
-      var date = barId.split('-')[1].replaceAll('_', '-')
-      var curDay = new Date(date).getDay()
-      // var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
-      var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
-      histogramTip.show(tipValue, document.getElementById(barId))
+      var currentDataSetName = Variables.get('currentDataSetName')
+      if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+        //  当前为Library的数据集
+        var barId = d.id
+        var date = barId.split('-')[1].replaceAll('_', '/')
+        var dayArray = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        var barValue = d.y
+        var date = barId.split('-')[1].replaceAll('_', '-')
+        var curDay = new Date(date).getDay()
+        // var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
+        var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
+        histogramTip.show(tipValue, document.getElementById(barId))
+      } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
+        //  当前是NBA的数据集
+        var barId = d.id
+        var barValue = d.y
+        var yearRemoveTree = barId.replace('tree', '')
+        var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + "year:" + yearRemoveTree + ", num: " + Math.round(barValue) + "</span></span>"
+        histogramTip.show(tipValue, document.getElementById(barId))
+      }
       //  如果存在比较高的tooltip移动了位置, 将类别变成d3-histogram-tip-flip; 需要先将d3-histogram-tip-flip变成d3-histogram-tip
       $('.d3-histogram-tip-flip').removeClass('d3-histogram-tip-flip').addClass('d3-histogram-tip')
       flipTooltipLeft()

@@ -351,15 +351,19 @@ define([
           }
         }
       } else {
-        var rootCategoryNum = +rootCategory
+        var rootCategoryNum = rootCategory
         //  不能够找到该节点的情况下
         for (var bI = 1; bI < barcodeNodeAttrArray.length; bI++) {
-          var thisCategory = +barcodeNodeAttrArray[bI].category
+          var thisCategory = barcodeNodeAttrArray[bI].category
           if ((thisCategory != NaN) && (rootCategoryNum != NaN)) {
-            if (thisCategory > rootCategoryNum) {
+            if (self.is_first_category_bigger(thisCategory, rootCategoryNum)) {
               subtreeRootIndex = bI
               break
             }
+            // if (thisCategory > rootCategoryNum) {
+            //   subtreeRootIndex = bI
+            //   break
+            // }
           }
         }
         subtreeLength = 0
@@ -370,6 +374,27 @@ define([
       replacedNodeObj.subtreeRootIndex = subtreeRootIndex
       replacedNodeObj.subtreeLength = subtreeLength
       return replacedNodeObj
+    },
+    /**
+     * 判断两个category的数值的先后关系
+     */
+    is_first_category_bigger: function (later_category, former_category) {
+      later_category = later_category.toString()
+      former_category = former_category.toString()
+      var splitCharacter = window.split_character
+      var formerCategoryArray = former_category.split(splitCharacter)
+      var laterCategoryArray = later_category.split(splitCharacter)
+      //  如果length不同, 那么比较的准则明确, 哪一个数字的位数比较大, 那么这个数字就较大, 因为位数小的是因为前面有0
+      for (var fI = 0; fI < formerCategoryArray.length; fI++) {
+        if ((+formerCategoryArray[fI]) < (+laterCategoryArray[fI])) {
+          return true
+        } else if ((+formerCategoryArray[fI]) === (+laterCategoryArray[fI])) {
+          //  相等就继续下一轮的比较
+        } else {
+          break
+        }
+      }
+      return false
     },
     /**
      * 为alignedBarcode中的节点建立索引, 从而构成alignedBarcodeNodeAttrObj对象
@@ -2918,12 +2943,13 @@ define([
           }
         }
       } else {
-        var rootCategoryNum = +rootCategory
+        var rootCategoryNum = rootCategory
         //  不能够找到该节点的情况下
         for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-          var thisCategory = +barcodeNodeAttrArray[bI].category
+          var thisCategory = barcodeNodeAttrArray[bI].category
           if ((thisCategory != NaN) && (rootCategoryNum != NaN)) {
-            if (thisCategory > rootCategoryNum) {
+            // if (thisCategory > rootCategoryNum) {
+            if (self.is_first_category_bigger(thisCategory, rootCategoryNum)) {
               subtreeRootIndex = bI
               break
             }

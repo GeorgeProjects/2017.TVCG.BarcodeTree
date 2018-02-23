@@ -13,11 +13,23 @@ define([
       'NULL_SELECTION': -1,
       'DataSetCollection': {
         'LibraryTree_DailyName': 'DailyRecordTree',
+        'NBATeamTreeName': 'NBATeamTree',
+        //
         'LibraryTree_Name': 'RecordTree',
         'SignalTree_Name': 'SignalTree',
         'RepostingTree_Name': 'RepostingTree',
         'PhylogeneticTree_Name': 'PhylogeneticTree',
         'DirectoryTree_Name': 'DirectoryTree'
+      },
+      MISSED_NODE_CLASS: {
+        MISS_NODE_HIGHLIGHT: 'missed-node-highlight',
+        MISS_NODE_HIGHLIGHT_MIN_STROKE: 'missed-node-highlight_min-stroke',
+        MISS_NODE_HIGHLIGHT_MAX_STROKE: 'missed-node-highlight_max-stroke'
+      },
+      GENERAL_MISSED_NODE_CLASS: {
+        MISS_NODE_HIGHLIGHT: 'node-missed',
+        MISS_NODE_HIGHLIGHT_MIN_STROKE: 'node-missed_min-stroke',
+        MISS_NODE_HIGHLIGHT_MAX_STROKE: 'node-missed_max-stroke'
       },
       BARCODETREE_VIEW_SETTING: {
         ICON_WAIT_DURATION: 1000,// 需要将barcode变换完成之后再绘制icon, 所以时间是需要比bar
@@ -67,7 +79,7 @@ define([
         'SAME_NODE_COLOR': 'black'
       },
       'DEFAULT_SETTINGS': {
-        'default_dataset': 'DailyRecordTree',
+        'default_dataset': 'DailyRecordTree', //'DailyRecordTree', 'NBATeamTree'
         'default_mode': 'original',
         'compact_num': 5,
         'init_width': 1600,

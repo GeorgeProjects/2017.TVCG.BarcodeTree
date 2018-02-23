@@ -4,20 +4,20 @@
   "children": [
     {
       "num": 36,
-      "name": "600",
+      "name": "6_0_0",
       "children": [
         {
           "num": 3,
-          "name": "620",
+          "name": "6_2_0",
           "children": [
             {
               "num": 1,
-              "name": "624",
+              "name": "6_2_4",
               "categoryName": "Civil engineering"
             },
             {
               "num": 2,
-              "name": "620",
+              "name": "6_2_0",
               "categoryName": "Engineering & Applied operations"
             }
           ],
@@ -25,16 +25,16 @@
         },
         {
           "num": 20,
-          "name": "650",
+          "name": "6_5_0",
           "children": [
             {
               "num": 17,
-              "name": "658",
+              "name": "6_5_8",
               "categoryName": "General management"
             },
             {
               "num": 3,
-              "name": "659",
+              "name": "6_5_9",
               "categoryName": "Advertising & public relations"
             }
           ],
@@ -42,36 +42,36 @@
         },
         {
           "num": 13,
-          "name": "610",
+          "name": "6_1_0",
           "children": [
             {
               "num": 5,
-              "name": "610",
+              "name": "6_1_0",
               "categoryName": "Medical sciences; Medicine"
             },
             {
               "num": 1,
-              "name": "613",
+              "name": "6_1_3",
               "categoryName": "Personal health & safety"
             },
             {
               "num": 1,
-              "name": "612",
+              "name": "6_1_2",
               "categoryName": "Human physiology"
             },
             {
               "num": 2,
-              "name": "616",
+              "name": "6_1_6",
               "categoryName": "Diseases"
             },
             {
               "num": 1,
-              "name": "615",
+              "name": "6_1_5",
               "categoryName": "Pharmacology and therapeutics"
             },
             {
               "num": 3,
-              "name": "617",
+              "name": "6_1_7",
               "categoryName": "Surgery & related medical specialties"
             }
           ],
@@ -82,15 +82,15 @@
     },
     {
       "num": 13,
-      "name": "800",
+      "name": "8_0_0",
       "children": [
         {
           "num": 1,
-          "name": "890",
+          "name": "8_9_0",
           "children": [
             {
               "num": 1,
-              "name": "895",
+              "name": "8_9_5",
               "categoryName": "Literatures of East & Southeast Asia"
             }
           ],
@@ -98,16 +98,16 @@
         },
         {
           "num": 3,
-          "name": "800",
+          "name": "8_0_0",
           "children": [
             {
               "num": 1,
-              "name": "801",
+              "name": "8_0_1",
               "categoryName": "Philosophy & theory"
             },
             {
               "num": 2,
-              "name": "808",
+              "name": "8_0_8",
               "categoryName": "Rhetoric & collections of literature"
             }
           ],
@@ -115,16 +115,16 @@
         },
         {
           "num": 7,
-          "name": "820",
+          "name": "8_2_0",
           "children": [
             {
               "num": 6,
-              "name": "823",
+              "name": "8_2_3",
               "categoryName": "English fiction"
             },
             {
               "num": 1,
-              "name": "822",
+              "name": "8_2_2",
               "categoryName": "English drama"
             }
           ],
@@ -132,11 +132,11 @@
         },
         {
           "num": 1,
-          "name": "830",
+          "name": "8_3_0",
           "children": [
             {
               "num": 1,
-              "name": "834",
+              "name": "8_3_4",
               "categoryName": "German essays"
             }
           ],
@@ -144,11 +144,11 @@
         },
         {
           "num": 1,
-          "name": "840",
+          "name": "8_4_0",
           "children": [
             {
               "num": 1,
-              "name": "848",
+              "name": "8_4_8",
               "categoryName": "French miscellaneous writings"
             }
           ],
@@ -159,15 +159,15 @@
     },
     {
       "num": 116,
-      "name": "300",
+      "name": "3_0_0",
       "children": [
         {
           "num": 2,
-          "name": "370",
+          "name": "3_7_0",
           "children": [
             {
               "num": 2,
-              "name": "370",
+              "name": "3_7_0",
               "categoryName": "Education"
             }
           ],
@@ -175,26 +175,26 @@
         },
         {
           "num": 10,
-          "name": "330",
+          "name": "3_3_0",
           "children": [
             {
               "num": 1,
-              "name": "339",
+              "name": "3_3_9",
               "categoryName": "Macroeconomics & related topics"
             },
             {
               "num": 6,
-              "name": "332",
+              "name": "3_3_2",
               "categoryName": "Financial economics"
             },
             {
               "num": 2,
-              "name": "331",
+              "name": "3_3_1",
               "categoryName": "Labor economics"
             },
             {
               "num": 1,
-              "name": "333",
+              "name": "3_3_3",
               "categoryName": "Land economics"
             }
           ],
@@ -202,26 +202,26 @@
         },
         {
           "num": 9,
-          "name": "300",
+          "name": "3_0_0",
           "children": [
             {
               "num": 4,
-              "name": "306",
+              "name": "3_0_6",
               "categoryName": "Culture & institutions"
             },
             {
               "num": 1,
-              "name": "307",
+              "name": "3_0_7",
               "categoryName": "Communities"
             },
             {
               "num": 2,
-              "name": "302",
+              "name": "3_0_2",
               "categoryName": "Social interaction"
             },
             {
               "num": 2,
-              "name": "303",
+              "name": "3_0_3",
               "categoryName": "Social processes"
             }
           ],
@@ -229,21 +229,21 @@
         },
         {
           "num": 3,
-          "name": "360",
+          "name": "3_6_0",
           "children": [
             {
               "num": 1,
-              "name": "361",
+              "name": "3_6_1",
               "categoryName": "General social problems"
             },
             {
               "num": 1,
-              "name": "362",
+              "name": "3_6_2",
               "categoryName": "Social welfare problems & services"
             },
             {
               "num": 1,
-              "name": "363",
+              "name": "3_6_3",
               "categoryName": "Other social problems & services"
             }
           ],
@@ -251,21 +251,21 @@
         },
         {
           "num": 89,
-          "name": "340",
+          "name": "3_4_0",
           "children": [
             {
               "num": 43,
-              "name": "346",
+              "name": "3_4_6",
               "categoryName": "Private law"
             },
             {
               "num": 44,
-              "name": "347",
+              "name": "3_4_7",
               "categoryName": "Civil procedure & courts"
             },
             {
               "num": 2,
-              "name": "340",
+              "name": "3_4_0",
               "categoryName": "Law"
             }
           ],
@@ -273,16 +273,16 @@
         },
         {
           "num": 2,
-          "name": "320",
+          "name": "3_2_0",
           "children": [
             {
               "num": 1,
-              "name": "321",
+              "name": "3_2_1",
               "categoryName": "Systems of governments & states"
             },
             {
               "num": 1,
-              "name": "320",
+              "name": "3_2_0",
               "categoryName": "Political science"
             }
           ],
@@ -290,11 +290,11 @@
         },
         {
           "num": 1,
-          "name": "380",
+          "name": "3_8_0",
           "children": [
             {
               "num": 1,
-              "name": "384",
+              "name": "3_8_4",
               "categoryName": "Communications; Telecommunication"
             }
           ],
@@ -305,15 +305,15 @@
     },
     {
       "num": 7,
-      "name": "400",
+      "name": "4_0_0",
       "children": [
         {
           "num": 1,
-          "name": "400",
+          "name": "4_0_0",
           "children": [
             {
               "num": 1,
-              "name": "401",
+              "name": "4_0_1",
               "categoryName": "Philosophy & theory"
             }
           ],
@@ -321,11 +321,11 @@
         },
         {
           "num": 2,
-          "name": "420",
+          "name": "4_2_0",
           "children": [
             {
               "num": 2,
-              "name": "428",
+              "name": "4_2_8",
               "categoryName": "Standard English usage"
             }
           ],
@@ -333,11 +333,11 @@
         },
         {
           "num": 3,
-          "name": "490",
+          "name": "4_9_0",
           "children": [
             {
               "num": 3,
-              "name": "495",
+              "name": "4_9_5",
               "categoryName": "Languages of East & Southeast Asia"
             }
           ],
@@ -345,11 +345,11 @@
         },
         {
           "num": 1,
-          "name": "440",
+          "name": "4_4_0",
           "children": [
             {
               "num": 1,
-              "name": "448",
+              "name": "4_4_8",
               "categoryName": "Standard French usage"
             }
           ],
@@ -360,25 +360,25 @@
     },
     {
       "num": 10,
-      "name": "500",
+      "name": "5_0_0",
       "children": [
         {
           "num": 7,
-          "name": "570",
+          "name": "5_7_0",
           "children": [
             {
               "num": 3,
-              "name": "574",
+              "name": "5_7_4",
               "categoryName": "Not assigned or no longer used"
             },
             {
               "num": 2,
-              "name": "576",
+              "name": "5_7_6",
               "categoryName": "Genetics and evolution"
             },
             {
               "num": 2,
-              "name": "575",
+              "name": "5_7_5",
               "categoryName": "Physiological systems of plants"
             }
           ],
@@ -386,11 +386,11 @@
         },
         {
           "num": 2,
-          "name": "540",
+          "name": "5_4_0",
           "children": [
             {
               "num": 2,
-              "name": "541",
+              "name": "5_4_1",
               "categoryName": "Physical & theoretical chemistry"
             }
           ],
@@ -398,11 +398,11 @@
         },
         {
           "num": 1,
-          "name": "550",
+          "name": "5_5_0",
           "children": [
             {
               "num": 1,
-              "name": "551",
+              "name": "5_5_1",
               "categoryName": "Geology, hydrology, meteorology/li>"
             }
           ],
@@ -413,20 +413,20 @@
     },
     {
       "num": 7,
-      "name": "900",
+      "name": "9_0_0",
       "children": [
         {
           "num": 3,
-          "name": "940",
+          "name": "9_4_0",
           "children": [
             {
               "num": 1,
-              "name": "941",
+              "name": "9_4_1",
               "categoryName": "General history of Europe; British Isles"
             },
             {
               "num": 2,
-              "name": "942",
+              "name": "9_4_2",
               "categoryName": "General history of Europe; England & Wales"
             }
           ],
@@ -434,11 +434,11 @@
         },
         {
           "num": 2,
-          "name": "990",
+          "name": "9_9_0",
           "children": [
             {
               "num": 2,
-              "name": "994",
+              "name": "9_9_4",
               "categoryName": "General history of other areas; Australia"
             }
           ],
@@ -446,16 +446,16 @@
         },
         {
           "num": 2,
-          "name": "910",
+          "name": "9_1_0",
           "children": [
             {
               "num": 1,
-              "name": "914",
+              "name": "9_1_4",
               "categoryName": "Europe"
             },
             {
               "num": 1,
-              "name": "910",
+              "name": "9_1_0",
               "categoryName": "Geography & travel"
             }
           ],
@@ -466,25 +466,25 @@
     },
     {
       "num": 5,
-      "name": "100",
+      "name": "1_0_0",
       "children": [
         {
           "num": 5,
-          "name": "150",
+          "name": "1_5_0",
           "children": [
             {
               "num": 1,
-              "name": "152",
+              "name": "1_5_2",
               "categoryName": "Perception, movement, emotions, and drives"
             },
             {
               "num": 3,
-              "name": "155",
+              "name": "1_5_5",
               "categoryName": "Differential and developmental psychology"
             },
             {
               "num": 1,
-              "name": "150",
+              "name": "1_5_0",
               "categoryName": "Psychology"
             }
           ],
@@ -495,20 +495,20 @@
     },
     {
       "num": 10,
-      "name": "700",
+      "name": "7_0_0",
       "children": [
         {
           "num": 2,
-          "name": "790",
+          "name": "7_9_0",
           "children": [
             {
               "num": 1,
-              "name": "796",
+              "name": "7_9_6",
               "categoryName": "Athletic & outdoor sports & games"
             },
             {
               "num": 1,
-              "name": "792",
+              "name": "7_9_2",
               "categoryName": "Stage presentations"
             }
           ],
@@ -516,11 +516,11 @@
         },
         {
           "num": 1,
-          "name": "710",
+          "name": "7_1_0",
           "children": [
             {
               "num": 1,
-              "name": "711",
+              "name": "7_1_1",
               "categoryName": "Area planning (Civic art)"
             }
           ],
@@ -528,16 +528,16 @@
         },
         {
           "num": 5,
-          "name": "700",
+          "name": "7_0_0",
           "children": [
             {
               "num": 4,
-              "name": "709",
+              "name": "7_0_9",
               "categoryName": "Historical, areas, persons treatment"
             },
             {
               "num": 1,
-              "name": "704",
+              "name": "7_0_4",
               "categoryName": "Special topics"
             }
           ],
@@ -545,11 +545,11 @@
         },
         {
           "num": 1,
-          "name": "720",
+          "name": "7_2_0",
           "children": [
             {
               "num": 1,
-              "name": "720",
+              "name": "7_2_0",
               "categoryName": "Architecture"
             }
           ],
@@ -557,11 +557,11 @@
         },
         {
           "num": 1,
-          "name": "750",
+          "name": "7_5_0",
           "children": [
             {
               "num": 1,
-              "name": "759",
+              "name": "7_5_9",
               "categoryName": "Geographical, historical, areas, persons treatment"
             }
           ],
@@ -572,15 +572,15 @@
     },
     {
       "num": 8,
-      "name": "000",
+      "name": "0_0_0",
       "children": [
         {
           "num": 3,
-          "name": "070",
+          "name": "0_7_0",
           "children": [
             {
               "num": 3,
-              "name": "070",
+              "name": "0_7_0",
               "categoryName": "News media, journalism & publishing"
             }
           ],
@@ -588,21 +588,21 @@
         },
         {
           "num": 5,
-          "name": "000",
+          "name": "0_0_0",
           "children": [
             {
               "num": 2,
-              "name": "001",
+              "name": "0_0_1",
               "categoryName": "Knowledge"
             },
             {
               "num": 2,
-              "name": "005",
+              "name": "0_0_5",
               "categoryName": "Computer programming, programs & data"
             },
             {
               "num": 1,
-              "name": "006",
+              "name": "0_0_6",
               "categoryName": "Special computer methods"
             }
           ],

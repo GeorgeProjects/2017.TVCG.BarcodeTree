@@ -39,6 +39,7 @@ define([
     //  程序的默认状态, 由config中的变量控制
     start: function (viewWidth, viewHeight) {
       var self = this
+      console.log('data center start')
       self.init_dataset_mode(viewWidth, viewHeight)
       var histogramModel = self.histogramModel
       // //  获取category dataset 当鼠标mouseover的时候得到barcode的名称
@@ -684,6 +685,7 @@ define([
         var barcodeNodeAttrArray = treeNodeArrayObject[item]
         var alignedBarcodeNodeAttrArray = JSON.parse(JSON.stringify(barcodeNodeAttrArray))
         var originalTreeObj = originalTreeObjObject[item]
+        console.log('barcodeNodeAttrArray', barcodeNodeAttrArray)
         var barcodeModel = new BarcodeModel({
           'barcodeTreeId': item,
           'barcodeNodeAttrArray': barcodeNodeAttrArray,
@@ -741,22 +743,20 @@ define([
     request_histogram_handler: function (result) {
       var self = this
       var histogramModel = self.histogramModel
+      //  对于result中的fileInfo进行排序
       result.fileInfo = histogramModel.sort_higtogram_array_accord_time(result.fileInfo)
+      //  获得数据集中的最小值
       result.minValue = histogramModel.get_min_value(result.fileInfo)
+      //  获取数据集中的最大值
       result.maxValue = histogramModel.get_max_value(result.fileInfo)
       //  TODO 这个地方会修改成按照文件里面的属性决定scale的类型
       result.scaleType = 'linear'//'log'
-      //  y轴上的标注
-      var hundredNum = +Math.ceil((+result.maxValue) / 100)
-      var yTicksValueArray = []
-      for (var hI = 1; hI < hundredNum; hI++) {
-        yTicksValueArray.push(hI * 100)
-      }
-      result.yTicksValueArray = yTicksValueArray//[ 100, 1000, result.maxValue ]
-      result.yTicksFormatArray = yTicksValueArray//[ '0.1k', '1k', '6k' ]
+      result.yTicksValueArray = histogramModel.get_y_ticks_value(result.maxValue) //[ 100, 1000, result.maxValue ]
+      result.yTicksFormatArray = result.yTicksValueArray//[ '0.1k', '1k', '6k' ]
+      // console.log('result.yTicksValueArray', result.yTicksValueArray)
       //  x轴上的标注
-      result.xTicksValueArray = [5, 36, 66, 98, 128, 159, 189, 220, 252, 283]
-      result.xTicksFormatArray = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+      result.xTicksValueArray = histogramModel.get_x_ticks_object().xTicksValueArray
+      result.xTicksFormatArray = histogramModel.get_x_ticks_object().xTicksFormatArray
       result.className = 'barcodetree-class'
       //  设置读取数据的相应属性, maxDepth - 树的最大深度, fileInfo - 树的基本信息
       histogramModel.set('histogramDataObject', result)

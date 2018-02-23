@@ -639,6 +639,11 @@ define([
         var icicleNodeObject = barcodeCollection.get_max_barcode_node_width(node_id, node_level, alignedNodeObj)
         var icicleNodeX = icicleNodeObject.x
         var icicleNodeWidth = icicleNodeObject.width
+        if (icicleNodeWidth < 0) {
+          console.log('node_id', node_id)
+          console.log('node_level', node_level)
+          console.log('alignedNodeObj', alignedNodeObj)
+        }
         if (self.d3el.select('#barcode-container').select('#level-' + node_level).select('#' + node_id).empty()) {
           self.d3el.select('#barcode-container')
             .select('#level-' + node_level)

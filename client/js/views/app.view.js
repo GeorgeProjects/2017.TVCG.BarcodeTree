@@ -104,6 +104,7 @@ define([
         var viewWidth = $(document).width()
         var viewHeight = $(document).height()
         init_font_size(viewWidth)
+        init_missed_stroke_width()
         Datacenter.start(viewWidth, viewHeight)
         // window.barcodeHeight = barcodeHeight
         //  初始化选择颜色的工具
@@ -118,9 +119,30 @@ define([
       //  初始化视图中的font-size
       function init_font_size(view_width) {
         window.rem_px = view_width / 160
+        console.log('window.rem_px', window.rem_px)
         document.getElementsByTagName('html')[0].style.fontSize = window.rem_px + 'px';
       }
 
+      //  根据缺失的节点的stroke width, 决定缺失节点的class
+      function init_missed_stroke_width() {
+        var strokeWidthRatio = 0.05
+        var rem_px = window.rem_px
+        var strokeWidth = strokeWidthRatio * rem_px
+        console.log('strokeWidth', strokeWidth)
+        if (strokeWidth <= 1.5) {
+          //  将节点的class设置为min-stroke
+          Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
+          Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
+        } else if (strokeWidth >= 5) {
+          //  将节点的class设置为max-stroke
+          Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
+          Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
+        } else {
+          //  将节点的class设置为scale-stroke
+          Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
+          Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
+        }
+      }
       //  之前的设定是预先选择一定的barcode的histogram, 然后选择颜色就可以支持在预先选择的barcode上面增加颜色
       // function resetCurrentPreClick(color) {
       //   self.set_preclick_color(color)
@@ -168,6 +190,7 @@ define([
         var dateDifference = date1.getTime() - date2.getTime()
         return dateDifference
       }
+      window.split_character = ""
     },
     //  初始化控制barcode的参数的视图
     render_single_view: function () {

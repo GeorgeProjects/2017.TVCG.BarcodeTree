@@ -19,6 +19,10 @@ define([
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
         Node_Arrangement: false
       },
+      //  missed node class
+      missed_node_class: 'missed-node-highlight',
+      //  general_missed_node_class
+      general_missed_node_class: 'node-missed',
       //  当前的barcode是否经过了mouseover
       mouseover_state: true,
       //  barcode的高度与barcode的container的占比, barcodeHeight传递到服务器端需要增加一定的比例, 因为barcode的节点的上部分与下部分都是存在一定的间隙
@@ -55,7 +59,7 @@ define([
       barcodeNodeHeightMaxValue: 100,
       //  =======================================================
       //  当前渲染的barcode数据集
-      currentDataSetName: 'DailyRecordTree',
+      currentDataSetName: 'DailyRecordTree', //'DailyRecordTree',NBATeamTree
       //  当前的barcode比较视图的宽度
       barcodetreeViewWidth: 0,
       //  当前的barcode比较视图的高度

@@ -408,6 +408,7 @@ define([
         var barcodeHeight = treeDataModel.get('barcodeNodeHeight')
         var barcodePaddingTop = treeDataModel.get('barcodePaddingTop')
         var operationType = treeDataModel.get('operationType')
+        console.log('operationType', operationType)
         var containerWidth = $('#barcodetree-scrollpanel').width()
         var barcodePaddingLeft = self.barcodePaddingLeft
         var tip = window.tip
@@ -472,14 +473,19 @@ define([
         //   $('#tree-config-div').css({visibility: 'visible'})
         // })
         // .style('fill', barcodeRectBgColor)
-        if (barcodeTreeId.indexOf('-') !== -1) {
-          var barcodeTreeLabelYearMonthDday = barcodeTreeId.split('-')[1]
-          var barcodeTreeLabelMonthDday = barcodeTreeLabelYearMonthDday.substring(5, barcodeTreeLabelYearMonthDday.length).replaceAll('_', '/')
-        } else {
-          barcodeTreeLabelMonthDday = barcodeTreeId.split('_')[0]
-          barcodeTreeLabelMonthDday = barcodeTreeLabelMonthDday.toUpperCase()
-          var operationTypeLabel = operationType.substring(0, 1).toUpperCase()
-          barcodeTreeLabelMonthDday = barcodeTreeLabelMonthDday + "(" + operationTypeLabel + ")"
+        var currentDataSetName = Variables.get('currentDataSetName')
+        if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+          if (barcodeTreeId.indexOf('-') !== -1) {
+            var barcodeTreeLabelYearMonthDday = barcodeTreeId.split('-')[1]
+            var barcodeTreeLabelMonthDday = barcodeTreeLabelYearMonthDday.substring(5, barcodeTreeLabelYearMonthDday.length).replaceAll('_', '/')
+          } else {
+            barcodeTreeLabelMonthDday = barcodeTreeId.split('_')[0]
+            barcodeTreeLabelMonthDday = barcodeTreeLabelMonthDday.toUpperCase()
+            var operationTypeLabel = operationType.substring(0, 1).toUpperCase()
+            barcodeTreeLabelMonthDday = barcodeTreeLabelMonthDday + "(" + operationTypeLabel + ")"
+          }
+        } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
+          var barcodeTreeLabelMonthDday = barcodeTreeId.replace('tree', '')
         }
         //  barcode的label的位置的左边界是紧邻着barcode的右侧的label
         var barcodeLabelX = self.barcodeTextPaddingLeft
@@ -803,6 +809,7 @@ define([
       update_class_nodes_none: function () {
         var self = this
         var treeDataModel = self.model
+        var missed_node_class = Variables.get('missed_node_class')
         var barcodeTreeId = treeDataModel.get('barcodeTreeId')
         var barcodeHeight = treeDataModel.get('barcodeNodeHeight')
         var barcodeNodeHeight = barcodeHeight * 0.8
@@ -829,8 +836,8 @@ define([
           })
         barcodeNode.each(function (d, i) {
           var removedClassArray = []
-          if (d3.select(this).classed('missed-node-highlight')) {
-            removedClassArray.push('missed-node-highlight')
+          if (d3.select(this).classed(missed_node_class)) {
+            removedClassArray.push(missed_node_class)
           }
           if (d3.select(this).classed('selection-unhighlight')) {
             removedClassArray.push('selection-unhighlight')
@@ -1219,6 +1226,7 @@ define([
         var self = this
         var treeDataModel = self.model
         var classArray = []
+        var generalMissedNodeClass = Variables.get('general_missed_node_class')
         classArray.push('barcode-node')
         classArray.push('barcode-node-level-' + d.depth)
         if (d.existed) {
@@ -1228,10 +1236,10 @@ define([
             if (d.beyondAlign) {
               classArray.push('node-none')
             } else {
-              classArray.push('node-missed')
+              classArray.push(generalMissedNodeClass)
             }
           } else {
-            classArray.push('node-missed')
+            classArray.push(generalMissedNodeClass)
           }
         }
         if (d.compactAttr === Config.get('CONSTANT').TEMPLATE) {
@@ -1422,6 +1430,7 @@ define([
       update_unexisted_aligned_barcode_node: function (next_step_func) {
         var self = this
         var treeDataModel = self.model
+        var generalMissedNodeClass = Variables.get('general_missed_node_class')
         var barcodeTreeId = treeDataModel.get('barcodeTreeId')
         var barcodeHeight = treeDataModel.get('barcodeNodeHeight')
         var barcodeNodeHeight = barcodeHeight * 0.8
@@ -1440,7 +1449,7 @@ define([
         var currentDisplayMode = Variables.get('displayMode')
         if (currentDisplayMode === Config.get('CONSTANT').GLOBAL) {
           self.d3el.select('#barcode-container')
-            .selectAll('.node-missed')
+            .selectAll('.' + generalMissedNodeClass)
             .remove()
           return
         }
@@ -1885,8 +1894,9 @@ define([
         var treeDataModel = self.model
         var barcodeTreeId = treeDataModel.get('barcodeTreeId')
         var barcodeNodeColorArray = Variables.get('barcodeNodeColorArray')
+        var missed_node_class = Variables.get('missed_node_class')
         self.d3el.select('#' + nodeId)
-          .classed('missed-node-highlight', true)
+          .classed(missed_node_class, true)
           .classed('selection-unhighlight', false)
           .classed('unhighlight', false)
       }
@@ -2036,6 +2046,8 @@ define([
       class_name_handler: function (d) {
         var self = this
         var classArray = []
+        var generalMissedNodeClass = Variables.get('general_missed_node_class')
+        console.log('generalMissedNodeClass', generalMissedNodeClass)
         classArray.push('barcode-node')
         classArray.push('aligned-barcode-node')
         classArray.push('barcode-node-level-' + d.depth)
@@ -2046,10 +2058,10 @@ define([
             if (d.beyondAlign) {
               classArray.push('node-none')
             } else {
-              classArray.push('node-missed')
+              classArray.push(generalMissedNodeClass)
             }
           } else {
-            classArray.push('node-missed')
+            classArray.push(generalMissedNodeClass)
           }
         }
         return self.get_class_name(classArray)
@@ -2061,6 +2073,8 @@ define([
       padding_node_class_name_handler: function (d) {
         var self = this
         var classArray = []
+        var generalMissedNodeClass = Variables.get('general_missed_node_class')
+        console.log('generalMissedNodeClass', generalMissedNodeClass)
         classArray.push('barcode-node')
         classArray.push('aligned-barcode-node')
         classArray.push('barcode-node-level-' + d.depth)
@@ -2071,10 +2085,10 @@ define([
             if (d.beyondAlign) {
               classArray.push('node-none')
             } else {
-              classArray.push('node-missed')
+              classArray.push(generalMissedNodeClass)
             }
           } else {
-            classArray.push('node-missed')
+            classArray.push(generalMissedNodeClass)
           }
         }
         return self.get_class_name(classArray)
@@ -2206,6 +2220,7 @@ define([
         var self = this
         var treeDataModel = self.model
         var barcodeTreeId = treeDataModel.get('barcodeTreeId')
+        var missed_node_class = Variables.get('missed_node_class')
         if (typeof (eventView) === "undefined") {
           tip.hide()
         }
@@ -2229,7 +2244,7 @@ define([
         self.d3el.selectAll('.barcode-node').classed('unhighlight', false)
         self.d3el.selectAll('.stat-summary').classed('unhighlight', false)
         self.d3el.selectAll('.added-node-highlight').classed('added-node-highlight', false)
-        self.d3el.selectAll('.missed-node-highlight').classed('missed-node-highlight', false)
+        self.d3el.selectAll('.' + missed_node_class).classed(missed_node_class, false)
         d3.select('#barcodetree-svg').selectAll('.collapse-triangle.' + barcodeTreeId)
           .classed('sibling-highlight', false).classed('unhighlight', false)
         //  更新原始的barcodeTree以及superTree中选择的节点
@@ -3237,13 +3252,14 @@ define([
       node_click_handler: function (d, alignedLevel, finishAlignDeferObj) {
         var self = this
         var barcodeCollection = window.Datacenter.barcodeCollection
+        var generalMissedNodeClass = Variables.get('general_missed_node_class')
         var rootLevel = 0
         self.node_mouseout_handler()
         //  打开上方的supertree视图
         self.open_supertree_view()
         //  点击的是root节点之外的其他的节点, 那么进入上面的判断条件
         // if ((Variables.get('alignedLevel') === rootLevel)) {//!((d.category === 'root') &&
-        if (!d3.select(this.el).classed('node-missed')) {
+        if (!d3.select(this.el).classed(generalMissedNodeClass)) {
           //  model中的节点需要使用其他的model中的节点进行填充
           barcodeCollection.add_super_subtree(d.id, d.depth, d.category, alignedLevel, finishAlignDeferObj)
         }
@@ -3258,11 +3274,13 @@ define([
       node_unclick_handler: function (d, alignedLevel, finishRemoveAlignDeferObj) {
         var self = this
         var barcodeCollection = window.Datacenter.barcodeCollection
+        var generalMissedNodeClass = Variables.get('general_missed_node_class')
+        console.log('generalMissedNodeClass', generalMissedNodeClass)
         var rootLevel = 0
         self.node_mouseout_handler()
         //  点击的是root节点之外的其他的节点, 那么进入上面的判断条件
         // if ((Variables.get('alignedLevel') === rootLevel)) {//!((d.category === 'root') &&
-        if (!d3.select(this.el).classed('node-missed')) {
+        if (!d3.select(this.el).classed(generalMissedNodeClass)) {
           //  model中的节点需要使用其他的model中的节点进行填充
           barcodeCollection.remove_super_subtree(d.id, d.depth, d.category, alignedLevel, finishRemoveAlignDeferObj)
         }
@@ -3599,6 +3617,7 @@ define([
       add_missed_added_summary: function () {
         var self = this
         var treeDataModel = self.model
+        var missed_node_class = Variables.get('missed_node_class')
         var barcodeNodeHeight = +treeDataModel.get('barcodeNodeHeight')
         var barcodeComparisonHeight = barcodeNodeHeight * 0.6
         var summaryRectY = barcodeNodeHeight * 0.1
@@ -3612,7 +3631,7 @@ define([
         var barcodeNodeAttrArray = self.get_barcode_node_array()
         self.d3el.selectAll('.same-node-highlight').classed('same-node-highlight', false)
         self.d3el.selectAll('.added-node-highlight').classed('added-node-highlight', false)
-        self.d3el.selectAll('.missed-node-highlight').classed('missed-node-highlight', false)
+        self.d3el.selectAll('.' + missed_node_class).classed(missed_node_class, false)
         self.d3el.select('#barcode-container').selectAll('.stat-summary').remove()
         self.d3el.select('#barcode-container').selectAll('.add-miss-summary').remove()
         for (var aI = 0; aI < alignedComparisonResultArray.length; aI++) {
@@ -3651,8 +3670,9 @@ define([
         }
 
         function highlightMissedNodes(missedNodeIdArray) {
+          var missed_node_class = Variables.get('missed_node_class')
           for (var mI = 0; mI < missedNodeIdArray.length; mI++) {
-            self.d3el.select('#' + missedNodeIdArray[mI]).classed('missed-node-highlight', true)
+            self.d3el.select('#' + missedNodeIdArray[mI]).classed(missed_node_class, true)
           }
         }
 

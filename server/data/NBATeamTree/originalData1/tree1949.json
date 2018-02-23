@@ -1,0 +1,1493 @@
+{
+  "year": 1949,
+  "name": "root",
+  "categoryName": "root",
+  "children": [
+    {
+      "categoryName": "Eastern",
+      "children": [
+        {
+          "num": 73.1,
+          "categoryName": "Baltimore_Bullets_(1st)",
+          "children": [
+            {
+              "num": 14.4,
+              "categoryName": "Paul Hoffman",
+              "name": "1_5_5_0"
+            },
+            {
+              "num": 14,
+              "categoryName": "Ed Sadowski",
+              "name": "1_1_0_0"
+            },
+            {
+              "num": 9,
+              "categoryName": "Walt Budko",
+              "name": "0_6_2_0"
+            },
+            {
+              "num": 8.8,
+              "categoryName": "Blackie Towery",
+              "name": "1_8_3_0"
+            },
+            {
+              "num": 8.1,
+              "categoryName": "Johnny Ezersky",
+              "name": "0_6_11_0"
+            },
+            {
+              "num": 6.9,
+              "categoryName": "Joe Dolhon",
+              "name": "0_6_24_0"
+            },
+            {
+              "num": 6.2,
+              "categoryName": "Whitey Von Nieda",
+              "name": "1_15_19_0"
+            },
+            {
+              "num": 6.2,
+              "categoryName": "Tommy Byrnes",
+              "name": "1_15_30_0"
+            },
+            {
+              "num": 5.3,
+              "categoryName": "Ron Livingstone",
+              "name": "0_6_27_0"
+            },
+            {
+              "num": 5.2,
+              "categoryName": "Buddy Jeannette",
+              "name": "1_5_3_0"
+            },
+            {
+              "num": 4.5,
+              "categoryName": "Les Pugh",
+              "name": "0_6_28_0"
+            },
+            {
+              "num": 3.6,
+              "categoryName": "Andy O'Donnell",
+              "name": "0_6_29_0"
+            },
+            {
+              "num": 3.5,
+              "categoryName": "Freddie Lewis",
+              "name": "1_31_7_8"
+            },
+            {
+              "num": 3.4,
+              "categoryName": "Howie Janotta",
+              "name": "0_6_30_0"
+            },
+            {
+              "num": 3.4,
+              "categoryName": "Marv Schatzman",
+              "name": "0_6_31_0"
+            },
+            {
+              "num": 3.4,
+              "categoryName": "Bob Tough",
+              "name": "1_16_10_0"
+            },
+            {
+              "num": 3,
+              "categoryName": "George Feigenbaum",
+              "name": "1_17_29_0"
+            },
+            {
+              "num": 1.7,
+              "categoryName": "Paul Cloyd",
+              "name": "1_16_14_0"
+            },
+            {
+              "num": 1.3,
+              "categoryName": "John Mandic",
+              "name": "1_8_15_0"
+            },
+            {
+              "num": 1.3,
+              "categoryName": "Mike McCarron",
+              "name": "2_4_13_0"
+            },
+            {
+              "num": 0.8,
+              "categoryName": "Paul Gordon",
+              "name": "0_6_37_0"
+            },
+            {
+              "num": 0.5,
+              "categoryName": "Dick Triptow",
+              "name": "1_7_13_0"
+            },
+            {
+              "num": 0,
+              "categoryName": "Lee Knorek",
+              "name": "0_6_39_0"
+            }
+          ],
+          "name": "1_5_0_0"
+        },
+        {
+          "num": 79.7,
+          "categoryName": "Boston_Celtics",
+          "children": [
+            {
+              "num": 11.1,
+              "categoryName": "Bob Kinney",
+              "name": "1_7_10_0"
+            },
+            {
+              "num": 10.2,
+              "categoryName": "Sonny Hertzberg",
+              "name": "1_6_4_0"
+            },
+            {
+              "num": 9.7,
+              "categoryName": "George Kaftan",
+              "name": "0_6_71_0"
+            },
+            {
+              "num": 8.9,
+              "categoryName": "Ed Leede",
+              "name": "0_0_48_0"
+            },
+            {
+              "num": 8.8,
+              "categoryName": "Tony Lavelli",
+              "name": "0_1_43_0"
+            },
+            {
+              "num": 8.8,
+              "categoryName": "Howie Shannon",
+              "name": "0_3_32_0"
+            },
+            {
+              "num": 8.2,
+              "categoryName": "Gene Englund",
+              "name": "1_15_8_0"
+            },
+            {
+              "num": 7.5,
+              "categoryName": "Brady Walker",
+              "name": "0_6_46_0"
+            },
+            {
+              "num": 6.7,
+              "categoryName": "Bob Doll",
+              "name": "1_4_2_0"
+            },
+            {
+              "num": 6.7,
+              "categoryName": "Johnny Ezersky",
+              "name": "0_6_11_0"
+            },
+            {
+              "num": 6,
+              "categoryName": "George Nostrand",
+              "name": "2_0_10_0"
+            },
+            {
+              "num": 4.8,
+              "categoryName": "Jim Seminoff",
+              "name": "1_0_5_0"
+            },
+            {
+              "num": 4.8,
+              "categoryName": "Dermie O'Connell",
+              "name": "2_4_7_0"
+            },
+            {
+              "num": 4.6,
+              "categoryName": "John Mahnken",
+              "name": "2_1_13_0"
+            },
+            {
+              "num": 3.5,
+              "categoryName": "Hoot Gibson",
+              "name": "1_16_7_0"
+            },
+            {
+              "num": 0.8,
+              "categoryName": "Joe Mullaney",
+              "name": "0_0_55_0"
+            },
+            {
+              "num": 0.7,
+              "categoryName": "Art Spector",
+              "name": "0_0_4_0"
+            }
+          ],
+          "name": "0_13_0_0"
+        },
+        {
+          "num": 80.7,
+          "categoryName": "New_York_Knicks",
+          "children": [
+            {
+              "num": 15.4,
+              "categoryName": "Carl Braun",
+              "name": "0_1_20_0"
+            },
+            {
+              "num": 11.8,
+              "categoryName": "Harry Gallatin",
+              "name": "1_20_2_0"
+            },
+            {
+              "num": 11.3,
+              "categoryName": "Connie Simmons",
+              "name": "1_10_36_0"
+            },
+            {
+              "num": 10.4,
+              "categoryName": "Vince Boryla",
+              "name": "0_1_35_0"
+            },
+            {
+              "num": 10,
+              "categoryName": "Ernie Vandeweghe",
+              "name": "0_1_36_0"
+            },
+            {
+              "num": 8.6,
+              "categoryName": "Dick McGuire",
+              "name": "1_20_5_0"
+            },
+            {
+              "num": 5.6,
+              "categoryName": "Harry Donovan",
+              "name": "0_1_38_0"
+            },
+            {
+              "num": 5.2,
+              "categoryName": "Tex Ritter",
+              "name": "0_1_28_0"
+            },
+            {
+              "num": 4.6,
+              "categoryName": "Ray Lumpp",
+              "name": "1_8_2_0"
+            },
+            {
+              "num": 3.8,
+              "categoryName": "Paul Noel",
+              "name": "1_10_15_0"
+            },
+            {
+              "num": 3.7,
+              "categoryName": "B. Van Breda Kolff",
+              "name": "0_1_17_0"
+            },
+            {
+              "num": 2,
+              "categoryName": "Ed Bartels",
+              "name": "1_12_10_0"
+            },
+            {
+              "num": 1.8,
+              "categoryName": "Gene James",
+              "name": "0_6_50_0"
+            }
+          ],
+          "name": "0_13_2_0"
+        },
+        {
+          "num": 73.3,
+          "categoryName": "Philadelphia_Warriors",
+          "children": [
+            {
+              "num": 14.2,
+              "categoryName": "Joe Fulks",
+              "name": "0_2_0_0"
+            },
+            {
+              "num": 13.5,
+              "categoryName": "Vern Gardner",
+              "name": "0_2_21_0"
+            },
+            {
+              "num": 9.6,
+              "categoryName": "Ron Livingstone",
+              "name": "0_6_27_0"
+            },
+            {
+              "num": 9,
+              "categoryName": "George Senesky",
+              "name": "0_2_4_0"
+            },
+            {
+              "num": 8.8,
+              "categoryName": "Leo Mogus",
+              "name": "1_8_0_0"
+            },
+            {
+              "num": 8.6,
+              "categoryName": "Ed Sadowski",
+              "name": "1_1_0_0"
+            },
+            {
+              "num": 7,
+              "categoryName": "Chink Crossin",
+              "name": "0_2_15_0"
+            },
+            {
+              "num": 4.6,
+              "categoryName": "Jerry Fleishman",
+              "name": "0_2_6_0"
+            },
+            {
+              "num": 4.2,
+              "categoryName": "Nelson Bobb",
+              "name": "0_2_24_0"
+            },
+            {
+              "num": 4.2,
+              "categoryName": "Jake Bornheimer",
+              "name": "0_2_14_0"
+            },
+            {
+              "num": 3.4,
+              "categoryName": "Freddie Lewis",
+              "name": "1_31_7_8"
+            },
+            {
+              "num": 2.4,
+              "categoryName": "Charlie Parsley",
+              "name": "0_2_26_0"
+            },
+            {
+              "num": 2.2,
+              "categoryName": "Johnny Payak",
+              "name": "1_17_25_0"
+            },
+            {
+              "num": 1.8,
+              "categoryName": "Jerry Rullo",
+              "name": "1_5_17_0"
+            },
+            {
+              "num": 1.7,
+              "categoryName": "Mike Novak",
+              "name": "2_3_12_0"
+            },
+            {
+              "num": 1.6,
+              "categoryName": "Jim Nolan",
+              "name": "0_2_29_0"
+            },
+            {
+              "num": 1.1,
+              "categoryName": "Al Guokas",
+              "name": "1_12_8_0"
+            }
+          ],
+          "name": "0_2_0_0"
+        },
+        {
+          "num": 84.9,
+          "categoryName": "Syracuse_Nationals",
+          "children": [
+            {
+              "num": 16.8,
+              "categoryName": "Dolph Schayes",
+              "name": "0_7_0_0"
+            },
+            {
+              "num": 10.9,
+              "categoryName": "Bill Gabor",
+              "name": "0_7_1_0"
+            },
+            {
+              "num": 10.2,
+              "categoryName": "Al Cervi",
+              "name": "0_7_2_0"
+            },
+            {
+              "num": 8.6,
+              "categoryName": "George Ratkovicz",
+              "name": "1_17_21_0"
+            },
+            {
+              "num": 7.7,
+              "categoryName": "Paul Seymour",
+              "name": "1_5_10_0"
+            },
+            {
+              "num": 7.5,
+              "categoryName": "Alex Hannum",
+              "name": "1_18_9_0"
+            },
+            {
+              "num": 7.4,
+              "categoryName": "Johnny Macknowski",
+              "name": "0_7_6_0"
+            },
+            {
+              "num": 7.2,
+              "categoryName": "Ed Peterson",
+              "name": "1_15_26_0"
+            },
+            {
+              "num": 5.5,
+              "categoryName": "Andrew Levane",
+              "name": "1_17_31_0"
+            },
+            {
+              "num": 5.2,
+              "categoryName": "Ray Corley",
+              "name": "1_15_31_0"
+            },
+            {
+              "num": 3.2,
+              "categoryName": "Leroy Chollet",
+              "name": "0_7_10_0"
+            }
+          ],
+          "name": "0_7_0_0"
+        },
+        {
+          "num": 76.5,
+          "categoryName": "Washington_Capitols",
+          "children": [
+            {
+              "num": 14.9,
+              "categoryName": "Don Otten",
+              "name": "1_17_0_0"
+            },
+            {
+              "num": 13.1,
+              "categoryName": "Jack Nichols",
+              "name": "1_17_20_0"
+            },
+            {
+              "num": 13,
+              "categoryName": "Fred Scolari",
+              "name": "1_7_41_0"
+            },
+            {
+              "num": 9.3,
+              "categoryName": "Bones McKinney",
+              "name": "1_6_2_0"
+            },
+            {
+              "num": 9,
+              "categoryName": "Chick Reiser",
+              "name": "1_5_1_0"
+            },
+            {
+              "num": 8.1,
+              "categoryName": "Bob Feerick",
+              "name": "1_6_0_0"
+            },
+            {
+              "num": 7,
+              "categoryName": "Dick O'Keefe",
+              "name": "1_6_7_0"
+            },
+            {
+              "num": 6.3,
+              "categoryName": "Johnny Norlander",
+              "name": "1_6_3_0"
+            },
+            {
+              "num": 6.1,
+              "categoryName": "Chuck Gilmur",
+              "name": "1_0_9_0"
+            },
+            {
+              "num": 4.8,
+              "categoryName": "Chick Halbert",
+              "name": "1_0_1_0"
+            },
+            {
+              "num": 4.4,
+              "categoryName": "Leo Katkaveck",
+              "name": "0_5_20_0"
+            },
+            {
+              "num": 3.3,
+              "categoryName": "Dick Schulz",
+              "name": "1_15_15_0"
+            },
+            {
+              "num": 2.8,
+              "categoryName": "John Mandic",
+              "name": "1_8_15_0"
+            },
+            {
+              "num": 1.6,
+              "categoryName": "Hook Dillon",
+              "name": "0_5_23_0"
+            }
+          ],
+          "name": "1_6_0_0"
+        }
+      ],
+      "name": "0_0_0_0",
+      "num": 468.20000000000005
+    },
+    {
+      "categoryName": "Central",
+      "children": [
+        {
+          "num": 78.7,
+          "categoryName": "Chicago_Stags",
+          "children": [
+            {
+              "num": 16.4,
+              "categoryName": "Max Zaslofsky",
+              "name": "2_0_0_0"
+            },
+            {
+              "num": 11.7,
+              "categoryName": "Andy Phillip",
+              "name": "2_0_1_0"
+            },
+            {
+              "num": 10.5,
+              "categoryName": "Odie Spears",
+              "name": "2_0_2_0"
+            },
+            {
+              "num": 8.1,
+              "categoryName": "Kleggie Hermsen",
+              "name": "2_0_3_0"
+            },
+            {
+              "num": 7.3,
+              "categoryName": "Stan Miasek",
+              "name": "2_0_4_0"
+            },
+            {
+              "num": 6.7,
+              "categoryName": "Frank Kudelka",
+              "name": "2_0_5_0"
+            },
+            {
+              "num": 6.5,
+              "categoryName": "Leo Barnhorst",
+              "name": "2_0_6_0"
+            },
+            {
+              "num": 5.4,
+              "categoryName": "Kenny Rollins",
+              "name": "2_0_7_0"
+            },
+            {
+              "num": 5.1,
+              "categoryName": "Ed Mikan",
+              "name": "2_3_11_0"
+            },
+            {
+              "num": 3.6,
+              "categoryName": "Joe Graboski",
+              "name": "2_0_9_0"
+            },
+            {
+              "num": 2.6,
+              "categoryName": "George Nostrand",
+              "name": "2_0_10_0"
+            },
+            {
+              "num": 1.9,
+              "categoryName": "Joe Bradley",
+              "name": "2_0_11_0"
+            },
+            {
+              "num": 1,
+              "categoryName": "Robert Hahn",
+              "name": "2_0_12_0"
+            }
+          ],
+          "name": "2_0_0_0"
+        },
+        {
+          "num": 79.3,
+          "categoryName": "Fort_Wayne_Pistons",
+          "children": [
+            {
+              "num": 14.3,
+              "categoryName": "Fred Schaus",
+              "name": "2_1_0_0"
+            },
+            {
+              "num": 10.6,
+              "categoryName": "Charlie Black",
+              "name": "2_1_1_0"
+            },
+            {
+              "num": 9.3,
+              "categoryName": "Bob Carpenter",
+              "name": "2_1_2_0"
+            },
+            {
+              "num": 8.5,
+              "categoryName": "Howie Schultz",
+              "name": "2_1_3_0"
+            },
+            {
+              "num": 7.9,
+              "categoryName": "Ralph Johnson",
+              "name": "2_1_4_0"
+            },
+            {
+              "num": 7.7,
+              "categoryName": "Bob Harris",
+              "name": "2_1_5_0"
+            },
+            {
+              "num": 7.6,
+              "categoryName": "Duane Klueh",
+              "name": "2_1_6_0"
+            },
+            {
+              "num": 7.3,
+              "categoryName": "Curly Armstrong",
+              "name": "2_1_7_0"
+            },
+            {
+              "num": 7.1,
+              "categoryName": "Jack Kerris",
+              "name": "2_1_8_0"
+            },
+            {
+              "num": 6.9,
+              "categoryName": "Leo Klier",
+              "name": "2_1_9_0"
+            },
+            {
+              "num": 6.1,
+              "categoryName": "John Oldham",
+              "name": "2_1_10_0"
+            },
+            {
+              "num": 5.6,
+              "categoryName": "Richie Niemiera",
+              "name": "2_1_11_0"
+            },
+            {
+              "num": 4.9,
+              "categoryName": "Bill Henry",
+              "name": "2_1_12_0"
+            },
+            {
+              "num": 3.5,
+              "categoryName": "John Mahnken",
+              "name": "2_1_13_0"
+            },
+            {
+              "num": 2.3,
+              "categoryName": "Clint Wager",
+              "name": "2_1_14_0"
+            },
+            {
+              "num": 0.9,
+              "categoryName": "Jerry Nagel",
+              "name": "2_1_15_0"
+            }
+          ],
+          "name": "2_1_0_0"
+        },
+        {
+          "num": 84.1,
+          "categoryName": "Minneapolis_Lakers",
+          "children": [
+            {
+              "num": 27.4,
+              "categoryName": "George Mikan",
+              "name": "2_2_0_0"
+            },
+            {
+              "num": 14.7,
+              "categoryName": "Jim Pollard",
+              "name": "2_2_1_0"
+            },
+            {
+              "num": 11.6,
+              "categoryName": "Vern Mikkelsen",
+              "name": "2_2_2_0"
+            },
+            {
+              "num": 5.4,
+              "categoryName": "Arnie Ferrin",
+              "name": "2_2_3_0"
+            },
+            {
+              "num": 5.1,
+              "categoryName": "Herm Schaefer",
+              "name": "2_2_4_0"
+            },
+            {
+              "num": 4.7,
+              "categoryName": "Don Carlson",
+              "name": "2_2_5_0"
+            },
+            {
+              "num": 4.5,
+              "categoryName": "Bob Harrison",
+              "name": "2_2_6_0"
+            },
+            {
+              "num": 4,
+              "categoryName": "Slater Martin",
+              "name": "2_2_7_0"
+            },
+            {
+              "num": 3.9,
+              "categoryName": "Tony Jaros",
+              "name": "2_2_8_0"
+            },
+            {
+              "num": 3.4,
+              "categoryName": "Paul Walther",
+              "name": "2_2_9_0"
+            },
+            {
+              "num": 2.7,
+              "categoryName": "Gene Stump",
+              "name": "2_2_10_0"
+            },
+            {
+              "num": 2.6,
+              "categoryName": "Billy Hassett",
+              "name": "2_2_11_0"
+            },
+            {
+              "num": 2.6,
+              "categoryName": "Bud Grant",
+              "name": "2_2_12_0"
+            },
+            {
+              "num": 2,
+              "categoryName": "Normie Glick",
+              "name": "2_2_13_0"
+            }
+          ],
+          "name": "2_2_0_0"
+        },
+        {
+          "num": 82.4,
+          "categoryName": "Rochester_Royals",
+          "children": [
+            {
+              "num": 14,
+              "categoryName": "Bob Davies",
+              "name": "2_3_0_0"
+            },
+            {
+              "num": 11.8,
+              "categoryName": "Bobby Wanzer",
+              "name": "2_3_1_0"
+            },
+            {
+              "num": 10.1,
+              "categoryName": "Arnie Risen",
+              "name": "2_3_2_0"
+            },
+            {
+              "num": 9,
+              "categoryName": "Bill Calhoun",
+              "name": "2_3_3_0"
+            },
+            {
+              "num": 8.7,
+              "categoryName": "Jack Coleman",
+              "name": "2_3_4_0"
+            },
+            {
+              "num": 8.2,
+              "categoryName": "Red Holzman",
+              "name": "2_3_5_0"
+            },
+            {
+              "num": 7.3,
+              "categoryName": "Arnie Johnson",
+              "name": "2_3_6_0"
+            },
+            {
+              "num": 6,
+              "categoryName": "Fran Curran",
+              "name": "2_3_7_0"
+            },
+            {
+              "num": 4.9,
+              "categoryName": "Price Brookfield",
+              "name": "2_3_8_0"
+            },
+            {
+              "num": 4.6,
+              "categoryName": "Andy Duncan",
+              "name": "2_3_9_0"
+            },
+            {
+              "num": 3.7,
+              "categoryName": "Pep Saul",
+              "name": "2_3_10_0"
+            },
+            {
+              "num": 3.7,
+              "categoryName": "Ed Mikan",
+              "name": "2_3_11_0"
+            },
+            {
+              "num": 0.6,
+              "categoryName": "Mike Novak",
+              "name": "2_3_12_0"
+            }
+          ],
+          "name": "2_3_0_0"
+        },
+        {
+          "num": 73.7,
+          "categoryName": "St._Louis_Bombers",
+          "children": [
+            {
+              "num": 16.1,
+              "categoryName": "Ed Macauley",
+              "name": "2_4_0_0"
+            },
+            {
+              "num": 13.7,
+              "categoryName": "Belus Smawley",
+              "name": "2_4_1_0"
+            },
+            {
+              "num": 12.2,
+              "categoryName": "John Logan",
+              "name": "2_4_2_0"
+            },
+            {
+              "num": 11.8,
+              "categoryName": "Red Rocha",
+              "name": "2_4_3_0"
+            },
+            {
+              "num": 7,
+              "categoryName": "Ariel Maughan",
+              "name": "2_4_4_0"
+            },
+            {
+              "num": 6.9,
+              "categoryName": "Mike Todorovich",
+              "name": "2_4_5_0"
+            },
+            {
+              "num": 5.5,
+              "categoryName": "Easy Parham",
+              "name": "2_4_6_0"
+            },
+            {
+              "num": 3.8,
+              "categoryName": "Dermie O'Connell",
+              "name": "2_4_7_0"
+            },
+            {
+              "num": 2.7,
+              "categoryName": "Bill Roberts",
+              "name": "2_4_8_0"
+            },
+            {
+              "num": 2.4,
+              "categoryName": "Don Putman",
+              "name": "2_4_9_0"
+            },
+            {
+              "num": 2.2,
+              "categoryName": "Mac Otten",
+              "name": "2_4_10_0"
+            },
+            {
+              "num": 2.1,
+              "categoryName": "D.C. Wilcutt",
+              "name": "2_4_11_0"
+            },
+            {
+              "num": 1.9,
+              "categoryName": "Johnny Orr",
+              "name": "2_4_12_0"
+            },
+            {
+              "num": 1,
+              "categoryName": "Mike McCarron",
+              "name": "2_4_13_0"
+            }
+          ],
+          "name": "2_4_0_0"
+        }
+      ],
+      "name": "2_0_0_0",
+      "num": 398.2
+    },
+    {
+      "categoryName": "Western",
+      "children": [
+        {
+          "num": 87.3,
+          "categoryName": "Anderson_Packers",
+          "children": [
+            {
+              "num": 17.8,
+              "categoryName": "Frankie Brian",
+              "name": "1_15_22_0"
+            },
+            {
+              "num": 11.8,
+              "categoryName": "Bill Closs",
+              "name": "1_11_1_0"
+            },
+            {
+              "num": 10.7,
+              "categoryName": "John Hargis",
+              "name": "1_15_33_0"
+            },
+            {
+              "num": 9.9,
+              "categoryName": "Milo Komenich",
+              "name": "1_11_3_0"
+            },
+            {
+              "num": 9.6,
+              "categoryName": "Ralph Johnson",
+              "name": "2_1_4_0"
+            },
+            {
+              "num": 9.6,
+              "categoryName": "Charlie Black",
+              "name": "2_1_1_0"
+            },
+            {
+              "num": 9.1,
+              "categoryName": "Ed Stanczak",
+              "name": "1_11_6_0"
+            },
+            {
+              "num": 8.1,
+              "categoryName": "Howie Schultz",
+              "name": "2_1_3_0"
+            },
+            {
+              "num": 7.8,
+              "categoryName": "Rollie Seltz",
+              "name": "1_11_8_0"
+            },
+            {
+              "num": 5.2,
+              "categoryName": "Richie Niemiera",
+              "name": "2_1_11_0"
+            },
+            {
+              "num": 4.6,
+              "categoryName": "Walt Kirk",
+              "name": "1_17_3_0"
+            },
+            {
+              "num": 4.5,
+              "categoryName": "Frank Gates",
+              "name": "1_11_11_0"
+            },
+            {
+              "num": 3.5,
+              "categoryName": "Jake Carter",
+              "name": "1_12_12_0"
+            },
+            {
+              "num": 3.3,
+              "categoryName": "Red Owens",
+              "name": "1_17_7_0"
+            },
+            {
+              "num": 2,
+              "categoryName": "Jack Smiley",
+              "name": "1_16_6_0"
+            },
+            {
+              "num": 1,
+              "categoryName": "Murray Mitchell",
+              "name": "1_11_15_0"
+            }
+          ],
+          "name": "1_11_0_0"
+        },
+        {
+          "num": 77.7,
+          "categoryName": "Denver_Nuggets_(1st)",
+          "children": [
+            {
+              "num": 17.3,
+              "categoryName": "Kenny Sailors",
+              "name": "1_12_0_0"
+            },
+            {
+              "num": 13.6,
+              "categoryName": "Dillard Crocker",
+              "name": "1_17_6_0"
+            },
+            {
+              "num": 11.7,
+              "categoryName": "Bob Brown",
+              "name": "1_12_2_0"
+            },
+            {
+              "num": 10,
+              "categoryName": "Duane Klueh",
+              "name": "2_1_6_0"
+            },
+            {
+              "num": 9.6,
+              "categoryName": "Floyd Volker",
+              "name": "1_13_11_0"
+            },
+            {
+              "num": 9.6,
+              "categoryName": "Jack Toomay",
+              "name": "1_12_5_0"
+            },
+            {
+              "num": 8.1,
+              "categoryName": "Jimmy Darden",
+              "name": "1_12_6_0"
+            },
+            {
+              "num": 5.1,
+              "categoryName": "Jack Cotton",
+              "name": "1_12_7_0"
+            },
+            {
+              "num": 4.8,
+              "categoryName": "Al Guokas",
+              "name": "1_12_8_0"
+            },
+            {
+              "num": 4.7,
+              "categoryName": "Bob Royer",
+              "name": "1_12_9_0"
+            },
+            {
+              "num": 4.5,
+              "categoryName": "Ed Bartels",
+              "name": "1_12_10_0"
+            },
+            {
+              "num": 4.3,
+              "categoryName": "Bill Herman",
+              "name": "1_12_11_0"
+            },
+            {
+              "num": 3.4,
+              "categoryName": "Jake Carter",
+              "name": "1_12_12_0"
+            },
+            {
+              "num": 1.7,
+              "categoryName": "Earl Dodd",
+              "name": "1_12_13_0"
+            },
+            {
+              "num": 1.5,
+              "categoryName": "Jim Browne",
+              "name": "1_12_14_0"
+            }
+          ],
+          "name": "1_12_0_0"
+        },
+        {
+          "num": 85.9,
+          "categoryName": "Indianapolis_Olympians",
+          "children": [
+            {
+              "num": 23.4,
+              "categoryName": "Alex Groza",
+              "name": "1_13_0_0"
+            },
+            {
+              "num": 14.9,
+              "categoryName": "Ralph Beard",
+              "name": "1_13_1_0"
+            },
+            {
+              "num": 12.5,
+              "categoryName": "Wah Wah Jones",
+              "name": "1_13_2_0"
+            },
+            {
+              "num": 10.3,
+              "categoryName": "Bruce Hale",
+              "name": "1_13_3_0"
+            },
+            {
+              "num": 7,
+              "categoryName": "Paul Walther",
+              "name": "2_2_9_0"
+            },
+            {
+              "num": 6.1,
+              "categoryName": "Joe Holland",
+              "name": "1_13_5_0"
+            },
+            {
+              "num": 5.7,
+              "categoryName": "Cliff Barker",
+              "name": "1_13_6_0"
+            },
+            {
+              "num": 5.6,
+              "categoryName": "Mal McMullen",
+              "name": "1_13_7_0"
+            },
+            {
+              "num": 3.9,
+              "categoryName": "Marshall Hawkins",
+              "name": "1_13_8_0"
+            },
+            {
+              "num": 3.5,
+              "categoryName": "Carl Shaeffer",
+              "name": "1_13_9_0"
+            },
+            {
+              "num": 3,
+              "categoryName": "Bob Evans",
+              "name": "1_13_10_0"
+            },
+            {
+              "num": 2.4,
+              "categoryName": "Floyd Volker",
+              "name": "1_13_11_0"
+            },
+            {
+              "num": 0.8,
+              "categoryName": "Jack Parkinson",
+              "name": "1_13_12_0"
+            }
+          ],
+          "name": "1_13_0_0"
+        },
+        {
+          "num": 82.4,
+          "categoryName": "Sheboygan_Red_Skins",
+          "children": [
+            {
+              "num": 13,
+              "categoryName": "Noble Jorgensen",
+              "name": "1_15_23_0"
+            },
+            {
+              "num": 12.6,
+              "categoryName": "Max Morris",
+              "name": "1_14_1_0"
+            },
+            {
+              "num": 12.1,
+              "categoryName": "Bob Brannum",
+              "name": "1_14_2_0"
+            },
+            {
+              "num": 11.5,
+              "categoryName": "Bobby Cook",
+              "name": "1_14_3_0"
+            },
+            {
+              "num": 9.8,
+              "categoryName": "Jack Burmaster",
+              "name": "1_14_4_0"
+            },
+            {
+              "num": 8,
+              "categoryName": "Milt Schoon",
+              "name": "1_14_5_0"
+            },
+            {
+              "num": 6.3,
+              "categoryName": "Danny Wagner",
+              "name": "1_14_6_0"
+            },
+            {
+              "num": 5.8,
+              "categoryName": "Chips Sobek",
+              "name": "1_14_7_0"
+            },
+            {
+              "num": 4.9,
+              "categoryName": "Stan Patrick",
+              "name": "1_16_5_0"
+            },
+            {
+              "num": 4.3,
+              "categoryName": "Walt Lautenbach",
+              "name": "1_14_9_0"
+            },
+            {
+              "num": 4.3,
+              "categoryName": "Dick Schulz",
+              "name": "1_15_15_0"
+            },
+            {
+              "num": 4.2,
+              "categoryName": "John Chaney",
+              "name": "1_15_17_0"
+            },
+            {
+              "num": 4.1,
+              "categoryName": "Jack Phelan",
+              "name": "1_16_11_0"
+            },
+            {
+              "num": 3.8,
+              "categoryName": "Matt Mazza",
+              "name": "1_14_13_0"
+            },
+            {
+              "num": 3.2,
+              "categoryName": "Glen Selbo",
+              "name": "1_14_14_0"
+            },
+            {
+              "num": 2,
+              "categoryName": "Don Grate",
+              "name": "1_14_15_0"
+            },
+            {
+              "num": 1.2,
+              "categoryName": "Bob Wood",
+              "name": "1_14_16_0"
+            }
+          ],
+          "name": "1_14_0_0"
+        },
+        {
+          "num": 83,
+          "categoryName": "Tri-Cities_Blackhawks",
+          "children": [
+            {
+              "num": 13.6,
+              "categoryName": "Mike Todorovich",
+              "name": "2_4_5_0"
+            },
+            {
+              "num": 13.1,
+              "categoryName": "Jack Nichols",
+              "name": "1_17_20_0"
+            },
+            {
+              "num": 12.9,
+              "categoryName": "Dike Eddleman",
+              "name": "1_17_1_0"
+            },
+            {
+              "num": 12.1,
+              "categoryName": "Don Otten",
+              "name": "1_17_0_0"
+            },
+            {
+              "num": 12,
+              "categoryName": "George Nostrand",
+              "name": "2_0_10_0"
+            },
+            {
+              "num": 8.9,
+              "categoryName": "Billy Hassett",
+              "name": "2_2_11_0"
+            },
+            {
+              "num": 8.7,
+              "categoryName": "Gene Vance",
+              "name": "1_17_15_0"
+            },
+            {
+              "num": 7.7,
+              "categoryName": "Murray Wier",
+              "name": "1_15_7_0"
+            },
+            {
+              "num": 7.5,
+              "categoryName": "Gene Englund",
+              "name": "1_15_8_0"
+            },
+            {
+              "num": 7.2,
+              "categoryName": "Walt Kirk",
+              "name": "1_17_3_0"
+            },
+            {
+              "num": 6.5,
+              "categoryName": "Jack Kerris",
+              "name": "2_1_8_0"
+            },
+            {
+              "num": 6.4,
+              "categoryName": "Dee Gibson",
+              "name": "1_15_11_0"
+            },
+            {
+              "num": 6.2,
+              "categoryName": "John Mahnken",
+              "name": "2_1_13_0"
+            },
+            {
+              "num": 6.2,
+              "categoryName": "Warren Perkins",
+              "name": "1_15_13_0"
+            },
+            {
+              "num": 6,
+              "categoryName": "Don Ray",
+              "name": "1_15_14_0"
+            },
+            {
+              "num": 5.1,
+              "categoryName": "Dick Schulz",
+              "name": "1_15_15_0"
+            },
+            {
+              "num": 4.8,
+              "categoryName": "Red Owens",
+              "name": "1_17_7_0"
+            },
+            {
+              "num": 4.7,
+              "categoryName": "John Chaney",
+              "name": "1_15_17_0"
+            },
+            {
+              "num": 4.3,
+              "categoryName": "Bill Henry",
+              "name": "2_1_12_0"
+            },
+            {
+              "num": 4.2,
+              "categoryName": "Whitey Von Nieda",
+              "name": "1_15_19_0"
+            },
+            {
+              "num": 3.3,
+              "categoryName": "Gene Berce",
+              "name": "1_15_20_0"
+            },
+            {
+              "num": 3.3,
+              "categoryName": "Mac Otten",
+              "name": "2_4_10_0"
+            }
+          ],
+          "name": "1_15_0_0"
+        },
+        {
+          "num": 79.4,
+          "categoryName": "Waterloo_Hawks",
+          "children": [
+            {
+              "num": 14.4,
+              "categoryName": "Dick Mehen",
+              "name": "1_17_2_0"
+            },
+            {
+              "num": 12.8,
+              "categoryName": "Harry Boykoff",
+              "name": "1_16_1_0"
+            },
+            {
+              "num": 11.5,
+              "categoryName": "Leo Kubiak",
+              "name": "1_16_2_0"
+            },
+            {
+              "num": 10.6,
+              "categoryName": "Don Boven",
+              "name": "1_17_4_0"
+            },
+            {
+              "num": 8,
+              "categoryName": "Johnny Payak",
+              "name": "1_17_25_0"
+            },
+            {
+              "num": 6.7,
+              "categoryName": "Stan Patrick",
+              "name": "1_16_5_0"
+            },
+            {
+              "num": 6.6,
+              "categoryName": "Jack Smiley",
+              "name": "1_16_6_0"
+            },
+            {
+              "num": 5.6,
+              "categoryName": "Hoot Gibson",
+              "name": "1_16_7_0"
+            },
+            {
+              "num": 5.2,
+              "categoryName": "Wayne See",
+              "name": "1_16_8_0"
+            },
+            {
+              "num": 4.7,
+              "categoryName": "Charley Shipp",
+              "name": "1_16_9_0"
+            },
+            {
+              "num": 4.6,
+              "categoryName": "Bob Tough",
+              "name": "1_16_10_0"
+            },
+            {
+              "num": 4.1,
+              "categoryName": "Jack Phelan",
+              "name": "1_16_11_0"
+            },
+            {
+              "num": 4,
+              "categoryName": "Johnny Orr",
+              "name": "2_4_12_0"
+            },
+            {
+              "num": 3.9,
+              "categoryName": "Gene Stump",
+              "name": "2_2_10_0"
+            },
+            {
+              "num": 3.5,
+              "categoryName": "Paul Cloyd",
+              "name": "1_16_14_0"
+            },
+            {
+              "num": 3.4,
+              "categoryName": "Al Miksis",
+              "name": "1_16_15_0"
+            },
+            {
+              "num": 3.1,
+              "categoryName": "Gene Ollrich",
+              "name": "1_16_16_0"
+            },
+            {
+              "num": 3.1,
+              "categoryName": "John Pritchard",
+              "name": "1_16_17_0"
+            },
+            {
+              "num": 2.5,
+              "categoryName": "Ken Menke",
+              "name": "1_16_18_0"
+            },
+            {
+              "num": 1.8,
+              "categoryName": "Dale Hamilton",
+              "name": "1_16_19_0"
+            },
+            {
+              "num": 1.6,
+              "categoryName": "Elmer Gainer",
+              "name": "1_16_20_0"
+            }
+          ],
+          "name": "1_16_0_0"
+        }
+      ],
+      "name": "1_0_0_0",
+      "num": 495.70000000000005
+    }
+  ],
+  "num": 1362.1000000000001
+}

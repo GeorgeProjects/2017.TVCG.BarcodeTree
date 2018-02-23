@@ -1,0 +1,166 @@
+{
+  "Eastern": [
+    {
+      "teamScore": "0.0",
+      "playersObjArray": [],
+      "teamName": "Baltimore_Bullets_(1st)"
+    },
+    {
+      "teamScore": "101.4",
+      "playersObjArray": [
+        {
+          "pts": "21.2",
+          "name": "Bob Cousy"
+        },
+        {
+          "pts": "18.4",
+          "name": "Bill Sharman"
+        },
+        {
+          "pts": "17.6",
+          "name": "Ed Macauley"
+        },
+        {
+          "pts": "11.2",
+          "name": "Frank Ramsey"
+        },
+        {
+          "pts": "10.5",
+          "name": "Don Barksdale"
+        },
+        {
+          "pts": "9.9",
+          "name": "Jack Nichols"
+        },
+        {
+          "pts": "6.2",
+          "name": "Bob Brannum"
+        },
+        {
+          "pts": "4.7",
+          "name": "Togo Palazzi"
+        },
+        {
+          "pts": "4.4",
+          "name": "Red Morrison"
+        },
+        {
+          "pts": "3.2",
+          "name": "Fred Scolari"
+        },
+        {
+          "pts": "0.7",
+          "name": "Skippy Whitaker"
+        },
+        {
+          "pts": "0.0",
+          "name": "Bob Houbregs"
+        }
+      ],
+      "teamName": "Boston_Celtics"
+    },
+    {
+      "teamScore": "92.7",
+      "playersObjArray": [
+        {
+          "pts": "15.1",
+          "name": "Carl Braun"
+        },
+        {
+          "pts": "14.6",
+          "name": "Harry Gallatin"
+        },
+        {
+          "pts": "14.4",
+          "name": "Ray Felix"
+        },
+        {
+          "pts": "13.9",
+          "name": "Jim Baechtold"
+        },
+        {
+          "pts": "13.1",
+          "name": "Nathaniel Clifton"
+        },
+        {
+          "pts": "9.1",
+          "name": "Dick McGuire"
+        },
+        {
+          "pts": "4.4",
+          "name": "Gene Shue"
+        },
+        {
+          "pts": "4.3",
+          "name": "Jack Turner"
+        },
+        {
+          "pts": "4.2",
+          "name": "Bob Peterson"
+        },
+        {
+          "pts": "3.5",
+          "name": "Bob Knight"
+        },
+        {
+          "pts": "3.3",
+          "name": "Fred Christ"
+        },
+        {
+          "pts": "3.2",
+          "name": "Bert Cook"
+        },
+        {
+          "pts": "3.0",
+          "name": "Don Anielak"
+        },
+        {
+          "pts": "2.3",
+          "name": "Chuck Grigsby"
+        },
+        {
+          "pts": "0.8",
+          "name": "Herm Hedderick"
+        },
+        {
+          "pts": "0.0",
+          "name": "Paul Hoffman"
+        }
+      ],
+      "teamName": "New_York_Knicks"
+    },
+    {
+      "teamScore": "93.2",
+      "playersObjArray": [],
+      "teamName": "Philadelphia_Warriors"
+    },
+    {
+      "teamScore": "91.1",
+      "playersObjArray": [],
+      "teamName": "Syracuse_Nationals"
+    }
+  ],
+  "Western": [
+    {
+      "teamScore": "92.4",
+      "playersObjArray": [],
+      "teamName": "Fort_Wayne_Pistons"
+    },
+    {
+      "teamScore": "87.4",
+      "playersObjArray": [],
+      "teamName": "Milwaukee_Hawks"
+    },
+    {
+      "teamScore": "95.6",
+      "playersObjArray": [],
+      "teamName": "Minneapolis_Lakers"
+    },
+    {
+      "teamScore": "90.8",
+      "playersObjArray": [],
+      "teamName": "Rochester_Royals"
+    }
+  ],
+  "year": 1954
+}

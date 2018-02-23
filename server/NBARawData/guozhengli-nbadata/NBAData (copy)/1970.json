@@ -1,0 +1,202 @@
+{
+  "Eastern": {
+    "Atlantic": [
+      {
+        "teamScore": "117.2",
+        "playersObjArray": [
+          {
+            "pts": "28.9",
+            "name": "John Havlicek"
+          },
+          {
+            "pts": "21.3",
+            "name": "Jo Jo White"
+          },
+          {
+            "pts": "17.0",
+            "name": "Dave Cowens"
+          },
+          {
+            "pts": "13.9",
+            "name": "Don Nelson"
+          },
+          {
+            "pts": "11.5",
+            "name": "Don Chaney"
+          },
+          {
+            "pts": "9.3",
+            "name": "Steve Kuberski"
+          },
+          {
+            "pts": "8.0",
+            "name": "Rich Johnson"
+          },
+          {
+            "pts": "6.5",
+            "name": "Hank Finkel"
+          },
+          {
+            "pts": "4.9",
+            "name": "Bill Dinwiddie"
+          },
+          {
+            "pts": "4.9",
+            "name": "Art Williams"
+          },
+          {
+            "pts": "3.4",
+            "name": "Rex Morgan"
+          },
+          {
+            "pts": "2.9",
+            "name": "Garfield Smith"
+          },
+          {
+            "pts": "2.3",
+            "name": "Tom Sanders"
+          },
+          {
+            "pts": "0.9",
+            "name": "Willie Williams"
+          }
+        ],
+        "teamName": "Boston_Celtics"
+      },
+      {
+        "teamScore": "105.5",
+        "playersObjArray": [],
+        "teamName": "Buffalo_Braves"
+      }
+    ],
+    "Central": [
+      {
+        "teamScore": "114.0",
+        "playersObjArray": [
+          {
+            "pts": "26.8",
+            "name": "Lou Hudson"
+          },
+          {
+            "pts": "23.2",
+            "name": "Pete Maravich"
+          },
+          {
+            "pts": "16.5",
+            "name": "Mahdi Abdul-Rahman"
+          },
+          {
+            "pts": "14.7",
+            "name": "Walt Bellamy"
+          },
+          {
+            "pts": "11.9",
+            "name": "Bill Bridges"
+          },
+          {
+            "pts": "8.9",
+            "name": "Jerry Chambers"
+          },
+          {
+            "pts": "8.3",
+            "name": "Jim Davis"
+          },
+          {
+            "pts": "4.8",
+            "name": "Len Chappell"
+          },
+          {
+            "pts": "3.7",
+            "name": "John Vallely"
+          },
+          {
+            "pts": "2.8",
+            "name": "Bob Christian"
+          },
+          {
+            "pts": "2.4",
+            "name": "Herb White"
+          },
+          {
+            "pts": "1.9",
+            "name": "Bob Riley"
+          }
+        ],
+        "teamName": "Atlanta_Hawks"
+      },
+      {
+        "teamScore": "112.9",
+        "playersObjArray": [],
+        "teamName": "Baltimore_Bullets"
+      },
+      {
+        "teamScore": "116.0",
+        "playersObjArray": [],
+        "teamName": "Cincinnati_Royals"
+      }
+    ]
+  },
+  "Western": {
+    "Midwest": [
+      {
+        "teamScore": "110.6",
+        "playersObjArray": [
+          {
+            "pts": "25.2",
+            "name": "Bob Love"
+          },
+          {
+            "pts": "22.0",
+            "name": "Chet Walker"
+          },
+          {
+            "pts": "18.3",
+            "name": "Jerry Sloan"
+          },
+          {
+            "pts": "10.8",
+            "name": "Tom Boerwinkle"
+          },
+          {
+            "pts": "9.7",
+            "name": "Jim Fox"
+          },
+          {
+            "pts": "9.5",
+            "name": "Bob Weiss"
+          },
+          {
+            "pts": "6.6",
+            "name": "Matt Guokas"
+          },
+          {
+            "pts": "4.8",
+            "name": "Jim King"
+          },
+          {
+            "pts": "4.6",
+            "name": "Johnny Baum"
+          },
+          {
+            "pts": "4.0",
+            "name": "Jimmy Collins"
+          },
+          {
+            "pts": "3.4",
+            "name": "Paul Ruffner"
+          },
+          {
+            "pts": "1.0",
+            "name": "Shaler Halimon"
+          },
+          {
+            "pts": "0.7",
+            "name": "A.W. Holt"
+          }
+        ],
+        "teamName": "Chicago_Bulls"
+      }
+    ]
+  },
+  "year": 1970
+}

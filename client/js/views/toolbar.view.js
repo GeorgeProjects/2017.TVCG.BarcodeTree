@@ -5,12 +5,13 @@ define([
   'jquery',
   'jquery-ui',
   'backbone',
+  'datacenter',
   'config',
   'variables',
   'bootstrap-slider',
   'views/svg-base.addon',
   'text!templates/toolbar.tpl'
-], function (require, Mn, _, $, jqueryUI, Backbone, Config, Variables, bootstrapSlider, SVGBase, Tpl) {
+], function (require, Mn, _, $, jqueryUI, Backbone, Datacenter, Config, Variables, bootstrapSlider, SVGBase, Tpl) {
   'user strict'
 
   return Mn.LayoutView.extend({
@@ -25,6 +26,9 @@ define([
       return _.template(Tpl)
     },
     events: {
+      //  在toolbar中更换数据集的函数
+      'click #library-record-tree': 'request_library_record_tree',
+      'click #nba-team-tree': 'request_nba_team_tree',
       'click #signal-tree': 'request_signal_tree',
       'click #original-mode': 'change_to_original_mode',
       'click #compact-mode': 'change_to_compact_mode',
@@ -35,7 +39,7 @@ define([
     },
     initialize: function () {
       var self = this
-      Backbone.Events.on(Config.get('EVENTS')[ 'CHANGE_BARCODE_WIDTH' ], function (event) {
+      Backbone.Events.on(Config.get('EVENTS')['CHANGE_BARCODE_WIDTH'], function (event) {
         // self.set_barcode_widtharray()
         self.update_dataset_check_icon()
         self.update_barcode_mode()
@@ -47,10 +51,30 @@ define([
       // self.initComparisonSingleMode()
     },
     trigger_transition_original_to_compact: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')[ 'TRANSITON_ORIGINAL_TO_COMPACT' ])
+      Backbone.Events.trigger(Config.get('EVENTS')['TRANSITON_ORIGINAL_TO_COMPACT'])
     },
     trigger_transition_compact_to_original: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')[ 'TRANSITON_COMPACT_TO_ORIGINAL' ])
+      Backbone.Events.trigger(Config.get('EVENTS')['TRANSITON_COMPACT_TO_ORIGINAL'])
+    },
+    //  获取图书馆数据的函数
+    request_library_record_tree: function () {
+      var self = this
+      $('.dataset-check-icon').css('visibility', 'hidden')
+      $('#library-record-tree .dataset-check-icon').css('visibility', 'visible')
+      Variables.set('currentDataSetName', Config.get('DataSetCollection')['LibraryTree_DailyName'])
+      var viewWidth = $(document).width()
+      var viewHeight = $(document).height()
+      // Datacenter.start(viewWidth, viewHeight)
+    },
+    //  获取nba数据的函数
+    request_nba_team_tree: function () {
+      var self = this
+      $('.dataset-check-icon').css('visibility', 'hidden')
+      $('#nba-team-tree .dataset-check-icon').css('visibility', 'visible')
+      Variables.set('currentDataSetName', Config.get('DataSetCollection')['NBATeamTreeName'])
+      var viewWidth = $(document).width()
+      var viewHeight = $(document).height()
+      // Datacenter.start(viewWidth, viewHeight)
     },
     initComparisonSingleMode: function () {
       var self = this
@@ -142,7 +166,7 @@ define([
         var treeObjArray = []
         var deferedArray = []
         for (var dI = 0; dI < this.files.length; dI++) {
-          deferedArray[ dI ] = $.Deferred()
+          deferedArray[dI] = $.Deferred()
         }
         var superTreeRequestDefer = $.Deferred()
         //  在superTree获取之后获取每一个树的节点id的数组
@@ -162,11 +186,11 @@ define([
             self.options.singleBarcodeModel.add_treeobj_array(treeObjArray)
           })
         for (var fI = 0; fI < this.files.length; fI++) {
-          var file = this.files[ fI ]
+          var file = this.files[fI]
           readFile(file, deferedArray, treeObjArray, fI)
         }
       }, false)
-      function readFile (file, deferedArray, treeObjArray, fI) {
+      function readFile(file, deferedArray, treeObjArray, fI) {
         if (file) {
           var reader = new FileReader()
           reader.readAsText(file, "UTF-8")
@@ -174,7 +198,7 @@ define([
             var treeObjJsonText = evt.target.result
             var treeObj = JSON.parse(treeObjJsonText)
             treeObjArray.push(treeObj)
-            deferedArray[ fI ].resolve()
+            deferedArray[fI].resolve()
             $("#single-view-dialog").dialog("close")
           }
           reader.onerror = function (evt) {

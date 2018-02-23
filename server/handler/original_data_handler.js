@@ -97,6 +97,7 @@ var handleOriginalData = function (request, response) {
   var originalTreeObjObject = dataCenter.get_original_data(dataSetName, dataItemNameArray)
 
   var linearTreeNodeArrayObject = dataCenter.get_linear_data(dataSetName, dataItemNameArray)
+
   var linearizedTreeNodeLocArrayObj = compute_node_location(linearTreeNodeArrayObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
 
   // var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)

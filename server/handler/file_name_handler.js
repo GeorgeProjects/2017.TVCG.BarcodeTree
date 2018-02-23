@@ -39,41 +39,43 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     var initDepth = 0
     var maxDepthObj = {maxDepth: 0}
     filenames.forEach(function (filename) {
-      var fileObject = clone(require(readFileDirectory + filename))
-      var fileNameRemovedJson = filename.replace('.json', '')
-      dataSetObj[fileNameRemovedJson] = fileObject
-      //  在tree的每个节点上增加深度并且获取整个数据集的最大的树的深度
-      _add_depth_find_max_depth(initDepth, fileObject, maxDepthObj)
-      //  在tree中的每个节点上增加节点数量的属性值
-      hierarchicalDataProcessor.add_node_num(fileObject)
-      //  对于树对象中的孩子节点进行排序
-      sort_children(fileObject)
-      //  将树的对象进行线性化得到线性化的节点数组
-      var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
-      linearObj[fileNameRemovedJson] = treeNodeArray
-      //  将树的对象线性化并且comapct返回compact并且线性化的节点数组
-      //  初始化selected Levels
-      for (var mI = 0; mI <= maxDepthObj.maxDepth; mI++) {
-        if (selectedLevels.indexOf(mI) === -1) {
-          selectedLevels.push(mI)
+      if (filename !== '.DS_Store') {
+        var fileObject = clone(require(readFileDirectory + filename))
+        var fileNameRemovedJson = filename.replace('.json', '')
+        dataSetObj[fileNameRemovedJson] = fileObject
+        //  在tree的每个节点上增加深度并且获取整个数据集的最大的树的深度
+        _add_depth_find_max_depth(initDepth, fileObject, maxDepthObj)
+        //  在tree中的每个节点上增加节点数量的属性值
+        hierarchicalDataProcessor.add_node_num(fileObject)
+        //  对于树对象中的孩子节点进行排序
+        sort_children(fileObject)
+        //  将树的对象进行线性化得到线性化的节点数组
+        var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
+        linearObj[fileNameRemovedJson] = treeNodeArray
+        //  将树的对象线性化并且comapct返回compact并且线性化的节点数组
+        //  初始化selected Levels
+        for (var mI = 0; mI <= maxDepthObj.maxDepth; mI++) {
+          if (selectedLevels.indexOf(mI) === -1) {
+            selectedLevels.push(mI)
+          }
         }
+        var compactTreeObj = clone(fileObject)
+        var compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
+        compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
+        var compactTreeNodeArrayObj = compact_tree_obj_linearization(compactTreeObjectObj)
+        compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
+        var fileObjNum = fileObject["num"]
+        var fileObjNodeNum = fileObject["nodeNum"]
+        //  仅仅对于dailyRecordTree的筛选条件
+        if ((fileObjNum > 1800) && (dataSetName === 'DailyRecordTree')) {
+          fileObjNum = 0
+        }
+        fileInfoArray.push({
+          "num": fileObjNum,//fileObjNodeNum
+          "nodenum": fileObjNodeNum,
+          "name": fileNameRemovedJson
+        })
       }
-      var compactTreeObj = clone(fileObject)
-      var compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
-      compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
-      var compactTreeNodeArrayObj = compact_tree_obj_linearization(compactTreeObjectObj)
-      compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
-      var fileObjNum = fileObject["num"]
-      var fileObjNodeNum = fileObject["nodeNum"]
-      //  仅仅对于dailyRecordTree的筛选条件
-      if ((fileObjNum > 1800) && (dataSetName === 'DailyRecordTree')) {
-        fileObjNum = 0
-      }
-      fileInfoArray.push({
-        "num": fileObjNum,//fileObjNodeNum
-        "nodenum": fileObjNodeNum,
-        "name": fileNameRemovedJson
-      })
     });
     fileInfoObj.fileInfo = fileInfoArray
     fileInfoObj.maxDepth = maxDepthObj.maxDepth
