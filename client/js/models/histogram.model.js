@@ -20,10 +20,9 @@ define([
     },
     initialize: function () {
     },
-    trigger_render_signal: function (dataSetName) {
+    trigger_render_signal: function () {
       // trigger出的信号所表示的含义是已经完成了对于histogram数据的准备, 接下来app.view中开始调用render_histogram_view进行渲染
       Backbone.Events.trigger(Config.get('EVENTS')['BEGIN_RENDER_HISTOGRAM_VIEW'])
-      Backbone.Events.trigger('render-barcode-width-controller', {dataSetName: dataSetName})
     },
     // request_histogram_dataset: function () {
     //   var self = this

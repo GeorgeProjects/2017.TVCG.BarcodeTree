@@ -50,8 +50,6 @@ function update_select_levels(selected_levels) {
 
 //  从全局的数据对象中获取数据
 function get_original_data(data_set_name, data_item_name_array) {
-  console.log('data_set_name', data_set_name)
-  console.log('data_item_name_array', data_item_name_array)
   var originalTreeObjObject = {}
   if (typeof (data_item_name_array) !== 'undefined') {
     for (var dI = 0; dI < data_item_name_array.length; dI++) {

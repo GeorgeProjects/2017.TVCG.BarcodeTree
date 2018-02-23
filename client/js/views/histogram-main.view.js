@@ -23,6 +23,8 @@ define([
     initialize: function (options) {
       //  初始化的时候请求一个默认的数据
       var self = this
+      //  清空所有选择的barcodeTree
+      self.clear_all_items()
       self.init_events()
       self.init_view()
     },

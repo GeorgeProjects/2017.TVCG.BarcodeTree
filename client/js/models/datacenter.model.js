@@ -183,6 +183,8 @@ define([
       var requestHistogramSuccessFunc = function (result) {
         self.request_histogram_handler(result)
       }
+      //  将loading的图标进行显示, 每次点击toolbar中的按钮获取数据, 都需要将loading进行显示
+      $('#loading').css({visibility: 'visible'})
       self.requestDataFromServer(url, formData, requestHistogramSuccessFunc)
     },
     /**

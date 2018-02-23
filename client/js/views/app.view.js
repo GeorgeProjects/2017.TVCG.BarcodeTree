@@ -83,7 +83,6 @@ define([
         //  此时加载完成histogram视图, 表示预处理工作也已经完成
         Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_HISTOGRAM_VIEW'], function () {
           $('#loading').css({visibility: 'hidden'})
-          console.log('re render all the views')
           self.render_toolbar_view()
           self.render_histogram_view()
           self.render_single_view()
@@ -120,7 +119,6 @@ define([
       function init_font_size() {
         var viewWidth = $(document).width()
         window.rem_px = viewWidth / 160
-        console.log('window.rem_px', window.rem_px)
         document.getElementsByTagName('html')[0].style.fontSize = window.rem_px + 'px';
       }
 

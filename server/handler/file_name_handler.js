@@ -8,8 +8,16 @@ var fileNameHandler = function (request, response) {
   var dataSetName = request.body.DataSetName
   var directoryName = './server/data/' + dataSetName + '/originalData/'//'../data/' + sampleDataName + '/originalData/'
   var readFileDirectory = '../data/' + dataSetName + '/originalData/'
+  Date.prototype.getDifference = function (date2) {
+    var date1 = this
+    var dateDifference = date1.getTime() - date2.getTime()
+    return dateDifference
+  }
+  var init_begin = new Date()
   dataCenter.clear_all()
   read_directory_file(dataSetName, directoryName, readFileDirectory, function (dataSetObj, linearObj, compactDataSetObj, compactLinearObj, selectedLevels, fileInfoObj) {
+    var init_end = new Date()
+    console.log(init_end.getDifference(init_begin))
     dataCenter.add_original_data_set(dataSetName, dataSetObj)
     dataCenter.add_linear_data_set(dataSetName, linearObj)
     dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
@@ -39,6 +47,7 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     var initDepth = 0
     var maxDepthObj = {maxDepth: 0}
     filenames.forEach(function (filename) {
+
       if (filename !== '.DS_Store') {
         var fileObject = clone(require(readFileDirectory + filename))
         var fileNameRemovedJson = filename.replace('.json', '')

@@ -41,13 +41,19 @@ define([
       var self = this
       Backbone.Events.on(Config.get('EVENTS')['CHANGE_BARCODE_WIDTH'], function (event) {
         // self.set_barcode_widtharray()
-        self.update_dataset_check_icon()
         self.update_barcode_mode()
         self.update_barcode_type()
       })
     },
     onShow: function () {
       var self = this
+      var currentDataSetName = window.dataSetName
+      $('.dataset-selection-icon').css('visibility', 'hidden')
+      if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+        $('#library-record-tree-check-icon').css('visibility', 'visible')
+      } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
+        $('#nba-team-tree-check-icon').css('visibility', 'visible')
+      }
       // self.initComparisonSingleMode()
     },
     trigger_transition_original_to_compact: function () {
@@ -59,8 +65,8 @@ define([
     //  获取图书馆数据的函数
     request_library_record_tree: function () {
       var self = this
-      $('.dataset-check-icon').css('visibility', 'hidden')
-      $('#library-record-tree .dataset-check-icon').css('visibility', 'visible')
+      $('.dataset-selection-icon').css('visibility', 'hidden')
+      $('#library-record-tree-check-icon').css('visibility', 'visible')
       Variables.set('currentDataSetName', Config.get('DataSetCollection')['LibraryTree_DailyName'])
       window.dataSetName = Config.get('DataSetCollection')['LibraryTree_DailyName']
       // Datacenter.start(viewWidth, viewHeight)
@@ -69,8 +75,8 @@ define([
     //  获取nba数据的函数
     request_nba_team_tree: function () {
       var self = this
-      $('.dataset-check-icon').css('visibility', 'hidden')
-      $('#nba-team-tree .dataset-check-icon').css('visibility', 'visible')
+      $('.dataset-selection-icon').css('visibility', 'hidden')
+      $('#nba-team-tree-check-icon').css('visibility', 'visible')
       Variables.set('currentDataSetName', Config.get('DataSetCollection')['NBATeamTreeName'])
       window.dataSetName = Config.get('DataSetCollection')['NBATeamTreeName']
       Datacenter.request_histogram_dataset()
@@ -269,15 +275,6 @@ define([
       var barcodeMode = window.barcodeMode
       $('.mode-check-icon').css('visibility', 'hidden')
       $('#' + barcodeMode).css('visibility', 'visible')
-    },
-    /*
-     * 在视图更新的时候会对于初始选择以及视图进行初始化
-     * barcode的数据集初始化
-     */
-    update_dataset_check_icon: function () {
-      var dataSetName = window.dataSetName
-      $('.dataset-check-icon').css('visibility', 'hidden')
-      $('#' + dataSetName).css('visibility', 'visible')
     },
     /*
      * 在视图更新的时候会对于初始选择以及视图进行初始化

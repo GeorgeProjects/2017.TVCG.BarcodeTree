@@ -6,8 +6,8 @@
                 <li class="dropdown" id = "comparison-dataset-open">
                     <a href="#" class="dropdown-toggle toolbar-a" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-folder-open" aria-hidden="true"></i>&nbsp;Dataset <span class="caret"></span></a>
                     <ul class="dropdown-menu" id="dataset-collection">
-                        <li><a href="#" id="library-record-tree" class="dataset-item"><i class="fa fa-file" aria-hidden="true"></i>&nbsp; LibraryRecords<span id='DailyRecordTree' class='span-alignment-right dataset-check-icon'><i class="fa fa-check" aria-hidden="true"></i></span></a></li>
-                        <li><a href="#" id="nba-team-tree" class="dataset-item"><i class="fa fa-file" aria-hidden="true"></i>&nbsp; NBATeams<span id='RecordTree' class='span-alignment-right dataset-check-icon'><i class="fa fa-check" aria-hidden="true"></i></span></a></li>
+                        <li><a href="#" id="library-record-tree" class="dataset-item"><i class="fa fa-file" aria-hidden="true"></i>&nbsp; LibraryRecords<span id='library-record-tree-check-icon' class='span-alignment-right dataset-selection-icon'><i class="fa fa-check" aria-hidden="true"></i></span></a></li>
+                        <li><a href="#" id="nba-team-tree" class="dataset-item"><i class="fa fa-file" aria-hidden="true"></i>&nbsp; NBATeams<span id='nba-team-tree-check-icon' class='span-alignment-right dataset-selection-icon'><i class="fa fa-check" aria-hidden="true"></i></span></a></li>
                     </ul>
                 </li>
             </ul>
