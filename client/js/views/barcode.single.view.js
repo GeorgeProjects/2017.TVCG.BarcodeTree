@@ -481,8 +481,10 @@ define([
           } else {
             barcodeTreeLabelMonthDday = barcodeTreeId.split('_')[0]
             barcodeTreeLabelMonthDday = barcodeTreeLabelMonthDday.toUpperCase()
-            var operationTypeLabel = operationType.substring(0, 1).toUpperCase()
-            barcodeTreeLabelMonthDday = barcodeTreeLabelMonthDday + "(" + operationTypeLabel + ")"
+            if (typeof (operationType) !== 'undefined') {
+              var operationTypeLabel = operationType.substring(0, 1).toUpperCase()
+              barcodeTreeLabelMonthDday = barcodeTreeLabelMonthDday + "(" + operationTypeLabel + ")"
+            }
           }
         } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
           var barcodeTreeLabelMonthDday = barcodeTreeId.replace('tree', '')

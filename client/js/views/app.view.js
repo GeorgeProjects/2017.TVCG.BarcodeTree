@@ -83,6 +83,7 @@ define([
         //  此时加载完成histogram视图, 表示预处理工作也已经完成
         Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_HISTOGRAM_VIEW'], function () {
           $('#loading').css({visibility: 'hidden'})
+          console.log('re render all the views')
           self.render_toolbar_view()
           self.render_histogram_view()
           self.render_single_view()
@@ -100,12 +101,11 @@ define([
         // var barcodeHeight = windowHeight / 30
         // defaultSettings.barcodeHeight = barcodeHeight
         // Variables.set('barcodeHeight', barcodeHeight)
-        //  获取整个视图的宽度与高度, 初始化控制barcode的表现的参数, 包括barcode的高度,宽度,interval,字体的大小
-        var viewWidth = $(document).width()
-        var viewHeight = $(document).height()
-        init_font_size(viewWidth)
+        //  初始化视图中的字体大小
+        init_font_size()
+        //  初始化缺失节点的stroke的宽度
         init_missed_stroke_width()
-        Datacenter.start(viewWidth, viewHeight)
+        Datacenter.start()
         // window.barcodeHeight = barcodeHeight
         //  初始化选择颜色的工具
         var elem = document.querySelector('#color-picker')
@@ -117,8 +117,9 @@ define([
         })
       })
       //  初始化视图中的font-size
-      function init_font_size(view_width) {
-        window.rem_px = view_width / 160
+      function init_font_size() {
+        var viewWidth = $(document).width()
+        window.rem_px = viewWidth / 160
         console.log('window.rem_px', window.rem_px)
         document.getElementsByTagName('html')[0].style.fontSize = window.rem_px + 'px';
       }
@@ -128,7 +129,6 @@ define([
         var strokeWidthRatio = 0.05
         var rem_px = window.rem_px
         var strokeWidth = strokeWidthRatio * rem_px
-        console.log('strokeWidth', strokeWidth)
         if (strokeWidth <= 1.5) {
           //  将节点的class设置为min-stroke
           Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])

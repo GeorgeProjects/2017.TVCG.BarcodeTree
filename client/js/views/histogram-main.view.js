@@ -463,14 +463,16 @@ define([
       if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
         //  当前为Library的数据集
         var barId = d.id
-        var date = barId.split('-')[1].replaceAll('_', '/')
-        var dayArray = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-        var barValue = d.y
-        var date = barId.split('-')[1].replaceAll('_', '-')
-        var curDay = new Date(date).getDay()
-        // var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
-        var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
-        histogramTip.show(tipValue, document.getElementById(barId))
+        if (barId.indexOf('-') !== -1) {
+          var date = barId.split('-')[1].replaceAll('_', '/')
+          var dayArray = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          var barValue = d.y
+          var date = barId.split('-')[1].replaceAll('_', '-')
+          var curDay = new Date(date).getDay()
+          // var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
+          var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
+          histogramTip.show(tipValue, document.getElementById(barId))
+        }
       } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
         //  当前是NBA的数据集
         var barId = d.id

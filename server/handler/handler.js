@@ -40,7 +40,7 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
   //  之前的测试程序, 将name中的数字变成字符
   // num_to_character_preprocess()
   //  执行对于NBAdata的预处理函数NBA_preprocess时, 需要在originalData文件夹中改变文件名称为1946 - 2017.json
-  NBA_preprocess()
+  // NBA_preprocess()
   //  对于recordTree数据的预处理函数
   function preprocess() {
     var filePath = './server/data/DailyRecordTree/originalData/'

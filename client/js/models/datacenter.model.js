@@ -37,10 +37,9 @@ define([
     },
     //  DataCenter在初始化之后向服务器端请求histogram的数据
     //  程序的默认状态, 由config中的变量控制
-    start: function (viewWidth, viewHeight) {
+    start: function () {
       var self = this
-      console.log('data center start')
-      self.init_dataset_mode(viewWidth, viewHeight)
+      self.init_dataset_mode()
       var histogramModel = self.histogramModel
       // //  获取category dataset 当鼠标mouseover的时候得到barcode的名称
       // var categoryModel = self.categoryModel
@@ -54,7 +53,9 @@ define([
       var self = this
       Backbone.Events.trigger(Config.get('EVENTS')['HIDE_LOADING_ICON'])
     },
-    init_dataset_mode: function (viewWidth, viewHeight) {
+    init_dataset_mode: function () {
+      var viewWidth = $(document).width()
+      var viewHeight = $(document).height()
       //  1600的宽度, 892的屏幕高度 对应的是当前的barcode高度50和当前barcode宽度[ 18, 12, 8, 4, 0 ], 那么需要对于该设置参数按按照比例进行变化
       var defaultSettings = Config.get('DEFAULT_SETTINGS')
       var initHeight = defaultSettings.init_height
@@ -594,6 +595,7 @@ define([
     requestDataFromServer: function (Url, formData, originalDatasuccessFunc) {
       var self = this
       var barcodeTreeId = formData.dataItemName
+      console.log('formData', formData)
       $.ajax({
         url: Url,
         type: 'POST',

@@ -62,9 +62,9 @@ define([
       $('.dataset-check-icon').css('visibility', 'hidden')
       $('#library-record-tree .dataset-check-icon').css('visibility', 'visible')
       Variables.set('currentDataSetName', Config.get('DataSetCollection')['LibraryTree_DailyName'])
-      var viewWidth = $(document).width()
-      var viewHeight = $(document).height()
+      window.dataSetName = Config.get('DataSetCollection')['LibraryTree_DailyName']
       // Datacenter.start(viewWidth, viewHeight)
+      Datacenter.request_histogram_dataset()
     },
     //  获取nba数据的函数
     request_nba_team_tree: function () {
@@ -72,9 +72,8 @@ define([
       $('.dataset-check-icon').css('visibility', 'hidden')
       $('#nba-team-tree .dataset-check-icon').css('visibility', 'visible')
       Variables.set('currentDataSetName', Config.get('DataSetCollection')['NBATeamTreeName'])
-      var viewWidth = $(document).width()
-      var viewHeight = $(document).height()
-      // Datacenter.start(viewWidth, viewHeight)
+      window.dataSetName = Config.get('DataSetCollection')['NBATeamTreeName']
+      Datacenter.request_histogram_dataset()
     },
     initComparisonSingleMode: function () {
       var self = this
