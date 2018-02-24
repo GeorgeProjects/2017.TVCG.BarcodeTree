@@ -94,6 +94,8 @@ var handleOriginalData = function (request, response) {
   //   }
   // }
   // var originalTreeObjObject = read_original_tree_object(dataItemNameArray, dataSetName)
+  console.log('selectedLevels', selectedLevels)
+  console.log('barcodeWidthArray', barcodeWidthArray)
   var originalTreeObjObject = dataCenter.get_original_data(dataSetName, dataItemNameArray)
 
   var linearTreeNodeArrayObject = dataCenter.get_linear_data(dataSetName, dataItemNameArray)

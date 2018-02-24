@@ -468,6 +468,8 @@ define([
       var selectedItemsArray = Variables.get('selectItemNameArray')
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+      console.log('window.selectedLevels', window.selectedLevels)
+      console.log('window.barcodeWidthArray', window.barcodeWidthArray)
       var formData = {
         'dataItemNameArray': selectedItemsArray,
         'dataSetName': window.dataSetName,
@@ -479,6 +481,7 @@ define([
       var originalDatasuccessUpdateFunc = function (result) {
         var treeNodeArrayObject = result.treeNodeArrayObject
         var originalTreeObjObject = result.originalTreeObjObject
+        console.log('treeNodeArrayObject', treeNodeArrayObject)
         var selectItemNameArray = Variables.get('selectItemNameArray')
         for (var item in treeNodeArrayObject) {
           var barcodeNodeAttrArray = treeNodeArrayObject[item]
@@ -497,7 +500,9 @@ define([
         }
         // Backbone.Events.trigger(Config.get('EVENTS')[ 'UPDATE_BARCODE_VIEW' ])
         // self.barcodeCollection.add_all_super_subtree()
+
         self.barcodeCollection.align_node_in_selected_list()
+
       }
       self.requestDataFromServer(url, formData, originalDatasuccessUpdateFunc)
     },

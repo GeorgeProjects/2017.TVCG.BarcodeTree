@@ -781,6 +781,10 @@ define([
         self.uncollapse_subtree(nodeObjId, nodeObjDepth)
       }
       self.subtree_node_focus(selectedAlignedItemList)
+      //  如果当前对齐的节点数量为0, 那么需要自动的对于选中的barcodeTree进行更新
+      if (selectedAlignedItemList.length === 0) {
+        self.update_data_all_view()
+      }
     },
     //  向collectionAlignedObjPercentageArrayObjArray增加元素
     add_aligned_obj_percentage_array: function (alignedObjPercentageArrayObj) {

@@ -47,8 +47,9 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     var initDepth = 0
     var maxDepthObj = {maxDepth: 0}
     filenames.forEach(function (filename) {
-
       if (filename !== '.DS_Store') {
+        //  对于fileObject的处理, 结果是得到一个增加了depth, 增加了节点的num值,
+        //  对于节点中的children进行排序的fileObject
         var fileObject = clone(require(readFileDirectory + filename))
         var fileNameRemovedJson = filename.replace('.json', '')
         dataSetObj[fileNameRemovedJson] = fileObject
@@ -58,9 +59,6 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
         hierarchicalDataProcessor.add_node_num(fileObject)
         //  对于树对象中的孩子节点进行排序
         sort_children(fileObject)
-        //  将树的对象进行线性化得到线性化的节点数组
-        var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
-        linearObj[fileNameRemovedJson] = treeNodeArray
         //  将树的对象线性化并且comapct返回compact并且线性化的节点数组
         //  初始化selected Levels
         for (var mI = 0; mI <= maxDepthObj.maxDepth; mI++) {
@@ -68,11 +66,16 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
             selectedLevels.push(mI)
           }
         }
-        var compactTreeObj = clone(fileObject)
-        var compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
+        //  将树的对象进行线性化得到线性化的节点数组
+        // var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
+        var treeNodeArray = get_linear_file_obj(dataSetName, filename, fileObject, initDepth)
+        linearObj[fileNameRemovedJson] = treeNodeArray
+        //  将树的对象进行compact得到compact之后的节点数组
+        var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
         compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
-        var compactTreeNodeArrayObj = compact_tree_obj_linearization(compactTreeObjectObj)
+        var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
         compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
+
         var fileObjNum = fileObject["num"]
         var fileObjNodeNum = fileObject["nodeNum"]
         //  仅仅对于dailyRecordTree的筛选条件
@@ -90,6 +93,85 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     fileInfoObj.maxDepth = maxDepthObj.maxDepth
     fileReadEnd(dataSetObj, linearObj, compactDataSetObj, compactLinearObj, selectedLevels, fileInfoObj)
   });
+}
+/**
+ * 读linear的compact的treeObject
+ */
+function get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj) {
+  var linearCompactFile = '../data/' + dataSetName + '/linearCompactData/' + filename
+  var compactTreeNodeArrayObj = null
+  // try {
+  //   console.log('find the file')
+  //   compactTreeNodeArrayObj = clone(require(linearCompactFile))
+  // } catch (e) {
+  //   if (e.code === 'MODULE_NOT_FOUND') {
+  //     compactTreeNodeArrayObj = compact_tree_obj_linearization(compactTreeObjectObj)
+  //     fs.writeFile(('./server/data/' + dataSetName + '/linearCompactData/' + filename), JSON.stringify(compactTreeNodeArrayObj), 'utf8', function (err) {
+  //       console.log('err', err)
+  //     })
+  //   }
+  // }
+  compactTreeNodeArrayObj = compact_tree_obj_linearization(compactTreeObjectObj)
+  fs.writeFile(('./server/data/' + dataSetName + '/linearCompactData/' + filename), JSON.stringify(compactTreeNodeArrayObj), 'utf8', function (err) {
+    console.log('err', err)
+  })
+  return compactTreeNodeArrayObj
+}
+/**
+ * 读compact的treeObject
+ */
+function get_compact_obj(dataSetName, filename, fileObject, selectedLevels) {
+  var compactFile = '../data/' + dataSetName + '/compactData/' + filename
+  var compactTreeObjectObj = null
+  var compactTreeObj = null
+  // try {
+  //   compactTreeObjectObj = clone(require(compactFile))
+  // } catch (e) {
+  //   if (e.code === 'MODULE_NOT_FOUND') {
+  //     compactTreeObj = clone(fileObject)
+  //     compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
+  //     fs.writeFile(('./server/data/' + dataSetName + '/compactData/' + filename), JSON.stringify(compactTreeObjectObj), 'utf8', function (err) {
+  //       console.log('err', err)
+  //     })
+  //   }
+  // }
+  compactTreeObj = clone(fileObject)
+  compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
+  fs.writeFile(('./server/data/' + dataSetName + '/compactData/' + filename), JSON.stringify(compactTreeObjectObj), 'utf8', function (err) {
+    console.log('err', err)
+  })
+  return compactTreeObjectObj
+}
+/**
+ * 读线性化的fileObject
+ */
+function get_linear_file_obj(dataSetName, filename, fileObject, initDepth) {
+  var linearFile = '../data/' + dataSetName + '/linearData/' + filename
+  var treeNodeArray = null
+  // try {
+  //   treeNodeArray = clone(require(linearFile))
+  // } catch (e) {
+  //   treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
+  //   fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(treeNodeArray), 'utf8', function (err) {
+  //     console.log('err', err)
+  //   })
+  // }
+  treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
+  fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(treeNodeArray), 'utf8', function (err) {
+    console.log('err', err)
+  })
+  return treeNodeArray
+  // if (fs.existsSync(linearFile)) {
+  //   // Do something
+  //   console.log('linearData existed')
+  //   var treeNodeArray = clone(require(linearFile))
+  // } else {
+  //   var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
+  //   fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(treeNodeArray), 'utf8', function (err) {
+  //     console.log('err', err)
+  //   })
+  // }
+  // return treeNodeArray
 }
 /**
  * compact模式的树的压缩
