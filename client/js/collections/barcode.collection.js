@@ -659,8 +659,10 @@ define([
         var paddingNodeObjArray = model.get('paddingNodeObjArray')
         for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
           if (typeof(paddingNodeObjArray) !== 'undefined') {
-            if (paddingNodeObjArray[pI].maxPaddingNodeLength > basedPaddingNodeObjArray[pI].maxPaddingNodeLength) {
-              basedPaddingNodeObjArray[pI].maxPaddingNodeLength = paddingNodeObjArray[pI].maxPaddingNodeLength
+            if (typeof (basedPaddingNodeObjArray[pI]) !== 'undefined') {
+              if (paddingNodeObjArray[pI].maxPaddingNodeLength > basedPaddingNodeObjArray[pI].maxPaddingNodeLength) {
+                basedPaddingNodeObjArray[pI].maxPaddingNodeLength = paddingNodeObjArray[pI].maxPaddingNodeLength
+              }
             }
           }
         }
@@ -738,6 +740,9 @@ define([
         self.update_fit_in_screen()
         //  更新barcode collection中的categoryNodeArray
         var basedBarcodeModel = self.at(0)
+        if (typeof (basedBarcodeModel) === 'undefined') {
+          basedBarcodeModel = self.at(1)
+        }
         self.set_category_nodeobj_array(basedBarcodeModel.get('barcodeNodeAttrArray'))
       }
       //  更新barcode comparison视图的最大的宽度
@@ -751,9 +756,18 @@ define([
      */
     update_fit_in_screen: function () {
       var self = this
+      //  得到所有的barcodeModel中最大的长度
+      var minRatio = 1
       self.each(function (model) {
-        model.update_fit_in_screen()
+        var changeRatio = model.get_change_ratio()
+        if (changeRatio < minRatio) {
+          minRatio = changeRatio
+        }
       })
+      self.each(function (model) {
+        model.update_fit_in_screen(minRatio)
+      })
+
     },
     /**
      * 还原到之前的barcode的节点宽度
@@ -1095,7 +1109,7 @@ define([
     /**
      *  增加一个选择的节点, 提供所有需要的数据, childrenNodeArray & siblingNodeArray
      */
-    add_selected_node: function (barcodeTreeId, nodeObjId, nodeObjDepth, nodeObjCategory, siblingNodesArray, childrenNodesArray) {
+    add_selected_node: function (barcodeTreeId, nodeObjId, nodeObjDepth, nodeObjCategory, nodeObjCategoryName, siblingNodesArray, childrenNodesArray) {
       var self = this
       var selectedNodesIdObj = self.selectedNodesId
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
@@ -1116,6 +1130,7 @@ define([
         barcodeTreeId: barcodeTreeId,
         nodeObjDepth: nodeObjDepth,
         nodeObjCategory: nodeObjCategory,
+        nodeObjCategoryName: nodeObjCategoryName,
         selectedChildrenNodeIdArray: childrenNodesArray,
         selectedSiblingNodeObjArray: siblingNodesArray
       }
@@ -1178,12 +1193,10 @@ define([
         }
       })
       return foundObj
-    }
-    ,
+    },
     //  删除交叉部分的节点的对齐情况
-    remove_crossed_node_alignment: function (nodeData) {
+    remove_crossed_node_alignment: function (nodeObjId) {
       var self = this
-      var nodeObjId = nodeData.id
       var selectedNodesIdObj = self.selectedNodesId
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       //  判断是否是父亲节点或者是孩子节点

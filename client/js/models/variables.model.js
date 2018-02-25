@@ -37,6 +37,10 @@ define([
       POW_EXPONENT: 0.4,
       //  标记各层的bar的宽度
       barcodeWidthArray: [18, 12, 8, 4, 1],
+      //  最大的barcode的宽度
+      maxBarcodeWidth: 20,
+      //  最小的barcode的宽度
+      minBarcodeWidth: 2,
       //  barcode节点的最小宽度
       barcodeNodeWidthMinValue: 2,
       //  barcode节点的最大宽度
@@ -154,10 +158,6 @@ define([
       'differentHeightNumber': 20,
       //  最小的barcode的高度
       'minBarcodeHeight': 2,
-      //  最大的barcode的宽度
-      'maxBarcodeWidth': 20,
-      //  最小的barcode的宽度
-      'minBarcodeWidth': 1,
       //  histogram和barcode都需要的变量
       //  给virtual的结点的description的标签
       'virtualNodeDescription': 'virtual',
@@ -168,7 +168,7 @@ define([
       //  displayed Last Level
       'displayedLastLevel': 3,
       //  supertree的高度
-      'superTreeHeight': 60,
+      'superTreeHeight': 40,
       //  barcodetree config视图的高度
       'barcodeTreeConfigHeight': 33,
       //  当前的config panel的状态, 打开(open)或者关闭(close)

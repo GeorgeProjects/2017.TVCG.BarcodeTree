@@ -15,23 +15,26 @@ var fileNameHandler = function (request, response) {
   }
   var init_begin = new Date()
   dataCenter.clear_all()
-  read_directory_file(dataSetName, directoryName, readFileDirectory, function (dataSetObj, linearObj, compactDataSetObj, compactLinearObj, selectedLevels, fileInfoObj) {
-    var init_end = new Date()
-    console.log(init_end.getDifference(init_begin))
+  //  read_directory_file函数传入的有两个函数, 一个是处理结束的函数, 一个是继续的数据处理函数
+  read_directory_file(dataSetName, directoryName, readFileDirectory, function (fileInfoObj, dataSetObj, linearObj) {
     dataCenter.add_original_data_set(dataSetName, dataSetObj)
     dataCenter.add_linear_data_set(dataSetName, linearObj)
-    dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
-    dataCenter.add_compact_linear_data(dataSetName, compactLinearObj)
-    dataCenter.update_select_levels(dataSetName, selectedLevels)
     response.setHeader('Content-Type', 'application/json')
     response.setHeader('Access-Control-Allow-Origin', '*')
     response.send(JSON.stringify(fileInfoObj, null, 3))
+  }, function (idIndexObj, compactDataSetObj, compactLinearObj, selectedLevels) {
+    var init_end = new Date()
+    console.log(init_end.getDifference(init_begin))
+    dataCenter.add_id_index_data_set(dataSetName, idIndexObj)
+    dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
+    dataCenter.add_compact_linear_data(dataSetName, compactLinearObj)
+    dataCenter.update_select_levels(dataSetName, selectedLevels)
   }, function (err) {
     throw err;
   })
 }
 
-function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEnd, onError) {
+function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEnd, dataProcess, onError) {
   fs.readdir(dirname, function (err, filenames) {
     if (err) {
       onError(err);
@@ -39,6 +42,7 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     }
     var dataSetObj = {}
     var compactDataSetObj = {}
+    var idIndexObj = {}
     var linearObj = {}
     var compactLinearObj = {}
     var fileInfoObj = {}
@@ -46,6 +50,8 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     var selectedLevels = []
     var initDepth = 0
     var maxDepthObj = {maxDepth: 0}
+    var fileNameObject = {}
+    //  上面是对于文件的处理, 处理结束之后会调用fileReadEnd函数
     filenames.forEach(function (filename) {
       if (filename !== '.DS_Store') {
         //  对于fileObject的处理, 结果是得到一个增加了depth, 增加了节点的num值,
@@ -59,6 +65,9 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
         hierarchicalDataProcessor.add_node_num(fileObject)
         //  对于树对象中的孩子节点进行排序
         sort_children(fileObject)
+        fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(fileObject), 'utf8', function (err) {
+          console.log('err', err)
+        })
         //  将树的对象线性化并且comapct返回compact并且线性化的节点数组
         //  初始化selected Levels
         for (var mI = 0; mI <= maxDepthObj.maxDepth; mI++) {
@@ -66,16 +75,14 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
             selectedLevels.push(mI)
           }
         }
+        //  将树的对象变成以节点id为索引的树的对象
+        var originalTreeNodeObj = _init_original_tree_obj(fileObject)
+        idIndexObj[fileNameRemovedJson] = originalTreeNodeObj
         //  将树的对象进行线性化得到线性化的节点数组
         // var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
         var treeNodeArray = get_linear_file_obj(dataSetName, filename, fileObject, initDepth)
         linearObj[fileNameRemovedJson] = treeNodeArray
-        //  将树的对象进行compact得到compact之后的节点数组
-        var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
-        compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
-        var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
-        compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
-
+        fileNameObject[filename] = fileObject
         var fileObjNum = fileObject["num"]
         var fileObjNodeNum = fileObject["nodeNum"]
         //  仅仅对于dailyRecordTree的筛选条件
@@ -88,11 +95,40 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
           "name": fileNameRemovedJson
         })
       }
-    });
+    })
     fileInfoObj.fileInfo = fileInfoArray
     fileInfoObj.maxDepth = maxDepthObj.maxDepth
-    fileReadEnd(dataSetObj, linearObj, compactDataSetObj, compactLinearObj, selectedLevels, fileInfoObj)
+    //  下面是对于数据继续的处理过程, 处理结束之后的结果会调用dataProcess函数进行存储
+    for (var filename in fileNameObject) {
+      var fileObject = fileNameObject[filename]
+      var fileNameRemovedJson = filename.replace('.json', '')
+      //  将树的对象进行compact得到compact之后的节点数组
+      var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
+      compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
+      var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
+      compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
+    }
+    dataProcess(idIndexObj, compactDataSetObj, compactLinearObj, selectedLevels)
+    fileReadEnd(fileInfoObj, dataSetObj, linearObj)
   });
+}
+/**
+ * 将original的treeObject转换为originalTreeNodeObj, 以节点的id为索引的对象
+ */
+function _init_original_tree_obj(treeObj) {
+  var originalTreeNodeObj = {}
+  var initDepth = 0
+  inner_traverse_original_tree(originalTreeNodeObj, treeObj, initDepth)
+  return originalTreeNodeObj
+  function inner_traverse_original_tree(originalTreeNodeObj, treeObj, initDepth) {
+    var nodeId = 'node-' + initDepth + '-' + treeObj.name
+    originalTreeNodeObj[nodeId] = treeObj
+    if (typeof (treeObj.children) !== 'undefined') {
+      for (var tI = 0; tI < treeObj.children.length; tI++) {
+        inner_traverse_original_tree(originalTreeNodeObj, treeObj.children[tI], (initDepth + 1))
+      }
+    }
+  }
 }
 /**
  * 读linear的compact的treeObject
@@ -112,9 +148,6 @@ function get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj) {
   //   }
   // }
   compactTreeNodeArrayObj = compact_tree_obj_linearization(compactTreeObjectObj)
-  fs.writeFile(('./server/data/' + dataSetName + '/linearCompactData/' + filename), JSON.stringify(compactTreeNodeArrayObj), 'utf8', function (err) {
-    console.log('err', err)
-  })
   return compactTreeNodeArrayObj
 }
 /**
@@ -137,9 +170,6 @@ function get_compact_obj(dataSetName, filename, fileObject, selectedLevels) {
   // }
   compactTreeObj = clone(fileObject)
   compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
-  fs.writeFile(('./server/data/' + dataSetName + '/compactData/' + filename), JSON.stringify(compactTreeObjectObj), 'utf8', function (err) {
-    console.log('err', err)
-  })
   return compactTreeObjectObj
 }
 /**
@@ -157,9 +187,6 @@ function get_linear_file_obj(dataSetName, filename, fileObject, initDepth) {
   //   })
   // }
   treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
-  fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(treeNodeArray), 'utf8', function (err) {
-    console.log('err', err)
-  })
   return treeNodeArray
   // if (fs.existsSync(linearFile)) {
   //   // Do something
@@ -211,13 +238,30 @@ function sort_children(tree) {
         tree.children.sort(function (a, b) {
           var aName = a.name
           var bName = b.name
-          return aName - bName
+          return a_minus_b(aName, bName)
         })
         for (var i = 0; i < tree.children.length; i++) {
           innerSortChildren(tree.children[i])
         }
       }
     }
+  }
+
+  function a_minus_b(aName, bName) {
+    var aNameArray = transform_num_array(aName)
+    var bNameArray = transform_num_array(bName)
+    for (var nI = 0; nI < aNameArray.length; nI++) {
+      var aNum = +aNameArray[nI]
+      var bNum = +bNameArray[nI]
+      if (aNum !== bNum) {
+        return aNum - bNum
+      }
+    }
+  }
+
+  function transform_num_array(name) {
+    var nameArray = name.split('_')
+    return nameArray
   }
 }
 

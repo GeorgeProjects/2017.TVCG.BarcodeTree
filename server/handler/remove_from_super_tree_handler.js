@@ -30,6 +30,9 @@ var removeUpdateCurrentSuperTree = function (request, response) {
   var unionTree = hierarchicalDataProcessor.buildUnionTree(unionTreeArray)
   dataCenter.update_super_tree_obj_item_array(dataItemNameArray)
   dataCenter.update_super_tree_obj_super_tree(unionTree)
+  response.setHeader('Content-Type', 'application/json')
+  response.setHeader('Access-Control-Allow-Origin', '*')
+  response.send(JSON.stringify({}, null, 3))
 }
 
 exports.removeUpdateCurrentSuperTree = removeUpdateCurrentSuperTree

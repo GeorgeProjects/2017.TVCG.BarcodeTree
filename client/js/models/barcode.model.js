@@ -27,6 +27,8 @@ define([
       'barcodeNodeAttrArray': [],
       //  根据barcodeNodeAttrArray建立的object对象
       'barcodeNodeAttrArrayObj': {},
+      //  根据barcodeNodeAttrArray建立的以categoryName为索引的object对象
+      'barcodeNodeAttrArrayCategoryIndexObj': {},
       //  对齐的barcode节点的数组信息
       'alignedBarcodeNodeAttrArray': [],
       //  compact的barcode节点数组
@@ -133,6 +135,16 @@ define([
         var barcodeNodeId = barcodeNodeAttrArray[bI].id
         barcodeNodeAttrArray[bI].existed = true
         barcodeNodeAttrArrayObj[barcodeNodeId] = barcodeNodeAttrArray[bI]
+      }
+      //  处理barcodeNodeAttrArray, 以barcodeNodeCategoryName为索引建立对象
+      var barcodeNodeAttrArrayCategoryIndexObj = self.get('barcodeNodeAttrArrayCategoryIndexObj')
+      for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
+        var barcodeNodeCategoryName = barcodeNodeAttrArray[bI].categoryName
+        if (typeof (barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName]) === 'undefined') {
+          barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName] = [barcodeNodeAttrArray[bI]]
+        }else{
+          barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName].push(barcodeNodeAttrArray[bI])
+        }
       }
       //  将originalTreeObj变成另一种形式, 即originalTreeNodeObj, 以treeNodeId为索引建立对象
       var originalTreeObj = self.get('originalTreeObj')
@@ -691,7 +703,6 @@ define([
             // paddingNodeObjArray[paddingNodeObjArray.length - 1].subtreeObjectArray = subtreeObjectArray
             // //  根据计算得到的subtreeObjectArray计算paddingnode的宽度
             // paddingNodeObjArray[paddingNodeObjArray.length - 1].compressPaddingNodeWidth = computePaddingNodeWidth(subtreeObjectArray)
-
             //  ==================================
             if ((alignedRangeObjArray[aI].rangeEndNodeIndex + 1) < barcodeNodeAttrArray.length) {
               paddingNodeObjArray.push({
@@ -1171,9 +1182,10 @@ define([
       }
     },
     /**
-     * 将barcodeTree更新到一个视图的宽度的大小
+     * 得到当前的barcodeModel的changeRatio的大小
+     * @returns {number}
      */
-    update_fit_in_screen: function () {
+    get_change_ratio: function () {
       var self = this
       var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
       var barcodeNodeMaxWidth = barcodeNodeAttrArray[barcodeNodeAttrArray.length - 1].x + barcodeNodeAttrArray[barcodeNodeAttrArray.length - 1].width
@@ -1184,9 +1196,17 @@ define([
       var globalViewPaddingLeft = 10
       var barcodeTreeWidth = barcodeComparisonViewWidth - barcodePaddingLeft - barcodeTextPaddingLeft - globalViewPaddingLeft
       var barcodeNodeChangeRatio = barcodeTreeWidth / barcodeNodeMaxWidth
+      return barcodeNodeChangeRatio
+    },
+    /**
+     * 将barcodeTree更新到一个视图的宽度的大小
+     */
+    update_fit_in_screen: function (minRatio) {
+      var self = this
+      var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
       for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-        barcodeNodeAttrArray[bI].x = barcodeNodeAttrArray[bI].x * barcodeNodeChangeRatio
-        barcodeNodeAttrArray[bI].width = barcodeNodeAttrArray[bI].width * barcodeNodeChangeRatio
+        barcodeNodeAttrArray[bI].x = barcodeNodeAttrArray[bI].x * minRatio
+        barcodeNodeAttrArray[bI].width = barcodeNodeAttrArray[bI].width * minRatio
       }
     },
     get_sorting_value: function (Selection_State, sortMode, comparedNodeId) {
@@ -1509,34 +1529,37 @@ define([
     //  根据传入的节点id计算节点下层的子树大小比例
     get_subree_size_obj_array: function (node_id) {
       var self = this
-      var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+      var barcodeNodeAttrArray = self.get_barcode_node_array()
+      // var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
       var nodeIndex = self.get_node_index(node_id)
-      //  barcodeNode节点的深度
-      var fatherNodeDepth = barcodeNodeAttrArray[nodeIndex].depth
-      var subtreeRootDepth = fatherNodeDepth + 1
       var subtreeLengthObj = {}
-      //  当前计数的subtree的root节点id
-      var currentAddedSubtreeRootId = null
-      for (var bI = (nodeIndex + 1); bI < barcodeNodeAttrArray.length; bI++) {
-        var barcodeNode = barcodeNodeAttrArray[bI]
-        var barcodeNodeId = barcodeNode.id
-        var barcodeNodeDepth = barcodeNode.depth
-        //  遇到下一个subtree, 更换当前计数的subtree的根节点id
-        if (barcodeNodeDepth === subtreeRootDepth) {
-          currentAddedSubtreeRootId = barcodeNodeId
-          subtreeLengthObj[barcodeNodeId] = 0
-        }
-        //  如果当前计数的subtree根节点id不为null, 那么就在当前技术的subtree增加1
-        if (currentAddedSubtreeRootId != null) {
-          if (window.selectedLevels.indexOf(barcodeNodeDepth) !== -1) {
-            if (barcodeNode.existed) {
-              subtreeLengthObj[currentAddedSubtreeRootId] = subtreeLengthObj[currentAddedSubtreeRootId] + 1
+      if ((typeof (subtreeLengthObj) !== 'undefined') && (typeof (barcodeNodeAttrArray[nodeIndex]) !== 'undefined')) {
+        //  barcodeNode节点的深度
+        var fatherNodeDepth = barcodeNodeAttrArray[nodeIndex].depth
+        var subtreeRootDepth = fatherNodeDepth + 1
+        //  当前计数的subtree的root节点id
+        var currentAddedSubtreeRootId = null
+        for (var bI = (nodeIndex + 1); bI < barcodeNodeAttrArray.length; bI++) {
+          var barcodeNode = barcodeNodeAttrArray[bI]
+          var barcodeNodeId = barcodeNode.id
+          var barcodeNodeDepth = barcodeNode.depth
+          //  遇到下一个subtree, 更换当前计数的subtree的根节点id
+          if (barcodeNodeDepth === subtreeRootDepth) {
+            currentAddedSubtreeRootId = barcodeNodeId
+            subtreeLengthObj[barcodeNodeId] = 0
+          }
+          //  如果当前计数的subtree根节点id不为null, 那么就在当前技术的subtree增加1
+          if (currentAddedSubtreeRootId != null) {
+            if (window.selectedLevels.indexOf(barcodeNodeDepth) !== -1) {
+              if (barcodeNode.existed) {
+                subtreeLengthObj[currentAddedSubtreeRootId] = subtreeLengthObj[currentAddedSubtreeRootId] + 1
+              }
             }
           }
-        }
-        //  如果当前的节点的的depth为节点深度的depth, 那么就暂停计数
-        if (barcodeNodeDepth === fatherNodeDepth) {
-          break
+          //  如果当前的节点的的depth为节点深度的depth, 那么就暂停计数
+          if (barcodeNodeDepth === fatherNodeDepth) {
+            break
+          }
         }
       }
       return subtreeLengthObj
@@ -2066,7 +2089,7 @@ define([
           var movedX = 0
           //  nextAlignedIndex的含义是在这个index处, 所有的barcodeTree的相应节点的x值是相同的
           for (var bI = (rangeStartIndex + 1); bI < barcodeNodeAttrArray.length; bI++) {
-            if (barcodeNodeAttrArray[bI].depth === barcodeNode.depth) {
+            if (barcodeNodeAttrArray[bI].depth <= barcodeNode.depth) {
               nextAlignedIndex = bI
               break
             }

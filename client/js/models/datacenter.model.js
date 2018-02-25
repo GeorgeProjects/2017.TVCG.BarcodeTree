@@ -54,61 +54,92 @@ define([
       Backbone.Events.trigger(Config.get('EVENTS')['HIDE_LOADING_ICON'])
     },
     init_dataset_mode: function () {
-      var viewWidth = $(document).width()
-      var viewHeight = $(document).height()
-      //  1600的宽度, 892的屏幕高度 对应的是当前的barcode高度50和当前barcode宽度[ 18, 12, 8, 4, 0 ], 那么需要对于该设置参数按按照比例进行变化
+      var self = this
       var defaultSettings = Config.get('DEFAULT_SETTINGS')
-      var initHeight = defaultSettings.init_height
-      var initWidth = defaultSettings.init_width
-      var heightRatio = viewHeight / initHeight
-      var widthRatio = viewWidth / initWidth
       var defaultDataSetName = defaultSettings.default_dataset
       var defaultBarcodeMode = defaultSettings.default_mode
+      //  barcodeWidth和selectedLevels首先赋予默认的数值, 在获得不同的histogram数据之后相对应的更新这两个数据集
       var defaultBarcodeWidthArray = defaultSettings.default_width_array
       //  根据width ratio计算与width ratio相关的变量
-      var defaultBarcodeNodeInterval = widthRatio > 1 ? Math.round(defaultSettings.barcode_node_interval * widthRatio) : defaultSettings.barcode_node_interval
-      for (var dI = 0; dI < defaultBarcodeWidthArray.length; dI++) {
-        defaultBarcodeWidthArray[dI] = Math.round(defaultBarcodeWidthArray[dI] * widthRatio)
-      }
-      var MAX_BARCODE_NODE_PADDING = Config.get('MAX_BARCODE_NODE_PADDING')
-      var defaultBarcodeTreeConfigHeight = Variables.get('barcodeTreeConfigHeight')
-      var defaultSuperTreeHeight = Variables.get('superTreeHeight')
-      var maxBarcodePaddingNodeWidth = MAX_BARCODE_NODE_PADDING * widthRatio
-      defaultSettings.original_width_array = JSON.parse(JSON.stringify(defaultBarcodeWidthArray))
-      //  根据计算得到的height ratio计算与height ratio相关的变量
-      var defaultHeight = Math.round(defaultSettings.default_barcode_height * heightRatio)
-      var defaultSelectedLevels = defaultSettings.default_selected_levels
-      var barcodeTreeConfigHeight = defaultBarcodeTreeConfigHeight * widthRatio
-      Variables.set('barcodeTreeConfigHeight', barcodeTreeConfigHeight)
-      var defaultBarcodeTextPaddingLeft = Variables.get('barcodeTextPaddingLeft')
-      var barcodeTextPaddingLeft = defaultBarcodeTextPaddingLeft * widthRatio
-      Variables.set('barcodeTextPaddingLeft', barcodeTextPaddingLeft)
-      var defaultBarcodePaddingLeft = Variables.get('barcodePaddingLeft')
-      var barcodePaddingLeft = defaultBarcodePaddingLeft * widthRatio
-      Variables.set('barcodePaddingLeft', barcodePaddingLeft)
-      var superTreeHeight = defaultSuperTreeHeight * heightRatio * 0.8
-      Variables.set('superTreeHeight', superTreeHeight)
-      var defaultComparisonResultPadding = Config.get('COMPARISON_RESULT_PADDING')
-      var comparisonResultPadding = defaultComparisonResultPadding * widthRatio
-      Config.set('COMPARISON_RESULT_PADDING', comparisonResultPadding)
-      var compactNum = defaultSettings.compact_num
-      Variables.set('barcodeMode', defaultBarcodeMode)
-      Variables.set('currentDataSetName', defaultDataSetName)
-      Variables.set('barcodeWidthArray', defaultBarcodeWidthArray)
-      Variables.set('barcodeHeight', defaultHeight)
-      Variables.set('selectedLevels', defaultSelectedLevels)
-      Variables.set('compactNum', compactNum)
+      //  1. 更新barcode的node interval的大小
+      var defaultBarcodeNodeInterval = defaultSettings.barcode_node_interval
+      var updateBarcodeNodeInterval = self.update_width_by_ratio(defaultBarcodeNodeInterval)
+      defaultBarcodeNodeInterval = updateBarcodeNodeInterval > defaultBarcodeNodeInterval ? updateBarcodeNodeInterval : defaultBarcodeNodeInterval
       Variables.set('barcodeNodeInterval', defaultBarcodeNodeInterval)
-      Variables.set('maxBarcodePaddingNodeWidth', maxBarcodePaddingNodeWidth)
-      //  初始化barcodeViewPaddingRight, 在不同的屏幕上的padding right是不同的
-      //TODO
-      window.barcodeMode = defaultBarcodeMode
-      window.dataSetName = defaultDataSetName
-      window.barcodeWidthArray = defaultBarcodeWidthArray
-      window.barcodeHeight = defaultHeight
-      window.selectedLevels = defaultSelectedLevels
-      window.compactNum = compactNum
       window.barcodeNodeInterval = defaultBarcodeNodeInterval
+      //  2. 更新barcode的node width的大小
+      for (var dI = 0; dI < defaultBarcodeWidthArray.length; dI++) {
+        defaultBarcodeWidthArray[dI] = self.update_width_by_ratio(defaultBarcodeWidthArray[dI])
+      }
+      Variables.set('barcodeWidthArray', defaultBarcodeWidthArray)
+      window.barcodeWidthArray = defaultBarcodeWidthArray
+      defaultSettings.original_width_array = JSON.parse(JSON.stringify(defaultBarcodeWidthArray))
+      //  3. 更新barcodeNode padding的大小
+      var MAX_BARCODE_NODE_PADDING = Config.get('MAX_BARCODE_NODE_PADDING')
+      var maxBarcodePaddingNodeWidth = self.update_width_by_ratio(MAX_BARCODE_NODE_PADDING)
+      Variables.set('maxBarcodePaddingNodeWidth', maxBarcodePaddingNodeWidth)
+      //  4. 更新barcode的左侧Text的偏移量的大小
+      var defaultBarcodeTextPaddingLeft = Variables.get('barcodeTextPaddingLeft')
+      var barcodeTextPaddingLeft = self.update_width_by_ratio(defaultBarcodeTextPaddingLeft)
+      Variables.set('barcodeTextPaddingLeft', barcodeTextPaddingLeft)
+      //  5. 更新barcode的左侧的偏移量的
+      var defaultBarcodePaddingLeft = Variables.get('barcodePaddingLeft')
+      var barcodePaddingLeft = self.update_width_by_ratio(defaultBarcodePaddingLeft)
+      Variables.set('barcodePaddingLeft', barcodePaddingLeft)
+      //  6. 更新比较结果的padding的大小
+      var defaultComparisonResultPadding = Config.get('COMPARISON_RESULT_PADDING')
+      var comparisonResultPadding = self.update_width_by_ratio(defaultComparisonResultPadding)
+      Config.set('COMPARISON_RESULT_PADDING', comparisonResultPadding)
+      //  根据计算得到的height ratio计算与height ratio相关的变量
+      //  1 更新barcodeTree的config的height的大小
+      var defaultBarcodeTreeConfigHeight = Variables.get('barcodeTreeConfigHeight')
+      var barcodeTreeConfigHeight = self.update_height_by_ratio(defaultBarcodeTreeConfigHeight) // 这个地方本来是用width ratio进行更新的
+      Variables.set('barcodeTreeConfigHeight', barcodeTreeConfigHeight)
+      //  2. 更新superTree的高度
+      var defaultSuperTreeHeight = Variables.get('superTreeHeight')
+      var defaultHeight = self.update_height_by_ratio(defaultSuperTreeHeight)
+      Variables.set('barcodeHeight', defaultHeight)
+      window.barcodeHeight = defaultHeight
+      var superTreeHeight = defaultHeight * 0.8
+      Variables.set('superTreeHeight', superTreeHeight)
+      //  更新barcode的模式
+      Variables.set('barcodeMode', defaultBarcodeMode)
+      window.barcodeMode = defaultBarcodeMode
+      //  初始化barcodeViewPaddingRight, 在不同的屏幕上的padding right是不同的
+      Variables.set('currentDataSetName', defaultDataSetName)
+      window.dataSetName = defaultDataSetName
+      //  更新barcode的compactNum
+      var compactNum = defaultSettings.compact_num
+      Variables.set('compactNum', compactNum)
+      window.compactNum = compactNum
+      //  更新选择的层级
+      var defaultSelectedLevels = defaultSettings.default_selected_levels
+      Variables.set('selectedLevels', defaultSelectedLevels)
+      window.selectedLevels = defaultSelectedLevels
+    },
+    /**
+     * 按照比例更新barcode的节点的宽度相关的属性
+     */
+    update_width_by_ratio: function (width) {
+      //  1600的宽度, 892的屏幕高度 对应的是当前的barcode高度50和当前barcode宽度[ 18, 12, 8, 4, 0 ], 那么需要对于该设置参数按按照比例进行变化
+      var viewWidth = $(document).width()
+      var defaultSettings = Config.get('DEFAULT_SETTINGS')
+      var initWidth = defaultSettings.init_width
+      var widthRatio = viewWidth / initWidth
+      var changedWidth = Math.round(widthRatio * width)
+      return changedWidth
+    },
+    /**
+     * 按照比例更新barcode节点的高度相关的属性
+     */
+    update_height_by_ratio: function (height) {
+      //  1600的宽度, 892的屏幕高度 对应的是当前的barcode高度50和当前barcode宽度[ 18, 12, 8, 4, 0 ], 那么需要对于该设置参数按按照比例进行变化
+      var viewHeight = $(document).height()
+      var defaultSettings = Config.get('DEFAULT_SETTINGS')
+      var initHeight = defaultSettings.init_height
+      var heightRatio = viewHeight / initHeight
+      var changedHeight = Math.round(height * heightRatio)
+      return changedHeight
     },
     /**
      * 将barcode的宽度控制在视图的范围内
@@ -359,6 +390,8 @@ define([
       var self = this
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+      console.log('window.barcodeWidthArray', window.barcodeWidthArray)
+      console.log('window.selectedLevels', window.selectedLevels)
       var formData = {
         'dataItemNameArray': selectedItemsArray,
         'dataSetName': window.dataSetName,
@@ -468,8 +501,6 @@ define([
       var selectedItemsArray = Variables.get('selectItemNameArray')
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
-      console.log('window.selectedLevels', window.selectedLevels)
-      console.log('window.barcodeWidthArray', window.barcodeWidthArray)
       var formData = {
         'dataItemNameArray': selectedItemsArray,
         'dataSetName': window.dataSetName,
@@ -481,7 +512,6 @@ define([
       var originalDatasuccessUpdateFunc = function (result) {
         var treeNodeArrayObject = result.treeNodeArrayObject
         var originalTreeObjObject = result.originalTreeObjObject
-        console.log('treeNodeArrayObject', treeNodeArrayObject)
         var selectItemNameArray = Variables.get('selectItemNameArray')
         for (var item in treeNodeArrayObject) {
           var barcodeNodeAttrArray = treeNodeArrayObject[item]
@@ -500,9 +530,7 @@ define([
         }
         // Backbone.Events.trigger(Config.get('EVENTS')[ 'UPDATE_BARCODE_VIEW' ])
         // self.barcodeCollection.add_all_super_subtree()
-
         self.barcodeCollection.align_node_in_selected_list()
-
       }
       self.requestDataFromServer(url, formData, originalDatasuccessUpdateFunc)
     },
@@ -567,7 +595,7 @@ define([
       var compactNum = window.compactNum
       var formData = {
         'dataItemNameArray': selectedItemsArray,
-        'subtreeObjArray': subtreeObjArray,
+        // 'subtreeObjArray': subtreeObjArray,
         'dataSetName': window.dataSetName,
         'barcodeWidthArray': window.barcodeWidthArray,
         'barcodeHeight': window.barcodeHeight * barcodeHeightRatio,
@@ -588,6 +616,7 @@ define([
     //  删除选中的某个元素的handler
     request_remove_item: function (removedSelectedItemsArray) {
       var self = this
+      console.log('removedSelectedItemsArray', removedSelectedItemsArray)
       var url = 'remove_from_super_tree'
       var formData = {
         'removedDataItemNameArray': removedSelectedItemsArray,
@@ -602,7 +631,6 @@ define([
     requestDataFromServer: function (Url, formData, originalDatasuccessFunc) {
       var self = this
       var barcodeTreeId = formData.dataItemName
-      console.log('formData', formData)
       $.ajax({
         url: Url,
         type: 'POST',
@@ -748,6 +776,33 @@ define([
       self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
       self.trigger_hide_loading_icon()
     },
+    //  更新barcode选定的层级以及层级的宽度
+    update_selected_levels_width: function (max_depth) {
+      var self = this
+      var barcodeWidthArray = []
+      var selectedLevels = []
+      for (var level = 0; level <= max_depth; level++) {
+        //  将所有的层级添加到selectedLevel数组中
+        selectedLevels.push(level)
+        var width = uniform_width_for_each_level(level, max_depth)
+        barcodeWidthArray.push(width)
+      }
+      //  更新barcode的宽度,以及选定的barcode的层级
+      window.barcodeWidthArray = barcodeWidthArray
+      window.selectedLevels = selectedLevels
+      Variables.set('barcodeWidthArray', barcodeWidthArray)
+      Variables.set('selectedLevels', selectedLevels)
+      //  采用平均的方法计算barcode的节点的宽度
+      function uniform_width_for_each_level(level, max_depth) {
+        var maxBarcodeWidth = Variables.get('maxBarcodeWidth')
+        var minBarcodeWidth = Variables.get('minBarcodeWidth')
+        var barcodeLevelPerWidth = maxBarcodeWidth / max_depth
+        if (level === max_depth) {
+          return minBarcodeWidth
+        }
+        return (max_depth - level) * barcodeLevelPerWidth
+      }
+    },
     //  获取histogram数据的后续处理函数
     request_histogram_handler: function (result) {
       var self = this
@@ -769,7 +824,10 @@ define([
       result.className = 'barcodetree-class'
       //  设置读取数据的相应属性, maxDepth - 树的最大深度, fileInfo - 树的基本信息
       histogramModel.set('histogramDataObject', result)
+      //  更新barcode选定的层级以及层级的宽度
       Variables.set('maxDepth', result.maxDepth)
+      self.update_selected_levels_width(result.maxDepth)
+      //  得到了maxDepth之后, 用户需要设置selectLevels, 和nodeWidthArray
       //  在得到了barcode的最大深度之后, 需要初始化barcode不同层级节点的颜色
       window.Variables.initNodesColor()
       //  trigger 渲染histogram的信号, histogram-main视图中会渲染得到相应的结果

@@ -5,13 +5,14 @@ var dataCenter = require('../dataCenter/dataCenter')
 var handlerBuildSuperTree = function (request, response) {
   var reqBody = request.body
   var dataSetName = reqBody.dataSetName
-  var subtreeObjArray = reqBody.subtreeObjArray
+  // var subtreeObjArray = reqBody.subtreeObjArray
   var dataItemNameArray = reqBody['dataItemNameArray']
   var dataItemType = typeof(dataItemNameArray)
   var selectedLevels = reqBody['selectedLevels']
   var barcodeWidthArray = reqBody['barcodeWidthArray']
   var barcodeHeight = reqBody['barcodeHeight']
   var barcodeNodeInterval = +reqBody['barcodeNodeInterval']
+  var rootId = reqBody.rootId
   var rootLevel = +reqBody.rootLevel
   var maxLevel = +reqBody.maxLevel
   var alignedLevel = reqBody.alignedLevel
@@ -32,6 +33,14 @@ var handlerBuildSuperTree = function (request, response) {
   var original_compact_superTreeNodeObj = null
   if (dataItemType === 'string') {
     dataItemNameArray = [dataItemNameArray]
+  }
+  //  读取subtreeObjectArray
+  var subtreeObjArray = []
+  for (var sI = 0; sI < dataItemNameArray.length; sI++) {
+    var subtreeObj = dataCenter.get_subtree_id_index_data(dataSetName, dataItemNameArray[sI], rootId)
+    if (typeof(subtreeObj) !== 'undefined') {
+      subtreeObjArray.push(subtreeObj)
+    }
   }
   var maxSubtreeWidth = 0
   for (var sI = 0; sI < subtreeObjArray.length; sI++) {

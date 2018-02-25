@@ -40,7 +40,7 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
   //  之前的测试程序, 将name中的数字变成字符
   // num_to_character_preprocess()
   //  执行对于NBAdata的预处理函数NBA_preprocess时, 需要在originalData文件夹中改变文件名称为1946 - 2017.json
-  // NBA_preprocess()
+  //  NBA_preprocess()
   //  对于recordTree数据的预处理函数
   function preprocess() {
     var filePath = './server/data/DailyRecordTree/originalData/'
@@ -53,7 +53,9 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
           var originalTreeObj = require('../data/DailyRecordTree/originalData/' + f)
           var originalTreeObj1 = addCategoryNameToObj(originalTreeObj)
           fs.writeFile(('./server/data/DailyRecordTree/originalData1/' + f), JSON.stringify(originalTreeObj1), 'utf8', function (err) {
-            console.log('err', err)
+            if (err) {
+              console.log('err', err)
+            }
           });
         }
       });
@@ -72,7 +74,9 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
           var originalTreeObj = require('../data/DailyRecordTree/originalData/' + f)
           var originalTreeObj1 = changeObjNameAttr(originalTreeObj)
           fs.writeFile(('./server/data/DailyRecordTree/originalData4/' + f), JSON.stringify(originalTreeObj1), 'utf8', function (err) {
-            console.log('err', err)
+            if (err) {
+              console.log('err', err)
+            }
           });
         }
       });
@@ -82,7 +86,7 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
   //  对于NBA数据的预处理函数, 预处理函数的输入是在数据文件夹下的raw data, 输出是在数据文件夹下的regularFormData
   function NBA_preprocess() {
     var dataFileName = "NBATeamTree"
-    var filePath = './server/data/' +  dataFileName + '/rawData/'
+    var filePath = './server/data/' + dataFileName + '/rawData/'
     fs.readdir(filePath, function (err, files) {
       if (err) {
         console.log('err', err)
@@ -116,8 +120,10 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
       compute_num_attr(regularFormTreeArray)
       //  将修改好的对象写入到文件中
       write_file_obj(dataFileName, regularFormTreeArray)
-      fs.writeFile(('./server/data/' + dataFileName +'/regularFormData/unionTree.json'), JSON.stringify(unionTree), 'utf8', function (err) {
-        console.log('err', err)
+      fs.writeFile(('./server/data/' + dataFileName + '/regularFormData/unionTree.json'), JSON.stringify(unionTree), 'utf8', function (err) {
+        if (err) {
+          console.log('err', err)
+        }
       })
     })
 
@@ -336,7 +342,9 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
     function add_node_name(regularFormTreeArray, unionTree) {
       var correspondingObj = get_corresponding_object(unionTree)
       fs.writeFile(('./server/data/NBATeamTree/regularFormData/correspondingObj.json'), JSON.stringify(correspondingObj), 'utf8', function (err) {
-        console.log('err', err)
+        if (err) {
+          console.log('err', err)
+        }
       })
       for (var rI = 0; rI < regularFormTreeArray.length; rI++) {
         add_node_name_to_single_tree(correspondingObj, regularFormTreeArray[rI])

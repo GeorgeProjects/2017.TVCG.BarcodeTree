@@ -94,7 +94,9 @@ function treeLinearization(treeObj, initDepth, originalSequenceState) {
         })
       } else {
         treeObj.children = treeObj.children.sort(function (a, b) {
-          return a.index > b.index
+          var aName = a.name
+          var bName = b.name
+          return a_minus_b(aName, bName)
         })
       }
       for (var cI = 0; cI < treeObj.children.length; cI++) {
@@ -104,6 +106,25 @@ function treeLinearization(treeObj, initDepth, originalSequenceState) {
       }
     }
     return
+  }
+
+  //  排序中使用到的的函数
+  function a_minus_b(aName, bName) {
+    var aNameArray = transform_num_array(aName)
+    var bNameArray = transform_num_array(bName)
+    for (var nI = 0; nI < aNameArray.length; nI++) {
+      var aNum = +aNameArray[nI]
+      var bNum = +bNameArray[nI]
+      if (aNum !== bNum) {
+        return aNum - bNum
+      }
+    }
+  }
+
+  //  将name转变成num的数组
+  function transform_num_array(name) {
+    var nameArray = name.split('_')
+    return nameArray
   }
 
   var depth = initDepth
@@ -1496,13 +1517,32 @@ function sortChildren(tree) {
         tree.children.sort(function (a, b) {
           var aName = a.name
           var bName = b.name
-          return aName - bName
+          return a_minus_b(aName, bName)
         })
         for (var i = 0; i < tree.children.length; i++) {
           innerSortChildren(tree.children[i])
         }
       }
     }
+  }
+
+  //  排序中使用到的的函数
+  function a_minus_b(aName, bName) {
+    var aNameArray = transform_num_array(aName)
+    var bNameArray = transform_num_array(bName)
+    for (var nI = 0; nI < aNameArray.length; nI++) {
+      var aNum = +aNameArray[nI]
+      var bNum = +bNameArray[nI]
+      if (aNum !== bNum) {
+        return aNum - bNum
+      }
+    }
+  }
+
+  //  将name转变成num的数组
+  function transform_num_array(name) {
+    var nameArray = name.split('_')
+    return nameArray
   }
 }
 /**

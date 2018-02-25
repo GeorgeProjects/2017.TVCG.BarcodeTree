@@ -59,6 +59,7 @@ var handleCompactData = function (request, response) {
 //  ********************
 var handleOriginalData = function (request, response) {
   //  读取传递的的数据
+  console.log('handleOriginalData')
   var reqBody = request.body
   var dataSetName = reqBody.dataSetName
   var dataItemNameArray = reqBody['dataItemNameArray']

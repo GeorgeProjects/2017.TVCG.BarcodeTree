@@ -268,9 +268,10 @@ define([
           self.changeDisplayMode2Original()
         } else if (display_mode === Config.get('CONSTANT').COMPACT) {
           self.changeDisplayMode2Compact()
-        } else if (display_mode === Config.get('CONSTANT').GLOBAL) {
-          self.changeDisplayMode2Global()
         }
+        // else if (display_mode === Config.get('CONSTANT').GLOBAL) {
+        //   self.changeDisplayMode2Global()
+        // }
       }
     },
     render_barcode_tree_config_view: function () {

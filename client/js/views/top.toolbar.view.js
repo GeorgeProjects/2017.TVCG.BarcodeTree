@@ -647,9 +647,13 @@ define([
      */
     global_comparison: function () {
       var self = this
+      console.log('global_comparison')
       var barcodeCollection = self.options.barcodeCollection
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
-      var Max_Real_Level = BarcodeGlobalSetting.Max_Real_Level
+      //  对齐barcodeTree的最深的层级
+      //var Max_Real_Level = Variables.get('maxDepth')
+      var Max_Real_Level = Variables.get('alignedLevel')
+      console.log('Max_Real_Level', Max_Real_Level)
       var MaxDisplayedLevel = Max_Real_Level + 1
       var alignedLevelText = $('#aligned-level-text')
       var nodeObjId = 'node-0-root'
@@ -677,6 +681,7 @@ define([
           var barcodeModel = filterModelArray[0]
           var barcodeTreeId = barcodeModel.get('barcodeTreeId')
           // var barcodeTreeId = null
+          barcodeCollection.remove_crossed_node_alignment(nodeObjId)
           barcodeCollection.add_selected_node(barcodeTreeId, nodeObjId, nodeObjDepth, nodeObjCategory, siblingNodesArray, childrenNodesArray)
           //  将所有的选择的节点清空
           barcodeCollection.add_selected_obj_into_children_nodes()

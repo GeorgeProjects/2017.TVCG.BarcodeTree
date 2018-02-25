@@ -1,5 +1,6 @@
 //  构建全局的数据对象, 防止用户对于本地数据的重复读取
 var globalOriginalObjDataCenter = {}
+var globalIdIndexObjDataCenter = {}
 var globalLinearTreeNodeArrayCenter = {}
 var globalCompactOriginalObjDataCenter = {}
 var globalCompactLinearTreeNodeArrayCenter = {}
@@ -27,6 +28,10 @@ function get_super_tree_obj() {
 function add_original_data_set(data_set_name, data_set_obj) {
   globalOriginalObjDataCenter[data_set_name] = data_set_obj
 }
+//  将读取的本地数据转换得到的以节点的id为索引的数据增加到全局变量的数据对象中
+function add_id_index_data_set(data_set_name, data_set_obj) {
+  globalIdIndexObjDataCenter[data_set_name] = data_set_obj
+}
 
 //  将读取的本地数据并且线性化之后的结果增加到全局的数据对象中
 function add_linear_data_set(data_set_name, data_set_obj) {
@@ -46,6 +51,13 @@ function add_compact_original_data_set(data_set_name, compact_data_set_obj) {
 //  更新selectedLevels数组
 function update_select_levels(selected_levels) {
   globalSelectedLevels = clone(selected_levels)
+}
+//  根据dataSet的名称, dataItem的内容, subtreeid的内容, 获取subtreeObject的对象
+function get_subtree_id_index_data(data_set_name, data_item, subtree_id) {
+  var IdIndexObjDataSet = globalIdIndexObjDataCenter[data_set_name]
+  var dataObject = IdIndexObjDataSet[data_item]
+  var subtreeObject = dataObject[subtree_id]
+  return subtreeObject
 }
 
 //  从全局的数据对象中获取数据
@@ -173,6 +185,8 @@ function clear_all() {
   globalRowSequenceArray = []
 }
 
+exports.add_id_index_data_set = add_id_index_data_set
+exports.get_subtree_id_index_data = get_subtree_id_index_data
 
 exports.add_original_data_set = add_original_data_set
 exports.get_original_data = get_original_data
