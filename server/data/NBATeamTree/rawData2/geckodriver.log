@@ -1,0 +1,64 @@
+1519348579577	geckodriver	INFO	geckodriver 0.19.1
+1519348579584	geckodriver	INFO	Listening on 127.0.0.1:33859
+1519348579892	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.iB0JZgJHp6Nf"
+1519348583397	Marionette	INFO	Enabled via --marionette
+1519348587913	Marionette	INFO	Listening on port 33835
+1519348588075	Marionette	WARN	TLS certificate errors will be ignored for this session
+1519374461253	geckodriver	INFO	geckodriver 0.19.1
+1519374461285	geckodriver	INFO	Listening on 127.0.0.1:43421
+1519374461643	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.MtnLf7jCOB8X"
+1519374465247	Marionette	INFO	Enabled via --marionette
+1519374469722	Marionette	INFO	Listening on port 43357
+1519374469814	Marionette	WARN	TLS certificate errors will be ignored for this session
+WARNING: At least one completion condition is taking too long to complete. Conditions: [{"name":"SessionStore: flushing all windows","state":{"total":1,"current":0},"filename":"resource:///modules/sessionstore/SessionStore.jsm","lineNumber":1608,"stack":["resource:///modules/sessionstore/SessionStore.jsm:ssi_onQuitApplicationGranted:1608","resource:///modules/sessionstore/SessionStore.jsm:ssi_observe:778","chrome://marionette/content/driver.js:GeckoDriver.prototype.quit:3381","chrome://marionette/content/server.js:despatch:560","chrome://marionette/content/server.js:execute:534","chrome://marionette/content/server.js:onPacket/<:509","chrome://marionette/content/server.js:onPacket:508","chrome://marionette/content/transport.js:_onJSONObjectReady/<:500"]}] Barrier: quit-application-granted
+1519378223623	geckodriver	INFO	geckodriver 0.19.1
+1519378223630	geckodriver	INFO	Listening on 127.0.0.1:36823
+1519378224779	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.dTdlffK6d9o3"
+1519378225457	Marionette	INFO	Enabled via --marionette
+1519378227652	Marionette	INFO	Listening on port 33311
+1519378227691	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: uncaught exception: out of memory
+JavaScript error: , line 0: uncaught exception: out of memory
+JavaScript error: http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js, line 1: uncaught exception: out of memory
+JavaScript error: , line 0: uncaught exception: out of memory
+[Child 3170, Chrome_ChildThread] WARNING: pipe error (21): Connection reset by peer: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+[Child 3170, Chrome_ChildThread] WARNING: pipe error (35): Connection reset by peer: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+[Child 3170, Chrome_ChildThread] WARNING: pipe error (3): Connection reset by peer: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+1519385279136	geckodriver	INFO	geckodriver 0.19.1
+1519385279139	geckodriver	INFO	Listening on 127.0.0.1:51787
+1519385280292	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.cS5LD2MT7GU4"
+1519385281051	Marionette	INFO	Enabled via --marionette
+1519385283366	Marionette	INFO	Listening on port 41467
+1519385283419	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: uncaught exception: out of memory
+[Child 5443, Chrome_ChildThread] WARNING: pipe error (23): Connection reset by peer: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+[Child 5443, Chrome_ChildThread] WARNING: pipe error (35): Connection reset by peer: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+[Child 5443, Chrome_ChildThread] WARNING: pipe error: Broken pipe: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 709
+1519387577095	geckodriver	INFO	geckodriver 0.19.1
+1519387577098	geckodriver	INFO	Listening on 127.0.0.1:59221
+1519387578248	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.2AFYzKKLMTS2"
+1519387578956	Marionette	INFO	Enabled via --marionette
+1519387581137	Marionette	INFO	Listening on port 46111
+1519387581178	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: uncaught exception: out of memory
+JavaScript error: , line 0: uncaught exception: out of memory
+WARNING: At least one completion condition is taking too long to complete. Conditions: [{"name":"SessionStore: flushing all windows","state":{"total":1,"current":0},"filename":"resource:///modules/sessionstore/SessionStore.jsm","lineNumber":1608,"stack":["resource:///modules/sessionstore/SessionStore.jsm:ssi_onQuitApplicationGranted:1608","resource:///modules/sessionstore/SessionStore.jsm:ssi_observe:778","chrome://marionette/content/driver.js:GeckoDriver.prototype.quit:3381","chrome://marionette/content/server.js:despatch:560","chrome://marionette/content/server.js:execute:534","chrome://marionette/content/server.js:onPacket/<:509","chrome://marionette/content/server.js:onPacket:508","chrome://marionette/content/transport.js:_onJSONObjectReady/<:500"]}] Barrier: quit-application-granted
+1519391122000	geckodriver	INFO	geckodriver 0.19.1
+1519391122045	geckodriver	INFO	Listening on 127.0.0.1:38961
+1519391122541	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.xbwyc6jBbi75"
+1519391130991	Marionette	INFO	Enabled via --marionette
+1519391141869	Marionette	INFO	Listening on port 39689
+1519391141994	Marionette	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: , line 0: uncaught exception: out of memory
+JavaScript error: , line 0: uncaught exception: out of memory
+JavaScript error: , line 0: uncaught exception: out of memory
+[Child 7224, Chrome_ChildThread] WARNING: pipe error (35): Connection reset by peer: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+[Child 7224, Chrome_ChildThread] WARNING: pipe error (23): Connection reset by peer: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353
+[Child 7224, Chrome_ChildThread] WARNING: pipe error: Broken pipe: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 709
+1519393460741	geckodriver	INFO	geckodriver 0.19.1
+1519393460744	geckodriver	INFO	Listening on 127.0.0.1:39691
+1519393462090	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.RzfBxy2B95S0"
+1519393462846	Marionette	INFO	Enabled via --marionette
+1519393465328	Marionette	INFO	Listening on port 34229
+1519393465411	Marionette	WARN	TLS certificate errors will be ignored for this session
+[Parent 7529, Gecko_IOThread] WARNING: pipe error (87): Connection reset by peer: file /build/firefox-9j9NY8/firefox-58.0.2+build1/ipc/chromium/src/chrome/common/ipc_channel_posix.cc, line 353

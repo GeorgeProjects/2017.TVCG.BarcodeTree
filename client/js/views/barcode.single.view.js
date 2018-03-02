@@ -422,8 +422,7 @@ define([
           .attr('transform', 'translate(' + 0 + ',' + barcodeTreeYLocation + ')')
         self.singleTree.append('rect')
           .attr('class', function () {
-            var colorClass = barcodeIndex % 2 ? 'bg-odd' : 'bg-even'
-            colorClass = colorClass + ' bg'
+            var colorClass = 'bg ' + 'barcode-bg'
             if (compareBased) {
               colorClass = colorClass + ' compare-based-selection'
             }
@@ -447,7 +446,7 @@ define([
             d3.select(this).classed('hovering-highlight', true)
             d3.select('#barcodetree-svg').selectAll('.barcode-node').classed('.mouseover-unhighlight', false)
             self.trigger_hovering_event()
-            var dayArray = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            var dayArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
             if (barcodeTreeId.indexOf('-') !== -1) {
               var dateInTip = barcodeTreeId.split('-')[1].replaceAll('_', '/')
               var date = barcodeTreeId.split('-')[1].replaceAll('_', '-')
@@ -460,7 +459,7 @@ define([
             if (Config.get('BARCODETREE_TOOLTIP_ENABLE')) {
               tip.show(tipValue)
             }
-            self.trigger_mouseout_event()
+            // self.trigger_mouseout_event()
           })
           .on('mouseout', function () {
             self.unhighlight_barcode_bg()
@@ -469,6 +468,9 @@ define([
             self.trigger_mouseout_event()
             self.trigger_render_cover_rect()
             tip.hide()
+          })
+          .on('click', function () {
+            self.trigger_mouseout_event()
           })
         self.add_barcode_dbclick_click_handler()
         // //  需要将dblclick与click进行区分
@@ -496,6 +498,7 @@ define([
         var barcodeLabelX = self.barcodeTextPaddingLeft
         self.singleTree.append('text')
           .attr('id', 'barcode-label')
+          .attr('class', 'barcode-label')
           .attr('x', barcodeLabelX)
           .attr('y', barcodeHeight / 2)
           .attr('text-anchor', 'start')
@@ -1634,10 +1637,14 @@ define([
         var barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
         var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
         var supertreeSelectedNodesIdObj = barcodeCollection.get_supertree_selected_nodes_id()
+        var selectedNodesIdObj = barcodeCollection.get_selected_nodes_id()
+        var alignedTreeSelectedNodesIdObj = barcodeCollection.get_aligned_tree_selected_node()
         //  首先将所有的节点取消selection的高亮
         self.cancel_selection_highlight()
-        //  首先对所有的节点的透明度统一进行改变
-        self.selection_unhighlightNodes()
+        if (is_selected_nodes_exist(selectedNodesIdObj, supertreeSelectedNodesIdObj, alignedTreeSelectedNodesIdObj)) {
+          //  首先对所有的节点的透明度统一进行改变
+          self.selection_unhighlightNodes()
+        }
         var selectedSuperNodesIdLength = 0
         //  如果存在从superTree中选择的节点, 高亮从superTree中选择的节点
         for (var item in supertreeSelectedNodesIdObj) {
@@ -1647,7 +1654,6 @@ define([
           selectedSuperNodesIdLength = selectedSuperNodesIdLength + 1
         }
         //  高亮从实际的barcodeTree中选择的节点
-        var selectedNodesIdObj = barcodeCollection.get_selected_nodes_id()
         var selectedNodesIdLength = 0
         // 然后按照选择的状态对于节点进行高亮
         for (var item in selectedNodesIdObj) {
@@ -1666,13 +1672,12 @@ define([
           }
         }
         //  在locked状态下选择的节点进行高亮
-        var alignedTreeSelectedNodesIdObj = barcodeCollection.get_aligned_tree_selected_node()
         var alignedSelectedNodesIdLength = 0
         // 然后按照选择的状态对于节点进行高亮
         for (var item in alignedTreeSelectedNodesIdObj) {
           var nodeId = item
           var nodeDepth = alignedTreeSelectedNodesIdObj[item].nodeObjDepth
-          var nodeObjCategoryName = selectedNodesIdObj[item].categoryName
+          var nodeObjCategoryName = alignedTreeSelectedNodesIdObj[item].categoryName
           var barcodeTreeId = alignedTreeSelectedNodesIdObj[item].barcodeTreeId
           var nodeObj = {
             nodeObjId: nodeId,
@@ -1693,6 +1698,21 @@ define([
           } else {
             self.cancel_selection_unhighlightNodes()
           }
+        }
+        //  判断用户是否已经从barcodeTree 的superTree视图中选择了节点
+        function is_selected_nodes_exist(selectedNodesIdObj, supertreeSelectedNodesIdObj, alignedTreeSelectedNodesIdObj) {
+          var selectNum = 0
+          for (var item in selectedNodesIdObj) {
+            selectNum = selectNum + 1
+          }
+          for (var item in supertreeSelectedNodesIdObj) {
+            selectNum = selectNum + 1
+          }
+          for (var item in alignedTreeSelectedNodesIdObj) {
+            selectNum = selectNum + 1
+          }
+          //  返回true表示存在选择的节点, 返回false表示selectNum为0即不存在选择的节点
+          return (selectNum !== 0)
         }
 
         function cancel_aligned_lock_unhighlightNodes() {
@@ -3393,7 +3413,7 @@ define([
         var treeDataModel = self.model
         //  取消在选择状态的所有的高亮
         globalObj.trigger_mouseout_event()
-        globalObj.node_mouseout_handler()
+        // globalObj.node_mouseout_handler()
         if (treeDataModel.is_aligned_state() && (BarcodeGlobalSetting['Align_Lock'])) {
           if (!(treeDataModel.is_aligned_start(d.id) || (treeDataModel.is_aligned_range(d.id)))) {
             return
@@ -3676,8 +3696,6 @@ define([
       //  取消所有节点的高亮, 恢复到最原始的状态
       cancel_selection_highlight: function () {
         var self = this
-        self.d3el.selectAll('.selection-unhighlight')
-          .classed('selection-unhighlight', false)
         self.d3el.selectAll('.selection-highlight')
           .classed('selection-highlight', false)
           .style('fill', null)

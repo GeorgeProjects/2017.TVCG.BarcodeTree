@@ -39,6 +39,8 @@ define([
       BARCODETREE_STATE: {
         BARCODETREE_NODE_SELECTION: 'NODE',// 需要将barcode变换完成之后再绘制icon, 所以时间是需要比bar
         BARCODETREE_SUBTREE_SELECTION: 'SUBTREE',
+        BARCODETREE_DATE_SORT: 'DATE',
+        BARCODETREE_DAY_SORT: 'DAY',
         BARCODETREE_NODENUMBER_SORT: 'NODENUMBER',
         BARCODETREE_ATTRIBUTE_SORT: 'ATTRIBUTE',
         BARCODETREE_SIMILARITY_SORT: 'SIMILARITY',
@@ -54,6 +56,18 @@ define([
         TOPOLOGY: 'TOPOLOGY'
       },
       BARCODETREE_TOOLTIP_ENABLE: true,
+      //  初始情况下的barcode比较的状态
+      INIT_BARCODETREE_GLOBAL_PARAS: {
+        Selection_State: 'NODE', //'SUBTREE'
+        Subtree_Compact: false, //subbarcodeTree是否是comapct的展示模式
+        Align_State: false, //subbarcodeTree是否是comapct的展示模式
+        Comparison_Result_Display: false, //  展示barcodeTree的比较结果
+        Max_Real_Level: 3,
+        Align_Lock: false,
+        Sort_Option: 'DATE',//'DATE', 'DAY', 'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
+        Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
+        Node_Arrangement: false
+      },
       //  展示barcode的不同状态, 包括原始状态, compact状态, global的状态
       'CONSTANT': {
         'ORIGINAL': 'ORIGINAL',
@@ -178,6 +192,8 @@ define([
         //***************************
         //  barcode.single视图上发出的信号
         //  渲染覆盖在barcode的上面的带有斜纹的矩形
+        //  支持lasso的功能的信号
+        'ENABLE_LASSO_FUNCTION': 'enable-lasso-function',
         'RENDER_HOVER_RECT': 'render-hover-rect',
         //  高亮相关的节点
         'HIGH_RELATED_NODES': 'highlight-related-nodes',
@@ -205,6 +221,10 @@ define([
         'SHOW_SUMMARY_STATE': 'show-summary-state',
         //  更新align部分的subtree
         'UPDATE_FOCUS_SUBTREE': 'update-focus-subtree',
+        //***************************
+        //  从barcode comparison视图中发出的信号
+        'HIGHLIGHT_LASSO_SELECTED': 'highlight-lasso-selected',
+        'UNHIGHLIGHT_LASSO_SELECTED': 'unhighlight-lasso-selected',
         //***************************
         //  从toolbar视图中发出的信号
         //  将barcode从original模式转换为compact模式

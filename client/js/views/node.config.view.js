@@ -194,6 +194,7 @@ define([
               var widthArrayControllerNamePrefix = Config.get('WIDTH_ARRAY_CONTROL_NAME_PREFIX')
               var realLevel = bI + 1
               $("#" + widthArrayControllerNamePrefix + realLevel + '-control-slider').slider("value", barcodeWidthArray[bI]);
+              $("#" + widthArrayControllerNamePrefix + realLevel + '-control-slider>' + "#" + widthArrayControllerNamePrefix + realLevel + '-handler').html(Math.round(barcodeWidthArray[bI]));
             }
             //  trigger change width
             Datacenter.barcodeCollection.change_barcode_width()

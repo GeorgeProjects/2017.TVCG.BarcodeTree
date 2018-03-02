@@ -15,10 +15,12 @@ define([
         Comparison_Result_Display: false, //  展示barcodeTree的比较结果
         Max_Real_Level: 3,
         Align_Lock: false,
-        Sort_Option: 'NODENUMBER',//'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
+        Sort_Option: 'DATE',//'DATE', 'DAY', 'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
         Node_Arrangement: false
       },
+      //  判断当前是否处于enable lasso的状态
+      enable_lasso: false,
       //  missed node class
       missed_node_class: 'missed-node-highlight',
       //  general_missed_node_class
@@ -38,7 +40,7 @@ define([
       //  标记各层的bar的宽度
       barcodeWidthArray: [18, 12, 8, 4, 1],
       //  最大的barcode的宽度
-      maxBarcodeWidth: 20,
+      maxBarcodeWidth: 15,
       //  最小的barcode的宽度
       minBarcodeWidth: 2,
       //  barcode节点的最小宽度
@@ -306,7 +308,7 @@ define([
       var barcodeHeight = self.get('barcodeHeight')
       var compactNum = self.get('compactNum')
       var superTreeHeight = +$('#supertree-scroll-panel').height()
-      var barcodeTreeConfigHeight = self.get('barcodeTreeConfigHeight')
+      var barcodeTreeConfigHeight = +$('#top-toolbar-container').height()//self.get('barcodeTreeConfigHeight')
       var barcodeViewPaddingBottom = self.get('barcodeViewPaddingBottom')
       var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - barcodeViewPaddingBottom
       var updatedHeight = barcodeViewHeight / (selectItemNameArray.length + setOperationArray.length)

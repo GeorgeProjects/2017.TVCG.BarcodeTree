@@ -8,6 +8,9 @@
 							    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="subtree-node-selection">
 														<i class="fa fa-sitemap" aria-hidden="true"></i>
 							    </button>
+							    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="tree-selection">
+														<i class="fa icon iconfont icon-ico-lassotool-QQn-"></i>
+							    </button>
 							    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="selection-refresh">
 							       <i class="fa fa-times" aria-hidden="true"></i>
 							    </button>
@@ -42,7 +45,7 @@
 														<i class="fa icon iconfont icon-show-histogram"></i>
 							    </button>
 											<button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="change-subtree-display-mode">
-														<i class="fa icon iconfont icon-alignment"></i>
+														<i class="fa icon iconfont icon-disgonal-strip"></i>
 							    </button>
            <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="global-display-controller">
               <i class="fa fa-th"></i>
@@ -86,9 +89,21 @@
 					       <div class="dropdown-menu" id="sorting-option-menu">
 					        <div id = "sorting-options-menu-container">
 					          <div id = "sorting-options">SORTING OPTIONS</div>
+               <div class="radio">
+                 <label id="label-similarity">
+                   <input type="radio" name="optionsRadios" id="options-similarity" value="DATE" checked>
+                   DATE
+                 </label>
+               </div>
+               <div class="radio">
+                 <label id="label-similarity">
+                   <input type="radio" name="optionsRadios" id="options-similarity" value="DAY">
+                   DAY
+                 </label>
+               </div>
 															<div class="radio">
                  <label id="label-structure">
-                   <input type="radio" name="optionsRadios" id="options-structure" value="NODENUMBER" checked>
+                   <input type="radio" name="optionsRadios" id="options-structure" value="NODENUMBER">
                    NODENUMBER
                  </label>
                </div>

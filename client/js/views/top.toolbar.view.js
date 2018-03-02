@@ -28,6 +28,7 @@ define([
       // 节点选择
       'click #single-node-selection': 'single_node_selection',
       'click #subtree-node-selection': 'subtree_node_selection',
+      'click #tree-selection': 'tree_selection',
       'click #selection-refresh': 'selection_refresh',
       'click #selection-tooltip': 'selection_tooltip',
       // 子树操作
@@ -90,6 +91,13 @@ define([
         self.change_to_not_arrangement()
       })
     },
+    trigger_disable_tree_selection: function () {
+      console.log('trigger_disable_tree_selection')
+      Backbone.Events.trigger(Config.get('EVENTS')['DISABLE_LASSO_FUNCTION'])
+    },
+    trigger_enable_tree_selection: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['ENABLE_LASSO_FUNCTION'])
+    },
     trigger_mouseout_event: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['NODE_MOUSEOUT'])
     },
@@ -134,6 +142,7 @@ define([
     },
     //
     init_sort_options: function () {
+      var self = this
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       $('#sort-options-text').text(BarcodeGlobalSetting['Sort_Option'])
       $(document).on('change', 'input:radio[id^="options-"]', function (event) {
@@ -156,7 +165,7 @@ define([
     init_hovering_event: function () {
       var self = this
       //  鼠标hovering在该视图上, 会删除在barcode上hovering的效果
-      $('#top-toolbar-container').on('mouseover', function () {
+      $('#top-toolbar-container').on('click', function () {
         self.trigger_mouseout_event()
       })
     },
@@ -254,6 +263,20 @@ define([
       $('#barcode-selection #single-node-selection').addClass('active')
       self.trigger_mouseout_event()
     },
+    //  选择整个的barcodeTree
+    tree_selection: function () {
+      var self = this
+      if ($('#tree-selection').hasClass('active')) {
+        $('#tree-selection').removeClass('active')
+        Variables.set('enable_lasso', false)
+        d3.select('#lasso-area')
+          .remove()
+      } else {
+        Variables.set('enable_lasso', true)
+        $('#tree-selection').addClass('active')
+        self.trigger_enable_tree_selection()
+      }
+    },
     //  选择barcodeTree上的子树
     subtree_node_selection: function () {
       var self = this
@@ -275,6 +298,7 @@ define([
         barcodeCollection.add_selected_obj_into_children_nodes()
         barcodeCollection.clear_aligned_selected_node()
       }
+      self.trigger_disable_tree_selection()
       self.trigger_mouseout_event()
     },
     // 在barcodeTree上的子树操作
@@ -647,13 +671,11 @@ define([
      */
     global_comparison: function () {
       var self = this
-      console.log('global_comparison')
       var barcodeCollection = self.options.barcodeCollection
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       //  对齐barcodeTree的最深的层级
       //var Max_Real_Level = Variables.get('maxDepth')
       var Max_Real_Level = Variables.get('alignedLevel')
-      console.log('Max_Real_Level', Max_Real_Level)
       var MaxDisplayedLevel = Max_Real_Level + 1
       var alignedLevelText = $('#aligned-level-text')
       var nodeObjId = 'node-0-root'
@@ -743,13 +765,20 @@ define([
       //  将比较状态切换到锁定的状态
       // self.change_to_compare_lock_state()
       var barcodeCollection = self.options.barcodeCollection
-      if (barcodeCollection.is_aligned_selected_node_empty()) {
-        swal("Sorting Tips", "Select the interested subtree first after locking -> Sorting.");
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      var asc_desc_para = 'desc'
+      var sortOption = BarcodeGlobalSetting['Sort_Option']
+      if (!((sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DATE_SORT'])
+        || (sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DAY_SORT']))) {
+        if (barcodeCollection.is_aligned_selected_node_empty()) {
+          swal("Sorting Tips", "Select the interested subtree first after locking -> Sorting.");
+        } else {
+          // self.change_to_compare_lock_state()
+          self.uniform_sort_handler(asc_desc_para)
+          $('#sort-operation .config-button').removeClass('active')
+        }
       } else {
-        // self.change_to_compare_lock_state()
-        var asc_desc_para = 'desc'
-        self.uniform_sort_handler(asc_desc_para)
-        $('#sort-operation .config-button').removeClass('active')
+        self.uniform_date_sort_handler(asc_desc_para)
       }
     },
     /**
@@ -760,14 +789,21 @@ define([
       //  将比较状态切换到锁定的状态
       // self.change_to_compare_lock_state()
       var barcodeCollection = self.options.barcodeCollection
-      if (barcodeCollection.is_aligned_selected_node_empty()) {
-        //  将比较状态切换到锁定的状态
-        swal("Sorting Tips", "Select the interested subtree first after locking -> Sorting.");
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      var asc_desc_para = 'asc'
+      var sortOption = BarcodeGlobalSetting['Sort_Option']
+      if (!((sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DATE_SORT'])
+        || (sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DAY_SORT']))) {
+        if (barcodeCollection.is_aligned_selected_node_empty()) {
+          //  将比较状态切换到锁定的状态
+          swal("Sorting Tips", "Select the interested subtree first after locking -> Sorting.");
+        } else {
+          self.uniform_sort_handler(asc_desc_para)
+          // self.change_to_compare_lock_state()
+          $('#sort-operation .config-button').removeClass('active')
+        }
       } else {
-        var asc_desc_para = 'asc'
-        self.uniform_sort_handler(asc_desc_para)
-        // self.change_to_compare_lock_state()
-        $('#sort-operation .config-button').removeClass('active')
+        self.uniform_date_sort_handler(asc_desc_para)
       }
     },
     /**
@@ -811,6 +847,12 @@ define([
     similarity_sorting: function () {
       var self = this
     },
+    uniform_date_sort_handler: function (asc_desc_para) {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      window.sort_state = true
+      barcodeCollection.date_sort_barcode_model(asc_desc_para)
+    },
     uniform_sort_handler: function (asc_desc_para) {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
@@ -843,7 +885,6 @@ define([
       $('#tree-operation .config-button').removeClass('active')
     },
     similarity_range: function () {
-
     },
     // 打开barcode节点的配置视图
     node_config_panel_toggle_handler: function () {

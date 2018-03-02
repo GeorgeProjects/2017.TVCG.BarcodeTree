@@ -72,8 +72,17 @@ define([
         defaultBarcodeWidthArray[dI] = self.update_width_by_ratio(defaultBarcodeWidthArray[dI])
       }
       Variables.set('barcodeWidthArray', defaultBarcodeWidthArray)
-      window.barcodeWidthArray = defaultBarcodeWidthArray
       defaultSettings.original_width_array = JSON.parse(JSON.stringify(defaultBarcodeWidthArray))
+      //  2.1 更新barcode的max barcodeNode Width的大小
+      window.barcodeWidthArray = defaultBarcodeWidthArray
+      var maxBarcodeWidth = Variables.get('maxBarcodeWidth')
+      var updateMaxBarcodeWidth = self.update_width_by_ratio(maxBarcodeWidth)
+      Variables.set('maxBarcodeWidth', updateMaxBarcodeWidth)
+      //  2.2 更新barcodeTree的min barcodeNode width的大小
+      window.barcodeWidthArray = defaultBarcodeWidthArray
+      var minBarcodeWidth = Variables.get('minBarcodeWidth')
+      var updateMinBarcodeWidth = self.update_width_by_ratio(minBarcodeWidth)
+      Variables.set('minBarcodeWidth', updateMinBarcodeWidth)
       //  3. 更新barcodeNode padding的大小
       var MAX_BARCODE_NODE_PADDING = Config.get('MAX_BARCODE_NODE_PADDING')
       var maxBarcodePaddingNodeWidth = self.update_width_by_ratio(MAX_BARCODE_NODE_PADDING)
@@ -654,6 +663,7 @@ define([
       var formData = {}
       var updateTreeVerticalSuccessFunc = function (result) {
         var barcodeTreeVerticalSequence = result.barcodeTreeVerticalSequence
+        console.log('barcodeTreeVerticalSequence', barcodeTreeVerticalSequence)
         self.barcodeCollection.sort_vertical_barcode_model(barcodeTreeVerticalSequence)
       }
       self.requestDataFromServer(url, formData, updateTreeVerticalSuccessFunc)
@@ -664,6 +674,7 @@ define([
     update_barcode_tree_sequence: function (collectionAlignedObjPercentageArrayObjArray) {
       var self = this
       var url = 'update_barcode_tree_sequence'
+      console.log('collectionAlignedObjPercentageArrayObjArray', collectionAlignedObjPercentageArrayObjArray)
       var selectedItemsArray = Variables.get('selectItemNameArray')
       var formData = {
         'alignedObjPercentageArrayObjArray': collectionAlignedObjPercentageArrayObjArray,
@@ -722,7 +733,6 @@ define([
         var barcodeNodeAttrArray = treeNodeArrayObject[item]
         var alignedBarcodeNodeAttrArray = JSON.parse(JSON.stringify(barcodeNodeAttrArray))
         var originalTreeObj = originalTreeObjObject[item]
-        console.log('barcodeNodeAttrArray', barcodeNodeAttrArray)
         var barcodeModel = new BarcodeModel({
           'barcodeTreeId': item,
           'barcodeNodeAttrArray': barcodeNodeAttrArray,
@@ -827,6 +837,9 @@ define([
       //  更新barcode选定的层级以及层级的宽度
       Variables.set('maxDepth', result.maxDepth)
       self.update_selected_levels_width(result.maxDepth)
+      //  每次更换数据集都要重置barcode的当前的比较状态
+      var INIT_BARCODETREE_GLOBAL_PARAS = Config.get('INIT_BARCODETREE_GLOBAL_PARAS')
+      Variables.set('BARCODETREE_GLOBAL_PARAS', JSON.parse(JSON.stringify(INIT_BARCODETREE_GLOBAL_PARAS)))
       //  得到了maxDepth之后, 用户需要设置selectLevels, 和nodeWidthArray
       //  在得到了barcode的最大深度之后, 需要初始化barcode不同层级节点的颜色
       window.Variables.initNodesColor()

@@ -13,7 +13,7 @@
           yTickNum = null,
           xTickNum = null,
           xLabel = '',
-          xLabel_location = '-1.5em',
+          xLabel_location = '-0.5em',
           xLabel_text_anchor = 'middle',
           yLabel = '',
           enable_brush = true,
@@ -116,11 +116,15 @@
                   .on('brushstart', brushstart)
                   .on('brush', brushmove)
                   .on('brushend', brushend)
+                
+                let brushG = g.select('g.brush')
 
-                let brushG = g.append('g')
+                if(g.select('g.brush').empty()){
+                  brushG = g.append('g')
                   .attr('class', 'brush')
                   .call(brush)
-
+                }
+              
                 brushG.selectAll('rect')
                   .attr('height', innerHeight)
 

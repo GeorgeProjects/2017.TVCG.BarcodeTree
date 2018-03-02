@@ -543,8 +543,10 @@ define([
         barcodeModel.update_single_barcode_subtree(rootId, rootCategory, rootLevel, cloneSubtreeNodeArray, cloneMaxNodeNumTreeNodeLocArray)
       })
       //  更新barcodeTree的节点之间的排列顺序
+      //  collectionAlignedObjPercentageArrayObjArray在上面的方法update_single_barcode_subtree已经计算得到
       var collectionAlignedObjPercentageArrayObjArray = self.collectionAlignedObjPercentageArrayObjArray
-      if (typeof (collectionAlignedObjPercentageArrayObjArray) === 'undefined') {
+      console.log('collectionAlignedObjPercentageArrayObjArray', collectionAlignedObjPercentageArrayObjArray)
+      if (typeof (collectionAlignedObjPercentageArrayObjArray) !== 'undefined') {
         window.Datacenter.update_barcode_tree_sequence(collectionAlignedObjPercentageArrayObjArray)
       }
     }
@@ -749,6 +751,8 @@ define([
       self.updateBarcodeNodexMaxX()
       self.updateBarcodeNodeyMaxY()
       self.update_all_barcode_view()
+      self.trigger_render_supertree()
+      //  在更新了comparison视图的max width以及max height之后, 需要重新更新选择barcodeTree的函数
       self.trigger_render_supertree()
     },
     /**
@@ -1388,8 +1392,6 @@ define([
       var self = this
       var barcodeNodeCollectionObj = {}
       var barcodeNodeCollectionObjWithId = {}
-      barcodeNodeCollectionObj['ratio'] = new Array()
-      barcodeNodeCollectionObjWithId['ratio'] = new Array()
       self.each(function (model) {
         var barcodeNodeAttrArray = model.get('barcodeNodeAttrArray')
         var barcodeTreeId = model.get('barcodeTreeId')
@@ -1398,7 +1400,7 @@ define([
             var nodeDepth = barcodeNodeAttrArray[bI].depth
             var nodeId = barcodeNodeAttrArray[bI].id
             //  在非对齐状态下, 选择非对齐状态的全部节点; 在对齐状态下, 选择对齐状态的全部节点
-            if ((!model.is_aligned_state()) || ((model.is_aligned_range(nodeId)) && (model.is_aligned_state()))) {
+            if ((!model.is_aligned_state()) || ((model.is_aligned_range(nodeId) || model.is_aligned_start(nodeId)) && (model.is_aligned_state()))) {
               if (typeof (barcodeNodeCollectionObj[nodeDepth]) !== 'undefined') {
                 var maxnum = barcodeNodeAttrArray[bI].maxnum
                 barcodeNodeCollectionObj[nodeDepth].push(barcodeNodeAttrArray[bI].num)
@@ -1407,7 +1409,13 @@ define([
                   nodeId: nodeId,
                   value: barcodeNodeAttrArray[bI].num
                 })
+                if (typeof (barcodeNodeCollectionObj['ratio']) === 'undefined') {
+                  barcodeNodeCollectionObj['ratio'] = new Array()
+                }
                 barcodeNodeCollectionObj['ratio'].push(barcodeNodeAttrArray[bI].num / barcodeNodeAttrArray[0].num)
+                if (typeof (barcodeNodeCollectionObjWithId['ratio']) === 'undefined') {
+                  barcodeNodeCollectionObjWithId['ratio'] = new Array()
+                }
                 barcodeNodeCollectionObjWithId['ratio'].push({
                   treeId: barcodeTreeId,
                   nodeId: nodeId,
@@ -1453,7 +1461,7 @@ define([
     update_barcode_view: function () {
       var self = this
       self.uniform_layout()
-      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_ATTR'])
+      self.update_data_all_view()
     }
     ,
     //  trigger出的信号所表示的是已经完成了对于barcode数据的准备, 接下来app.view中开始调用render_barcodetree_view进行渲染
@@ -2321,30 +2329,28 @@ define([
       var barcodeModelArray = []
       var selectItemNameArray = Variables.get('selectItemNameArray')
       self.each(function (model) {
-        if ((typeof (model.get('barcodeModelType'))) !== 'undefined') {
-          model.set('barcodeIndex', -1)
-        }
+        // console.log('barcodeModelType', model.get('barcodeModelType'))
+        // if ((typeof (model.get('barcodeModelType'))) !== 'undefined') {
+        //   model.set('barcodeIndex', -1)
+        // }
         barcodeModelArray.push(model)
         // var barcodeTreeId = model.get('barcodeTreeId')
         // var barcodeIndex = selectItemNameArray.indexOf(barcodeTreeId)
         // model.set('barcodeIndex', barcodeIndex)
       })
       barcodeModelArray.sort(function (model_a, model_b) {
-        return model_a.get('barcodeIndex') - model_b.get('barcodeIndex')
+        var modelAType = model_a.get('barcodeModelType')
+        var modelBType = model_b.get('barcodeModelType')
+        if ((typeof (modelAType) !== 'undefined') && (typeof (modelAType) === 'undefined')) {
+          return 1
+        } else if ((typeof (modelAType) === 'undefined') && (typeof (modelAType) !== 'undefined')) {
+          return -1
+        } else if ((typeof (modelAType) !== 'undefined') && (typeof (modelAType) !== 'undefined')) {
+          return modelAType > modelBType
+        } else {
+          return model_a.get('barcodeIndex') - model_b.get('barcodeIndex')
+        }
       })
-      // barcodeModelArray.sort(function (model_a, model_b) {
-      //   var modelAType = model_a.get('barcodeModelType')
-      //   var modelBType = model_b.get('barcodeModelType')
-      //   if ((typeof (modelAType) !== 'undefined') && (typeof (modelAType) === 'undefined')) {
-      //     return 1
-      //   } else if ((typeof (modelAType) === 'undefined') && (typeof (modelAType) !== 'undefined')) {
-      //     return -1
-      //   } else if ((typeof (modelAType) !== 'undefined') && (typeof (modelAType) !== 'undefined')) {
-      //     return modelAType > modelBType
-      //   } else {
-      //     return model_a.get('barcodeIndex') - model_b.get('barcodeIndex')
-      //   }
-      // })
       var barcodeHeight = Variables.get('barcodeHeight')
       var compactNum = window.compactNum
       var superTreeHeight = $('#supertree-scroll-panel').height()
@@ -2653,6 +2659,86 @@ define([
       // self.trigger_barcode_loc()
     }
     ,
+    date_sort_barcode_model: function (asc_desc_para) {
+      var self = this
+      var barcodeModelArray = []
+      self.each(function (model) {
+        barcodeModelArray.push(model)
+      })
+      var currentDataSetName = Variables.get('currentDataSetName')
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      var sortOption = BarcodeGlobalSetting['Sort_Option']
+      //  只有在comparisonMode维按照date或者day进行排序的状态
+      if ((sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DATE_SORT'])
+        || (sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DAY_SORT'])) {
+        barcodeModelArray.sort(function (model_a, model_b) {
+          if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+            //  如果数据集是LibraryTree_DailyName
+            console.log('sortOption', sortOption)
+            return library_tree_handler(model_a, model_b, sortOption, asc_desc_para)
+          } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
+            //  如果数据集是NBATeamTreeName
+            console.log('sortOption', sortOption)
+            return nba_team_tree_handler(model_a, model_b, sortOption, asc_desc_para)
+          }
+        })
+      }
+      for (var mI = 0; mI < barcodeModelArray.length; mI++) {
+        barcodeModelArray[mI].set('barcodeIndex', mI)
+      }
+      console.log('barcodeModelArray', barcodeModelArray)
+      self.uniform_layout()
+      self.update_data_all_view()
+      //  library tree的排序函数
+      function library_tree_handler(model_a, model_b, sortOption, asc_desc_para) {
+        console.log('asc_desc_para', asc_desc_para)
+        var barcodeTreeId_a = model_a.get('barcodeTreeId')
+        var barcodeTreeId_b = model_b.get('barcodeTreeId')
+        var date_a = barcodeTreeId_a.split('-')[1].replaceAll('_', '-')
+        var curDay_a = new Date(date_a).getDay()
+        var date_b = barcodeTreeId_b.split('-')[1].replaceAll('_', '-')
+        var curDay_b = new Date(date_b).getDay()
+        var month_day_a = date_a.split('-')[1] + date_a.split('-')[2]
+        var month_day_b = date_b.split('-')[1] + date_b.split('-')[2]
+        if (sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DATE_SORT']) {
+          //  如果当前的状态是按照日期先后进行排序
+          console.log('month_day_a', month_day_a)
+          console.log('month_day_b', month_day_b)
+          if (asc_desc_para === 'asc') {
+            return (+month_day_a) - (+month_day_b)
+          } else {
+            return (+month_day_b) - (+month_day_a)
+          }
+        } else {
+          if ((+curDay_a) !== (+curDay_b)) {
+            if (asc_desc_para === 'asc') {
+              return (+curDay_a) - (+curDay_b)
+            } else {
+              return (+curDay_b) - (+curDay_a)
+            }
+          } else {
+            if (asc_desc_para === 'asc') {
+              return (+month_day_a) - (+month_day_b)
+            } else {
+              return (+month_day_b) - (+month_day_a)
+            }
+          }
+        }
+      }
+
+      //  nba team tree的排序函数
+      function nba_team_tree_handler(model_a, model_b, sortOption, asc_desc_para) {
+        var barcodeTreeId_a = model_a.get('barcodeTreeId')
+        var barcodeTreeId_b = model_b.get('barcodeTreeId')
+        var year_a = +barcodeTreeId_a.replace('tree', '')
+        var year_b = +barcodeTreeId_b.replace('tree', '')
+        if (asc_desc_para === 'asc') {
+          return (+year_a) - (+year_b)
+        } else if (asc_desc_para === 'desc') {
+          return (+year_b) - (+year_a)
+        }
+      }
+    },
     //  对于barcode model进行排序
     sort_barcode_model: function (asc_desc_para) {
       var self = this

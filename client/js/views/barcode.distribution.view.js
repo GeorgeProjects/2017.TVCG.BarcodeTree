@@ -44,11 +44,23 @@ define([
         distributionHistogramHeight = 90
       }
       self.distributionHistogramHeight = distributionHistogramHeight
+      var distribution_histogram_prefix = 'distribution-level-'
+      d3.selectAll('.distribution-levels')
+        .each(function (d, i) {
+          var distributionLevel = d3.select(this).attr('id').replace('distribution-level-', '')
+          if (typeof (barcodeNodeCollectionObj[distributionLevel]) === 'undefined') {
+            d3.select('#' + distribution_histogram_prefix + distributionLevel).remove()
+          }
+        })
       for (var item in barcodeNodeCollectionObj) {
         var distribution_level = item
-        var dataValueArray = barcodeNodeCollectionObj[item]
-        if ((typeof(dataValueArray) !== 'undefined') && (dataValueArray.length !== 0)) {
-          self.add_distribution_histogram(distribution_level, dataValueArray)
+        if (typeof (barcodeNodeCollectionObj[item]) === 'undefined') {
+          self.remove_distribution_histogram(distribution_level)
+        } else {
+          var dataValueArray = barcodeNodeCollectionObj[item]
+          if ((typeof(dataValueArray) !== 'undefined') && (dataValueArray.length !== 0)) {
+            self.add_distribution_histogram(distribution_level, dataValueArray)
+          }
         }
       }
     },
@@ -74,16 +86,23 @@ define([
         }
       }
     },
+    //  删除 distribution histogram
+    remove_distribution_histogram: function (distribution_level) {
+      var divId = 'distribution-level-' + distribution_level
+      d3.select('#distribution-histogram-view').select('#' + divId).remove()
+    },
     add_distribution_histogram: function (distribution_level, raw_data_array) {
       var self = this
       var intervals = 100
       intervals = raw_data_array.max() > intervals ? raw_data_array.max() : intervals
       var eachIntervalRange = self.get_each_interval_range(raw_data_array, intervals)
       var histogramDataArray = self.get_distribution_histogram(raw_data_array, intervals, eachIntervalRange)
-      var divId = 'distribution-level-' + distribution_level
+      var distribution_histogram_prefix = 'distribution-level-'
+      var divId = distribution_histogram_prefix + distribution_level
       var distributionHistogramWidth = +$('#distribution-content').width()
       var distributionHistogramHeight = +self.distributionHistogramHeight
-      var margin = {top: 20, right: 10, bottom: 25, left: 30}
+      var remPx = window.rem_px
+      var margin = {top: 20, right: 10, bottom: remPx * 2, left: remPx * 3}
       var barClass = 'distribution-bar'
       var histogramWidth = distributionHistogramWidth - margin.left - margin.right
       var histogramHeight = distributionHistogramHeight - margin.top - margin.bottom
@@ -210,9 +229,11 @@ define([
       var barcodeNodeCollectionObjWithId = Variables.get('barcodeNodeCollectionObjWithId')
       var barcodeNodeArray = barcodeNodeCollectionObjWithId[distribution_level]
       var highlightObjArray = Variables.get('brushHighlightObjArray')
-      for (var bI = 0; bI < barcodeNodeArray.length; bI++) {
-        if ((barcodeNodeArray[bI].value >= real_brush_start) && (barcodeNodeArray[bI].value <= real_brush_end)) {
-          highlightObjArray.push(barcodeNodeArray[bI])
+      if (typeof (barcodeNodeArray) !== 'undefined') {
+        for (var bI = 0; bI < barcodeNodeArray.length; bI++) {
+          if ((barcodeNodeArray[bI].value >= real_brush_start) && (barcodeNodeArray[bI].value <= real_brush_end)) {
+            highlightObjArray.push(barcodeNodeArray[bI])
+          }
         }
       }
       if (distribution_level === 'ratio') {

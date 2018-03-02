@@ -89,9 +89,10 @@ define([
           self.render_barcode_node_config_view()
           self.render_barcodetree_view()
         })
-        Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_BARCODE_VIEW'], function () {
-          self.render_barcodetree_view()
-        })
+        // Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_BARCODE_VIEW'], function () {
+        //   console.log('BEGIN_RENDER_BARCODE_VIEW')
+        //   self.render_barcodetree_view()
+        // })
         Backbone.Events.on(Config.get('EVENTS')['RESET_SELECTION_COLOR'], function (event) {
           self.reset_color_button()
         })

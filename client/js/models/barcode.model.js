@@ -142,7 +142,7 @@ define([
         var barcodeNodeCategoryName = barcodeNodeAttrArray[bI].categoryName
         if (typeof (barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName]) === 'undefined') {
           barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName] = [barcodeNodeAttrArray[bI]]
-        }else{
+        } else {
           barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName].push(barcodeNodeAttrArray[bI])
         }
       }
@@ -181,6 +181,12 @@ define([
       var heightScale = self.get_height_scale()
       for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
         barcodeNodeAttrArray[bI].height_value = heightScale(barcodeNodeAttrArray[bI].num)
+      }
+      //  更新barcodeTree的视图
+      var barcodeTreeComparisonMode = Config.get('BARCODETREE_COMPARISON_MODE')
+      var barcodeTreeGlobalParas = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      if (barcodeTreeGlobalParas['Comparison_Mode'] === barcodeTreeComparisonMode['ATTRIBUTE']) {
+        self.set('viewHeightUpdateValue', (self.get('viewHeightUpdateValue') + 1) % 2)
       }
     },
     /**
@@ -1319,17 +1325,21 @@ define([
       // globalCompareResult.siblingNodes = innerCompare(basedFindingNodesObj.siblingNodes, thisTreeFindingNodesObj.siblingNodes)
       return globalCompareResult
       function innerCompare(array1, array2) {
-        for (var a1I = 0; a1I < array1.length; a1I++) {
-          for (var a2I = 0; a2I < array2.length; a2I++) {
-            if (array1[a1I].id === array2[a2I].id) {
-              array1[a1I].compare_result = 'same'
-              array2[a2I].compare_result = 'same'
+        if (typeof (array1) !== 'undefined') {
+          for (var a1I = 0; a1I < array1.length; a1I++) {
+            for (var a2I = 0; a2I < array2.length; a2I++) {
+              if (array1[a1I].id === array2[a2I].id) {
+                array1[a1I].compare_result = 'same'
+                array2[a2I].compare_result = 'same'
+              }
             }
           }
         }
-        for (var a1I = 0; a1I < array1.length; a1I++) {
-          if (array1[a1I].compare_result !== 'same') {
-            array1[a1I].compare_result = 'miss'
+        if (typeof (array1) !== 'undefined') {
+          for (var a1I = 0; a1I < array1.length; a1I++) {
+            if (array1[a1I].compare_result !== 'same') {
+              array1[a1I].compare_result = 'miss'
+            }
           }
         }
         for (var a2I = 0; a2I < array2.length; a2I++) {
@@ -1341,11 +1351,13 @@ define([
         compareResultObj.same = []
         compareResultObj.add = []
         compareResultObj.miss = []
-        for (var a1I = 0; a1I < array1.length; a1I++) {
-          if (array1[a1I].compare_result === 'same') {
-            compareResultObj.same.push(array1[a1I])
-          } else if (array1[a1I].compare_result === 'miss') {
-            compareResultObj.miss.push(array1[a1I])
+        if (typeof (array1) !== 'undefined') {
+          for (var a1I = 0; a1I < array1.length; a1I++) {
+            if (array1[a1I].compare_result === 'same') {
+              compareResultObj.same.push(array1[a1I])
+            } else if (array1[a1I].compare_result === 'miss') {
+              compareResultObj.miss.push(array1[a1I])
+            }
           }
         }
         for (var a2I = 0; a2I < array2.length; a2I++) {

@@ -5,6 +5,7 @@ var ITERATION_NUM = 200
 var updateBarcodeTreeSequence = function (request, response) {
   var reqBody = request.body
   var alignedObjPercentageArrayObjArray = reqBody.alignedObjPercentageArrayObjArray
+  console.log('alignedObjPercentageArrayObjArray', alignedObjPercentageArrayObjArray)
   var dataItemNameArray = reqBody.dataItemNameArray
   var rowSequenceSame = false, columnSequenceSame = false
   var interateNum = 0

@@ -29,6 +29,7 @@ require.config({
     'bootstrap-slider': '../bower_components/bootstrap-slider/dist/bootstrap-slider.min',
     'd3Menu': '../bower_components/d3_menu/d3.menu',
     'd3Barchart': '../bower_components/d3_barchart/d3.barchart',
+    'd3Lasso': '../bower_components/d3_lasso/d3.lasso',
     'jsColor': '../bower_components/jscolor/jscolor',
     'pagination': '../bower_components/JqueryPagination/jquery.simplePagination',
     'tooltips': '../bower_components/d3-tip/d3-tip',

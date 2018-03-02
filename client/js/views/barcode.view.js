@@ -105,6 +105,7 @@ define([
       })
       self.showChildView('supertreeView', superTreeView)
       // 绘制barcode进行比较的主视图
+      console.log(' new BarcodeComparisonView')
       var barcodeComparisonView = new BarcodeComparisonView({
         barcodeCollection: barcodeCollection,
         categoryModel: categoryModel
@@ -175,7 +176,7 @@ define([
     open_config_view: function () {
       var self = this
       var duration = self.duration
-      var barcodeDistributionViewWidth = +$('#barcode-distribution-view').width()
+      var barcodeDistributionViewWidth = +$('#barcode-config').width()
       var configPanelState = Variables.get('configPanelState')
       if (configPanelState === 'close') {
         $('#barcode-config').animate({
@@ -189,7 +190,7 @@ define([
     close_config_view: function () {
       var self = this
       var duration = self.duration
-      var barcodeDistributionViewWidth = +$('#barcode-distribution-view').width()
+      var barcodeDistributionViewWidth = +$('#barcode-config').width()
       var configPanelState = Variables.get('configPanelState')
       if (configPanelState === 'open') {
         $('#barcode-config').animate({

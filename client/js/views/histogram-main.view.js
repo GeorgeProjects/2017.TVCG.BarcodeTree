@@ -66,7 +66,6 @@ define([
       })
       //  鼠标在comparisonview中点击取消选中barcode广播的事件
       Backbone.Events.on(Config.get('EVENTS')['SET_UNSELECT_BARCODE_EVENT'], function (event) {
-        console.log('SET_UNSELECT_BARCODE_EVENT')
         var barcodeTreeId = event.barcodeTreeId
         self.set_unselect_histogram(barcodeTreeId)
       })
@@ -76,11 +75,12 @@ define([
         self.update_histogram_color_encode(colorEncodingObj)
       })
       //  在histogram视图中更新histogram的位置
-      Backbone.Events.on(Config.get('EVENTS')['UPDATE_HISTOGRAM_COMPARISON_LOC'], function (event) {
-        var sameNodeNumObj = event.sameNodeNumObj
-        var differentNodeNumObj = event.differentNodeNumObj
-        self.update_histogram_comparison_loc_encode(sameNodeNumObj, differentNodeNumObj)
-      })
+      // Backbone.Events.on(Config.get('EVENTS')['UPDATE_HISTOGRAM_COMPARISON_LOC'], function (event) {
+      //   console.log('listen UPDATE_HISTOGRAM_COMPARISON_LOC')
+      //   var sameNodeNumObj = event.sameNodeNumObj
+      //   var differentNodeNumObj = event.differentNodeNumObj
+      //   self.update_histogram_comparison_loc_encode(sameNodeNumObj, differentNodeNumObj)
+      // })
       //  用户点击clear all的按钮, 清空选中所有的element
       Backbone.Events.on(Config.get('EVENTS')['CLEAR_ALL'], function (event) {
         self.clear_all_items()
@@ -103,6 +103,13 @@ define([
         console.log('barId', barId)
         self.cancel_selection_highlight(barId)
       })
+      Backbone.Events.on(Config.get('EVENTS')['HIGHLIGHT_LASSO_SELECTED'], function (event) {
+        var filteredTreeArray = event.filteredTreeArray
+        self.highlight_lasso_selected(filteredTreeArray)
+      })
+      Backbone.Events.on(Config.get('EVENTS')['UNHIGHLIGHT_LASSO_SELECTED'], function (event) {
+        self.unhighlight_all_lasso_selected()
+      })
     },
     //  选择数据之后,数据无法马上显示,可以展示loading的icon
     trigger_show_loading_icon: function () {
@@ -121,7 +128,7 @@ define([
       })
     },
     //  发出mouseout的信号
-    trigger_mouseout_event: function (barcodeId) {
+    trigger_mouseout_event: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['NODE_MOUSEOUT'], {
         'eventView': 'HISTOGRAM'
       })
@@ -138,6 +145,9 @@ define([
     trigger_close_supertree: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['CLOSE_SUPER_TREE'])
     },
+    trigger_update_distribution: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_DISTRIBUTION_VIEW'])
+    },
     //  更新选择的list
     trigger_update_selection_list: function () {
       var self = this
@@ -145,6 +155,18 @@ define([
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_SELECTION_LIST'], {
         selectionList: selectionList
       })
+    },
+    //  高亮所有选择的barcodeTree的高亮
+    highlight_lasso_selected: function (filteredTreeArray) {
+      var self = this
+      for (var fI = 0; fI < filteredTreeArray.length; fI++) {
+        self.d3el.select('rect#' + filteredTreeArray[fI]).classed('lasso-selected', true)
+      }
+    },
+    //  删除所有的lasso选择的barcodeTree的高亮
+    unhighlight_all_lasso_selected: function () {
+      var self = this
+      self.d3el.selectAll('.lasso-selected').classed('lasso-selected', false)
     },
     get_selection_list: function () {
       var self = this
@@ -219,6 +241,9 @@ define([
       self.draw_histogram(histogramWidth, histogramHeight, margin)
       d3.select('#histogram-main-panel')
         .on('mouseover', function (d, i) {
+          // self.trigger_mouseout_event()
+        })
+        .on('click', function (d, i) {
           self.trigger_mouseout_event()
         })
       var tip = window.histogramTip
@@ -306,7 +331,7 @@ define([
         var currentDataSetName = Variables.get('currentDataSetName')
         if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
           for (var i = 0; i < 7; ++i) {
-            var day = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            var day = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
             icons.push({
               title: day[i],
               text: day[i][0],
@@ -467,7 +492,7 @@ define([
         var barId = d.id
         if (barId.indexOf('-') !== -1) {
           var date = barId.split('-')[1].replaceAll('_', '/')
-          var dayArray = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+          var dayArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
           var barValue = d.y
           var date = barId.split('-')[1].replaceAll('_', '-')
           var curDay = new Date(date).getDay()
@@ -877,6 +902,9 @@ define([
       self.clear_brush_range_rect()
       //  关闭superTree视图
       self.trigger_close_supertree()
+      //  更新distribution视图, 即直接清空distribution
+      barcodeCollection.update_barcode_node_attr_array()
+      self.trigger_update_distribution()
     }
   }, SVGBase))
 })
