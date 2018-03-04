@@ -8,6 +8,9 @@
 							    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="subtree-node-selection">
 														<i class="fa fa-sitemap" aria-hidden="true"></i>
 							    </button>
+											<button type="button" class="btn btn-default btn-lg config-button active" aria-label="Left Align" id="father-child-link" disabled>
+														<i class="fa icon iconfont icon-node-link"></i>
+							    </button>
 							    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="tree-selection">
 														<i class="fa icon iconfont icon-ico-lassotool-QQn-"></i>
 							    </button>
@@ -39,7 +42,7 @@
 											   <i class="fa icon fa-unlock" aria-hidden="true"></i>
        				</button>
 											<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="align-compare">
-											   <i class="fa icon iconfont icon-compare-arrows"></i>
+											   <i class="fa icon iconfont icon-align-icon"></i>
        				</button>
 											<button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="summary-comparison">
 														<i class="fa icon iconfont icon-show-histogram"></i>
@@ -55,7 +58,7 @@
 					       </button>
 					       <div class="dropdown-menu" id="aligned-level-menu">
 					        <div id = "aligned-level-menu-container">
-					         <div id = "slider-label">ALIGNED LEVEL</div>
+					          <div id = "slider-label">ALIGNED LEVEL</div>
 					            <div id = "align-level-control" class="btn-toolbar level-control" role="toolbar">
 					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-1">1</button>
 					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-2">2</button>

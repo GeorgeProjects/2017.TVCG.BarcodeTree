@@ -105,11 +105,13 @@ define([
       var barcodeTreeConfigHeight = self.update_height_by_ratio(defaultBarcodeTreeConfigHeight) // 这个地方本来是用width ratio进行更新的
       Variables.set('barcodeTreeConfigHeight', barcodeTreeConfigHeight)
       //  2. 更新superTree的高度
+      var defaultBarcodeHeight = Variables.get('barcodeHeight')
+      defaultBarcodeHeight = self.update_height_by_ratio(defaultBarcodeHeight)
+      Variables.set('barcodeHeight', defaultBarcodeHeight)
+      window.barcodeHeight = defaultBarcodeHeight
       var defaultSuperTreeHeight = Variables.get('superTreeHeight')
-      var defaultHeight = self.update_height_by_ratio(defaultSuperTreeHeight)
-      Variables.set('barcodeHeight', defaultHeight)
-      window.barcodeHeight = defaultHeight
-      var superTreeHeight = defaultHeight * 0.8
+      defaultSuperTreeHeight = self.update_height_by_ratio(defaultSuperTreeHeight)
+      var superTreeHeight = defaultSuperTreeHeight * 0.8
       Variables.set('superTreeHeight', superTreeHeight)
       //  更新barcode的模式
       Variables.set('barcodeMode', defaultBarcodeMode)
@@ -397,10 +399,9 @@ define([
     requestDataCenter: function (selectedItemsArray) {
       var url = 'barcode_original_data'
       var self = this
+      console.log('selectedItemsArray', selectedItemsArray)
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
-      console.log('window.barcodeWidthArray', window.barcodeWidthArray)
-      console.log('window.selectedLevels', window.selectedLevels)
       var formData = {
         'dataItemNameArray': selectedItemsArray,
         'dataSetName': window.dataSetName,
@@ -674,7 +675,6 @@ define([
     update_barcode_tree_sequence: function (collectionAlignedObjPercentageArrayObjArray) {
       var self = this
       var url = 'update_barcode_tree_sequence'
-      console.log('collectionAlignedObjPercentageArrayObjArray', collectionAlignedObjPercentageArrayObjArray)
       var selectedItemsArray = Variables.get('selectItemNameArray')
       var formData = {
         'alignedObjPercentageArrayObjArray': collectionAlignedObjPercentageArrayObjArray,
@@ -727,6 +727,7 @@ define([
       var selectItemNameArray = Variables.get('selectItemNameArray')
       var addedBarcodeModelArray = []
       var compactNum = window.compactNum
+      console.log('treeNodeArrayObject', treeNodeArrayObject)
       //  将展示全部的barcode压缩到屏幕的范围内
       for (var item in treeNodeArrayObject) {
         //  1. 对于全局的categoryNodeObj的处理
@@ -746,6 +747,7 @@ define([
       // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
       window.get_barcode_time_datacenter303 = new Date()
       var loadOriginalDataTime = window.get_barcode_time_datacenter303.getDifference(window.request_barcode_time_histogram435)
+      console.log('addedBarcodeModelArray', addedBarcodeModelArray)
       self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
       self.trigger_hide_loading_icon()
     },
@@ -806,7 +808,7 @@ define([
       function uniform_width_for_each_level(level, max_depth) {
         var maxBarcodeWidth = Variables.get('maxBarcodeWidth')
         var minBarcodeWidth = Variables.get('minBarcodeWidth')
-        var barcodeLevelPerWidth = maxBarcodeWidth / max_depth
+        var barcodeLevelPerWidth = Math.round(maxBarcodeWidth / max_depth)
         if (level === max_depth) {
           return minBarcodeWidth
         }
@@ -824,9 +826,9 @@ define([
       //  获取数据集中的最大值
       result.maxValue = histogramModel.get_max_value(result.fileInfo)
       //  TODO 这个地方会修改成按照文件里面的属性决定scale的类型
-      result.scaleType = 'linear'//'log'
-      result.yTicksValueArray = histogramModel.get_y_ticks_value(result.maxValue) //[ 100, 1000, result.maxValue ]
-      result.yTicksFormatArray = result.yTicksValueArray//[ '0.1k', '1k', '6k' ]
+      result.scaleType = 'log'//'log'
+      result.yTicksValueArray = histogramModel.get_y_ticks_value(result.maxValue, result.scaleType) //[ 100, 1000, result.maxValue ]
+      result.yTicksFormatArray = JSON.parse(JSON.stringify(result.yTicksValueArray))//[ '0.1k', '1k', '6k' ]
       // console.log('result.yTicksValueArray', result.yTicksValueArray)
       //  x轴上的标注
       result.xTicksValueArray = histogramModel.get_x_ticks_object().xTicksValueArray

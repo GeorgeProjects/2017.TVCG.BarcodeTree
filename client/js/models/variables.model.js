@@ -19,6 +19,8 @@ define([
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
         Node_Arrangement: false
       },
+      //  判断当前是否显示father与child之间的链接
+      show_father_child_link: true,
       //  判断当前是否处于enable lasso的状态
       enable_lasso: false,
       //  missed node class
@@ -40,7 +42,7 @@ define([
       //  标记各层的bar的宽度
       barcodeWidthArray: [18, 12, 8, 4, 1],
       //  最大的barcode的宽度
-      maxBarcodeWidth: 15,
+      maxBarcodeWidth: 18,
       //  最小的barcode的宽度
       minBarcodeWidth: 2,
       //  barcode节点的最小宽度
@@ -50,11 +52,11 @@ define([
       //  改变之间的状态的属性: 各层的bar的宽度
       barcodeWidthArray_previous: [18, 12, 8, 4, 1],
       //  barcode的节点之间的间距
-      barcodeNodeInterval: 3,
+      barcodeNodeInterval: 5,
       //  改变之间的状态的属性: barcode的节点之间的间距
-      barcodeNodeInterval_previous: 3,
+      barcodeNodeInterval_previous: 5,
       //  barcode节点间距的最小值
-      barcodeNodeIntervalMinValue: 2,
+      barcodeNodeIntervalMinValue: 3,
       //  barcode节点间距的最大值
       barcodeNodeIntervalMaxValue: 10,
       //  标记barcode的高度
@@ -170,7 +172,7 @@ define([
       //  displayed Last Level
       'displayedLastLevel': 3,
       //  supertree的高度
-      'superTreeHeight': 40,
+      'superTreeHeight': 60,
       //  barcodetree config视图的高度
       'barcodeTreeConfigHeight': 33,
       //  当前的config panel的状态, 打开(open)或者关闭(close)

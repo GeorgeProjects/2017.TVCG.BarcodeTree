@@ -111,9 +111,14 @@ define([
         var elem = document.querySelector('#color-picker')
         var hueb = new Huebee(elem, {})
         hueb.on('change', function (color, hue, sat, lum) {
-          resetColorButton(color)
+          setColorButton(color)
           Variables.set('selectionColor', color)
           // resetCurrentPreClick(color)
+        })
+        //  双击color picker的button的时候会还原颜色设置
+        $('#color-picker').dblclick(function () {
+          Variables.set('selectionColor', null)
+          $('#color-picker').css('background-color', 'white')
         })
       })
       //  初始化视图中的font-size
@@ -128,7 +133,8 @@ define([
         var strokeWidthRatio = 0.05
         var rem_px = window.rem_px
         var strokeWidth = strokeWidthRatio * rem_px
-        if (strokeWidth <= 1.5) {
+        console.log('strokeWidth', strokeWidth)
+        if (strokeWidth <= 0.5) {
           //  将节点的class设置为min-stroke
           Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
           Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
@@ -142,12 +148,13 @@ define([
           Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
         }
       }
+
       //  之前的设定是预先选择一定的barcode的histogram, 然后选择颜色就可以支持在预先选择的barcode上面增加颜色
       // function resetCurrentPreClick(color) {
       //   self.set_preclick_color(color)
       //   // var selectionColor =
       // }
-      function resetColorButton(color) {
+      function setColorButton(color) {
         $('#color-picker').css("background-color", color)
       }
     },

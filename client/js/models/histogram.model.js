@@ -149,30 +149,35 @@ define([
     /**
      * y轴上的标注
      */
-    get_y_ticks_value: function (maxValue) {
+    get_y_ticks_value: function (maxValue, scaleType) {
       //  确定了tick的数量为5, 下面就是确定tick的间隔, 而且我们需要保证tick为整数, 整十数, 或者整百数
-      var ticksNum = 5
-      var averageNum = maxValue / ticksNum
-      if (averageNum < 10) {
-        //  ticks是整数, 将averageNum变到最近的整数上
-        averageNum = Math.round(averageNum)
-      } else if ((averageNum > 10) && (averageNum < 100)) {
-        //  ticks是整十数, 将averageNum变到最近的整十数上
-        averageNum = Math.round(averageNum / 10) * 10
-      } else if (averageNum > 100) {
-        //  ticks是整百数, 将averageNum变到最近的整百数上
-        averageNum = Math.round(averageNum / 100) * 100
+      if (scaleType === 'linear') {
+        var ticksNum = 5
+        var averageNum = maxValue / ticksNum
+        if (averageNum < 10) {
+          //  ticks是整数, 将averageNum变到最近的整数上
+          averageNum = Math.round(averageNum)
+        } else if ((averageNum > 10) && (averageNum < 100)) {
+          //  ticks是整十数, 将averageNum变到最近的整十数上
+          averageNum = Math.round(averageNum / 10) * 10
+        } else if (averageNum > 100) {
+          //  ticks是整百数, 将averageNum变到最近的整百数上
+          averageNum = Math.round(averageNum / 100) * 100
+        }
+        var yTicksValueArray = []
+        for (var hI = 1; hI < ticksNum; hI++) {
+          yTicksValueArray.push(hI * averageNum)
+        }
+        return yTicksValueArray
+      } else if (scaleType === 'log') {
+        var yTicksValueArray = [10, 100, 1000]
+        return yTicksValueArray
       }
-      var yTicksValueArray = []
-      for (var hI = 1; hI < ticksNum; hI++) {
-        yTicksValueArray.push(hI * averageNum)
-      }
-      return yTicksValueArray
     },
     /**
      *  x轴上的标注的对象
      */
-    get_x_ticks_object: function(){
+    get_x_ticks_object: function () {
       var currentDataSetName = Variables.get('currentDataSetName')
       if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
         var xTicksObject = {

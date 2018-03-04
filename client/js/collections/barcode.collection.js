@@ -398,6 +398,19 @@ define([
       }
     },
     /**
+     *  更新现有的barcodemodel的颜色
+     */
+    update_barcode_model_color: function (selectedItemsArray, selectionColor) {
+      var self = this
+      for (var sI = 0; sI < selectedItemsArray.length; sI++) {
+        var filterModelArray = self.where({barcodeTreeId: selectedItemsArray[sI]})
+        if (filterModelArray.length !== 0) {
+          var filterModel = filterModelArray[0]
+          filterModel.set('barcodeRectBgColor', selectionColor)
+        }
+      }
+    },
+    /**
      * 向barcodeCollection中增加新的barcodeModel
      */
     add_barcode_dataset: function (barcodeModelArray) {
@@ -545,7 +558,6 @@ define([
       //  更新barcodeTree的节点之间的排列顺序
       //  collectionAlignedObjPercentageArrayObjArray在上面的方法update_single_barcode_subtree已经计算得到
       var collectionAlignedObjPercentageArrayObjArray = self.collectionAlignedObjPercentageArrayObjArray
-      console.log('collectionAlignedObjPercentageArrayObjArray', collectionAlignedObjPercentageArrayObjArray)
       if (typeof (collectionAlignedObjPercentageArrayObjArray) !== 'undefined') {
         window.Datacenter.update_barcode_tree_sequence(collectionAlignedObjPercentageArrayObjArray)
       }
@@ -2338,14 +2350,14 @@ define([
         // var barcodeIndex = selectItemNameArray.indexOf(barcodeTreeId)
         // model.set('barcodeIndex', barcodeIndex)
       })
-      barcodeModelArray.sort(function (model_a, model_b) {
+      barcodeModelArray = barcodeModelArray.sort(function (model_a, model_b) {
         var modelAType = model_a.get('barcodeModelType')
         var modelBType = model_b.get('barcodeModelType')
-        if ((typeof (modelAType) !== 'undefined') && (typeof (modelAType) === 'undefined')) {
-          return 1
-        } else if ((typeof (modelAType) === 'undefined') && (typeof (modelAType) !== 'undefined')) {
+        if ((typeof (modelAType) !== 'undefined') && (typeof (modelBType) === 'undefined')) {
           return -1
-        } else if ((typeof (modelAType) !== 'undefined') && (typeof (modelAType) !== 'undefined')) {
+        } else if ((typeof (modelAType) === 'undefined') && (typeof (modelBType) !== 'undefined')) {
+          return 1
+        } else if ((typeof (modelAType) !== 'undefined') && (typeof (modelBType) !== 'undefined')) {
           return modelAType > modelBType
         } else {
           return model_a.get('barcodeIndex') - model_b.get('barcodeIndex')

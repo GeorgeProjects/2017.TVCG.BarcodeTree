@@ -2016,7 +2016,7 @@ define([
 
       function collapse_change_location(nodeAttrArray, nodeDataId, nodeDataDepth) {
         var collapsedRootNodeIndex = 0
-        var collapsedNextRootNodeIndex = 0
+        var collapsedNextRootNodeIndex = -1
         var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
         var foundClickedNode = false
         if (nodeAttrArray.length === 0) {
@@ -2040,6 +2040,10 @@ define([
           }
           nodeAttrArray[nI].x = nodeAttrArray[collapsedRootNodeIndex].x
           nodeAttrArray[nI].width = 0
+        }
+        //  下一个root节点不存在,就直接返回
+        if (collapsedNextRootNodeIndex === -1) {
+          return
         }
         //  第三段依次进行变化
         var currentNodeX = nodeAttrArray[collapsedRootNodeIndex].x + nodeAttrArray[collapsedRootNodeIndex].width + barcodeNodeInterval

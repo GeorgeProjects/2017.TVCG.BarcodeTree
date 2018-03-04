@@ -1214,7 +1214,7 @@ define([
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       Variables.set('superTreeViewState', true)
-      var superTreeHeight = Variables.get('superTreeHeight')
+      var superTreeHeight = 80
       var barcodeTreeConfigHeight = $('#top-toolbar-container').height()
       var histogramHeightRem = Variables.get('histogramHeightRem')
       $('#supertree-scroll-panel').css('top', barcodeTreeConfigHeight + 'px')

@@ -29,6 +29,7 @@ define([
       'click #single-node-selection': 'single_node_selection',
       'click #subtree-node-selection': 'subtree_node_selection',
       'click #tree-selection': 'tree_selection',
+      'click #father-child-link': 'show_father_child_link',
       'click #selection-refresh': 'selection_refresh',
       'click #selection-tooltip': 'selection_tooltip',
       // 子树操作
@@ -139,6 +140,14 @@ define([
       self.init_hovering_event()
       self.init_selection_list()
       self.init_drop_down_menu(Variables.get('closable'))
+      self.init_mouseout_event()
+      self.update_aligned_level()
+    },
+    init_mouseout_event: function () {
+      var self = this
+      $('.config-button').on('mouseover', function (d, i) {
+        self.trigger_mouseout_event()
+      })
     },
     //
     init_sort_options: function () {
@@ -262,6 +271,21 @@ define([
       $('#barcode-selection .config-button').removeClass('active')
       $('#barcode-selection #single-node-selection').addClass('active')
       self.trigger_mouseout_event()
+      //  删除father children之间的连线
+      $('#father-child-link').removeClass('active')
+      Variables.set('show_father_child_link', false)
+      //  disable #father-child-link的按钮
+      self.disable_buttons($('#father-child-link'))
+    },
+    show_father_child_link: function () {
+      var self = this
+      if ($('#father-child-link').hasClass('active')) {
+        $('#father-child-link').removeClass('active')
+        Variables.set('show_father_child_link', false)
+      } else {
+        Variables.set('show_father_child_link', true)
+        $('#father-child-link').addClass('active')
+      }
     },
     //  选择整个的barcodeTree
     tree_selection: function () {
@@ -285,6 +309,10 @@ define([
       $('#barcode-selection .config-button:not(#selection-tooltip)').removeClass('active')
       $('#barcode-selection #subtree-node-selection').addClass('active')
       self.trigger_mouseout_event()
+      //  增加father children之间的连线
+      Variables.set('show_father_child_link', true)
+      $('#father-child-link').addClass('active')
+      self.enable_buttons($('#father-child-link'))
     },
     //  清除在barcodeTree上的所有选择
     selection_refresh: function () {
@@ -486,6 +514,7 @@ define([
      * 更新当前对齐的层级
      */
     update_aligned_level: function () {
+      console.log('update_aligned_level')
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       var selectedAlignedItemList = barcodeCollection.get_selected_aligned_item_list()
@@ -501,6 +530,13 @@ define([
       }
       //  更新barcode的align的层级
       self.update_aligned_level_controller(Variables.get('alignedLevel'))
+      //  按照当前选择的数据集名称更新align level显示的层级
+      var currentDataSetName = Variables.get('currentDataSetName')
+      if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
+        $('#align-level-control > #btn-5').css({visibility: 'hidden'})
+      } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
+        $('#align-level-control > #btn-5').css({visibility: 'visible'})
+      }
     },
     // ====================================================
     // 增加当前选择的节点的icon
@@ -1044,12 +1080,16 @@ define([
       addedElementArray.sort(function (a, b) {
         return dayNameArray.indexOf(a.dayName) - dayNameArray.indexOf(b.dayName)
       })
+      //  删除selection group中的所有选项
+      $("#selection-group .default").remove()
       for (var aI = 0; aI < addedElementArray.length; aI++) {
         var dayObj = addedElementArray[aI]
         var dayId = dayObj.dayId
         var dayNum = dayObj.dayNum
         var dayName = dayObj.dayName
-        self._add_element_html(dayId, dayNum, dayName)
+        var newAdded = null
+        var extraClass = 'default'
+        self._add_element_html(dayId, dayNum, dayName, newAdded, extraClass)
       }
       if (window.current_select_group_id != null) {
         self.selection_item_handler(window.current_select_group_id)
@@ -1076,8 +1116,8 @@ define([
       if (typeof (extraClass) !== 'undefined') {
         elementClass = elementClass + ' ' + extraClass
       }
-      if ($("#selection-group #" + dayId).length > 0) {
-        $("#selection-group #" + dayId).remove()
+      if ($("#selection-group > #" + dayId).length > 0) {
+        $("#selection-group > #" + dayId).remove()
       }
       var elementHtml = "<a href = '#' class= " + "'" + elementClass + "'" + " id='" + dayId + "'>" + "<span class='badge'>" + dayNum + "</span>" + "<span class='badge remove-icon'><i class='fa fa-times remove-cross' aria-hidden='true'></i></span>" + dayName + "</a>"
       if (newAdded) {
@@ -1096,7 +1136,7 @@ define([
           window.current_select_group_id = groupId
           self.trigger_select_group_barcodetree(groupId)
         }
-        e.stopPropagation();
+        e.stopPropagation()
       })
       $('.list-group-item#' + dayId).mouseover(function (e) {
         var groupId = $(this).attr('id')

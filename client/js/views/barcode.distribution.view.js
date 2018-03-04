@@ -131,6 +131,18 @@ define([
       } else {
         yTicksValueArray = self._get_display_ticks_value_array(maxHistogramData, rangeNum)
       }
+      console.log('yTicksValueArray', yTicksValueArray)
+      var _yTicksValueArray = []
+      for (var yI = 0; yI < yTicksValueArray.length; yI++) {
+        var yTicksValue = Math.round(yTicksValueArray[yI])
+        if (yTicksValue !== 0) {
+          if (_yTicksValueArray.indexOf(yTicksValue) === -1) {
+            _yTicksValueArray.push(yTicksValue)
+          }
+        }
+      }
+      console.log('_yTicksValueArray', _yTicksValueArray)
+      yTicksValueArray = _yTicksValueArray
       var xLabel = null
       if (distribution_level === 'ratio') {
         xLabel = '#' + distribution_level

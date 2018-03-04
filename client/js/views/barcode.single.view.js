@@ -637,6 +637,11 @@ define([
           barcodeCollection.update_after_remove_models()
           //  传递信号, 在服务器端更新dataCenter删除选中的item数组, 进而更新superTree
           window.Datacenter.request_remove_item([barcodeTreeId])
+          //  取消在set operation selection上的选择状态
+          self.trigger_unclick_selection_event()
+          self.remove_set_operation_selection_anchor()
+          //  取消树的选择状态
+          self.cancel_tree_selection_handler()
         });
         //  捕捉click事件,将他分发到不同的方法中进行处理
         function clickcancel(d, i) {
@@ -2846,6 +2851,8 @@ define([
       get_subtree_width_height: function (nodeId) {
         var self = this
         var leveledNodeObj = self.get_leveled_node_obj(nodeId)
+        console.log('nodeId', nodeId)
+        console.log('leveledNodeObj', leveledNodeObj)
         var wholeWidth = 0
         var height = 0
         for (var item in leveledNodeObj) {
@@ -2905,6 +2912,8 @@ define([
           //  三角形的直线的点的数据
           var lineData = [{"x": 0, "y": 0}, {"x": -subtree_width / 2, "y": subtree_height},
             {"x": subtree_width / 2, "y": subtree_height}, {"x": 0, "y": 0}]
+          console.log('subtree_width', subtree_width)
+          console.log('subtree_height', subtree_height)
           //  将三角形上的点连接成直线
           var lineFunction = d3.svg.line()
             .x(function (d) {
@@ -2941,7 +2950,7 @@ define([
           }
         }
         for (var bI = (nodeStartIndex + 1); bI < barcodeNodeAttrArray.length; bI++) {
-          if (barcodeNodeAttrArray[bI].depth === nodeDepth) {
+          if ((barcodeNodeAttrArray[bI].depth === nodeDepth) || (bI === (barcodeNodeAttrArray.length - 1))) {
             nodeEndIndex = bI
             break
           }
@@ -3596,48 +3605,50 @@ define([
               .classed('unhighlight', false)
           }
         }
-        //  只有在对齐的情况下才会绘制从根节点到当前节点的连接线
-        currentFatherNodesArray = []
-        for (var fI = 0; fI < fatherNodesArray.length; fI++) {
-          var currentFatherNode = self.findCurrentNodeObj(fatherNodesArray[fI])
-          if (currentFatherNode != null) {
-            currentFatherNodesArray.push(currentFatherNode)
+        if (Variables.get('show_father_child_link')) {
+          //  只有在对齐的情况下才会绘制从根节点到当前节点的连接线
+          currentFatherNodesArray = []
+          for (var fI = 0; fI < fatherNodesArray.length; fI++) {
+            var currentFatherNode = self.findCurrentNodeObj(fatherNodesArray[fI])
+            if (currentFatherNode != null) {
+              currentFatherNodesArray.push(currentFatherNode)
+            }
           }
-        }
-        for (var fI = 0; fI < currentFatherNodesArray.length; fI++) {
-          if (currentFatherNodesArray[fI].width !== 0) {
-            beginX = currentFatherNodesArray[fI].x + currentFatherNodesArray[fI].width / 2
-            break
+          for (var fI = 0; fI < currentFatherNodesArray.length; fI++) {
+            if (currentFatherNodesArray[fI].width !== 0) {
+              beginX = currentFatherNodesArray[fI].x + currentFatherNodesArray[fI].width / 2
+              break
+            }
           }
-        }
-        for (var fI = (currentFatherNodesArray.length - 1); fI >= 0; fI--) {
-          if (currentFatherNodesArray[fI].width !== 0) {
-            endX = currentFatherNodesArray[fI].x + currentFatherNodesArray[fI].width / 2
-            break
+          for (var fI = (currentFatherNodesArray.length - 1); fI >= 0; fI--) {
+            if (currentFatherNodesArray[fI].width !== 0) {
+              endX = currentFatherNodesArray[fI].x + currentFatherNodesArray[fI].width / 2
+              break
+            }
           }
-        }
-        var lineY = barcodeNodeHeight / 2
-        var strokeWidth = barcodeNodeHeight / 10
-        var radius = barcodeNodeHeight / 16
-        self.d3el.select('#barcode-container')
-          .append('line')
-          .attr('class', 'node-link')
-          .style('stroke-width', strokeWidth)
-          .attr('x1', beginX)
-          .attr('y1', lineY)
-          .attr('x2', endX)
-          .attr('y2', lineY)
-        for (var fI = 0; fI < currentFatherNodesArray.length; fI++) {
-          if (currentFatherNodesArray[fI].width !== 0) {
-            var circleX = currentFatherNodesArray[fI].x + currentFatherNodesArray[fI].width / 2
-            var circleY = barcodeNodeHeight / 2
-            self.d3el.select('#barcode-container')
-              .append('circle')
-              .attr('class', 'link-circle')
-              .attr('cx', circleX)
-              .attr('cy', circleY)
-              .style('r', radius)
-              .style('stroke', 'steelblue')
+          var lineY = barcodeNodeHeight / 2
+          var strokeWidth = barcodeNodeHeight / 10
+          var radius = barcodeNodeHeight / 16
+          self.d3el.select('#barcode-container')
+            .append('line')
+            .attr('class', 'node-link')
+            .style('stroke-width', strokeWidth)
+            .attr('x1', beginX)
+            .attr('y1', lineY)
+            .attr('x2', endX)
+            .attr('y2', lineY)
+          for (var fI = 0; fI < currentFatherNodesArray.length; fI++) {
+            if (currentFatherNodesArray[fI].width !== 0) {
+              var circleX = currentFatherNodesArray[fI].x + currentFatherNodesArray[fI].width / 2
+              var circleY = barcodeNodeHeight / 2
+              self.d3el.select('#barcode-container')
+                .append('circle')
+                .attr('class', 'link-circle')
+                .attr('cx', circleX)
+                .attr('cy', circleY)
+                .style('r', radius)
+                .style('stroke', 'steelblue')
+            }
           }
         }
       }

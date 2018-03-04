@@ -86,9 +86,9 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
         var fileObjNum = fileObject["num"]
         var fileObjNodeNum = fileObject["nodeNum"]
         //  仅仅对于dailyRecordTree的筛选条件
-        if ((fileObjNum > 1800) && (dataSetName === 'DailyRecordTree')) {
-          fileObjNum = 0
-        }
+        // if ((fileObjNum > 1800) && (dataSetName === 'DailyRecordTree')) {
+        //   fileObjNum = 0
+        // }
         fileInfoArray.push({
           "num": fileObjNum,//fileObjNodeNum
           "nodenum": fileObjNodeNum,

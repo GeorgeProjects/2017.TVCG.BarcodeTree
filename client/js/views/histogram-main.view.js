@@ -175,7 +175,7 @@ define([
       if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
         //  记录不同日期的个数的对象
         var dayRecordObj = {}
-        var selectionBarcodeObject = Variables.get('selectionBarcodeObject')
+        var selectionBarcodeObject = {}
         var selectItemNameArray = Variables.get('selectItemNameArray')
         var dayIdArray = ['mon', 'tues', 'wedn', 'thurs', 'fri', 'satur', 'sun']
         var dayNameArray = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -205,6 +205,8 @@ define([
         for (var item in dayRecordObj) {
           selectionList.push(dayRecordObj[item])
         }
+        Variables.set('selectionBarcodeObject', selectionBarcodeObject)
+        console.log('selectionBarcodeObject', selectionBarcodeObject)
       }
       return selectionList
     },
@@ -596,10 +598,13 @@ define([
     unSelectBarItem: function (barIdArray) {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
+      var selectItemNameArray = Variables.get('selectItemNameArray')
       for (var bI = 0; bI < barIdArray.length; bI++) {
         var barId = barIdArray[bI]
         barcodeCollection.remove_item_and_model(barId)
+        selectItemNameArray.splice(selectItemNameArray.indexOf(barId), 1)
       }
+      self.trigger_update_selection_list()
       window.Variables.update_barcode_attr()
       barcodeCollection.update_after_remove_models()
       //  传递信号, 在服务器端更新dataCenter删除选中的item数组, 进而更新superTree
@@ -634,8 +639,10 @@ define([
     //  点击brush上面的确认按钮, 表示选中brush的部分
     brushSelectionItems: function () {
       var self = this
+      var barcodeCollection = self.options.barcodeCollection
       var highlightNum = d3.select(self.el).selectAll('.library-bar.pre-click-highlight')[0].length - 1
       var selectedItemsArray = []
+      var allSelectedItemsArray = []
       var existedSelectItemNameArray = Variables.get('selectItemNameArray')
       var selectedItemColorObj = {}
       d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
@@ -644,9 +651,12 @@ define([
           if (existedSelectItemNameArray.indexOf(itemId) === -1) {
             selectedItemsArray.push(itemId)
           }
+          allSelectedItemsArray.push(itemId)
           var selectionColor = Variables.get('selectionColor')
+          console.log('selectionColor', selectionColor)
           if (selectionColor != null) {
             d3.select(this).style('fill', selectionColor)
+            barcodeCollection.update_barcode_model_color(allSelectedItemsArray, selectionColor)
           }
           d3.select(this).classed('click-unhighlight', false)
           d3.select(this).classed('click-highlight', true)
@@ -660,8 +670,9 @@ define([
       self.requestData(selectedItemsArray)
       self.trigger_update_selection_list()
       //  在brush完成之后, 将Variable中的selectionColor设置为null
-      Variables.set('selectionColor', null)
-      $('#color-picker').css('background-color', 'white')
+      // Variables.set('selectionColor', null)
+      // $('#color-picker').css('background-color', 'white')
+
       // d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
       //   .classed('pre-click-highlight', false)
       // self.clear_brush_range_rect()
@@ -683,6 +694,7 @@ define([
       d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
         .classed('pre-click-highlight', false)
       self.clear_brush_range_rect()
+      self.trigger_update_selection_list()
       // var selectItemNameArray = Variables.get('selectItemNameArray')
     },
     /**
@@ -773,6 +785,9 @@ define([
       var self = this
       self.d3el.select('#' + barcodeTreeId).classed('set-selection', true)
       var histogramHeight = self.histogramHeight
+      if (self.d3el.select('#' + barcodeTreeId).empty()) {
+        return
+      }
       var barWidth = +self.d3el.select('#' + barcodeTreeId).attr('width')
       var barHeight = +self.d3el.select('#' + barcodeTreeId).attr('height')
       var barX = +self.d3el.select('#' + barcodeTreeId).attr('x')
