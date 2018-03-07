@@ -30,7 +30,7 @@ define([
       self.operationItemList = []
       self.unalignItemList = []
       self.selectedNodesIdObj = {}
-      self.alignedTreeSelectedNodesIdObj = {}
+      self.alignedTreeSelectedNodesIdObj = null
       self.paddingSubtreeRangeObject = {}
       self.barcodeNodeYMaxY = 0
       self.collectionAlignedObjPercentageArrayObjArray = []
@@ -763,7 +763,6 @@ define([
       self.updateBarcodeNodexMaxX()
       self.updateBarcodeNodeyMaxY()
       self.update_all_barcode_view()
-      self.trigger_render_supertree()
       //  在更新了comparison视图的max width以及max height之后, 需要重新更新选择barcodeTree的函数
       self.trigger_render_supertree()
     },
@@ -918,6 +917,7 @@ define([
         var deferObj = $.Deferred()
         $.when(deferObj)
           .done(function () {
+            console.log('update_data_all_view')
             self.update_data_all_view()
           })
           .fail(function () {
@@ -1274,7 +1274,7 @@ define([
      */
     clear_aligned_selected_node: function () {
       var self = this
-      self.alignedTreeSelectedNodesIdObj = {}
+      self.alignedTreeSelectedNodesIdObj = null
     },
     /**
      * 获取alignedTreeSelectedNodesIdObj的对象
@@ -1305,7 +1305,7 @@ define([
     in_aligned_selected_array: function (barcodeTreeId, nodeId) {
       var self = this
       var alignedTreeSelectedNodesIdObj = self.alignedTreeSelectedNodesIdObj
-      if (typeof (alignedTreeSelectedNodesIdObj[nodeId]) === 'undefined') {
+      if ((alignedTreeSelectedNodesIdObj == null) || (typeof (alignedTreeSelectedNodesIdObj[nodeId]) === 'undefined')) {
         return false
       } else {
         //  只有在节点的id与tree的id相同时, 才说明该节点是已经被选择的
@@ -2378,7 +2378,7 @@ define([
       var barcodeCompactNodeHeight = barcodeOriginalNodeHeight / (compactNum + (compactNum - 1) / 4)
       var barcodeCompactNodeGap = barcodeCompactNodeHeight / 4
       var ABSOLUTE_COMPACT_FATHER = Config.get('CONSTANT')['ABSOLUTE_COMPACT_FATHER']
-      var barcodeYLocation = 0
+      var barcodeYLocation = 3
       for (var barcodeIndex = 0; barcodeIndex < barcodeModelArray.length; barcodeIndex++) {
         var treeDataModel = barcodeModelArray[barcodeIndex]
         if (typeof(treeDataModel) !== 'undefined') {
@@ -2698,12 +2698,10 @@ define([
       for (var mI = 0; mI < barcodeModelArray.length; mI++) {
         barcodeModelArray[mI].set('barcodeIndex', mI)
       }
-      console.log('barcodeModelArray', barcodeModelArray)
       self.uniform_layout()
       self.update_data_all_view()
       //  library tree的排序函数
       function library_tree_handler(model_a, model_b, sortOption, asc_desc_para) {
-        console.log('asc_desc_para', asc_desc_para)
         var barcodeTreeId_a = model_a.get('barcodeTreeId')
         var barcodeTreeId_b = model_b.get('barcodeTreeId')
         var date_a = barcodeTreeId_a.split('-')[1].replaceAll('_', '-')
@@ -2714,8 +2712,6 @@ define([
         var month_day_b = date_b.split('-')[1] + date_b.split('-')[2]
         if (sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DATE_SORT']) {
           //  如果当前的状态是按照日期先后进行排序
-          console.log('month_day_a', month_day_a)
-          console.log('month_day_b', month_day_b)
           if (asc_desc_para === 'asc') {
             return (+month_day_a) - (+month_day_b)
           } else {

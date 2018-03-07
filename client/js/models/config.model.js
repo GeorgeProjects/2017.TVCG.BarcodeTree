@@ -45,20 +45,20 @@ define([
         BARCODETREE_ATTRIBUTE_SORT: 'ATTRIBUTE',
         BARCODETREE_SIMILARITY_SORT: 'SIMILARITY',
       },
-      BARCODETREE_MODEL_SETTING:{
+      BARCODETREE_MODEL_SETTING: {
         ALIGN_START: 'aligned-start',
         ALIGN_RANGE: 'aligned-range',
         PADDING_RANGE: 'padding-range',
         PADDING_BEGIN: 'padding-begin'
       },
-      BARCODETREE_COMPARISON_MODE:{
+      BARCODETREE_COMPARISON_MODE: {
         ATTRIBUTE: 'ATTRIBUTE',
         TOPOLOGY: 'TOPOLOGY'
       },
       BARCODETREE_TOOLTIP_ENABLE: true,
       //  初始情况下的barcode比较的状态
       INIT_BARCODETREE_GLOBAL_PARAS: {
-        Selection_State: 'NODE', //'SUBTREE'
+        Selection_State: 'NODE', //'SUBTREE', 'NODE'
         Subtree_Compact: false, //subbarcodeTree是否是comapct的展示模式
         Align_State: false, //subbarcodeTree是否是comapct的展示模式
         Comparison_Result_Display: false, //  展示barcodeTree的比较结果
@@ -82,6 +82,7 @@ define([
         'NODE': 'NODE',
         'SUBTREE': 'SUBTREE',
         'NOT_SELECTED': 'NOT_SELECTED',
+        'UN_SELECTION': 'UN_SELECTION',
         'NODE_SELECTION': 'NODE',
         'SUBTREE_SELECTION': 'SUBTREE'
       },
@@ -130,7 +131,7 @@ define([
         //  切换到节点的非resorting状态
         'CHANGE_TO_NOT_RESORTING': 'change-to-not-resorting',
         //  切换到节点的resorting状态
-        'CHANGE_TO_RESORTING':'change-to-resorting',
+        'CHANGE_TO_RESORTING': 'change-to-resorting',
         // ====================================================================
         //  设置选择的颜色
         'SET_PRECLICK_COLOR': 'set-preclick-color',

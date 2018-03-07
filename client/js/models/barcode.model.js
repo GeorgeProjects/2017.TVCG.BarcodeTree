@@ -1365,6 +1365,10 @@ define([
             compareResultObj.add.push(array2[a2I])
           }
         }
+        // //  array1 是based Tree所发现的节点, 所以当based Tree中的节点为空时, 返回的是另一个tree中的节点, 即array2
+        // if ((typeof (array1) === 'undefined') || (array1.length === 0)) {
+        //   compareResultObj.same = JSON.parse(JSON.stringify(array2))
+        // }
         return compareResultObj
       }
     },

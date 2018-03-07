@@ -119,6 +119,7 @@ define([
         $('#color-picker').dblclick(function () {
           Variables.set('selectionColor', null)
           $('#color-picker').css('background-color', 'white')
+          $('#color-picker-text').css('-webkit-text-fill-color', 'black')
         })
       })
       //  初始化视图中的font-size
@@ -133,12 +134,11 @@ define([
         var strokeWidthRatio = 0.05
         var rem_px = window.rem_px
         var strokeWidth = strokeWidthRatio * rem_px
-        console.log('strokeWidth', strokeWidth)
         if (strokeWidth <= 0.5) {
           //  将节点的class设置为min-stroke
           Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
           Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
-        } else if (strokeWidth >= 5) {
+        } else if (strokeWidth >= 0.5) {
           //  将节点的class设置为max-stroke
           Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
           Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])

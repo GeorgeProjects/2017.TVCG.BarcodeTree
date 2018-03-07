@@ -395,6 +395,18 @@
           "categoryName": "Civic & landscape art"
         },
         {
+          "num": 3,
+          "name": "7_2_0",
+          "children": [
+            {
+              "num": 3,
+              "name": "7_2_0",
+              "categoryName": "Architecture"
+            }
+          ],
+          "categoryName": "Architecture"
+        },
+        {
           "num": 1,
           "name": "7_0_0",
           "children": [

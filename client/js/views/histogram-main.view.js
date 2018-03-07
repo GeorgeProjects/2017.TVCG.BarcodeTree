@@ -274,11 +274,13 @@ define([
       var fileInfoData = histogramDataObject.fileInfo
       var histogramDataArray = []
       var histogramDataObj = {}
+      var yLabel = '#num'
       for (var hI = 0; hI < fileInfoData.length; hI++) {
         histogramDataArray[hI] = {}
         histogramDataArray[hI].x1 = hI
         histogramDataArray[hI].x2 = hI + 1
         if (histogramDataObject.scaleType === 'log') {
+          yLabel = '#log(num)'
           histogramDataArray[hI].y = Math.log(fileInfoData[hI]['num'])
         } else {
           histogramDataArray[hI].y = fileInfoData[hI]['num']
@@ -297,6 +299,11 @@ define([
       var yTicksFormatArray = histogramDataObject.yTicksFormatArray
       var xTicksValueArray = histogramDataObject.xTicksValueArray
       var xTicksFormatArray = histogramDataObject.xTicksFormatArray
+      if (histogramDataObject.scaleType === 'log') {
+
+      } else if (histogramDataObject.scaleType === 'linear') {
+
+      }
       //  在brush开始的时候首先将之前选择的barcode的pre-click-highlight取消
       var brushstart = function () {
         d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
@@ -460,7 +467,7 @@ define([
         .xLabel('#Date')
         .xLabel_location('.90em')
         .xLabel_text_anchor('end')
-        .yLabel('#log(num)')
+        .yLabel(yLabel)
         .bar_interval(0.5)
         .brush_trigger(brushend)
         .brush_start_trigger(brushstart)
@@ -552,6 +559,12 @@ define([
     selectBarItem: function (barId) {
       var self = this
       var selectedItemArray = [barId]
+      //  设置选择的barcodeTree的颜色
+      var selectionColor = Variables.get('selectionColor')
+      var selectedItemColorObj = {}
+      selectedItemColorObj[barId] = selectionColor
+      self.d3el.select('#' + barId).style('fill', selectionColor)
+      Variables.set('selectedItemColorObj', selectedItemColorObj)
       self.requestData(selectedItemArray)
       self.trigger_update_selection_list()
     },
@@ -602,7 +615,7 @@ define([
       for (var bI = 0; bI < barIdArray.length; bI++) {
         var barId = barIdArray[bI]
         barcodeCollection.remove_item_and_model(barId)
-        selectItemNameArray.splice(selectItemNameArray.indexOf(barId), 1)
+        // selectItemNameArray.splice(selectItemNameArray.indexOf(barId), 1)
       }
       self.trigger_update_selection_list()
       window.Variables.update_barcode_attr()
@@ -653,7 +666,6 @@ define([
           }
           allSelectedItemsArray.push(itemId)
           var selectionColor = Variables.get('selectionColor')
-          console.log('selectionColor', selectionColor)
           if (selectionColor != null) {
             d3.select(this).style('fill', selectionColor)
             barcodeCollection.update_barcode_model_color(allSelectedItemsArray, selectionColor)

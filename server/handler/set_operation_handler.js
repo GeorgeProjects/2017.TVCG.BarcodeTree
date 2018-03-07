@@ -93,8 +93,6 @@ var handlerOrOperation = function (request, response) {
   // var linearizedTreeNodeArrayObj = read_tree_node_array_obj(originalTreeObjObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
   // var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
   // var categoryNodeObjWithLocArray = linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
-  console.log('orTreeObject', orTreeObject)
-  console.log('orTreeLocNodeArray', orTreeLocNodeArray)
   sendTreeNodeArray(orTreeObject, orTreeLocNodeArray)
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeArrayObj) {

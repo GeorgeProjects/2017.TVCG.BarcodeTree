@@ -35,6 +35,7 @@ define([
     },
     events: {},
     initialize: function () {
+      console.log('super tree view initialize')
       var self = this
       self.initEventFunc()
       self.initParaFunc()
@@ -49,6 +50,7 @@ define([
         self.close_supertree_view()
       })
       Backbone.Events.on(Config.get('EVENTS')['RENDER_SUPERTREE'], function (event) {
+        console.log('RENDER_SUPERTREE')
         self.draw_super_tree()
       })
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_ALIGNED_ICON'], function (event) {
@@ -575,6 +577,7 @@ define([
       var superTreeVisibleHeight = Variables.get('superTreeHeight')
       var levelNodeHeight = superTreeVisibleHeight / 2
       var allAlignedNodesObj = self.get_aligned_nodes_different_level()
+      console.log('allAlignedNodesObj', allAlignedNodesObj)
       var barcodeNodeAttrArray = self.get_super_tree_barcode_node_array()
       var maxLevel = 0
       var selectedLevels = Variables.get('selectedLevels')
@@ -587,9 +590,6 @@ define([
       }
       self.d3el.select('#barcode-container').selectAll('.level-g').remove()
       var alignedLevel = Variables.get('alignedLevel')
-      if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
-        alignedLevel = window.barcodeWidthArray.max()
-      }
       d3.selectAll('.level-g').remove()
       for (var item in allAlignedNodesObj) {
         var alignedNodeArray = allAlignedNodesObj[item]
@@ -1214,7 +1214,7 @@ define([
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       Variables.set('superTreeViewState', true)
-      var superTreeHeight = 80
+      var superTreeHeight = Variables.get('superTreeHeight')
       var barcodeTreeConfigHeight = $('#top-toolbar-container').height()
       var histogramHeightRem = Variables.get('histogramHeightRem')
       $('#supertree-scroll-panel').css('top', barcodeTreeConfigHeight + 'px')

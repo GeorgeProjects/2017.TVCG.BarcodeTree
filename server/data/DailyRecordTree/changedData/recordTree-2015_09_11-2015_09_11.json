@@ -371,6 +371,23 @@
           "categoryName": "Arts"
         },
         {
+          "num": 4,
+          "name": "7_2_0",
+          "children": [
+            {
+              "num": 3,
+              "name": "7_2_0",
+              "categoryName": "Architecture"
+            },
+            {
+              "num": 1,
+              "name": "7_2_4",
+              "categoryName": "Architecture from 1400"
+            }
+          ],
+          "categoryName": "Architecture"
+        },
+        {
           "num": 3,
           "name": "7_9_0",
           "children": [

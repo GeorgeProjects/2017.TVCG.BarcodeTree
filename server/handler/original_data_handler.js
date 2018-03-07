@@ -59,7 +59,6 @@ var handleCompactData = function (request, response) {
 //  ********************
 var handleOriginalData = function (request, response) {
   //  读取传递的的数据
-  console.log('handleOriginalData')
   var reqBody = request.body
   var dataSetName = reqBody.dataSetName
   var dataItemNameArray = reqBody['dataItemNameArray']
@@ -95,8 +94,6 @@ var handleOriginalData = function (request, response) {
   //   }
   // }
   // var originalTreeObjObject = read_original_tree_object(dataItemNameArray, dataSetName)
-  console.log('selectedLevels', selectedLevels)
-  console.log('barcodeWidthArray', barcodeWidthArray)
   var originalTreeObjObject = dataCenter.get_original_data(dataSetName, dataItemNameArray)
 
   var linearTreeNodeArrayObject = dataCenter.get_linear_data(dataSetName, dataItemNameArray)

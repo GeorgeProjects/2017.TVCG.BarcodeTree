@@ -9,7 +9,7 @@ define([
   window.Variables = new (Backbone.Model.extend({
     defaults: {
       BARCODETREE_GLOBAL_PARAS: {
-        Selection_State: 'NODE', //'SUBTREE'
+        Selection_State: 'NODE', //'SUBTREE', 'NODE'
         Subtree_Compact: false, //subbarcodeTree是否是comapct的展示模式
         Align_State: false, //subbarcodeTree是否是comapct的展示模式
         Comparison_Result_Display: false, //  展示barcodeTree的比较结果
@@ -19,6 +19,12 @@ define([
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
         Node_Arrangement: false
       },
+      //  是否使用padding显示不存在的节点
+      is_show_padding_node: false,
+      //  是否对于节点进行高亮的选项
+      highlight_node: false,
+      //  只是高亮节点的选项
+      only_highlight_node: true,  // 对立面是取消高亮其他的节点
       //  判断当前是否显示father与child之间的链接
       show_father_child_link: true,
       //  判断当前是否处于enable lasso的状态

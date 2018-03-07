@@ -36,10 +36,12 @@ var handlerBuildSuperTree = function (request, response) {
   }
   //  读取subtreeObjectArray
   var subtreeObjArray = []
-  for (var sI = 0; sI < dataItemNameArray.length; sI++) {
-    var subtreeObj = dataCenter.get_subtree_id_index_data(dataSetName, dataItemNameArray[sI], rootId)
-    if (typeof(subtreeObj) !== 'undefined') {
-      subtreeObjArray.push(subtreeObj)
+  if (typeof (dataItemNameArray) !== 'undefined') {
+    for (var sI = 0; sI < dataItemNameArray.length; sI++) {
+      var subtreeObj = dataCenter.get_subtree_id_index_data(dataSetName, dataItemNameArray[sI], rootId)
+      if (typeof(subtreeObj) !== 'undefined') {
+        subtreeObjArray.push(subtreeObj)
+      }
     }
   }
   var maxSubtreeWidth = 0

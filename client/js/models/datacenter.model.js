@@ -826,7 +826,7 @@ define([
       //  获取数据集中的最大值
       result.maxValue = histogramModel.get_max_value(result.fileInfo)
       //  TODO 这个地方会修改成按照文件里面的属性决定scale的类型
-      result.scaleType = 'log'//'log'
+      result.scaleType = 'linear'//'log' 'linear'
       result.yTicksValueArray = histogramModel.get_y_ticks_value(result.maxValue, result.scaleType) //[ 100, 1000, result.maxValue ]
       result.yTicksFormatArray = JSON.parse(JSON.stringify(result.yTicksValueArray))//[ '0.1k', '1k', '6k' ]
       // console.log('result.yTicksValueArray', result.yTicksValueArray)

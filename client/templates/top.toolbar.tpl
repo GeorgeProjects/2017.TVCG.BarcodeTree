@@ -2,7 +2,7 @@
 					<span id = "selection-operation-div" class = "config-div">
 							<span class = "operation-label"> SELECTION </span>
 							<span id = "barcode-selection" class="btn-group" role="group">
-							    <button type="button" class="btn btn-default btn-lg config-button active" aria-label="Left Align" id="single-node-selection">
+							    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="single-node-selection">
 														<i class="fa fa-square" aria-hidden="true"></i>
 							    </button>
 							    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="subtree-node-selection">
@@ -17,6 +17,9 @@
 							    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="selection-refresh">
 							       <i class="fa fa-times" aria-hidden="true"></i>
 							    </button>
+								    <button type="button" class="btn btn-default btn-lg config-button" aria-label="Right Align" id="highlight-mode">
+                <i class="fa icon iconfont icon-highlight-mode-"></i>
+ 							    </button>
 							    <button type="button" class="btn btn-default btn-lg config-button active" aria-label="Right Align" id="selection-tooltip">
 							       <i class="fa fa-comment" aria-hidden="true"></i>
 							    </button>
@@ -49,6 +52,9 @@
 							    </button>
 											<button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="change-subtree-display-mode">
 														<i class="fa icon iconfont icon-disgonal-strip"></i>
+							    </button>
+											<button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="show-padding-node">
+														<i class="fa icon iconfont icon-padding-node-icon"></i>
 							    </button>
            <button type="button" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="global-display-controller">
               <i class="fa fa-th"></i>

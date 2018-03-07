@@ -31,6 +31,7 @@ define([
       'click #tree-selection': 'tree_selection',
       'click #father-child-link': 'show_father_child_link',
       'click #selection-refresh': 'selection_refresh',
+      'click #highlight-mode': 'change_highlight_mode',
       'click #selection-tooltip': 'selection_tooltip',
       // 子树操作
       'click #subtree-collapse': 'subtree_collapse',
@@ -41,6 +42,7 @@ define([
       'click #align-compare': 'align_compare',
       'click #summary-comparison': 'summary_comparison',
       'click #change-subtree-display-mode': 'change_subtree_display_mode',
+      'click #show-padding-node': 'showing_padding_node',
       'click #node-number-comparison': 'node_number_comparison',
       'click #global-display-controller': 'global_comparison',
       'click #structure-comparison': 'structure_comparison',
@@ -175,7 +177,7 @@ define([
       var self = this
       //  鼠标hovering在该视图上, 会删除在barcode上hovering的效果
       $('#top-toolbar-container').on('click', function () {
-        self.trigger_mouseout_event()
+        // self.trigger_mouseout_event()
       })
     },
     /**
@@ -267,15 +269,47 @@ define([
     single_node_selection: function () {
       var self = this
       var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
-      BARCODETREE_GLOBAL_PARAS['Selection_State'] = Config.get('CONSTANT')['NODE_SELECTION']
-      $('#barcode-selection .config-button').removeClass('active')
-      $('#barcode-selection #single-node-selection').addClass('active')
+      if (!$('#barcode-selection #single-node-selection').hasClass('active')) {
+        $('#barcode-selection .config-button:not(#selection-tooltip):not(#tree-selection)').removeClass('active')
+        $('#barcode-selection #single-node-selection').addClass('active')
+        BARCODETREE_GLOBAL_PARAS['Selection_State'] = Config.get('CONSTANT')['NODE_SELECTION']
+        //  删除father children之间的连线
+        $('#father-child-link').removeClass('active')
+        Variables.set('show_father_child_link', false)
+        //  disable #father-child-link的按钮
+        self.disable_buttons($('#father-child-link'))
+        Variables.set('highlight_node', true)
+      } else {
+        $('#barcode-selection #single-node-selection').removeClass('active')
+        Variables.set('highlight_node', false)
+        // BARCODETREE_GLOBAL_PARAS['Selection_State'] = Config.get('CONSTANT')['UN_SELECTION']
+      }
       self.trigger_mouseout_event()
-      //  删除father children之间的连线
-      $('#father-child-link').removeClass('active')
-      Variables.set('show_father_child_link', false)
-      //  disable #father-child-link的按钮
-      self.disable_buttons($('#father-child-link'))
+    },
+    //  选择barcodeTree上的子树
+    subtree_node_selection: function () {
+      var self = this
+      var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      if (!$('#barcode-selection #subtree-node-selection').hasClass('active')) {
+        $('#barcode-selection .config-button:not(#selection-tooltip):not(#tree-selection)').removeClass('active')
+        $('#barcode-selection #subtree-node-selection').addClass('active')
+        BARCODETREE_GLOBAL_PARAS['Selection_State'] = Config.get('CONSTANT')['SUBTREE_SELECTION']
+        //  增加father children之间的连线
+        $('#father-child-link').addClass('active')
+        Variables.set('show_father_child_link', true)
+        //  enable #father-child-link的按钮
+        self.enable_buttons($('#father-child-link'))
+        Variables.set('highlight_node', true)
+      } else {
+        $('#barcode-selection #subtree-node-selection').removeClass('active')
+        $('#father-child-link').removeClass('active')
+        Variables.set('show_father_child_link', false)
+        Variables.set('highlight_node', false)
+        //  disable #father-child-link的按钮
+        self.disable_buttons($('#father-child-link'))
+        // BARCODETREE_GLOBAL_PARAS['Selection_State'] = Config.get('CONSTANT')['UN_SELECTION']
+      }
+      self.trigger_mouseout_event()
     },
     show_father_child_link: function () {
       var self = this
@@ -301,18 +335,16 @@ define([
         self.trigger_enable_tree_selection()
       }
     },
-    //  选择barcodeTree上的子树
-    subtree_node_selection: function () {
+    //  改变当前节点的高亮状态
+    change_highlight_mode: function () {
       var self = this
-      var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
-      BARCODETREE_GLOBAL_PARAS['Selection_State'] = Config.get('CONSTANT')['SUBTREE_SELECTION']
-      $('#barcode-selection .config-button:not(#selection-tooltip)').removeClass('active')
-      $('#barcode-selection #subtree-node-selection').addClass('active')
-      self.trigger_mouseout_event()
-      //  增加father children之间的连线
-      Variables.set('show_father_child_link', true)
-      $('#father-child-link').addClass('active')
-      self.enable_buttons($('#father-child-link'))
+      if ($('#highlight-mode > .iconfont').hasClass('icon-highlight-mode')) {
+        $('#highlight-mode > .iconfont').removeClass('icon-highlight-mode').addClass('icon-highlight-mode-')
+        Variables.set('only_highlight_node', true)
+      } else {
+        $('#highlight-mode > .iconfont').removeClass('icon-highlight-mode-').addClass('icon-highlight-mode')
+        Variables.set('only_highlight_node', false)
+      }
     },
     //  清除在barcodeTree上的所有选择
     selection_refresh: function () {
@@ -380,6 +412,7 @@ define([
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      console.log('is_exist_align_part', barcodeCollection.is_exist_align_part())
       if (barcodeCollection.is_exist_align_part()) {
         if ($('#compare-lock .fa').hasClass('fa-lock')) {
           self.change_to_compare_unlock_state()
@@ -399,6 +432,7 @@ define([
      */
     change_to_compare_lock_state: function () {
       var self = this
+      console.log('change_to_compare_lock_state')
       var barcodeCollection = self.options.barcodeCollection
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       $('#compare-lock .fa').removeClass('fa-unlock')
@@ -418,6 +452,7 @@ define([
      */
     change_to_compare_unlock_state: function () {
       var self = this
+      console.log('change_to_compare_unlock_state')
       var barcodeCollection = self.options.barcodeCollection
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       $('#compare-lock .fa').removeClass('fa-lock')
@@ -486,6 +521,22 @@ define([
       }
       barcodeCollection.process_barcode_model_data()
       barcodeCollection.update_data_all_view()
+    },
+    /**
+     * 显示barcodeTree中的padding node
+     */
+    showing_padding_node: function () {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      if ($('#show-padding-node').hasClass('active')) {
+        $('#show-padding-node').removeClass('active')
+        Variables.set('is_show_padding_node', false)
+        barcodeCollection.update_all_barcode_view()
+      } else {
+        $('#show-padding-node').addClass('active')
+        Variables.set('is_show_padding_node', true)
+        barcodeCollection.update_all_barcode_view()
+      }
     },
     /**
      * 改变barcode当前的显示模式
@@ -745,7 +796,7 @@ define([
           barcodeCollection.add_selected_obj_into_children_nodes()
         }
       } else {
-        swal("Original Comparison Mode", "You can the interested subtrees!", "success");
+        swal("Original Comparison Mode", "You can select the interested subtrees!", "success")
         Variables.set('displayMode', Config.get('CONSTANT').ORIGINAL)
         $('#global-display-controller').removeClass('active')
         //  设置对齐的Align_State状态为true, 并且自动更新barcode aligned controller的状态

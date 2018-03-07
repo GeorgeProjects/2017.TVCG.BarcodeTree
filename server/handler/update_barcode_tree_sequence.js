@@ -5,7 +5,6 @@ var ITERATION_NUM = 200
 var updateBarcodeTreeSequence = function (request, response) {
   var reqBody = request.body
   var alignedObjPercentageArrayObjArray = reqBody.alignedObjPercentageArrayObjArray
-  console.log('alignedObjPercentageArrayObjArray', alignedObjPercentageArrayObjArray)
   var dataItemNameArray = reqBody.dataItemNameArray
   var rowSequenceSame = false, columnSequenceSame = false
   var interateNum = 0
@@ -119,13 +118,15 @@ var updateBarcodeTreeSequence = function (request, response) {
     var columnSequenceObj = {}
     var firstAlignedObjPercentageArrayObj = alignedObjPercentageArrayObjArray[0]
     var alignedObjPercentageArray = firstAlignedObjPercentageArrayObj.alignedObjPercentageArray
-    for (var aI = 0; aI < alignedObjPercentageArray.length; aI++) {
-      var alignedNodeId = alignedObjPercentageArray[aI].alignedNodeId
-      columnSequenceObj[alignedNodeId] = []
-      var nextPercentageArray = alignedObjPercentageArray[aI].nextPercentageArray
-      for (var nI = 0; nI < nextPercentageArray.length; nI++) {
-        var barcodeNodeId = nextPercentageArray[nI].barcodeNode_id
-        columnSequenceObj[alignedNodeId].push(barcodeNodeId)
+    if (typeof (alignedObjPercentageArray) !== 'undefined') {
+      for (var aI = 0; aI < alignedObjPercentageArray.length; aI++) {
+        var alignedNodeId = alignedObjPercentageArray[aI].alignedNodeId
+        columnSequenceObj[alignedNodeId] = []
+        var nextPercentageArray = alignedObjPercentageArray[aI].nextPercentageArray
+        for (var nI = 0; nI < nextPercentageArray.length; nI++) {
+          var barcodeNodeId = nextPercentageArray[nI].barcodeNode_id
+          columnSequenceObj[alignedNodeId].push(barcodeNodeId)
+        }
       }
     }
     return columnSequenceObj
@@ -152,16 +153,18 @@ function update_sum_value(alignedObjPercentageArrayObjArray) {
     var alignedObjPercentageArray = alignedObjPercentageArrayObj.alignedObjPercentageArray
     var sumValue = 0
     //  这里的pI代表的是有几个aligned的部分
-    for (var pI = 0; pI < alignedObjPercentageArray.length; pI++) {
-      var nextPercentageArray = alignedObjPercentageArray[pI].nextPercentageArray
-      //  这里的nI代表的是aligned部分的节点, 对于每个节点的计算值依次累加
-      var reorderingColNum = nextPercentageArray.length
-      for (var nI = 0; nI < nextPercentageArray.length; nI++) {
-        var existedPercentage = nextPercentageArray[nI].existed_percentage
-        if (typeof (existedPercentage) === 'undefined') {
-          nextPercentageArray[nI].existed_percentage = 0
+    if (typeof (alignedObjPercentageArray) !== 'undefined') {
+      for (var pI = 0; pI < alignedObjPercentageArray.length; pI++) {
+        var nextPercentageArray = alignedObjPercentageArray[pI].nextPercentageArray
+        //  这里的nI代表的是aligned部分的节点, 对于每个节点的计算值依次累加
+        var reorderingColNum = nextPercentageArray.length
+        for (var nI = 0; nI < nextPercentageArray.length; nI++) {
+          var existedPercentage = nextPercentageArray[nI].existed_percentage
+          if (typeof (existedPercentage) === 'undefined') {
+            nextPercentageArray[nI].existed_percentage = 0
+          }
+          sumValue = sumValue + existedPercentage * Math.pow(2, reorderingColNum - nI)
         }
-        sumValue = sumValue + existedPercentage * Math.pow(2, reorderingColNum - nI)
       }
     }
     alignedObjPercentageArrayObj.sum_value = sumValue
