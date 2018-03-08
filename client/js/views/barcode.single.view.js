@@ -3448,7 +3448,7 @@ define([
         self.node_unclick_handler(nodeData, nodeLevel, finishRemoveAlignDeferObj)
       }
       ,
-//  点击focus选项的按钮
+      //  点击focus选项的按钮
       node_click_handler: function (d, alignedLevel, finishAlignDeferObj) {
         var self = this
         var barcodeCollection = window.Datacenter.barcodeCollection
@@ -3529,7 +3529,7 @@ define([
           //  在将d3-tip的类变成d3-tip-flip的情况下, 需要将d3-tip-flip再次变成d3-tip
           $('.d3-tip-flip').removeClass('d3-tip-flip').addClass('d3-tip')
           if (typeof(d.categoryName) !== 'undefined') {
-            tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.category + '-' + d.categoryName + ", num: " + d.num + "</span></span>"
+            tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.categoryName + ", " + d.num + "</span></span>"
           } else {
             tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.category + "</span></span>"
           }

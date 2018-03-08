@@ -166,7 +166,7 @@ define([
         $('#topological-comparison-button').addClass('active')
         $('#attribute-comparison-button').removeClass('active')
         Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
-        self.hide_distribution_view_toggle()
+        // self.hide_distribution_view_toggle()
         self.trigger_close_distribution_view()
       })
       $('#attribute-comparison-button').click(function () {
@@ -180,7 +180,7 @@ define([
         // self.trigger_update_distribution_view()
         window.Datacenter.barcodeCollection.update_barcode_node_collection_obj()
         self.trigger_open_distribution_view()
-        self.show_distribution_view_toggle()
+        // self.show_distribution_view_toggle()
       })
       self.render_barcode_tree_config_view()
       self.init_locked_state()

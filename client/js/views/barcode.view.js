@@ -78,7 +78,6 @@ define([
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_TREE_CONFIG_VIEW'])
     },
     init_tooltip: function () {
-      var self = this
       $(function () {
         $('[data-toggle = "tooltip"]').tooltip()
       })
@@ -134,6 +133,13 @@ define([
           self.close_config_view()
         }
       })
+      //  控制distribution的toggle在不同状态下的透明度
+      $('#distribution-view-toggle').mousemove(function () {
+        $('#distribution-view-toggle').css('opacity', 1)
+      })
+      $('#distribution-view-toggle').mouseout(function () {
+        $('#distribution-view-toggle').css('opacity', 0.3)
+      })
       //  在supertree-view-toggle按钮上增加监听函数, 将superTree视图打开
       $('#supertree-view-toggle').click(function () {
         var superTreeViewState = Variables.get('superTreeViewState')
@@ -145,6 +151,13 @@ define([
           self.open_supertree_view()
           self.trigger_open_supertree()
         }
+      })
+      //  控制superTree view的toggle在不同状态下的透明度
+      $('#supertree-view-toggle').mousemove(function () {
+        $('#supertree-view-toggle').css('opacity', 1)
+      })
+      $('#supertree-view-toggle').mouseout(function () {
+        $('#supertree-view-toggle').css('opacity', 0.3)
       })
       // //  将打开按钮锁定按钮
       // $('#btn-pin').click(function () {

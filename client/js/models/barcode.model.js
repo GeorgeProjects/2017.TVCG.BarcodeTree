@@ -1320,6 +1320,8 @@ define([
       var globalCompareResult = {}
       var basedFindingNodesObj = JSON.parse(JSON.stringify(basedFindingNodesObj))
       var thisTreeFindingNodesObj = JSON.parse(JSON.stringify(thisTreeFindingNodesObj))
+      console.log('basedFindingNodesObj.childrenNodes', basedFindingNodesObj.childrenNodes)
+      console.log('thisTreeFindingNodesObj.childrenNodes', thisTreeFindingNodesObj.childrenNodes)
       globalCompareResult.childrenNodes = innerCompare(basedFindingNodesObj.childrenNodes, thisTreeFindingNodesObj.childrenNodes)
       // globalCompareResult.fatherCurrentNodes = innerCompare(basedFindingNodesObj.fatherCurrentNodes, thisTreeFindingNodesObj.fatherCurrentNodes)
       // globalCompareResult.siblingNodes = innerCompare(basedFindingNodesObj.siblingNodes, thisTreeFindingNodesObj.siblingNodes)

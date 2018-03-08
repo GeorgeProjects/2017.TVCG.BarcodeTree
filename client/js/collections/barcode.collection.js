@@ -1452,9 +1452,10 @@ define([
       var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
       var Comparison_Mode = BARCODETREE_GLOBAL_PARAS['Comparison_Mode']
       var BARCODETREE_COMPARISON_MODE = Config.get('BARCODETREE_COMPARISON_MODE')
-      if (Comparison_Mode === BARCODETREE_COMPARISON_MODE['ATTRIBUTE']) {
+      //  之前只有在当前的状态是attribute的显示状态才会更新distribution的视图
+      // if (Comparison_Mode === BARCODETREE_COMPARISON_MODE['ATTRIBUTE']) {
         Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_DISTRIBUTION_VIEW'])
-      }
+      // }
     },
     // ==========================================================
     //  重置barcode collection中所有的参数

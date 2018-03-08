@@ -12,7 +12,7 @@
       stroke: #ddd;
       stroke-width: 0.25px;
     }
-    rect.barcode-bg{
+    rect.barcode-bg {
       fill: #fff; //#f9f9f9
     }
     rect.bg-odd {
@@ -75,8 +75,24 @@
     .barcode-node.node-missed_max-stroke {
       fill: white !important;
       stroke: #aaa !important;
-      stroke-width: 2px !important;
+      stroke-width: 2px;
       opacity: 0.4;
+    }
+
+    .barcode-node-level-3.node-missed {
+      stroke-width: 2px !important;
+    }
+
+    .barcode-node-level-3.node-missed {
+      stroke-width: 2px !important;
+    }
+
+    .barcode-node-level-2.node-missed {
+      stroke-width: 3px !important;
+    }
+
+    .barcode-node-level-1.node-missed {
+      stroke-width: 5px !important;
     }
 
     .barcode-node.node-missed_min-stroke {
@@ -89,7 +105,7 @@
     .barcode-node.node-missed {
       fill: white !important;
       stroke: #aaa !important;
-      stroke-width: 0.1rem !important;
+      //stroke-width: 0.1rem !important;
       opacity: 0.4;
     }
 
@@ -165,13 +181,13 @@
 
     .barcode-node[class~=missed-node-highlight_min-stroke] {
       stroke: #e9a3c9 !important;
-      stroke-width: 1.5px !important;
+      //stroke-width: 1.5px !important;
       opacity: 0.4;
     }
 
     .barcode-node[class~=missed-node-highlight_max-stroke] {
       stroke: #e9a3c9 !important;
-      stroke-width: 5px;
+      //stroke-width: 4px;
       opacity: 0.4;
     }
 

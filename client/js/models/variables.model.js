@@ -24,7 +24,7 @@ define([
       //  是否对于节点进行高亮的选项
       highlight_node: false,
       //  只是高亮节点的选项
-      only_highlight_node: true,  // 对立面是取消高亮其他的节点
+      only_highlight_node: false,  // 对立面是取消高亮其他的节点
       //  判断当前是否显示father与child之间的链接
       show_father_child_link: true,
       //  判断当前是否处于enable lasso的状态

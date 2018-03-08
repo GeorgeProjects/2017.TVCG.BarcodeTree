@@ -181,7 +181,7 @@ define([
       var currentDataSetName = Variables.get('currentDataSetName')
       if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
         var xTicksObject = {
-          xTicksValueArray: [5, 36, 66, 98, 128, 159, 189, 220, 252, 283],
+          xTicksValueArray:  [6, 37, 67, 98, 128, 157, 185, 215, 246, 273],
           xTicksFormatArray: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
         }
         return xTicksObject

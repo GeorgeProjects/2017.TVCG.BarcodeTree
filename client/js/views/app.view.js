@@ -9,6 +9,7 @@ define([
   'config',
   'tooltips',
   'huebee',
+  'bootstrap',
   'rangeslider',
   'views/histogram-main.view',
   'views/barcode.view',
@@ -17,7 +18,7 @@ define([
   'views/single.view',
   'views/node.config.view',
   'text!templates/layoutDiv.tpl',
-], function (require, Mn, _, $, Backbone, Datacenter, Variables, Config, Tooltip, Huebee, RangeSlider, HistogramView, BarcodeView, ToolBarView, SideBarView, SingleView, NodeConfig, Tpl) {
+], function (require, Mn, _, $, Backbone, Datacenter, Variables, Config, Tooltip, Huebee, Bootstrap, RangeSlider, HistogramView, BarcodeView, ToolBarView, SideBarView, SingleView, NodeConfig, Tpl) {
   'use strict'
   return Mn.LayoutView.extend({
     tagName: 'div',
@@ -134,19 +135,22 @@ define([
         var strokeWidthRatio = 0.05
         var rem_px = window.rem_px
         var strokeWidth = strokeWidthRatio * rem_px
-        if (strokeWidth <= 0.5) {
-          //  将节点的class设置为min-stroke
-          Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
-          Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
-        } else if (strokeWidth >= 0.5) {
-          //  将节点的class设置为max-stroke
-          Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
-          Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
-        } else {
-          //  将节点的class设置为scale-stroke
-          Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
-          Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
-        }
+        Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
+        Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
+        //  之前是检验屏幕的长宽来设置miss的节点的stroke的宽度, 现在是根据不同的节点类型设置stroke的宽度
+        // if (strokeWidth <= 0.5) {
+        //   //  将节点的class设置为min-stroke
+        //   Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
+        //   Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
+        // } else if (strokeWidth >= 0.5) {
+        //   //  将节点的class设置为max-stroke
+        //   Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
+        //   Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
+        // } else {
+        //   //  将节点的class设置为scale-stroke
+        //   Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
+        //   Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
+        // }
       }
 
       //  之前的设定是预先选择一定的barcode的histogram, 然后选择颜色就可以支持在预先选择的barcode上面增加颜色
