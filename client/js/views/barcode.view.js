@@ -8,14 +8,13 @@ define([
   'datacenter',
   'config',
   'variables',
-  'bootstrap',
   'views/supertree.view',
   'views/barcode.comparison.view',
   'views/tree.config.view',
   'views/barcode.distribution.view',
   'views/top.toolbar.view',
   'text!templates/barcodeView.tpl'
-], function (require, Mn, _, $, Backbone, d3, Datacenter, Config, Variables, Bootstrap, SuperTreeView, BarcodeComparisonView, TreeConfigView, BarcodeDistributionView, TopToolBarView, Tpl) {
+], function (require, Mn, _, $, Backbone, d3, Datacenter, Config, Variables, SuperTreeView, BarcodeComparisonView, TreeConfigView, BarcodeDistributionView, TopToolBarView, Tpl) {
   'use strict'
   //  barcode.view中包含三个视图, 分别是比较barcodeTree的主视图, barcode的superTree视图, barcode的参数控制视图
   return Mn.LayoutView.extend({
@@ -104,7 +103,6 @@ define([
       })
       self.showChildView('supertreeView', superTreeView)
       // 绘制barcode进行比较的主视图
-      console.log(' new BarcodeComparisonView')
       var barcodeComparisonView = new BarcodeComparisonView({
         barcodeCollection: barcodeCollection,
         categoryModel: categoryModel

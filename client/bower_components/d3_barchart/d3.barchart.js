@@ -47,7 +47,6 @@
               selection.each(function(dataset) {
                 let innerWidth = width
                 let innerHeight = height
-                console.log('innerWidth:' + innerWidth +',innerHeight' + innerHeight)
                 let x = d3.scale.linear()
                   .domain([0, d3.max(dataset, d => d.x2)])
                 .range([0, innerWidth])
@@ -229,7 +228,13 @@
                     return d.id
                   })
                   .attr('x', d => x(d.x1) + 1)
-                  .attr('width', d => x(d.x2 - d.x1) - bar_interval)
+                  .attr('width', function(d){
+                    if((x(d.x2 - d.x1) - bar_interval) >= 1){
+                      return x(d.x2 - d.x1) - bar_interval
+                    }else{
+                      return 1
+                    }
+                  })
                   .attr('y', d => y(d.y))
                   .attr('height', d => innerHeight - y(d.y))
                   .on('mouseover', function(d,i){
@@ -271,7 +276,14 @@
               bars.transition()
                   .duration(duration)
                   .attr('x', d => x(d.x1) + 1)
-                  .attr('width', d => x(d.x2 - d.x1) - bar_interval)
+                  .attr('width', function(d, i){
+                    var width = x(d.x2 - d.x1) - bar_interval
+                    if ( width >= 1 ) {
+                      return width
+                    } else {
+                      return 1
+                    }
+                  })
                   .attr('y', d => y(d.y))
                   .attr('height', d => innerHeight - y(d.y))
             })
@@ -356,7 +368,6 @@
                 console.warn('invalid value for width', value)
                 return
             }
-            console.log('width settting', value)
             width = value
             return chart
         }
@@ -367,7 +378,6 @@
                 console.warn('invalid value for height', value)
                 return
             }
-            console.log('height settting', value)
             height = value
             return chart
         }

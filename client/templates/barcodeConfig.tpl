@@ -36,13 +36,15 @@
                     </span>
                 </div>
             </div>-->
-            <div id = "align-controller">Layout Mode:</div>
+            <div id = "align-controller">Fit on Screen:</div>
             <div id = "barcode-layout-mode" class="btn-group" role="group">
-                <button type="button" class="btn btn-default btn-lg mode-button active" aria-label="Left Align" id="original-layout-button">
-																			<i class="fa icon iconfont icon-tree-uncollapse1"></i> <span class="tree-config-label">original</span>
+                <button type="button" class="btn btn-default btn-lg mode-button" aria-label="Left Align" id="horizontal-fit-layout">
+																			<!--<i class="fa icon iconfont icon-tree-uncollapse1"></i>-->
+																			<i class="fa fa-arrows-h" aria-hidden="true"></i> <span class="tree-config-label">horizontal</span>
                 </button>
-                <button type="button" class="btn btn-default btn-lg mode-button" aria-label="Left Align" id="union-layout-button">
-                  <i class="fa icon iconfont icon-UnionLayout1" id = "union-layout"></i> <span class="tree-config-label">fit on screen</span>
+                <button type="button" class="btn btn-default btn-lg mode-button" aria-label="Left Align" id="vertical-fit-layout">
+                			<i class="fa fa-arrows-v" aria-hidden="true"></i> <span class="tree-config-label">vertical</span>
+                  <!--<i class="fa icon iconfont icon-UnionLayout1" id = "union-layout"></i> <span class="tree-config-label">fit on screen</span>-->
                 </button>
             </div>
             <div id = "display-controller">Display Mode:</div>

@@ -9,7 +9,7 @@ define([
   window.Variables = new (Backbone.Model.extend({
     defaults: {
       BARCODETREE_GLOBAL_PARAS: {
-        Selection_State: 'NODE', //'SUBTREE', 'NODE'
+        Selection_State: 'NULL', //'SUBTREE', 'NODE', 'NULL'(NULL表示当前处于不高亮节点的状态, 但是选择之后仍然高亮整个subtree)
         Subtree_Compact: false, //subbarcodeTree是否是comapct的展示模式
         Align_State: false, //subbarcodeTree是否是comapct的展示模式
         Comparison_Result_Display: false, //  展示barcodeTree的比较结果
@@ -17,7 +17,8 @@ define([
         Align_Lock: false,
         Sort_Option: 'DATE',//'DATE', 'DAY', 'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
-        Node_Arrangement: false
+        Node_Arrangement: false,
+        Horizontal_Fit_In_Screen: false
       },
       //  是否使用padding显示不存在的节点
       is_show_padding_node: false,
@@ -73,7 +74,7 @@ define([
       barcodeNodeHeightMaxValue: 100,
       //  =======================================================
       //  当前渲染的barcode数据集
-      currentDataSetName: 'DailyRecordTree', //'DailyRecordTree',NBATeamTree
+      currentDataSetName: 'DailyRecordTree', //'DailyRecordTree', 'NBATeamTree', 'LibraryRecordTree'
       //  当前的barcode比较视图的宽度
       barcodetreeViewWidth: 0,
       //  当前的barcode比较视图的高度
@@ -93,6 +94,10 @@ define([
       //  barcode的比较模式
       TOPOLOGICAL: 'TOPOLOGICAL',
       ATTRIBUTE: 'ATTRIBUTE',
+      //  当前刷选部分的barcode的范围的节点属性值分布对象
+      brushBarcodeNodeCollectionObj: {},
+      //  当前刷选部分的barcode的范围的节点属性值分布对象
+      brushBarcodeNodeCollectionObjWithId: {},
       //  当前对齐的barcode的范围的节点属性值分布对象
       barcodeNodeCollectionObj: {},
       //  带有节点的id的节点属性值分布对象
@@ -178,7 +183,7 @@ define([
       //  displayed Last Level
       'displayedLastLevel': 3,
       //  supertree的高度
-      'superTreeHeight': 60,
+      'superTreeHeight': 50,
       //  barcodetree config视图的高度
       'barcodeTreeConfigHeight': 33,
       //  当前的config panel的状态, 打开(open)或者关闭(close)
@@ -236,7 +241,7 @@ define([
       //  取"sum_flowSize"或"nonvirtual_sum_node"
       'histogramValueDim': 'sum_flowSize',
       //  barcode布局的方法
-      'layoutMode': 'ORIGINAL', //或者FISHEYE或者ORIGINAL
+      'layoutMode': 'ORIGINAL', //UNION || ORIGINAL
       //  barcode的margin对象
       barcodeMargin: {top: 0, left: 1 / 25, bottom: 1 / 90, right: 0},
       //  datelinechart的margin对象
@@ -256,7 +261,9 @@ define([
       //  barcode当前的显示模式
       barcodeMode: 'original',
       //  渲染的树的最大深度
-      maxDepth: null,
+      maxDepth: 3,
+      //  当前实现的树的最大的个数
+      fileMaxDepth: null,
       //  每个barcode的宽度数组,以barcode的名称为索引
       barcodeMaxWidthObj: {},
       //  树的最大宽度
@@ -340,7 +347,6 @@ define([
       } else {
         //  当前的barcode是非original的模式
         window.barcodeHeight = updatedHeight > barcodeHeight ? barcodeHeight : updatedHeight.toFixed(2)
-        $('#barcodetree-scrollpanel').css({'overflow-y': 'hidden'})
       }
       self.change_barcode_node_config(window.barcodeHeight)
       // window.Datacenter.barcodeCollection.update_height()

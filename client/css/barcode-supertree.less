@@ -35,6 +35,19 @@
     opacity: 1;
   }
 
+  //  默认情况下对于supertree上的冰柱图的节点的额高亮
+  .supertree-icicle-node[class~=default-highlight] {
+    fill: black !important;
+  }
+
+  .supertree-icicle-node[class~=possible] {
+    fill: steelblue !important;
+  }
+
+  .category-text[class~=possible] {
+    fill: steelblue !important;
+  }
+
   .supertree-icicle-node[class~=selection-unhighlight] {
     fill: @barcode-node-color;
     stroke: white;

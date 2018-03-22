@@ -90,6 +90,8 @@ define([
           $('#display-level-control>#btn-' + labelLevel).addClass('active')
         }
         self.changeBarcodeWidthBySelectLevels()
+        //  更新barcodeTree节点宽度的控制视图, 更新对齐层级的控制视图
+        self.update_barcode_node_width_control()
         //  用户选择节点之后, 对于当前展示的节点进行更新
         // barcodeCollection.update_displayed_level()
         window.Datacenter.updateDateCenter()
@@ -135,24 +137,60 @@ define([
       //   var alignedLevel = event.thisNodeObj
       //   self.activeAlignedLevel(alignedLevel)
       // })
-      $('#original-layout-button').click(function () {
-        $('#barcode-layout-mode .mode-button').removeClass('active')
-        $('#original-layout-button').addClass('active')
-        Variables.set('layoutMode', 'ORIGINAL')
+      $('#vertical-fit-layout').click(function () {
+        if ($('#vertical-fit-layout').hasClass('active')) {
+          //  当前处于vertical fit on screen的状态
+          $('#vertical-fit-layout').removeClass('active')
+          Variables.set('layoutMode', 'ORIGINAL')
+        } else if (!$('#vertical-fit-layout').hasClass('active')) {
+          //  当前处于vertical原始模式的状态
+          $('#vertical-fit-layout').addClass('active')
+          Variables.set('layoutMode', 'UNION')
+        }
         window.Variables.update_barcode_attr()
         barcodeCollection.change_layout_mode()
         //  更新在具有attribute的情况下的barcode节点高度
         barcodeCollection.update_attribute_height()
+        barcodeCollection.updateBarcodeNodeyMaxY()
+        $('#supertree-scroll-panel').css('overflow-x', 'auto')
       })
-      $('#union-layout-button').click(function () {
-        $('#barcode-layout-mode .mode-button').removeClass('active')
-        $('#union-layout-button').addClass('active')
-        Variables.set('layoutMode', 'UNION')
-        window.Variables.update_barcode_attr()
-        barcodeCollection.change_layout_mode()
-        //  更新在具有attribute的情况下的barcode节点高度
-        barcodeCollection.update_attribute_height()
+      $('#horizontal-fit-layout').click(function () {
+        if ($('#horizontal-fit-layout').hasClass('active')) {
+          //  当前处于horizontal fit on screen的状态
+          $('#horizontal-fit-layout').removeClass('active')
+          Variables.get('BARCODETREE_GLOBAL_PARAS')['Horizontal_Fit_In_Screen'] = false
+          barcodeCollection.update_unfit_in_screen()
+        } else if (!$('#horizontal-fit-layout').hasClass('active')) {
+          //  当前处于horizontal原始模式的状态
+          $('#horizontal-fit-layout').addClass('active')
+          Variables.get('BARCODETREE_GLOBAL_PARAS')['Horizontal_Fit_In_Screen'] = true
+          barcodeCollection.update_fit_in_screen()
+          $('#supertree-scroll-panel').css('overflow-x', 'hidden')
+        }
+        barcodeCollection.update_all_barcode_view()
       })
+      // $('#original-layout-button').click(function () {
+      //   $('#barcode-layout-mode .mode-button').removeClass('active')
+      //   $('#original-layout-button').addClass('active')
+      //   Variables.set('layoutMode', 'ORIGINAL')
+      //   window.Variables.update_barcode_attr()
+      //   //  更新barcode视图的最大的高度值
+      //   barcodeCollection.updateBarcodeNodeyMaxY()
+      //   barcodeCollection.change_layout_mode()
+      //   //  更新在具有attribute的情况下的barcode节点高度
+      //   barcodeCollection.update_attribute_height()
+      // })
+      // $('#union-layout-button').click(function () {
+      //   $('#barcode-layout-mode .mode-button').removeClass('active')
+      //   $('#union-layout-button').addClass('active')
+      //   Variables.set('layoutMode', 'UNION')
+      //   window.Variables.update_barcode_attr()
+      //   //  更新barcode视图的最大的高度值
+      //   barcodeCollection.updateBarcodeNodeyMaxY()
+      //   barcodeCollection.change_layout_mode()
+      //   //  更新在具有attribute的情况下的barcode节点高度
+      //   barcodeCollection.update_attribute_height()
+      // })
       $('#original-display-button').click(function () {
         self.changeDisplayMode2Original()
       })
@@ -191,6 +229,28 @@ define([
         self.trigger_unhovering_barcode()
       })
     },
+    /**
+     * 根据选中的层级改变层级的节点的宽度
+     */
+    changeBarcodeWidthBySelectLevels: function () {
+      var selectedLevels = Variables.get('selectedLevels')
+      var maxDepth = selectedLevels.max()
+      Variables.set('maxDepth', maxDepth)
+      window.Datacenter.update_selected_levels_width()
+      //  在按照点击层级的maxDepth更新各个层次节点的深度之后, 按照选择的层级设置未选择层级的深度
+      var barcodeWidthArray = window.barcodeWidthArray
+      for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
+        if (selectedLevels.indexOf(bI) === -1) {
+          window.barcodeWidthArray[bI] = 0
+        }
+      }
+    },
+    //  更新barcodeTree节点宽度的控制视图
+    update_barcode_node_width_control: function () {
+      var self = this
+      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_SELECTED_LEVELS'])
+    },
+    //
     //  隐藏distribution视图的控制按钮
     hide_distribution_view_toggle: function () {
       var self = this
@@ -308,18 +368,6 @@ define([
         var dataValueArray = barcodeNodeCollectionObj[item]
         if ((typeof(dataValueArray) !== 'undefined') && (dataValueArray.length !== 0)) {
           self.add_distribution_histogram(distribution_level, dataValueArray)
-        }
-      }
-    },
-    /**
-     * 根据选中的层级改变层级的节点的宽度
-     */
-    changeBarcodeWidthBySelectLevels: function () {
-      var selectedLevels = Variables.get('selectedLevels')
-      var barcodeWidthArray = window.barcodeWidthArray
-      for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
-        if (selectedLevels.indexOf(bI) === -1) {
-          window.barcodeWidthArray[bI] = 0
         }
       }
     },

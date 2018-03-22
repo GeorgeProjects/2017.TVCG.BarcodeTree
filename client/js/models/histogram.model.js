@@ -165,7 +165,7 @@ define([
           averageNum = Math.round(averageNum / 100) * 100
         }
         var yTicksValueArray = []
-        for (var hI = 1; hI < ticksNum; hI++) {
+        for (var hI = 1; hI <= ticksNum; hI++) {
           yTicksValueArray.push(hI * averageNum)
         }
         return yTicksValueArray
@@ -181,8 +181,8 @@ define([
       var currentDataSetName = Variables.get('currentDataSetName')
       if (currentDataSetName === Config.get('DataSetCollection')['LibraryTree_DailyName']) {
         var xTicksObject = {
-          xTicksValueArray:  [6, 37, 67, 98, 128, 157, 185, 215, 246, 273],
-          xTicksFormatArray: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+          xTicksValueArray: [0, 28, 57, 88, 118, 149, 179, 210, 241, 271, 302, 332, 352, 381, 409, 440, 469, 499, 529, 559, 590, 620, 651, 681, 703, 733],
+          xTicksFormatArray: ['2016 Jan', 'Febr', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', '2017 Jan', 'Febr', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec', '2018 Jan', 'Febr']
         }
         return xTicksObject
       } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
@@ -192,6 +192,13 @@ define([
         }
         return xTicksObject
       }
+      // else if (currentDataSetName === Config.get('DataSetCollection')['LibraryRecordTree']) {
+      //   var xTicksObject = {
+      //     xTicksValueArray: [6, 37, 67, 98, 128, 157, 185, 215, 246, 273],
+      //     xTicksFormatArray: ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
+      //   }
+      //   return xTicksObject
+      // }
     }
   })
 })

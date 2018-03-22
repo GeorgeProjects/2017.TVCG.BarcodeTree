@@ -14,6 +14,7 @@ define([
       'DataSetCollection': {
         'LibraryTree_DailyName': 'DailyRecordTree',
         'NBATeamTreeName': 'NBATeamTree',
+        'LibraryRecordTree': 'LibraryRecordTree',
         //
         'LibraryTree_Name': 'RecordTree',
         'SignalTree_Name': 'SignalTree',
@@ -34,7 +35,7 @@ define([
       BARCODETREE_VIEW_SETTING: {
         ICON_WAIT_DURATION: 1000,// 需要将barcode变换完成之后再绘制icon, 所以时间是需要比bar
         COMPARISON_RESULT_PADDING: 50,
-        BARCODE_NODE_PADDING_LENGTH: 30
+        BARCODE_NODE_PADDING_LENGTH: 40
       },
       BARCODETREE_STATE: {
         BARCODETREE_NODE_SELECTION: 'NODE',// 需要将barcode变换完成之后再绘制icon, 所以时间是需要比bar
@@ -58,7 +59,7 @@ define([
       BARCODETREE_TOOLTIP_ENABLE: true,
       //  初始情况下的barcode比较的状态
       INIT_BARCODETREE_GLOBAL_PARAS: {
-        Selection_State: 'NODE', //'SUBTREE', 'NODE'
+        Selection_State: 'NULL', //'SUBTREE', 'NODE', 'NULL'
         Subtree_Compact: false, //subbarcodeTree是否是comapct的展示模式
         Align_State: false, //subbarcodeTree是否是comapct的展示模式
         Comparison_Result_Display: false, //  展示barcodeTree的比较结果
@@ -66,7 +67,9 @@ define([
         Align_Lock: false,
         Sort_Option: 'DATE',//'DATE', 'DAY', 'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
-        Node_Arrangement: false
+        Node_Arrangement: false,
+        Vertical_Fit_In_Screen: false,
+        Horizontal_Fit_In_Screen: false
       },
       //  展示barcode的不同状态, 包括原始状态, compact状态, global的状态
       'CONSTANT': {
@@ -84,6 +87,7 @@ define([
         'NOT_SELECTED': 'NOT_SELECTED',
         'UN_SELECTION': 'UN_SELECTION',
         'NODE_SELECTION': 'NODE',
+        'NULL_SELECTION': 'NULL',
         'SUBTREE_SELECTION': 'SUBTREE'
       },
       'BARCODE_COLOR': {
@@ -94,7 +98,7 @@ define([
         'SAME_NODE_COLOR': 'black'
       },
       'DEFAULT_SETTINGS': {
-        'default_dataset': 'DailyRecordTree', //'DailyRecordTree', 'NBATeamTree'
+        'default_dataset': 'DailyRecordTree', //'DailyRecordTree', 'NBATeamTree', 'LibraryRecordTree'
         'default_mode': 'original',
         'compact_num': 5,
         'init_width': 1600,
@@ -123,6 +127,9 @@ define([
         'COMPRESS_MODE': 'CompressMode'
       },
       'EVENTS': {
+        //  更新barcode的参数值
+        'UPDATE_BARCODE_PARAMETERS': 'update-barcode-parameters',
+        'UPDATE_SELECTED_LEVELS': 'update-selected-levels',
         //*******************************************
         //  向barcode节点中增加locked aligned的class
         'ADD_LOCKED_ALIGN_CLASS': 'add-locked-align-class',
@@ -135,6 +142,9 @@ define([
         // ====================================================================
         //  设置选择的颜色
         'SET_PRECLICK_COLOR': 'set-preclick-color',
+        //  更新刷选范围的distribution柱状图的信号
+        'UPDATE_BRUSH_DISTRIBUTION_VIEW': 'update-brush-distribution-view',
+        //  更新distribution的信号
         'UPDATE_DISTRIBUTION_VIEW': 'update-distribution-view',
         'UPDATE_FILTERING_HIGHLIGHT_NODES': 'update-filtering-highlight-nodes',
         //  更新barcode视图的宽度

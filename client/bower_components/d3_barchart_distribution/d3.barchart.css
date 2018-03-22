@@ -1,0 +1,35 @@
+.bar.highlight {
+    fill: #1F77B4;
+}
+
+.library-bar {
+    fill: #808080;
+    cursor: pointer;
+
+}
+
+.library-bar[class~=hovering-highlight] {
+    fill: #808080 !important;
+}
+
+.library-bar[class~=click-highlight] {
+    fill: #808080;
+}
+
+.library-bar[class~=click-unhighlight] {
+    fill: #eee;
+}
+
+.library-bar[class~=pre-click-highlight]{
+    fill: #808080;
+}
+
+.library-bar[class~=compare-based-selection] {
+    /*fill: #1F77B4;*/
+}
+rect.hovering-rect{
+	fill: #ddd;
+}
+rect.compare-based-rect{
+	fill: #ddd;
+}

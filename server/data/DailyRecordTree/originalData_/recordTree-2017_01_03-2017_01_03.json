@@ -1,0 +1,1509 @@
+{
+  "num": 232,
+  "name": "root",
+  "children": [
+    {
+      "num": 51,
+      "name": "6_0_0",
+      "children": [
+        {
+          "num": 17,
+          "name": "6_2_0",
+          "children": [
+            {
+              "num": 5,
+              "name": "6_2_0",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Engineering and society : broadening the discourses of engineering practice / Stephen F. Johnston."
+                },
+                {
+                  "num": 1,
+                  "name": "Probability concepts in engineering : emphasis on applications in civil & environmental engineering"
+                },
+                {
+                  "num": 1,
+                  "name": "Materials science and engineering : an introduction / William D. Callister, Jr. Department Of Metall"
+                },
+                {
+                  "num": 1,
+                  "name": "Matlab programming with applications for engineers / Stephen J. Chapman."
+                }
+              ],
+              "categoryName": "Engineering & Applied operations"
+            },
+            {
+              "num": 5,
+              "name": "6_2_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Fundamentals of LTE / Arunabha Ghosh ... [et al.]."
+                },
+                {
+                  "num": 1,
+                  "name": "Logic and computer design fundamentals / M. Morris Mano, Charles R. Kime."
+                },
+                {
+                  "num": 1,
+                  "name": "Wind power : systems engineering applications & design models / edited by Ted R. Moore, Ewarld I. Ba"
+                },
+                {
+                  "num": 1,
+                  "name": "Electrical engineering : concepts and applications / S.A. Reza Zekavat."
+                },
+                {
+                  "num": 1,
+                  "name": "Engine testing : theory and practice / A.J. Martyr, M.A. Plint."
+                }
+              ],
+              "categoryName": "Applied physics"
+            },
+            {
+              "num": 2,
+              "name": "6_2_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "MATLAB for control engineers / Katsuhiko Ogata."
+                },
+                {
+                  "num": 1,
+                  "name": "Automotive sensors / edited by John Turner."
+                }
+              ],
+              "categoryName": "Other branches of engineering"
+            },
+            {
+              "num": 4,
+              "name": "6_2_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Site engineers manual / edited by David Doran."
+                },
+                {
+                  "num": 1,
+                  "name": "How structures work : design and behaviour from bridges to buildings / David Yeomans."
+                },
+                {
+                  "num": 1,
+                  "name": "Building with steel : details, principles, examples / Alexander Reichel ... [et al.]"
+                },
+                {
+                  "num": 1,
+                  "name": "Steel structures design handbook / edited by L. Pham, P. Boxhall, D. Mansell."
+                }
+              ],
+              "categoryName": "Civil engineering"
+            },
+            {
+              "num": 1,
+              "name": "6_2_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Environmental physics : sustainable energy and climate change / Egbert Boeker and Rienk van Grondell"
+                }
+              ],
+              "categoryName": "Sanitary & municipal engineering"
+            }
+          ],
+          "categoryName": "Engineering & Applied operations"
+        },
+        {
+          "num": 11,
+          "name": "6_1_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "6_1_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Women confined : toward a sociology of childbirth / Ann Oakley"
+                }
+              ],
+              "categoryName": "Gynecology & other medical specialties"
+            },
+            {
+              "num": 1,
+              "name": "6_1_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The new public health / Theodore Tulchinsky, Elena A. Varavikova."
+                }
+              ],
+              "categoryName": "Incidence & prevention of disease"
+            },
+            {
+              "num": 5,
+              "name": "6_1_6",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Attitudes to endangered languages : identities and policies / Julia Sallabank."
+                },
+                {
+                  "num": 2,
+                  "name": "Vital signs : stories from intensive care / Ken Hillman."
+                },
+                {
+                  "num": 1,
+                  "name": "Psychiatric-mental health assessment / Bonnie Kawczak Hagerty"
+                },
+                {
+                  "num": 1,
+                  "name": "Psychiatric and mental health nursing : a commitment to care and concern / Helen Z. Kreigh, Joanne E"
+                }
+              ],
+              "categoryName": "Diseases"
+            },
+            {
+              "num": 1,
+              "name": "6_1_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The green book of language revitalization in practice / edited by Leanne Hinton and Ken Hale."
+                }
+              ],
+              "categoryName": "Medical sciences; Medicine"
+            },
+            {
+              "num": 1,
+              "name": "6_1_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Histology : a text and atlas : with correlated cell and molecular biology / Michael H. Ross, Wojciec"
+                }
+              ],
+              "categoryName": "Human anatomy, cytology, histology"
+            },
+            {
+              "num": 2,
+              "name": "6_1_7",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Medical-surgical nursing : critical reasoning in patient care / Priscilla LeMone,  Karen M. Burke, G"
+                }
+              ],
+              "categoryName": "Surgery & related medical specialties"
+            }
+          ],
+          "categoryName": "Medical sciences; Medicine"
+        },
+        {
+          "num": 22,
+          "name": "6_5_0",
+          "children": [
+            {
+              "num": 21,
+              "name": "6_5_8",
+              "children": [
+                {
+                  "num": 6,
+                  "name": "Exploring strategy / Gerry Johnson, Richard Whittington, Kevan Scholes, Duncan Angwin, Patrick Regne"
+                },
+                {
+                  "num": 1,
+                  "name": "3 weeks to startup / by Tim Berry and Sabrina Parsons."
+                },
+                {
+                  "num": 1,
+                  "name": "Patterns of entrepreneurship management."
+                },
+                {
+                  "num": 1,
+                  "name": "International business : managing in the Asia-Pacific / Greg Fisher ... [et al.]."
+                },
+                {
+                  "num": 1,
+                  "name": "International business : challenges and choices / Alan Sitkin and Nick Bowen."
+                },
+                {
+                  "num": 1,
+                  "name": "E-business : a management perspective / Jonathan Reynolds."
+                },
+                {
+                  "num": 1,
+                  "name": "The digital business start-up workbook : the ultimate step-by-step guide to succeeding online from s"
+                },
+                {
+                  "num": 1,
+                  "name": "The definitive guide to warehousing : managing the storage and handling of materials and products in"
+                },
+                {
+                  "num": 1,
+                  "name": "Purchasing & supply chain management : analysis, strategy, planning and practice / Arjan J. van Weel"
+                },
+                {
+                  "num": 1,
+                  "name": "Purchasing and supply chain management / W.C. Benton, Jr."
+                },
+                {
+                  "num": 1,
+                  "name": "Retail buying : from basics to fashion / Richard Clodfelter."
+                },
+                {
+                  "num": 1,
+                  "name": "Retail buying / Jay Diamond."
+                },
+                {
+                  "num": 1,
+                  "name": "E-business and e-commerce management : strategy, implementation and practice / Dave Chaffey."
+                },
+                {
+                  "num": 2,
+                  "name": "Knowledge management : organizing knowledge based enterprises / Igor Hawryszkiewycz."
+                },
+                {
+                  "num": 1,
+                  "name": "Introduction to information systems : supporting and transforming business / R. Kelly Rainer Jr., Br"
+                }
+              ],
+              "categoryName": "General management"
+            },
+            {
+              "num": 1,
+              "name": "6_5_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Introduction to VBA for Excel / Steven C. Chapra."
+                }
+              ],
+              "categoryName": "Management & auxiliary services"
+            }
+          ],
+          "categoryName": "Management & auxiliary services"
+        },
+        {
+          "num": 1,
+          "name": "6_9_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "6_9_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Handbook for blast-resistant design of buildings / edited by Donald O. Dusenberry."
+                }
+              ],
+              "categoryName": "Specific materials & purposes"
+            }
+          ],
+          "categoryName": "Buildings"
+        }
+      ],
+      "categoryName": "Technology"
+    },
+    {
+      "num": 52,
+      "name": "7_0_0",
+      "children": [
+        {
+          "num": 5,
+          "name": "7_0_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "7_0_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Surrealism and women / edited by Mary Ann Caws, Rudolf E. Kuenzli, Gwen Raaberg."
+                },
+                {
+                  "num": 1,
+                  "name": "Central European avant-gardes : exchange and transformation, 1910-1930 / edited by Timothy O. Benson"
+                }
+              ],
+              "categoryName": "Historical, areas, persons treatment"
+            },
+            {
+              "num": 1,
+              "name": "7_0_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Race-ing art history : critical readings in race and art history / [edited by] Kymberly N. Pinder."
+                }
+              ],
+              "categoryName": "The Arts; fine & decorative arts"
+            },
+            {
+              "num": 2,
+              "name": "7_0_1",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Town and country in China : identity and perception / edited by David Faure and Tao Tao Liu."
+                }
+              ],
+              "categoryName": "Philosophy & theory"
+            }
+          ],
+          "categoryName": "Arts"
+        },
+        {
+          "num": 36,
+          "name": "7_2_0",
+          "children": [
+            {
+              "num": 26,
+              "name": "7_2_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Technics and civilization / Lewis Mumford"
+                },
+                {
+                  "num": 1,
+                  "name": "The environmental design pocketbook / Sofie Pelsmakers."
+                },
+                {
+                  "num": 2,
+                  "name": "A Lecture by Valerio Olgiati."
+                },
+                {
+                  "num": 3,
+                  "name": "Palmar Kristmundsson, arkitekt / text: Daniel Golling, Palmar Kristmundsson, Gert Wingardh ; editor:"
+                },
+                {
+                  "num": 3,
+                  "name": "Architecture + art : new visions, new strategies / Eeva-Liisa Pelkonen and Esa Laaksonen, editors."
+                },
+                {
+                  "num": 3,
+                  "name": "Noah's ark : essays on architecture / Hubert Damisch ; edited and introduction by Anthony Vidler ; t"
+                },
+                {
+                  "num": 3,
+                  "name": "Jean Nouvel, 2007 2016 : reflejos de lo contemporaneo = contemporary reflections / editores y direct"
+                },
+                {
+                  "num": 3,
+                  "name": "The eyes of the skin : architecture and the senses / [Juhani] Pallasmaa."
+                },
+                {
+                  "num": 3,
+                  "name": "The thinking hand : existential and embodied wisdom in architecture / Juhani Pallasmaa."
+                },
+                {
+                  "num": 2,
+                  "name": "RCR Arquitectes, 2007-2012 : abstraccion poetica = poetic abstraction / [Juan Antonio Cortes ; edito"
+                },
+                {
+                  "num": 2,
+                  "name": "Cuatro estrategies = four strategies. MGM, Barozzi Veiga, Harquitectes, Selgascano / editores y dire"
+                }
+              ],
+              "categoryName": "Architecture"
+            },
+            {
+              "num": 4,
+              "name": "7_2_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Superlight : lightness in contemporary houses / Phyllis Richardson."
+                },
+                {
+                  "num": 1,
+                  "name": "Nano house : innovations for small dwellings / Phyllis Richardson."
+                },
+                {
+                  "num": 1,
+                  "name": "The new Asia Pacific house / Patrick Bingham-Hall."
+                },
+                {
+                  "num": 1,
+                  "name": "Bungalow : architecture + design / Michelle Galindo."
+                }
+              ],
+              "categoryName": "Residential & related buildings"
+            },
+            {
+              "num": 1,
+              "name": "7_2_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Architecture as material culture : the work of Francis-Jones Morehen Thorp / introduction by Kenneth"
+                }
+              ],
+              "categoryName": "Public structures"
+            },
+            {
+              "num": 1,
+              "name": "7_2_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Furnishing - zoning : spaces, materials, fit-out / editors, Alexander Reichel, Kerstin Schultz ; aut"
+                }
+              ],
+              "categoryName": "Design & decoration"
+            },
+            {
+              "num": 1,
+              "name": "7_2_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The Sainsbury Laboratory : Science, Architecture and Art."
+                }
+              ],
+              "categoryName": "Buildings for education & research"
+            },
+            {
+              "num": 3,
+              "name": "7_2_4",
+              "children": [
+                {
+                  "num": 3,
+                  "name": "Differences : topographies of contemporary architecture / Ignasi de Sola-Morales ; translated by Gra"
+                }
+              ],
+              "categoryName": "Architecture from 1400"
+            }
+          ],
+          "categoryName": "Architecture"
+        },
+        {
+          "num": 4,
+          "name": "7_4_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "7_4_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "My cool houseboat : an inspirational guide to stylish houseboats / Jane Field-Lewis ; photography by"
+                }
+              ],
+              "categoryName": "Interior decoration"
+            },
+            {
+              "num": 3,
+              "name": "7_4_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Paper constructions : two- and three-dimensional forms for artists, architects, and designers / Fran"
+                },
+                {
+                  "num": 1,
+                  "name": "Unfolded : paper in design, art, architecture and industry / Petra Schmidt and Nicola Stattmann."
+                },
+                {
+                  "num": 1,
+                  "name": "Simply Droog : 10 + 1 years of creating innovation and discussion / [editor, Renny Ramakers]."
+                }
+              ],
+              "categoryName": "Decorative arts"
+            }
+          ],
+          "categoryName": "Drawing & decorative arts"
+        },
+        {
+          "num": 4,
+          "name": "7_9_0",
+          "children": [
+            {
+              "num": 4,
+              "name": "7_9_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "A history of experimental film and video : from canonical avant-garde to contemporary British practi"
+                },
+                {
+                  "num": 1,
+                  "name": "Cinema II : the time-image / Gilles Deleuze."
+                },
+                {
+                  "num": 1,
+                  "name": "Jacques Rivette / Douglas Morrey and Alison Smith."
+                },
+                {
+                  "num": 1,
+                  "name": "Film sound : theory and practice / edited by Elisabeth Weis and John Belton"
+                }
+              ],
+              "categoryName": "Public performances"
+            }
+          ],
+          "categoryName": "Recreational & performing arts"
+        },
+        {
+          "num": 1,
+          "name": "7_7_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "7_7_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The animator's survival kit / Richard Williams."
+                }
+              ],
+              "categoryName": "Fields & kinds of photography"
+            }
+          ],
+          "categoryName": "Photography & photographs"
+        },
+        {
+          "num": 2,
+          "name": "7_5_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "7_5_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The guerilla art kit / by Keri Smith."
+                },
+                {
+                  "num": 1,
+                  "name": "Drainspotting / Remo Camerota."
+                }
+              ],
+              "categoryName": "Techniques, equipment, forms"
+            }
+          ],
+          "categoryName": "Painting & paintings"
+        }
+      ],
+      "categoryName": "Arts & recreation"
+    },
+    {
+      "num": 8,
+      "name": "8_0_0",
+      "children": [
+        {
+          "num": 1,
+          "name": "8_3_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "8_3_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Heroes like us / Thomas Brussig ; translated from the German by John Brownjohn."
+                }
+              ],
+              "categoryName": "German fiction"
+            }
+          ],
+          "categoryName": "German & related literatures"
+        },
+        {
+          "num": 1,
+          "name": "8_0_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "8_0_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Writing like an engineer : a rhetorical education / Dorothy A. Winsor."
+                }
+              ],
+              "categoryName": "Rhetoric & collections of literature"
+            }
+          ],
+          "categoryName": "Literature, rhetoric & criticism"
+        },
+        {
+          "num": 5,
+          "name": "8_1_0",
+          "children": [
+            {
+              "num": 5,
+              "name": "8_1_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The sellout : a novel / Paul Beatty."
+                },
+                {
+                  "num": 1,
+                  "name": "Heart of darkness : and other stories / With an introd. by Bruce Harkness. Suggestions for reading a"
+                },
+                {
+                  "num": 1,
+                  "name": "Fahrenheit 451 / Ray Bradbury."
+                },
+                {
+                  "num": 2,
+                  "name": "Still life with husband / Lauren Fox."
+                }
+              ],
+              "categoryName": "Fiction"
+            }
+          ],
+          "categoryName": "American literature in English"
+        },
+        {
+          "num": 1,
+          "name": "8_2_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "8_2_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The tragedy of Othello the Moor of Venice / William Shakespeare ; edited by Christopher Bentley"
+                }
+              ],
+              "categoryName": "English drama"
+            }
+          ],
+          "categoryName": "English & Old English literatures"
+        }
+      ],
+      "categoryName": "Literature"
+    },
+    {
+      "num": 87,
+      "name": "3_0_0",
+      "children": [
+        {
+          "num": 9,
+          "name": "3_6_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "3_6_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Histories of state surveillance in Europe and beyond / edited by Kees Boersma, Rosamunde van Brakel,"
+                },
+                {
+                  "num": 1,
+                  "name": "The political economy of climate change adaptation / Benjamin K. Sovacool, Bjorn-Ola Linner."
+                }
+              ],
+              "categoryName": "Other social problems & services"
+            },
+            {
+              "num": 7,
+              "name": "3_6_2",
+              "children": [
+                {
+                  "num": 4,
+                  "name": "Social determinants of indigenous health / edited by Bronwyn Carson ... [et al.]."
+                },
+                {
+                  "num": 2,
+                  "name": "Health care and indigenous Australians : cultural safety in practice / Kerry Taylor, Pauline Guerin."
+                },
+                {
+                  "num": 1,
+                  "name": "Madness and civilization : a history of insanity in the Age of Reason / Translated from the French,"
+                }
+              ],
+              "categoryName": "Social welfare problems & services"
+            }
+          ],
+          "categoryName": "Social services; association"
+        },
+        {
+          "num": 27,
+          "name": "3_4_0",
+          "children": [
+            {
+              "num": 16,
+              "name": "3_4_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The horse and the law / by Clifford L. Pannam."
+                },
+                {
+                  "num": 5,
+                  "name": "Australian insurance law : a first reference / Greg Pynt."
+                },
+                {
+                  "num": 1,
+                  "name": "Traffic law (N.S.W.)"
+                },
+                {
+                  "num": 1,
+                  "name": "Mann's annotated Insurance Contracts Act / by Peter Mann and Candace Lewis."
+                },
+                {
+                  "num": 1,
+                  "name": "Transnational legal problems of refugees"
+                },
+                {
+                  "num": 2,
+                  "name": "Australian mental health tribunals : space for fairness, freedom, protection & treatment? / Terry Ca"
+                },
+                {
+                  "num": 1,
+                  "name": "Australian master family law guide."
+                },
+                {
+                  "num": 1,
+                  "name": "Australian finance law / King & Wood Mallesons : edited by Professor John Stumbles."
+                },
+                {
+                  "num": 1,
+                  "name": "Everett and McCracken's banking and financial institutions law / Sheelagh McCracken ... [et al.]."
+                },
+                {
+                  "num": 1,
+                  "name": "Legal aspects of mental capacity / Bridgit Dimond."
+                },
+                {
+                  "num": 1,
+                  "name": "Mental health law : policy and practice / Peter Bartlett and Ralph Sandland."
+                }
+              ],
+              "categoryName": "Civil procedure & courts"
+            },
+            {
+              "num": 4,
+              "name": "3_4_6",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Doping in sport and the law / edited by Ulrich Haas and Deborah Healey."
+                },
+                {
+                  "num": 1,
+                  "name": "Justice in tribunals / J R S Forbes."
+                },
+                {
+                  "num": 2,
+                  "name": "Taxation law & practice : workbook / Geoff Cliff, John Taggart, James Cooper."
+                }
+              ],
+              "categoryName": "Private law"
+            },
+            {
+              "num": 6,
+              "name": "3_4_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The International Arbitration Act 1974 : a commentary / Malcolm Holmes, Chester Brown."
+                },
+                {
+                  "num": 1,
+                  "name": "International arbitration in Australia / Luke Nottage, Richard Garnett, editors ; foreword by the Ho"
+                },
+                {
+                  "num": 1,
+                  "name": "Universal minority rights : a commentary on the jurisprudence of international courts and treaty bod"
+                },
+                {
+                  "num": 1,
+                  "name": "The law of treaties / by Lord McNair"
+                },
+                {
+                  "num": 1,
+                  "name": "The refugee in international law / by Guy Goodwin-Gill, Jane McAdam."
+                },
+                {
+                  "num": 1,
+                  "name": "The international covenant on civil and political rights : cases, materials, and commentary"
+                }
+              ],
+              "categoryName": "International law"
+            },
+            {
+              "num": 1,
+              "name": "3_4_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Australian guide to legal citation."
+                }
+              ],
+              "categoryName": "Law"
+            }
+          ],
+          "categoryName": "Law"
+        },
+        {
+          "num": 38,
+          "name": "3_0_0",
+          "children": [
+            {
+              "num": 9,
+              "name": "3_0_6",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Social support and motherhood : the natural history of a research project / Ann Oakley"
+                },
+                {
+                  "num": 1,
+                  "name": "Endangered languages and new technologies / edited by Mari C. Jones."
+                },
+                {
+                  "num": 1,
+                  "name": "Endangered languages / edited by Peter K. Austin and Stuart McGill."
+                },
+                {
+                  "num": 1,
+                  "name": "Equity, environment, efficiency : ethics and economics in urban Australia / edited by Patrick Troy."
+                },
+                {
+                  "num": 2,
+                  "name": "Seductions of place : geographical perspectives on globalization and touristed landscapes / edited b"
+                },
+                {
+                  "num": 2,
+                  "name": "Grassroots charisma : four local leaders in China / Stephan Feuchtwang and Wang Mingming."
+                },
+                {
+                  "num": 1,
+                  "name": "Place and the politics of identity / edited by Michael Keith and Steve Pile."
+                }
+              ],
+              "categoryName": "Culture & institutions"
+            },
+            {
+              "num": 13,
+              "name": "3_0_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Readings in planning theory / edited by Scott Campbell, Susan S. Fainstein."
+                },
+                {
+                  "num": 1,
+                  "name": "Readings in urban theory / edited by Susan S. Fainstein and Scott Campbell."
+                },
+                {
+                  "num": 1,
+                  "name": "Cities and climate change : responding to an urgent agenda / Daniel Hoornweg ... [et al.], editors."
+                },
+                {
+                  "num": 1,
+                  "name": "Social research methods / Alan Bryman."
+                },
+                {
+                  "num": 1,
+                  "name": "The environmental advantages of cities : countering commonsense antiurbanism / William B. Meyer."
+                },
+                {
+                  "num": 1,
+                  "name": "Quality of life in cities : equity, sustainable development and happiness from a policy perspective"
+                },
+                {
+                  "num": 1,
+                  "name": "Gender, asset accumulation and just cities : pathways to transformation? / Caroline Moser."
+                },
+                {
+                  "num": 1,
+                  "name": "Public space : critical concepts in built environment / edited by Vikas Mehta."
+                },
+                {
+                  "num": 1,
+                  "name": "Urban informalities : reflections on the formal and informal / [edited] by Colin McFarlane and Micha"
+                },
+                {
+                  "num": 1,
+                  "name": "Cities and inequalities in a global and neoliberal world / edited by Faranak Miraftab, David Wilson"
+                },
+                {
+                  "num": 1,
+                  "name": "A world of emergence : cities and regions in the 21st century / Allen J. Scott."
+                },
+                {
+                  "num": 1,
+                  "name": "Policy, planning, and people : promoting justice in urban development / edited by Naomi Carmon and S"
+                },
+                {
+                  "num": 1,
+                  "name": "Mapping the futures : local cultures, global change / edited by Jon Bird ... [et al.]."
+                }
+              ],
+              "categoryName": "Communities"
+            },
+            {
+              "num": 2,
+              "name": "3_0_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Rebel cities : from the right to the city to the urban revolution / David Harvey."
+                },
+                {
+                  "num": 1,
+                  "name": "Mapping the futures : local cultures, global change / edited by Jon Bird ... [et al.]."
+                }
+              ],
+              "categoryName": "Social processes"
+            },
+            {
+              "num": 6,
+              "name": "3_0_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "An introduction to qualitative research / Uwe Flick."
+                },
+                {
+                  "num": 1,
+                  "name": "Grounded theory for qualitative research : a practical guide / Cathy Urquhart."
+                },
+                {
+                  "num": 1,
+                  "name": "Basics of qualitative research : techniques and procedures for developing grounded theory / Juliet C"
+                },
+                {
+                  "num": 1,
+                  "name": "Basics of qualitative research : techniques and procedures for developing grounded theory / Anselm S"
+                },
+                {
+                  "num": 1,
+                  "name": "Qualitative research and evaluation methods / by Michael Quinn Patton."
+                },
+                {
+                  "num": 1,
+                  "name": "Quantitative data analysis : doing social research to test ideas / Donald J. Treiman."
+                }
+              ],
+              "categoryName": "Social sciences"
+            },
+            {
+              "num": 4,
+              "name": "3_0_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The discovery of grounded theory : strategies for qualitative research / [by] Barney G. Glaser and A"
+                },
+                {
+                  "num": 1,
+                  "name": "Basics of grounded theory analysis / Barney G. Glaser."
+                },
+                {
+                  "num": 1,
+                  "name": "Doing grounded theory : issues and discussions / Barney G. Glaser."
+                },
+                {
+                  "num": 1,
+                  "name": "Interpreting qualitative data : methods for analysing talk, text, and interaction / David Silverman."
+                }
+              ],
+              "categoryName": "Sociology & anthropology"
+            },
+            {
+              "num": 1,
+              "name": "3_0_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The biggest estate on earth : how Aborigines made Australia / Bill Gammage."
+                }
+              ],
+              "categoryName": "Social groups"
+            },
+            {
+              "num": 3,
+              "name": "3_0_4",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Space, place and gender / Doreen Massey"
+                },
+                {
+                  "num": 1,
+                  "name": "Place and the politics of identity / edited by Michael Keith and Steve Pile."
+                }
+              ],
+              "categoryName": "Factors affecting social behavior"
+            }
+          ],
+          "categoryName": "Social sciences"
+        },
+        {
+          "num": 3,
+          "name": "3_7_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "3_7_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Teaching for quality learning at university : what the student does."
+                },
+                {
+                  "num": 1,
+                  "name": "Learning to teach in higher education / Paul Ramsden."
+                }
+              ],
+              "categoryName": "Higher education"
+            },
+            {
+              "num": 1,
+              "name": "3_7_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "If you lived here : the city in art, theory, and social activism / a project by Martha Rosler ; edit"
+                }
+              ],
+              "categoryName": "School management; special education"
+            }
+          ],
+          "categoryName": "Education"
+        },
+        {
+          "num": 6,
+          "name": "3_3_0",
+          "children": [
+            {
+              "num": 4,
+              "name": "3_3_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "SchweserNotes for the CFA exam prep 2016. Level I."
+                },
+                {
+                  "num": 1,
+                  "name": "Financing economic development in the 21st century / Sammis B. White and Zenia Z. Kotval, editors."
+                },
+                {
+                  "num": 2,
+                  "name": "The great transformation / by Karl Polanyi"
+                }
+              ],
+              "categoryName": "Production"
+            },
+            {
+              "num": 1,
+              "name": "3_3_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The political economy of environmental justice / edited by H. Spencer Banzhaf."
+                }
+              ],
+              "categoryName": "Land economics"
+            },
+            {
+              "num": 1,
+              "name": "3_3_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Writings in exile / Leon Trotsky ; edited by Kunal Chattapadhyay and Paul Le Blanc."
+                }
+              ],
+              "categoryName": "Socialism & related systems"
+            }
+          ],
+          "categoryName": "Economics"
+        },
+        {
+          "num": 3,
+          "name": "3_2_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "3_2_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Pedagogy of the oppressed / Paulo Freire ; translated [from the Portuguese] by Myra Bergman Ramos"
+                }
+              ],
+              "categoryName": "International relations"
+            },
+            {
+              "num": 2,
+              "name": "3_2_0",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Roots of the state : neighborhood organization and social networks in Beijing and Taipei / Benjamin"
+                }
+              ],
+              "categoryName": "Political science"
+            }
+          ],
+          "categoryName": "Political science"
+        },
+        {
+          "num": 1,
+          "name": "3_9_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "3_9_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Tattoo delirium / Eva Minguet."
+                }
+              ],
+              "categoryName": "Costume & personal appearance"
+            }
+          ],
+          "categoryName": "Customs, etiquette, folklore"
+        }
+      ],
+      "categoryName": "Social sciences"
+    },
+    {
+      "num": 12,
+      "name": "0_0_0",
+      "children": [
+        {
+          "num": 12,
+          "name": "0_0_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "0_0_6",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The Adobe Photoshop Lightroom 4 book : the complete guide for photographers / Martin Evening."
+                }
+              ],
+              "categoryName": "Special computer methods"
+            },
+            {
+              "num": 7,
+              "name": "0_0_5",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Android user interface design : implementing material design for developers / Ian G. Clifton."
+                },
+                {
+                  "num": 1,
+                  "name": "Sams teach yourself C++ in 24 hours Rogers Cadenhead, Jesse Liberty."
+                },
+                {
+                  "num": 1,
+                  "name": "Sams teach yourself C programming in one hour a day."
+                },
+                {
+                  "num": 1,
+                  "name": "Core Java / Cay S. Horstmann."
+                },
+                {
+                  "num": 1,
+                  "name": "Android 6 for programmers : an app-driven approach / Paul Deitel, Harvey Deitel, Alexander Wald, Dei"
+                },
+                {
+                  "num": 1,
+                  "name": "Financial analysis with microsoft excel / Timothy R. Mayes, Metropolitan State College of Denver, To"
+                }
+              ],
+              "categoryName": "Computer programming, programs & data"
+            },
+            {
+              "num": 4,
+              "name": "0_0_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Wrong : why experts* keep failing us--and how to know when not to trust them : *scientists, finance"
+                },
+                {
+                  "num": 1,
+                  "name": "The three cultures : natural sciences, social sciences, and the humanities in the 21st century / Jer"
+                },
+                {
+                  "num": 1,
+                  "name": "Qualitative data analysis : a methods sourcebook / Matthew B. Miles, A. Michael Huberman, Johnny Sal"
+                },
+                {
+                  "num": 1,
+                  "name": "Heuretics : the logic of invention / Gregory L. Ulmer."
+                }
+              ],
+              "categoryName": "Knowledge"
+            }
+          ],
+          "categoryName": "Computer science, knowledge & systems"
+        }
+      ],
+      "categoryName": "Computer science, information & general works"
+    },
+    {
+      "num": 6,
+      "name": "5_0_0",
+      "children": [
+        {
+          "num": 2,
+          "name": "5_1_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "5_1_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Mathematical methods for engineers and scientists / G.F. Fitz-Gerald & I.A. Peckham."
+                }
+              ],
+              "categoryName": "Mathematics"
+            },
+            {
+              "num": 1,
+              "name": "5_1_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Getting started with MATLAB : a quick introduction for scientists and engineers / Rudra Pratap."
+                }
+              ],
+              "categoryName": "Probabilities & applied mathematics"
+            }
+          ],
+          "categoryName": "Mathematics"
+        },
+        {
+          "num": 1,
+          "name": "5_3_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "5_3_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "An introduction to electrical science / Adrian Waygood."
+                }
+              ],
+              "categoryName": "Electricity & electronics"
+            }
+          ],
+          "categoryName": "Physics"
+        },
+        {
+          "num": 3,
+          "name": "5_0_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "5_0_7",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Pearson science New South Wales S.B. Student book 7 / writing and development team Greg Rickard, Jac"
+                }
+              ],
+              "categoryName": "Education, research, related topics"
+            },
+            {
+              "num": 1,
+              "name": "5_0_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Science focus 1 / Greg Rickard ... [et al.]."
+                }
+              ],
+              "categoryName": "Natural sciences & mathematics"
+            }
+          ],
+          "categoryName": "Sciences"
+        }
+      ],
+      "categoryName": "Science"
+    },
+    {
+      "num": 9,
+      "name": "4_0_0",
+      "children": [
+        {
+          "num": 1,
+          "name": "4_4_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "4_4_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Collins Robert French-English, English-French dictionary : unabridged / by Beryl T. Atkins ... [et a"
+                }
+              ],
+              "categoryName": "French dictionaries"
+            }
+          ],
+          "categoryName": "Romance languages; French"
+        },
+        {
+          "num": 8,
+          "name": "4_2_0",
+          "children": [
+            {
+              "num": 8,
+              "name": "4_2_8",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "The official guide to PTE Academic : Pearson Test of English Academic / from the test developers."
+                },
+                {
+                  "num": 1,
+                  "name": "Cambridge certificate of proficiency in English. 5 : with answers : examination papers from Universi"
+                },
+                {
+                  "num": 1,
+                  "name": "PTE academic expert. B1 coursebook / Clare Walsh and Lindsay Warwick."
+                },
+                {
+                  "num": 2,
+                  "name": "Everyday English for nursing : an English language resource for nurses who are non-native speakers o"
+                },
+                {
+                  "num": 2,
+                  "name": "Academic vocabulary in use 50 units of academic vocabulary reference and practice, self-study and cl"
+                }
+              ],
+              "categoryName": "Standard English usage"
+            }
+          ],
+          "categoryName": "English & Old English"
+        }
+      ],
+      "categoryName": "Language"
+    },
+    {
+      "num": 6,
+      "name": "9_0_0",
+      "children": [
+        {
+          "num": 1,
+          "name": "9_2_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "9_2_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "A moveable feast / by Ernest Hemingway"
+                }
+              ],
+              "categoryName": "928 This SIFT is reserved as an optional location for biographies, which are shelved alphabetically by subject's last name."
+            }
+          ],
+          "categoryName": "Biography, genealogy, insignia"
+        },
+        {
+          "num": 2,
+          "name": "9_0_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "9_0_9",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Inquiry : a source-based approach to modern history / Brian Hoepper ... [et al.]."
+                }
+              ],
+              "categoryName": "World history"
+            }
+          ],
+          "categoryName": "History"
+        },
+        {
+          "num": 2,
+          "name": "9_4_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "9_4_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "A Lecture by Valerio Olgiati."
+                }
+              ],
+              "categoryName": "General history of Europe"
+            },
+            {
+              "num": 1,
+              "name": "9_4_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Tocqueville : The Ancien Regime and the French Revolution / translated by Arthur Goldhammer ; edited"
+                }
+              ],
+              "categoryName": "General history of Europe; France & Monaco"
+            }
+          ],
+          "categoryName": "General history of Europe"
+        },
+        {
+          "num": 1,
+          "name": "9_8_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "9_8_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Strategy for revolution : [essays translated from the French] / edited & with an introduction by Rob"
+                }
+              ],
+              "categoryName": "General history of South America"
+            }
+          ],
+          "categoryName": "General history of South America"
+        }
+      ],
+      "categoryName": "History & geography"
+    },
+    {
+      "num": 1,
+      "name": "1_0_0",
+      "children": [
+        {
+          "num": 1,
+          "name": "1_1_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "1_1_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Human space / O.F. Bollnow ; translated by Christine Shuttleworth ; edited by Joseph Kohlmaier."
+                }
+              ],
+              "categoryName": "Space"
+            }
+          ],
+          "categoryName": "Metaphysics"
+        }
+      ],
+      "categoryName": "Philosophy and psychology"
+    }
+  ],
+  "categoryName": "root"
+}

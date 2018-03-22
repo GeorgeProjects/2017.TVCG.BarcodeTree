@@ -29,6 +29,7 @@ require.config({
     'bootstrap-slider': '../bower_components/bootstrap-slider/dist/bootstrap-slider.min',
     'd3Menu': '../bower_components/d3_menu/d3.menu',
     'd3Barchart': '../bower_components/d3_barchart/d3.barchart',
+    'd3Barchart_dis': '../bower_components/d3_barchart_distribution/d3.barchart',
     'd3Lasso': '../bower_components/d3_lasso/d3.lasso',
     'jsColor': '../bower_components/jscolor/jscolor',
     'pagination': '../bower_components/JqueryPagination/jquery.simplePagination',
@@ -49,7 +50,7 @@ require.config({
 //  在外面的require的内容加在完以后，才会加载内部的require中的内容
 require([ 'underscore', 'd3' ], function (_, d3) {
   'use strict'
-  require([ 'backbone', 'bootstrap', 'd3Barchart', 'jquery-ui' ], function (Backbone, Bootstrap, d3Barchart, jqueryUI) {
+  require([ 'backbone', 'bootstrap', 'd3Barchart', 'd3Barchart_dis', 'jquery-ui' ], function (Backbone, Bootstrap, d3Barchart, d3Barchart_dis, jqueryUI) {
     require(['d3Menu'], function(d3Menu) {
       //d3Menu binding
       $.fn.d3_menu = function() {

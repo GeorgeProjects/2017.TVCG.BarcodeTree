@@ -399,11 +399,11 @@ define([
     requestDataCenter: function (selectedItemsArray) {
       var url = 'barcode_original_data'
       var self = this
-      console.log('selectedItemsArray', selectedItemsArray)
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
       var formData = {
         'dataItemNameArray': selectedItemsArray,
+        'allSelectedDataItemNameArray': Variables.get('selectItemNameArray'),
         'dataSetName': window.dataSetName,
         'barcodeWidthArray': window.barcodeWidthArray,
         'barcodeNodeInterval': barcodeNodeInterval,
@@ -439,10 +439,10 @@ define([
         'compactNum': window.compactNum,
         'maxDepth': Variables.get('maxDepth')
       }
-      var originalDatasuccessFunc = function (result) {
-        self.compact_tree_object_request_handler(result)
-      }
-      self.requestDataFromServer(url, formData, originalDatasuccessFunc)
+      // var originalDatasuccessFunc = function (result) {
+      //   self.compact_tree_object_request_handler(result)
+      // }
+      // self.requestDataFromServer(url, formData, originalDatasuccessFunc)
     },
     /**
      *  在histogram-main中调用这个方法, 获取compact形式的BarcodeTree节点数组
@@ -511,6 +511,7 @@ define([
       var selectedItemsArray = Variables.get('selectItemNameArray')
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       var formData = {
         'dataItemNameArray': selectedItemsArray,
         'dataSetName': window.dataSetName,
@@ -538,8 +539,6 @@ define([
             barcodeModel.set('originalTreeObj', originalTreeObj)
           }
         }
-        // Backbone.Events.trigger(Config.get('EVENTS')[ 'UPDATE_BARCODE_VIEW' ])
-        // self.barcodeCollection.add_all_super_subtree()
         self.barcodeCollection.align_node_in_selected_list()
       }
       self.requestDataFromServer(url, formData, originalDatasuccessUpdateFunc)
@@ -602,6 +601,10 @@ define([
       if (Node_Arrangement_State) {
         originalSequenceState = 'SORTING'
       }
+      //  为什么选择displayed level
+      var selectedLevels = Variables.get('selectedLevels')
+      var displayMaxDepth = selectedLevels.max()
+      var maxDepth = Variables.get('fileMaxDepth')  //默认的情况下显示4层的barcodeTree
       var compactNum = window.compactNum
       var formData = {
         'dataItemNameArray': selectedItemsArray,
@@ -613,7 +616,7 @@ define([
         'barcodeNodeInterval': barcodeNodeInterval,
         'rootId': rootId,
         'rootLevel': rootLevel,
-        'maxLevel': Variables.get('maxDepth'),
+        'maxLevel': maxDepth,
         'alignedLevel': alignedLevel,
         'compactNum': compactNum,
         'originalSequenceState': originalSequenceState
@@ -626,14 +629,14 @@ define([
     //  删除选中的某个元素的handler
     request_remove_item: function (removedSelectedItemsArray) {
       var self = this
-      console.log('removedSelectedItemsArray', removedSelectedItemsArray)
       var url = 'remove_from_super_tree'
       var formData = {
         'removedDataItemNameArray': removedSelectedItemsArray,
+        'allSelectedDataItemNameArray': Variables.get('selectItemNameArray'),
         'dataSetName': window.dataSetName
       }
       var buildSuperTreeSuccessFunc = function () {
-        console.log('globalSuperTreeUpdate successfully!')
+        self.barcodeCollection.update_after_remove_models()
       }
       self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
     },
@@ -664,7 +667,6 @@ define([
       var formData = {}
       var updateTreeVerticalSuccessFunc = function (result) {
         var barcodeTreeVerticalSequence = result.barcodeTreeVerticalSequence
-        console.log('barcodeTreeVerticalSequence', barcodeTreeVerticalSequence)
         self.barcodeCollection.sort_vertical_barcode_model(barcodeTreeVerticalSequence)
       }
       self.requestDataFromServer(url, formData, updateTreeVerticalSuccessFunc)
@@ -727,7 +729,6 @@ define([
       var selectItemNameArray = Variables.get('selectItemNameArray')
       var addedBarcodeModelArray = []
       var compactNum = window.compactNum
-      console.log('treeNodeArrayObject', treeNodeArrayObject)
       //  将展示全部的barcode压缩到屏幕的范围内
       for (var item in treeNodeArrayObject) {
         //  1. 对于全局的categoryNodeObj的处理
@@ -747,7 +748,6 @@ define([
       // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
       window.get_barcode_time_datacenter303 = new Date()
       var loadOriginalDataTime = window.get_barcode_time_datacenter303.getDifference(window.request_barcode_time_histogram435)
-      console.log('addedBarcodeModelArray', addedBarcodeModelArray)
       self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
       self.trigger_hide_loading_icon()
     },
@@ -788,22 +788,29 @@ define([
       self.barcodeCollection.add_barcode_dataset(addedBarcodeModelArray)
       self.trigger_hide_loading_icon()
     },
-    //  更新barcode选定的层级以及层级的宽度
-    update_selected_levels_width: function (max_depth) {
+    init_selected_levels: function () {
       var self = this
-      var barcodeWidthArray = []
+      var max_depth = Variables.get('maxDepth')
       var selectedLevels = []
       for (var level = 0; level <= max_depth; level++) {
-        //  将所有的层级添加到selectedLevel数组中
         selectedLevels.push(level)
+      }
+      window.selectedLevels = selectedLevels
+      Variables.set('selectedLevels', selectedLevels)
+    },
+    //  更新barcode选定的层级以及层级的宽度, 目前的做法是只显示barcodeTree的前四层,逐层向下地进行探索
+    update_selected_levels_width: function () {
+      var self = this
+      var max_depth = Variables.get('maxDepth')
+      var barcodeWidthArray = []
+      for (var level = 0; level <= max_depth; level++) {
+        //  将所有的层级添加到selectedLevel数组中
         var width = uniform_width_for_each_level(level, max_depth)
         barcodeWidthArray.push(width)
       }
       //  更新barcode的宽度,以及选定的barcode的层级
       window.barcodeWidthArray = barcodeWidthArray
-      window.selectedLevels = selectedLevels
       Variables.set('barcodeWidthArray', barcodeWidthArray)
-      Variables.set('selectedLevels', selectedLevels)
       //  采用平均的方法计算barcode的节点的宽度
       function uniform_width_for_each_level(level, max_depth) {
         var maxBarcodeWidth = Variables.get('maxBarcodeWidth')
@@ -837,8 +844,9 @@ define([
       //  设置读取数据的相应属性, maxDepth - 树的最大深度, fileInfo - 树的基本信息
       histogramModel.set('histogramDataObject', result)
       //  更新barcode选定的层级以及层级的宽度
-      Variables.set('maxDepth', result.maxDepth)
-      self.update_selected_levels_width(result.maxDepth)
+      Variables.set('fileMaxDepth', result.maxDepth)  //默认的情况下显示4层的barcodeTree
+      self.init_selected_levels()
+      self.update_selected_levels_width()
       //  每次更换数据集都要重置barcode的当前的比较状态
       var INIT_BARCODETREE_GLOBAL_PARAS = Config.get('INIT_BARCODETREE_GLOBAL_PARAS')
       Variables.set('BARCODETREE_GLOBAL_PARAS', JSON.parse(JSON.stringify(INIT_BARCODETREE_GLOBAL_PARAS)))

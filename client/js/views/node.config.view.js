@@ -24,6 +24,18 @@ define([
     onShow: function () {
       var self = this
       self.render_barcode_node_config_view()
+      //  初始化消息的视图
+      self.init_event()
+    },
+    init_event: function () {
+      var self = this
+      Backbone.Events.on(Config.get('EVENTS')['UPDATE_BARCODE_PARAMETERS'], function (event) {
+        self.update_barcode_parameters()
+      })
+      Backbone.Events.on(Config.get('EVENTS')['UPDATE_SELECTED_LEVELS'], function (event) {
+        self.render_barcode_node_config_view()
+      })
+      self.listenTo(Variables, 'change:barcodeHeight', self.update_height_slider_value)
     },
     //  触发删除barcode视图中mouseout的事件
     trigger_mouse_out: function () {
@@ -34,6 +46,29 @@ define([
     trigger_unhovering_barcode: function () {
       //  当点击视图的其他空白地方的时候, 需要将当前选中的barcode的背景清除
       Backbone.Events.trigger(Config.get('EVENTS')['UN_HOVERING_BARCODE_EVENT'])
+    },
+    update_barcode_parameters: function () {
+      var self = this
+      var barcodeWidthArray = window.barcodeWidthArray
+      for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
+        self.update_width_sldier_value(bI, barcodeWidthArray[bI])
+      }
+      var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+      self.update_interval_sldier_value(barcodeNodeInterval)
+    },
+    //  更新slider的value数值
+    update_height_slider_value: function () {
+      var height = window.barcodeHeight
+      $("#height-handler").text(height)
+      $('#height-control-slider').slider('value', height)
+    },
+    update_width_sldier_value: function (level, width) {
+      $("#level" + level + "-handler").text(width)
+      $("#level" + level + "-control-slider").slider('value', width)
+    },
+    update_interval_sldier_value: function (interval) {
+      $("#interval-handler").text(interval)
+      $("#interval-control-slider").slider('value', interval)
     },
     //  渲染barcode节点的配置视图
     render_barcode_node_config_view: function () {
@@ -67,19 +102,19 @@ define([
       var iconSpanId = 'level-width-lock-span'
       var containerId = 'barcode-node-config-content'
       // 计算lock图标的y位置
-      var lockYLocation = _compute_lock_y_location(iconSize)
+      // var lockYLocation = _compute_lock_y_location(iconSize)
       //  计算lock图标的x位置
-      var lockXLocation = _compute_lock_x_location()
+      // var lockXLocation = _compute_lock_x_location()
       //  在config的视图中增加lock周围的连接线
       // appendLockLine()
       // //  在config的视图中增加lock图标
-      appendLockIcon(iconId, iconSpanId, containerId)
+      // appendLockIcon(iconId, iconSpanId, containerId)
       //  改变lock图标的位置
-      changeIconLocation(iconSpanId, lockXLocation, lockYLocation)
+      // changeIconLocation(iconSpanId, lockXLocation, lockYLocation)
       //  改变lock图标的大小
-      changeIconSize(iconId, iconSize)
+      // changeIconSize(iconId, iconSize)
       //  在lock图标上增加监听函数
-      addClickEvent2Icon(iconId)
+      // addClickEvent2Icon(iconId)
       //  在slidebar的控制框中增加监听函数
       addSlideBarEvent()
       initSliderBarEvent()
@@ -130,6 +165,10 @@ define([
             controllerHanlder.text($(this).slider("value"))
           },
           slide: function (event, ui) {
+            var value = +ui.value
+            controllerHanlder.text(value);
+          },
+          stop: function (event, ui) {
             var value = +ui.value
             controllerHanlder.text(value);
             var id = $(this).attr('id').replace('-control-slider', '')
@@ -184,28 +223,38 @@ define([
         var maxWidthValue = Config.get('MAX_WIDTH_VALUE')
         var overallMinWidth = 1
         var overallMaxWidth = 100
-        if (Variables.get('changeMeanTime')) {
-          var oldValue = barcodeWidthArray[levelofArray]
-          var changes = value - oldValue
-          if (((barcodeWidthArray[barcodeWidthArray.length - 1] > overallMinWidth) && (changes < 0)) || ((barcodeWidthArray[0] < overallMaxWidth) && (changes > 0))) {
-            for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
-              barcodeWidthArray[bI] = barcodeWidthArray[bI] + changes
-              originalBarcodeWidthArray[bI] = originalBarcodeWidthArray[bI] + changes
-              var widthArrayControllerNamePrefix = Config.get('WIDTH_ARRAY_CONTROL_NAME_PREFIX')
-              var realLevel = bI + 1
-              $("#" + widthArrayControllerNamePrefix + realLevel + '-control-slider').slider("value", barcodeWidthArray[bI]);
-              $("#" + widthArrayControllerNamePrefix + realLevel + '-control-slider>' + "#" + widthArrayControllerNamePrefix + realLevel + '-handler').html(Math.round(barcodeWidthArray[bI]));
-            }
-            //  trigger change width
-            Datacenter.barcodeCollection.change_barcode_width()
-          } else {
-            $('#' + id).val(oldValue)
+        // if (Variables.get('changeMeanTime')) {
+        //   var oldValue = barcodeWidthArray[levelofArray]
+        //   var changes = value - oldValue
+        //   if (((barcodeWidthArray[barcodeWidthArray.length - 1] > overallMinWidth) && (changes < 0)) || ((barcodeWidthArray[0] < overallMaxWidth) && (changes > 0))) {
+        //     for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
+        //       barcodeWidthArray[bI] = barcodeWidthArray[bI] + changes
+        //       originalBarcodeWidthArray[bI] = originalBarcodeWidthArray[bI] + changes
+        //       var widthArrayControllerNamePrefix = Config.get('WIDTH_ARRAY_CONTROL_NAME_PREFIX')
+        //       var realLevel = bI + 1
+        //       $("#" + widthArrayControllerNamePrefix + realLevel + '-control-slider').slider("value", barcodeWidthArray[bI]);
+        //       $("#" + widthArrayControllerNamePrefix + realLevel + '-control-slider>' + "#" + widthArrayControllerNamePrefix + realLevel + '-handler').html(Math.round(barcodeWidthArray[bI]));
+        //     }
+        //     //  trigger change width
+        //     Datacenter.barcodeCollection.change_barcode_width()
+        //   } else {
+        //     $('#' + id).val(oldValue)
+        //   }
+        // } else {
+        if ((levelofArray - 1) >= 0) {
+          if (value > originalBarcodeWidthArray[levelofArray - 1]) {
+            value = originalBarcodeWidthArray[levelofArray - 1]
           }
-        } else {
-          originalBarcodeWidthArray[levelofArray] = value
-          //  trigger change width
-          Datacenter.barcodeCollection.change_barcode_width()
         }
+        if ((levelofArray + 1) < originalBarcodeWidthArray.length) {
+          if (value < originalBarcodeWidthArray[levelofArray + 1]) {
+            value = originalBarcodeWidthArray[levelofArray + 1]
+          }
+        }
+        originalBarcodeWidthArray[levelofArray] = value
+        $("#" + id + "-handler").text(value)
+        // $('#' + id + '-control-slider').slider('value', value)
+        Datacenter.barcodeCollection.change_barcode_width()
       }
 
       // 改变barcode interval大小的监听函数
@@ -228,6 +277,7 @@ define([
         //  初始化height的控制
         var heightControllerName = Config.get('HEIGHT_CONTROL_NAME')
         var barcodeHeight = Variables.get('barcodeHeight')
+        $('.slider-container').remove()
         _append_controller(heightControllerName, barcodeHeight)
         //  初始化width的控制
         var widthArrayControllerNamePrefix = Config.get('WIDTH_ARRAY_CONTROL_NAME_PREFIX')
@@ -246,7 +296,7 @@ define([
         var containerId = controller_name + '-slider-container'
         var sliderId = controller_name + '-control-slider'
         var handlerId = controller_name + '-handler'
-        var height_slider_container = "<div id = \"" + containerId + "\" class = \"slider-container\"> <div id=\"" + sliderId + "\" class = \"slider-div col-md-8\"> <div id=\"" + handlerId + "\" class=\"ui-slider-handle\"> </div> </div> <div class=\"slider-label col-md-4\">" + controller_name + "</div></div>"
+        var height_slider_container = "<div id = \"" + containerId + "\" class = \"slider-container\"> <div id=\"" + sliderId + "\" class = \"slider-div col-md-10\"> <div id=\"" + handlerId + "\" class=\"ui-slider-handle\"> </div> </div> <div class=\"slider-label col-md-2\">" + controller_name + "</div></div>"
         $('#barcode-node-config-content').append(height_slider_container)
       }
 

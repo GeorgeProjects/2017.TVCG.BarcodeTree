@@ -41,12 +41,24 @@
 					<span id = "compare-operation-div" class = "config-div">
 							<span class = "operation-label">COMPARISON</span>
 							<span id = "compare-operation" class="btn-group" role="group">
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "lock selection" aria-label="Right Align" id="compare-lock">
-											   <i class="fa icon fa-unlock" aria-hidden="true"></i>
-       				</button>
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "align selected" aria-label="Right Align" id="align-compare">
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "align selected" aria-label="Left Align" id="align-compare">
 											   <i class="fa icon iconfont icon-align-icon"></i>
        				</button>
+											<button class="btn btn-default btn-lg dropdown-toggle config-button" type="button" id = "structure-comparison" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					         <i class="fa icon iconfont icon-comparisonsamenode" data-toggle = "tooltip" title = "aligned level"></i> <span id = "aligned-level-text" ></span> <span class="caret" id="adaptive"></span>
+					      </button>
+					      <div class="dropdown-menu" id="aligned-level-menu">
+					        <div id = "aligned-level-menu-container">
+					          <div id = "slider-label">ALIGNED LEVEL</div>
+					            <div id = "align-level-control" class="btn-toolbar level-control" role="toolbar">
+					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-1">1</button>
+					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-2">2</button>
+					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-3">3</button>
+					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-4">4</button>
+					            </div>
+					          <!--<div id="structure-comparison-slider" class = "slider-div"><div id="structure-custom-handle" class="ui-slider-handle"></div></div>-->
+					        </div>
+					      </div>
 											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "summary histogram" aria-label="Right Align" id="summary-comparison">
 														<i class="fa icon iconfont icon-show-histogram"></i>
 							    </button>
@@ -59,22 +71,9 @@
            <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "align the whole tree" aria-label="Left Align" id="global-display-controller">
               <i class="fa fa-th"></i>
            </button>
-											<button class="btn btn-default btn-lg dropdown-toggle config-button" type="button" id = "structure-comparison" data-toggle="dropdown" aria-label="Left Align" aria-haspopup="true" aria-expanded="false">
-					         <i class="fa icon iconfont icon-comparisonsamenode" data-toggle = "tooltip" title = "aligned level"></i> <span id = "aligned-level-text" ></span> <span class="caret" id="adaptive"></span>
-					       </button>
-					       <div class="dropdown-menu" id="aligned-level-menu">
-					        <div id = "aligned-level-menu-container">
-					          <div id = "slider-label">ALIGNED LEVEL</div>
-					            <div id = "align-level-control" class="btn-toolbar level-control" role="toolbar">
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-1">1</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-2">2</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-3">3</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-4">4</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-5">5</button>
-					            </div>
-					          <!--<div id="structure-comparison-slider" class = "slider-div"><div id="structure-custom-handle" class="ui-slider-handle"></div></div>-->
-					        </div>
-					       </div>
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "lock selection" aria-label="Right Align" id="compare-lock">
+											   <i class="fa icon fa-unlock" aria-hidden="true"></i>
+       				</button>
 							</span>
 					</span>
 					<span id = "sort-operation-div" class = "config-div">

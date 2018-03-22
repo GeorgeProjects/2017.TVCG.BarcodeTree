@@ -14,7 +14,7 @@ var removeFromSuperTreeHandler = require('./server/handler/remove_from_super_tre
 var handlerObj =
 {
   '/barcode_original_data': originalDataHandler.handleOriginalData,
-  '/barcode_compact_data': originalDataHandler.handleCompactData,
+  // '/barcode_compact_data': originalDataHandler.handleCompactData,
   '/build_super_tree': alignedCompareHandler.handlerBuildSuperTree,
   '/and_operation_result': setOperationHandler.handlerAndOperation,
   '/or_operation_result': setOperationHandler.handlerOrOperation,
@@ -24,6 +24,9 @@ var handlerObj =
   '/update_barcode_tree_sequence': updateBarcodeTreeSequence.updateBarcodeTreeSequence,
   '/update_barcode_tree_vertical_sequence': updateBarcodeTreeVerticalSequence.updateBarcodeTreeVerticalSequence
 }
+//  初始化读入默认的数据集, 默认的数据集为DailyRecordTree数据集
+var defaultDataSetName = "DailyRecordTree"
+fileNameHandler.initilizeOriginalDataset(defaultDataSetName)
 var handle = require('./server/handler/handler').initialize(root, signalTreeProcessor, handlerObj, logger, fs)
 var router = require('./server/router/router').initialize(handle, logger)
 var server = require('./server/server').initialize(router)

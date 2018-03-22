@@ -69,43 +69,48 @@ define([
         barcodetreeViewWidth = barcodeTreeContainerWidth > barcodeNodexMaxX ? barcodeTreeContainerWidth : barcodeNodexMaxX
       }
       $('#barcodetree-view').width(barcodetreeViewWidth)
-      if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
-        $('#barcodetree-scrollpanel').css({'overflow-x': 'hidden'})
-      }
       $('#supertree-view').width(barcodetreeViewWidth)
       d3.selectAll('.bg').attr('width', barcodetreeViewWidth)
       d3.select('.container-bg').attr('width', barcodetreeViewWidth)
-    },
+    }
+    ,
     show_loading_icon: function () {
       var self = this
       d3.select('#barcode-view-loading').style('visibility', 'visible')
-    },
+    }
+    ,
     //  停止视图的更新
     hide_loading_icon: function () {
       var self = this
       d3.select('#barcode-view-loading').style('visibility', 'hidden')
-    },
+    }
+    ,
     add: function () {
       var self = this
-    },
+    }
+    ,
     remove: function () {
       var self = this
-    },
+    }
+    ,
     update_barcode_attr: function () {
       var self = this
-    },
+    }
+    ,
     reset_barcode_attr: function () {
       var self = this
       var defaultSettings = Config.get('DEFAULT_SETTINGS')
       var defaultHeight = defaultSettings.default_barcode_height
       Variables.set('barcodeHeight', defaultHeight)
-    },
+    }
+    ,
     hovering_barcode: function (barcodeTreeId) {
       var self = this
       d3.select(self.el).select('#' + barcodeTreeId)
         .select('.bg')
         .classed('hovering-highlight', true)
-    },
+    }
+    ,
     unhovering_barcode: function () {
       var self = this
       d3.select(self.el)

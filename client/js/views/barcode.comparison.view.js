@@ -54,15 +54,18 @@ define([
       self.listenTo(Variables, 'change:barcodeNodeyMaxY', self.enable_lasso_function)
       barcodeCollection.on('add', function () {
         self.enable_lasso_function()
+        self.enable_supertree_lasso_function()
       })
       barcodeCollection.on('remove', function () {
         self.enable_lasso_function()
+        self.enable_supertree_lasso_function()
       })
     },
     enable_listener: function () {
       var self = this
       Backbone.Events.on(Config.get('EVENTS')['ENABLE_LASSO_FUNCTION'], function () {
         self.enable_lasso_function()
+        self.enable_supertree_lasso_function()
       })
       Backbone.Events.on(Config.get('EVENTS')['DISABLE_LASSO_FUNCTION'], function () {
         self.disable_lasso_function()
@@ -98,6 +101,109 @@ define([
         })
         .attr('opacity', 0)
     },
+    //  在barcode的superTree视图中增加lasso函数
+    enable_supertree_lasso_function: function () {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      var enableLasso = Variables.get('enable_lasso')
+      if (!enableLasso) {
+        return
+      }
+      //  lasso开始调用的函数
+      var lasso_start = function () {
+      }
+      //  lasso绘制过程中调用的函数
+      var lasso_draw = function () {
+        // // Style the possible dots
+        //  选择所有的possible为true的元素
+        lasso.items().filter(function (d) {
+          return d.possible === true
+        }).each(function (d, i) {
+          d3.select(this)
+            .classed({"not_possible": false, "possible": true})
+          highlight_children_id_by_father(d)
+        })
+        lasso.items().each(function (d) {
+          // console.log('d', d)
+          if (d3.select(this).classed('possible')) {
+            d.possible = true
+          }
+        })
+        // // Style the not possible dot
+        lasso.items().filter(function (d) {
+          return d.possible === false
+        })
+          .classed({"not_possible": true, "possible": false})
+      }
+      //  lasso结束时候调用的函数
+      var lasso_end = function () {
+        // Reset the style of the not selected dots
+        var filterResultArray = lasso.items().filter(function (d) {
+          return d.selected === true
+        })
+          .each(function (d, i) {
+            //  向histogram中传递信号表示选中这些树
+          })
+        //  brush结束之后统计选中的节点的分布情况
+        self.update_brush_node_distribution()
+      }
+      var supertreeViewWidth = $('#supertree-view').width()
+      var supertreeViewheight = $('#supertree-view').height()
+      if (d3.select('#supertree-svg').select('g.lasso').empty()) {
+        var lasso_area = d3.select('#supertree-svg')
+          .append("rect")
+          .attr('id', 'lasso-area')
+          .attr("width", supertreeViewWidth)
+          .attr("height", supertreeViewheight)
+          .style("opacity", 0)
+      } else {
+        d3.select('#supertree-svg').select('g.lasso').remove()
+        d3.select('#supertree-svg').select('#lasso-area').remove()
+        var lasso_area = d3.select('#supertree-svg')
+          .append("rect")
+          .attr('id', 'lasso-area')
+          .attr("width", supertreeViewWidth)
+          .attr("height", supertreeViewheight)
+          .style("opacity", 0)
+      }
+      // Define the lasso
+      var lasso = d3.lasso()
+        .closePathDistance(75) // max distance for the lasso loop to be closed
+        .closePathSelect(true) // can items be selected by closing the path?
+        .hoverSelect(true) // can items by selected by hovering over them?
+        .area(lasso_area) // area where the lasso can be started
+        .on("start", lasso_start) // lasso start function
+        .on("draw", lasso_draw) // lasso draw function
+        .on("end", lasso_end) // lasso end function
+      // Init the lasso on the svg:g that contains the dots
+      d3.select('#supertree-svg').call(lasso)
+      lasso.items(d3.selectAll(".supertree-icicle-node"))
+      //  根据父亲节点的id, 找到所有的孩子节点的id
+      function highlight_children_id_by_father(fatherObj) {
+        barcodeCollection.each(function (model) {
+          var barcodetreeId = model.get('barcodeTreeId')
+          var fatherNodeId = fatherObj.id
+          if (typeof (fatherNodeId) === 'undefined') {
+            fatherNodeId = 'node-0-root'
+            fatherObj.id = fatherNodeId
+          }
+          var fatherNodeArray = fatherNodeId.split('-')
+          if ((typeof (fatherNodeArray) !== 'undefined') && (fatherNodeArray.length > 1)) {
+            var fatherNodeDepth = fatherNodeArray[1]
+            fatherObj.depth = +fatherNodeDepth
+            var childrenNodeArray = model.find_children_nodes(fatherObj)
+            for (var cI = 0; cI < childrenNodeArray.length; cI++) {
+              var childNode = childrenNodeArray[cI]
+              d3.select('#barcodetree-svg')
+                .select('#' + barcodetreeId)
+                .select('#' + childNode.id)
+                .classed({"not_possible": false, "possible": true})
+            }
+          }
+        })
+      }
+    },
+    //  在barcodeTree comparison视图中增加lasso函数
     enable_lasso_function: function () {
       var enableLasso = Variables.get('enable_lasso')
       if (!enableLasso) {
@@ -108,14 +214,35 @@ define([
         //   .attr("r", 3.5) // reset size
         //   .style("fill", null) // clear all of the fills
         //   .classed({"not_possible": true, "selected": false}); // style as not possible
-      };
+      }
       var lasso_draw = function () {
         // // Style the possible dots
+        //  选择所有的possible为true的元素
         lasso.items().filter(function (d) {
           return d.possible === true
+        }).each(function (d, i) {
+          if (d3.select(this).classed('barcode-label')) {
+            //  如果当前选中的是barcodeTree的label的元素, 那么需要即高亮label元素, 又高亮相应的barcodeTree中的所有元素
+            d3.select(this)
+              .classed({"not_possible": false, "possible": true})
+            var labelId = d3.select(this).attr('id')
+            var barcodeTreeId = labelId.replace('label-', '')
+            //  将label对应的所有的barcodeNode进行高亮
+            d3.select('#barcodetree-svg')
+              .select('#' + barcodeTreeId)
+              .selectAll('.barcode-node')
+              .classed({
+                "not_possible": false,
+                "possible": true
+              })
+          } else if (d3.select(this).classed('barcode-node')) {
+            //  如果当前选中的是barcodeTree中的节点元素, 那么需要即高亮barcodeTree中的对应的节点
+            d3.select(this)
+              .classed({"not_possible": false, "possible": true})
+          }
         })
-          .classed({"not_possible": false, "possible": true});
         lasso.items().each(function (d) {
+          // console.log('d', d)
           if (d3.select(this).classed('possible')) {
             d.possible = true
           }
@@ -124,8 +251,8 @@ define([
         lasso.items().filter(function (d) {
           return d.possible === false
         })
-          .classed({"not_possible": true, "possible": false});
-      };
+          .classed({"not_possible": true, "possible": false})
+      }
       var lasso_end = function () {
         // Reset the style of the not selected dots
         var filterResultArray = lasso.items().filter(function (d) {
@@ -134,6 +261,8 @@ define([
           .each(function (d, i) {
             //  向histogram中传递信号表示选中这些树
           })
+        //  brush结束之后统计选中的节点的分布情况
+        self.update_brush_node_distribution()
         var filterResult = filterResultArray[0]
         var filteredTreeArray = []
         for (var fI = 0; fI < filterResult.length; fI++) {
@@ -174,14 +303,52 @@ define([
         .on("end", lasso_end); // lasso end function
       // Init the lasso on the svg:g that contains the dots
       d3.select('#barcodetree-svg').call(lasso)
-      lasso.items(d3.selectAll(".barcode-label"))
+      lasso.items(d3.selectAll(".barcode-class"))
     },
     disable_lasso_function: function () {
       var self = this
-      d3.selectAll(".barcode-label").classed('possible', false)
-      d3.selectAll(".barcode-label").classed('not_possible', false)
+      d3.selectAll(".barcode-class").classed('possible', false)
+      d3.selectAll(".barcode-class").classed('not_possible', false)
+      d3.selectAll(".supertree-icicle-node").classed('possible', false)
+      d3.selectAll(".supertree-icicle-node").classed('not_possible', false)
       // 删除所有选择的高亮, 包括在histogram中的高亮
       self.trigger_unhighlight_selected_bar()
+    },
+    //  在lasso结束之后, 更新lasso范围内的节点的分布情况
+    update_brush_node_distribution: function () {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      var brushedNodeAttrObj = {}
+      var brushNodeNum = 0
+      d3.select('#barcodetree-svg')
+        .select('#barcodetree-collection-container')
+        .selectAll('.single-tree')
+        .each(function () {
+          var barcodeTreeId = d3.select(this).attr('id')
+          brushedNodeAttrObj[barcodeTreeId] = {}
+          var rootNodeObj = d3.select('#barcodetree-svg')
+            .select('#' + barcodeTreeId)
+            .select('#node-0-root').data()[0]
+          if (typeof (rootNodeObj) !== 'undefined') {
+            if (typeof (rootNodeObj['num']) !== 'undefined') {
+              var maxNum = rootNodeObj['num']
+              brushedNodeAttrObj[barcodeTreeId]['maxNum'] = maxNum
+              var brushedNodeAttrArray = []
+              d3.select('#barcodetree-svg')
+                .select('#' + barcodeTreeId)
+                .selectAll('.barcode-node.possible')
+                .each(function (d, i) {
+                  var nodeObj = d3.select(this).data()[0]
+                  brushedNodeAttrArray.push(nodeObj)
+                  brushNodeNum = brushNodeNum + 1
+                })
+              brushedNodeAttrObj[barcodeTreeId]['nodeAttrArray'] = brushedNodeAttrArray
+            }
+          }
+        })
+      if (brushNodeNum !== 0) {
+        barcodeCollection.update_brush_barcode_node_obj(brushedNodeAttrObj)
+      }
     }
   }, SVGBase))
 })

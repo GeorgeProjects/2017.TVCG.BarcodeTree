@@ -9,16 +9,14 @@ define([
   'config',
   'tooltips',
   'huebee',
-  'bootstrap',
   'rangeslider',
   'views/histogram-main.view',
   'views/barcode.view',
   'views/toolbar.view',
-  'views/sidebar.view',
   'views/single.view',
   'views/node.config.view',
   'text!templates/layoutDiv.tpl',
-], function (require, Mn, _, $, Backbone, Datacenter, Variables, Config, Tooltip, Huebee, Bootstrap, RangeSlider, HistogramView, BarcodeView, ToolBarView, SideBarView, SingleView, NodeConfig, Tpl) {
+], function (require, Mn, _, $, Backbone, Datacenter, Variables, Config, Tooltip, Huebee, RangeSlider, HistogramView, BarcodeView, ToolBarView, SingleView, NodeConfig, Tpl) {
   'use strict'
   return Mn.LayoutView.extend({
     tagName: 'div',
@@ -30,7 +28,7 @@ define([
       'toolbarView': '#toolbar-view',
       'histogramView': '#histogram-main-panel',
       'barcodeView': '#barcode-view',
-      'singleView': '#barcode-single-view',
+      // 'singleView': '#barcode-single-view',
       'colorButton': '#color-picker',
       'barcodeNodeConfig': '#barcode-node-config'
     },
@@ -86,7 +84,7 @@ define([
           $('#loading').css({visibility: 'hidden'})
           self.render_toolbar_view()
           self.render_histogram_view()
-          self.render_single_view()
+          // self.render_single_view()
           self.render_barcode_node_config_view()
           self.render_barcodetree_view()
         })
@@ -202,14 +200,14 @@ define([
       }
       window.split_character = ""
     },
-    //  初始化控制barcode的参数的视图
-    render_single_view: function () {
-      var self = this
-      //  初始化barcodeView
-      self.showChildView('singleView', new SingleView({
-        model: Datacenter.singleBarcodeModel
-      }))
-    },
+    // //  初始化控制barcode的参数的视图
+    // render_single_view: function () {
+    //   var self = this
+    //   //  初始化barcodeView
+    //   self.showChildView('singleView', new SingleView({
+    //     model: Datacenter.singleBarcodeModel
+    //   }))
+    // },
     //  初始化控制显示barcode进行比较的视图
     render_barcodetree_view: function () {
       var self = this

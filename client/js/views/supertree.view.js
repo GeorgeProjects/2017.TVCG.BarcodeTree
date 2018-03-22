@@ -35,7 +35,6 @@ define([
     },
     events: {},
     initialize: function () {
-      console.log('super tree view initialize')
       var self = this
       self.initEventFunc()
       self.initParaFunc()
@@ -48,9 +47,12 @@ define([
       })
       Backbone.Events.on(Config.get('EVENTS')['CLOSE_SUPER_TREE'], function (event) {
         self.close_supertree_view()
+        //  在关闭superTree视图的时候需要清空所有的参数设置
+        //  清空barcode collection中的tablelens数组
+        var barcodeCollection = self.options.barcodeCollection
+        barcodeCollection.clear_tablelens_array()
       })
       Backbone.Events.on(Config.get('EVENTS')['RENDER_SUPERTREE'], function (event) {
-        console.log('RENDER_SUPERTREE')
         self.draw_super_tree()
       })
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_ALIGNED_ICON'], function (event) {
@@ -64,6 +66,8 @@ define([
         var thisNodeObj = event.thisNodeObj
         self.higlight_all_related_nodes(thisNodeObj)
       })
+      //  监听, displayMode的变化
+      self.listenTo(Variables, 'change:displayMode', self.clear_all_parameters)
       //  取消mouseover的高亮效果
       Backbone.Events.on(Config.get('EVENTS')['NODE_MOUSEOUT'], function (event) {
         if (typeof (event) !== 'undefined') {
@@ -72,6 +76,15 @@ define([
         } else {
           self.node_mouseout_handler()
         }
+      })
+      //  清空所有的选择
+      Backbone.Events.on(Config.get('EVENTS')['CLEAR_ALL'], function (event) {
+        self.clear_all_supertree_elements()
+        self.close_supertree_view()
+        //  在关闭superTree视图的时候需要清空所有的参数设置
+        //  清空barcode collection中的tablelens数组
+        var barcodeCollection = self.options.barcodeCollection
+        barcodeCollection.clear_tablelens_array()
       })
     },
     trigger_mouseout_event: function () {
@@ -110,6 +123,11 @@ define([
       var histogramViewHeight = +$('#histogram-view').height()
       var topToolbarViewHeight = +$('#top-toolbar-container').height()
       $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + topToolbarViewHeight) + 'px')
+    },
+    //  清空superTree视图中的所有元素
+    clear_all_supertree_elements: function () {
+      var self = this
+      self.d3el.select('.level-g').remove()
     },
     node_mouseout_handler: function (eventView) {
       var self = this
@@ -575,10 +593,11 @@ define([
       var barcodeCollection = self.options.barcodeCollection
       var treeDataModel = self.get_super_tree_data_model()
       var superTreeVisibleHeight = Variables.get('superTreeHeight')
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       var levelNodeHeight = superTreeVisibleHeight / 2
       var allAlignedNodesObj = self.get_aligned_nodes_different_level()
-      console.log('allAlignedNodesObj', allAlignedNodesObj)
       var barcodeNodeAttrArray = self.get_super_tree_barcode_node_array()
+      //  在global的模式下并且当前用户选择了focus的子树, 那么需要对于增加的冰柱图的节点进行筛选
       var maxLevel = 0
       var selectedLevels = Variables.get('selectedLevels')
       var maxSelectedLevel = selectedLevels.max()
@@ -590,23 +609,29 @@ define([
       }
       self.d3el.select('#barcode-container').selectAll('.level-g').remove()
       var alignedLevel = Variables.get('alignedLevel')
-      d3.selectAll('.level-g').remove()
+      console.log('append_proportion_icicle')
       for (var item in allAlignedNodesObj) {
         var alignedNodeArray = allAlignedNodesObj[item]
         item = +item
         for (var aI = 0; aI < alignedNodeArray.length; aI++) {
-          var nodeId = alignedNodeArray[aI].id
-          append_icicle(item, nodeId, levelNodeHeight, alignedNodeArray[aI])
-          if (item === maxLevel) {
-            var underLevel = maxLevel + 1
-            if (underLevel < maxSelectedLevel) {
-              //  判断aligned level是否align到当前的层级, 即underLevel
-              if (alignedLevel < underLevel) {
-                //  如果没有align到当前的层级, 那么就在underLevel层级下面增加表示比例的proportion icicle
-                append_proportion_icicle(underLevel, nodeId, levelNodeHeight, alignedNodeArray[aI])
-              } else {
-                //  如果align到当前的层级, 那么就在underLevel层级下面增加表示范围的certain icicle
-                append_certain_icicle(underLevel, nodeId, levelNodeHeight, alignedNodeArray[aI])
+          var fatherNodeArray = barcodeCollection.find_all_father_current_nodes(alignedNodeArray[aI])
+          for (var fI = 0; fI < fatherNodeArray.length; fI++) {
+            var nodeId = fatherNodeArray[fI].id
+            var nodeDepth = fatherNodeArray[fI].depth
+            append_icicle(nodeDepth, nodeId, levelNodeHeight, fatherNodeArray[fI])
+            if (nodeDepth === maxLevel) {
+              var underLevel = maxLevel + 1
+              if (underLevel < maxSelectedLevel) {
+                //  判断aligned level是否align到当前的层级, 即underLevel
+                if (alignedLevel < underLevel) {
+                  console.log('append_proportion_icicle')
+                  //  如果没有align到当前的层级, 那么就在underLevel层级下面增加表示比例的proportion icicle
+                  append_proportion_icicle(underLevel, nodeId, levelNodeHeight, fatherNodeArray[fI])
+                } else {
+                  console.log('append_certain_icicle')
+                  //  如果align到当前的层级, 那么就在underLevel层级下面增加表示范围的certain icicle
+                  append_certain_icicle(underLevel, nodeId, levelNodeHeight, fatherNodeArray[fI])
+                }
               }
             }
           }
@@ -625,10 +650,13 @@ define([
           self._change_supertreeview_height(maxLevel + 1)
           //  对于global模式下的barcode, 需要确定下一层的barcode节点是tablelens的节点, 并且节点的大小和位置的确定方式是准确的
           for (var tI = 0; tI < tablelensNodesIdArray.length; tI++) {
-            var nodeId = tablelensNodesIdArray[tI]
-            var nodeObj = treeDataModel.get_node_obj_from_id(nodeId)
-            var underLevel = nodeObj.depth + 1
-            append_certain_icicle(underLevel, nodeId, levelNodeHeight, nodeObj)
+            var fatherNodeArray = barcodeCollection.find_all_father_current_nodes(nodeObj)
+            for (var fI = 0; fI < fatherNodeArray.length; fI++) {
+              var nodeId = fatherNodeArray[fI].id
+              // var nodeObj = treeDataModel.get_node_obj_from_id(nodeId)
+              var underLevel = fatherNodeArray[fI].depth + 1
+              append_certain_icicle(underLevel, nodeId, levelNodeHeight, fatherNodeArray[fI])
+            }
           }
         }
       }
@@ -640,9 +668,6 @@ define([
         var icicleNodeX = icicleNodeObject.x
         var icicleNodeWidth = icicleNodeObject.width
         if (icicleNodeWidth < 0) {
-          console.log('node_id', node_id)
-          console.log('node_level', node_level)
-          console.log('alignedNodeObj', alignedNodeObj)
         }
         if (self.d3el.select('#barcode-container').select('#level-' + node_level).select('#' + node_id).empty()) {
           self.d3el.select('#barcode-container')
@@ -681,14 +706,21 @@ define([
         var upperLevelIcicleNodeObject = barcodeCollection.get_max_barcode_node_width(node_id, nodeUpperLevel, aligned_node_obj)
         var upperLevelIcicleNodeX = upperLevelIcicleNodeObject.x
         var upperLevelIcicleNodeWidth = upperLevelIcicleNodeObject.width
+        var globalAlignedNodeIdArray = barcodeCollection.get_global_aligned_nodeid_array()
+        var filterMode = ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) && (BarcodeGlobalSetting['Subtree_Compact']) && (globalAlignedNodeIdArray.length !== 0))
         //  计算得到不同的subtree所占的比例, 如果是在attribute的状态下, 得到的是属性值的比例, 在topology的状态下, 得到的是节点数目的比例
         var barcodeSubtreeProportionArray = barcodeCollection.get_barcode_proportion(node_id)
+        for (var bI = 0; bI < barcodeSubtreeProportionArray.length; bI++) {
+          barcodeSubtreeProportionArray[bI].width = barcodeSubtreeProportionArray[bI].proportion * upperLevelIcicleNodeWidth
+        }
         init_icicle_level_g(node_level, level_node_height)
         //  计算最大的BarcodeTree的width大小
         var proportionIcicleNodes = self.d3el.select('#barcode-container')
           .select('#level-' + node_level)
           .selectAll('.supertree-node-father-' + node_id)
-          .data(barcodeSubtreeProportionArray, function (d, i) {
+          .data(barcodeSubtreeProportionArray.filter(function (d, i) {
+            return ((filterMode && (globalAlignedNodeIdArray.indexOf(d.id) !== -1)) || (!filterMode))
+          }), function (d, i) {
             return d.id
           })
         //  在非对齐情况下, 在icicle的视图中增加icicle的节点
@@ -711,9 +743,11 @@ define([
             var nodeId = d3.select(this).attr('id')
             var nodeObject = treeDataModel.get_node_obj_from_id(nodeId)
             self.trigger_higlight_all_related_nodes(nodeObject)
+            d3.select(this).classed('default-highlight', true)
           })
           .on('mouseout', function (d, i) {
             self.trigger_mouseout_event()
+            d3.select(this).classed('default-highlight', false)
           })
         //  在非对齐情况下, 更新在icicle的视图中的icicle的节点
         proportionIcicleNodes
@@ -734,10 +768,14 @@ define([
         init_icicle_level_g(node_level, level_node_height)
         //  计算得到不同的subtree所占的比例, 如果是在attribute的状态下, 得到的是属性值的比例, 在topology的状态下, 得到的是节点数目的比例
         var barcodeDetailedSubtreeArray = barcodeCollection.get_barcode_detailed_subtree(node_id, node_level)
+        var globalAlignedNodeIdArray = barcodeCollection.get_global_aligned_nodeid_array()
+        var filterMode = ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) && (BarcodeGlobalSetting['Subtree_Compact']) && (globalAlignedNodeIdArray.length !== 0))
         var certainIcicleNodes = self.d3el.select('#barcode-container')
           .select('#level-' + node_level)
           .selectAll('.supertree-node-father-' + node_id)
-          .data(barcodeDetailedSubtreeArray, function (d, i) {
+          .data(barcodeDetailedSubtreeArray.filter(function (d, i) {
+            return ((filterMode && (globalAlignedNodeIdArray.indexOf(d.id) !== -1)) || (!filterMode))
+          }), function (d, i) {
             return d.id
           })
         //  在非对齐情况下, 在icicle的视图中增加icicle的节点
@@ -764,9 +802,11 @@ define([
             var nodeId = d3.select(this).attr('id')
             var nodeObject = treeDataModel.get_node_obj_from_id(nodeId)
             self.trigger_higlight_all_related_nodes(nodeObject)
+            d3.select(this).classed('default-highlight', true)
           })
           .on('mouseout', function (d, i) {
             self.trigger_mouseout_event()
+            d3.select(this).classed('default-highlight', false)
           })
         //  在非对齐情况下, 更新在icicle的视图中的icicle的节点
         certainIcicleNodes
@@ -797,7 +837,9 @@ define([
             .attr('transform', 'translate(' + translateX + ',' + level_node_height * node_level + ')')
         }
       }
-    },
+    }
+
+    ,
     //  增加操作的icon
     add_operation_icon: function (operated_node_id) {
       var self = this
@@ -821,7 +863,8 @@ define([
         .text('\uf08d')
         .style('fill', selectIconColor)
         .style('font-size', (categoryRectHeight / 2) + 'px')
-    },
+    }
+    ,
     //  增加标记排序的icon
     add_sort_icon: function (operated_node_id) {
       var self = this
@@ -845,11 +888,13 @@ define([
         .text('\uf0dc')
         .style('fill', selectIconColor)
         .style('font-size', (categoryRectHeight / 2) + 'px')
-    },
+    }
+    ,
     remove_operation_icon: function (operated_node_id) {
       var self = this
       self.d3el.select('.edit-icon#' + operated_node_id).remove()
-    },
+    }
+    ,
     add_single_category_text: function () {
       var self = this
       var barcodeHeight = self.barcodeHeight
@@ -914,12 +959,14 @@ define([
               if (nodeObject.categoryName !== textAbbr(nodeObject)) {
                 tip.show(tipValue)
               }
+              d3.select(this).classed('default-highlight', true)
             })
             .on('mouseout', function (d, i) {
               var thisObjId = d3.select(this).attr('id')
               d3.select('rect#' + thisObjId).classed('mouseover-highlight', false)
               self.trigger_mouseout_event()
               tip.hide()
+              d3.select(this).classed('default-highlight', false)
             })
             .on('click', function (d, i) {
               var thisObjId = d3.select(this).attr('id')
@@ -1062,20 +1109,62 @@ define([
 
       }
     },
+    //  改变barcodeTree的displayMode的响应函数
+    clear_all_parameters: function () {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      //  在displayMode变化的时候都要对于在superTree视图选择的部分清空
+      self.remove_all_edit_icon()
+      self.clear_supertree_selection()
+      self.clear_tablelens()
+      barcodeCollection.clear_global_zoom_node_array()
+      barcodeCollection.clear_global_zoom_padding_range()
+      //  清除在superTree视图中所有选择的节点
+      barcodeCollection.clear_supertree_selected_subtree_id()
+    },
+    //  删除在supetTree视图中编辑节点的icon
     remove_all_edit_icon: function () {
       var self = this
       d3.selectAll('.edit-icon').remove()
+    }
+    ,
+    //  删除barcode的交互操作中当前的tablelens的效果
+    clear_tablelens: function () {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      barcodeCollection.clear_supertree_selected_subtree_id()
+      //  然后就需要更新tablelens的节点范围以及padding节点属性值
+      barcodeCollection.global_preprocess_barcode_model_data()
+    },
+    //  删除在superTree视图中选择的节点
+    clear_supertree_selection: function () {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      barcodeCollection.clear_supertree_selected_subtree_id()
+      //  删除所有选择节点的同时删除所有的标记选择节点的icon
+      self.remove_all_edit_icon()
     },
     /**
      *  在背景矩形中增加双击的监听函数
      */
     category_rect_dbclick_handler: function (nodeData) {
       var self = this
-      var nodeId = nodeData.id
       var barcodeCollection = self.options.barcodeCollection
-      var isAdded = barcodeCollection.tablelens_interested_subtree(nodeId)
+      var nodeDataArray = [nodeData]
+      //  tablelens_interested_subtree为了更新全局的tablelensNode的数组
+      var isAdded = barcodeCollection.tablelens_interested_subtree(nodeDataArray)
+      //  然后就需要更新tablelens的节点范围以及padding节点属性值
+      barcodeCollection.global_preprocess_barcode_model_data()
+      // if (isAdded) {
+      //   //  如果增加了该节点进行tablelens的展示
+      //   barcodeCollection.update_global_zoom_node_array(nodeId, nodeData.depth, nodeData.category)
+      // } else {
+      //   //  如果没有增加该节点进行tablelens的展示, 那么就要去掉这个节点
+      //   barcodeCollection.remove_global_zoom_node_array(nodeId, nodeData.depth, nodeData.category)
+      // }
       return isAdded
-    },
+    }
+    ,
     supertree_node_click_handler: function (thisObjId, nodeObject, barcodeTreeId, selectMultiple) {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
@@ -1112,13 +1201,13 @@ define([
         self.supertree_node_click_handler(thisObjId, nodeObject, barcodeTreeId, selectMultiple)
         var isAdded = self.category_rect_dbclick_handler(nodeObject)
         if (!isAdded) {
-          barcodeCollection.remove_supertree_selected_subtree_id(nodeObject.id, nodeObject.depth)
           self.remove_operation_icon(thisObjId)
         }
         barcodeCollection.update_barcode_selection_state()
+        //  在点击之后更新全部的视图
+        barcodeCollection.update_data_all_view()
       })
       cc.on('click', function (el) {
-        console.log('supertree_node_click_handler')
         var treeDataModel = self.get_super_tree_data_model()
         var barcodeTreeId = treeDataModel.get('barcodeTreeId')
         var thisObjId = d3.select(el.srcElement).attr('id')
@@ -1164,7 +1253,8 @@ define([
         };
         return d3.rebind(cc, event, 'on');
       }
-    },
+    }
+    ,
     /**
      * 在superTree视图中增加文本, 是focus的最上层的类别的名称
      * @param rootId
@@ -1209,7 +1299,8 @@ define([
         }
       }
       return textAddedObjArray
-    },
+    }
+    ,
     open_supertree_view: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
@@ -1223,9 +1314,13 @@ define([
       var histogramViewHeight = +$('#histogram-view').height()
       $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + barcodeTreeConfigHeight + superTreeHeight) + 'px')
       $('#barcodetree-scrollpanel').css('top', (barcodeTreeConfigHeight + superTreeHeight) + 'px')
-      barcodeCollection.update_barcode_location()
+      window.Variables.update_barcode_attr()
+      barcodeCollection.change_layout_mode()
+      //  更新在具有attribute的情况下的barcode节点高度
+      barcodeCollection.update_attribute_height()
       self.update_supertree_height()
-    },
+    }
+    ,
     close_supertree_view: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
@@ -1237,19 +1332,22 @@ define([
       $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + barcodeTreeConfigHeight) + 'px')
       $('#barcodetree-scrollpanel').css('top', barcodeTreeConfigHeight + 'px')
       $('#supertree-scroll-panel').css('height', '0px')
-      barcodeCollection.update_barcode_location()
-    },
+      window.Variables.update_barcode_attr()
+      barcodeCollection.change_layout_mode()
+      barcodeCollection.update_attribute_height()
+      self.update_supertree_height()
+    }
+    ,
     draw_super_tree: function () {
       var self = this
       self.update_supertree_height()
       self.append_supernodes_different_level()
-      // self.update_aligned_barcode_node(self.update_sort_icon.bind(self))
-      // self.render_padding_cover_rect()
       self.update_interaction_icon()
       self.highlight_selection_supertree_selection_nodes()
       self.add_category_text()
       self.add_category_rect_dbclick_click_handler()
-    },
+    }
+    ,
     //  更新标记交互的icon
     update_interaction_icon: function () {
       var self = this
@@ -1258,7 +1356,8 @@ define([
       } else {
         self.update_current_edit_icon()
       }
-    },
+    }
+    ,
     update_current_edit_icon: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
@@ -1275,7 +1374,8 @@ define([
           self.add_operation_icon(nodeDataId)
         }
       }
-    },
+    }
+    ,
     //  更新标记排序的icon
     update_aligned_sort_icon: function () {
       var self = this
@@ -1287,7 +1387,8 @@ define([
         var nodeDataId = nodeData.id
         self.add_sort_icon(nodeDataId)
       }
-    },
+    }
+    ,
     add_category_text: function () {
       var self = this
       var barcodeNodeAttrArray = self.get_super_tree_barcode_node_array()
@@ -1302,7 +1403,8 @@ define([
       //   var nodeId = barcodeNodeAttrArray[rangeStartNodeIndex].id
       //   self.add_single_category_text(nodeId)
       // }
-    },
+    }
+    ,
     //  过滤得到所有在superTree视图中绘制出来的对象
     filtered_aligned_element: function () {
       var self = this
@@ -1315,117 +1417,8 @@ define([
         }
       }
       return filteredArray
-    },
-    update_aligned_barcode_node: function (next_step_func) {
-      var self = this
-      var tip = window.tip
-      var barcodeNodeHeight = self.barcodeNodeHeight
-      var barcodeNodeAttrArray = self.get_super_tree_barcode_node_array()
-      var DURATION = 1000
-      var alignedLevel = Variables.get('alignedLevel')
-      var currentNodeHeight = 0
-      if (barcodeNodeAttrArray.length > 0) {
-        currentNodeHeight = barcodeNodeAttrArray[0].height
-      }
-      var yRatio = barcodeNodeHeight / currentNodeHeight
-      var ABSOLUTE_COMPACT_FATHER = Config.get('CONSTANT')['ABSOLUTE_COMPACT_FATHER']
-      var alignedRangeObjArray = self.get_super_tree_aligned_range_obj()
-      //
-      var alignedBarcodeNodes = self.d3el.select('#barcode-container')
-        .selectAll('.aligned-barcode-node')
-        .data(barcodeNodeAttrArray.filter(function (d, i) {
-          return ((d.depth < 4) && (self.isBelongAligned(i, alignedRangeObjArray)))
-        }), function (d, i) {
-          return d.id
-        })
-
-      //  enter 添加节点
-      alignedBarcodeNodes.enter()
-        .append('rect')
-        .attr('class', function (d, i) {
-          var classArray = []
-          classArray.push('barcode-node')
-          classArray.push('aligned-barcode-node')
-          if (d.depth > alignedLevel) {
-            classArray.push('node-none')
-          }
-          return self.get_class_name(classArray)
-        })
-        .attr('id', function (d, i) {
-          return d.id
-        })
-        .attr('x', function (d) {
-          return +d.x
-        })
-        .attr('y', function (d) {
-          return +d.height * yRatio
-        })
-        .attr('width', function (d) {
-          return +d.width
-        })
-        .attr('height', function (d) {
-          return 0
-        })
-        .style("cursor", "pointer")
-        .on('mouseover', mouseover_handler)
-        .on('mouseout', mouseout_handler)
-        .on('click', click_handler)
-      // update 更新节点
-      alignedBarcodeNodes.attr('class', function (d, i) {
-        var classArray = []
-        classArray.push('barcode-node')
-        classArray.push('aligned-barcode-node')
-        if (d.depth > alignedLevel) {
-          classArray.push('node-none')
-        }
-        return self.get_class_name(classArray)
-      })
-        .attr('width', function (d) {
-          return +d.width
-        })
-        .transition()
-        .duration(DURATION)
-        .attr('x', function (d) {
-          return +d.x
-        })
-        .attr('y', function (d) {
-          return +d.y * yRatio
-        })
-        .attr('height', function (d) {
-          return +d.height * yRatio
-        })
-        .call(self.endall, function (d, i) {
-          if ((next_step_func != null) && (typeof (next_step_func) !== 'undefined')) {
-            next_step_func()
-          } else {
-            console.log('not next step')
-          }
-        })
-      alignedBarcodeNodes.exit().remove()
-      function mouseover_handler(d, i) {
-        if (typeof(d.categoryName) !== 'undefined') {
-          var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.category + ' ' + d.categoryName + "</span></span>"
-          tip.show(tipValue)
-        } else {
-          var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.category + "</span></span>"
-          tip.show(tipValue)
-        }
-        d3.select(this).classed('sort-hovering-highlight', true)
-        self.trigger_hovering_sort_barcode_node(d.id)
-      }
-
-      function mouseout_handler(d, i) {
-        tip.hide()
-        d3.select(this).classed('sort-hovering-highlight', false)
-        self.trigger_unhovering_sort_barcode_node()
-      }
-
-      function click_handler(d, i) {
-        self.clickedObject = this
-        self.clickedRectIndex = null
-        self.add_supertree_node_options_button(this, d)
-      }
-    },
+    }
+    ,
     add_supertree_node_options_button: function (thisNodeObj, thisNodeData) {
       var self = this
       var barcodePaddingLeft = self.barcodePaddingLeft
@@ -1527,7 +1520,8 @@ define([
         .attr('width', iconSide)
         .style('opacity', 1)
       barcodeIcon.exit().remove()
-    },
+    }
+    ,
     super_tree_node_controller: function (d, i, thisNodeId, self, thisNodeData) {
       var barcodeCollection = self.options.barcodeCollection
       var parameter = null
@@ -1558,7 +1552,8 @@ define([
         self.subtree_unalign_handler(thisNodeData, finishRemoveAlignDeferObj)
         self.remove_options_button()
       }
-    },
+    }
+    ,
     /**
      * 再次click节点, 取消对于当前的subtree的对齐
      */
@@ -1566,7 +1561,8 @@ define([
       var self = this
       var nodeLevel = nodeData.depth
       self.node_unclick_handler(nodeData, nodeLevel, finishRemoveAlignDeferObj)
-    },
+    }
+    ,
     /**
      * 再次点击focus选项的按钮, 取消focus
      * @param d
@@ -1577,7 +1573,8 @@ define([
       var self = this
       //  model中的节点需要使用其他的model中的节点进行填充
       window.Datacenter.barcodeCollection.remove_super_subtree(d.id, d.depth, d.category, alignedLevel, finishRemoveAlignDeferObj)
-    },
+    }
+    ,
     update_sort_icon: function () {
       var self = this
       self.d3el.selectAll('.sort-indicator').remove()
@@ -1628,7 +1625,8 @@ define([
         .select('.sort-button')
         .style('fill', '#ddd')
         .text('\uf0dc')
-    },
+    }
+    ,
     /**
      * 点击barcode收缩时先判断动画是否结束
      * @param transition
@@ -1646,7 +1644,8 @@ define([
         .each("end", function () {
           if (!--n) callback.apply(this, arguments);
         });
-    },
+    }
+    ,
     /**
      * 判断节点是否是aligned范围, 如果属于aligned范围, 那么绘制节点; 否则这些节点不会被绘制
      * @param nodeIndex
@@ -1665,7 +1664,8 @@ define([
         }
       }
       return false
-    },
+    }
+    ,
     // 获取supertree视图中的barcodeNodeArray的节点
     get_super_tree_barcode_node_array: function () {
       var self = this
@@ -1683,7 +1683,8 @@ define([
         barcodeNodeAttrArray = treeDataModel.get('barcodeNodeAttrArray')
       }
       return barcodeNodeAttrArray
-    },
+    }
+    ,
     //  获取supertree视图中的align的节点
     get_super_tree_aligned_range_obj: function () {
       var self = this
@@ -1694,7 +1695,8 @@ define([
       }
       alignedRangeObjArray = treeDataModel.get('alignedRangeObjArray')
       return alignedRangeObjArray
-    },
+    }
+    ,
     //  获取supertree视图中的padding的节点
     get_super_tree_padding_range_obj: function () {
       var self = this
@@ -1705,7 +1707,8 @@ define([
       }
       paddingNodeObjArray = treeDataModel.get('paddingNodeObjArray')
       return paddingNodeObjArray
-    },
+    }
+    ,
     //  获取supertree视图中的data model
     get_super_tree_data_model: function () {
       var self = this
@@ -1714,176 +1717,8 @@ define([
       // var treeDataModel = barcodeCollection.where({barcodeTreeId: selectItemNameArray[0]})[0]
       var treeDataModel = barcodeCollection.where({barcodeIndex: 0})[0]
       return treeDataModel
-    },
-    // 渲染覆盖在padding barcode上面带有纹理的矩形
-    render_padding_cover_rect: function () {
-      var self = this
-      var barcodeNodeHeight = self.barcodeNodeHeight
-      var paddingNodeObjArray = self.get_super_tree_padding_range_obj()
-      var barcodeNodePadding = Config.get('BARCODE_NODE_PADDING')
-      var DURATION = 1000
-      // self.d3el.select('#barcode-container')
-      //   .selectAll('.padding-covered-rect')
-      //   .remove()
-      var paddingCoverRectObj = self.d3el.select('#barcode-container')
-        .selectAll('.padding-covered-rect')
-        .data(paddingNodeObjArray.filter(function (d, i) {
-          return d.paddingNodeStartIndex <= d.paddingNodeEndIndex
-        }), function (d, i) {
-          return 'covered-rect-' + i
-        })
-      //  与barcode的padding width的计算不同的是无论superTree的paddingNode的范围内是否存在节点一定要增加paddingnode的coverRect
-      paddingCoverRectObj.enter()
-        .append('rect')
-        .attr('id', function (d, i) {
-          return 'covered-rect-' + i
-        })
-        .attr('class', function (d, i) {
-          return 'padding-covered-rect covered-rect-' + i
-        })
-        .attr('x', function (d, i) {
-          return d.paddingNodeX
-        })
-        .attr('y', barcodeNodeHeight)
-        .attr('width', barcodeNodePadding)
-        .attr('height', 0)
-        .style("fill", self.fill_style_handler.bind(self))
-        .on('mouseover', function (d, i) {
-          d3.select(this).classed('sort-hovering-highlight', true)//
-          // d3.select(this).attr('color', 'red')
-        })
-        .on('mouseout', function (d, i) {
-          d3.select(this).classed('sort-hovering-highlight', false)
-        })
-        .on('click', padding_super_cover_click_handler)
-      paddingCoverRectObj.attr('x', function (d, i) {
-        return d.paddingNodeX
-      })
-        .transition()
-        .duration(DURATION)
-        .attr('y', 0)
-        .attr('width', barcodeNodePadding)
-        .attr('height', barcodeNodeHeight)
-      paddingCoverRectObj.exit().remove()
-      function padding_super_cover_click_handler(d, covered_rect_index) {
-        self.clickedObject = this
-        self.clickedRectIndex = covered_rect_index
-        self.add_options_button(this)
-        // if (d3.select(this).classed('sort-selection-highlight')) {
-        //   d3.selectAll('.sort-selection-highlight').classed('sort-selection-highlight', false)
-        //   d3.select(this).classed('sort-selection-highlight', false)
-        //   barcodeCollection.recover_barcode_model_sequence()
-        // } else {
-        //   d3.selectAll('.sort-selection-highlight').classed('sort-selection-highlight', false)
-        //   d3.select(this).classed('sort-selection-highlight', true)
-        //   barcodeCollection.sort_cover_rect_barcode_model(covered_rect_index)
-        // }
-      }
-
-      function rgb2hex(rgb) {
-        rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
-        return (rgb && rgb.length === 4) ? "#" +
-        ("0" + parseInt(rgb[1], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[2], 10).toString(16)).slice(-2) +
-        ("0" + parseInt(rgb[3], 10).toString(16)).slice(-2) : '';
-      }
-    },
-    add_options_button: function (thisNodeObj) {
-      var self = this
-      var barcodePaddingLeft = self.barcodePaddingLeft
-      var barcodePaddingTop = self.barcodePaddingTop + self.barcodePaddingGap / 2
-      var DURATION = 500
-      var thisX = +d3.select(thisNodeObj).attr('x') + 1
-      var thisY = +d3.select(thisNodeObj).attr('y') - 1
-      var thisWidth = +d3.select(thisNodeObj).attr('width')
-      var iconSide = Variables.get('superTreeHeight') * 0.3
-      var iconPadding = 2
-      var barcodeConfigFontSize = 12
-      var iconArray = [
-        {'iconName': 'compress', 'iconCode': '\uf066'},
-        {'iconName': 'expand', 'iconCode': '\uf065'},
-        {'iconName': 'sort-amount-asc', 'iconCode': '\uf160'},
-        {'iconName': 'sort-amount-desc', 'iconCode': '\uf161'}]
-      var iconLeftX = thisX + barcodePaddingLeft + thisWidth / 2 - iconSide * 2
-      self.d3el.selectAll('.barcode-icon-bg').remove()
-      self.d3el.selectAll('.barcode-g-icon').remove()
-      //  更新barcode的背景矩形的位置
-      var barcodeIconBg = self.d3el.selectAll('.barcode-icon-bg')
-        .data(iconArray)
-      barcodeIconBg.enter()
-        .append('rect')
-        .attr('cursor', 'pointer')
-        .attr('id', function (d, i) {
-          return d.iconName
-        })
-        .attr('class', 'barcode-icon-bg')
-        .attr('x', function (d, i) {
-          return barcodePaddingLeft + thisX + thisWidth / 2 - iconSide / 2
-        })
-        .attr('y', barcodePaddingTop + iconSide)
-        .attr('height', iconSide - 1)
-        .attr('width', iconSide)
-        .attr('fill', '#808080')
-        .on('mouseover', function (d, i) {
-          d3.select('text#' + d.iconName).classed('mouseover-highlight', true)
-        })
-        .on('mouseout', function (d, i) {
-          d3.select('text#' + d.iconName).classed('mouseover-highlight', false)
-        })
-        .style('opacity', 0)
-      barcodeIconBg.transition()
-        .duration(DURATION)
-        .attr('x', function (d, i) {
-          return iconLeftX + (iconSide + 1) * i
-        })
-        .attr('y', barcodePaddingTop - iconSide)
-        .attr('height', iconSide - 1)
-        .attr('width', iconSide)
-        .style('opacity', 1)
-      barcodeIconBg.exit().remove()
-      //  更新barcode的图标的位置
-      var barcodeIcon = self.d3el.selectAll('.barcode-g-icon')
-        .data(iconArray)
-      barcodeIcon.enter()
-        .append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .attr('cursor', 'pointer')
-        .attr('id', function (d, i) {
-          return d.iconName
-        })
-        .attr('class', 'barcode-g-icon')
-        .attr('font-family', 'FontAwesome')
-        .attr('x', function (d, i) {
-          return barcodePaddingLeft + thisX + thisWidth / 2
-        })
-        .attr('y', barcodePaddingTop + iconSide / 2)
-        .attr('height', iconSide - 1)
-        .attr('width', iconSide)
-        .text(function (d, i) {
-          return d.iconCode
-        })
-        .on('mouseover', function (d, i) {
-          d3.select(this).classed('mouseover-highlight', true)
-        })
-        .on('mouseout', function (d, i) {
-          d3.select(this).classed('mouseover-highlight', false)
-        })
-        .on('click', function (d, i) {
-          self.super_tree_controller(d, i)
-        })
-        .style('opacity', 0)
-      barcodeIcon.transition()
-        .duration(DURATION)
-        .attr('x', function (d, i) {
-          return iconLeftX + (iconSide + 1) * i + iconSide / 2
-        })
-        .attr('y', barcodePaddingTop - iconSide / 2)
-        .attr('height', iconSide - 1)
-        .attr('width', iconSide)
-        .style('opacity', 1)
-      barcodeIcon.exit().remove()
-    },
+    }
+    ,
     remove_options_button: function () {
       var self = this
       var thisNodeObj = self.clickedObject
@@ -1932,7 +1767,8 @@ define([
         .call(self.endall, function (d, i) {
           self.d3el.selectAll('.barcode-g-icon').remove()
         })
-    },
+    }
+    ,
     super_tree_controller: function (d, i) {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
@@ -1959,7 +1795,8 @@ define([
           self.update_sort_icon()
         }
       }
-    },
+    }
+    ,
     fill_style_handler: function (d, i) {
       var self = this
       var nodeNum = self.get_node_number(d.paddingNodeStartIndex, d.paddingNodeEndIndex)
@@ -1967,7 +1804,8 @@ define([
       var partition = maxLeveledNumArray[4] / 6
       var styleIndex = Math.ceil(nodeNum / partition + 1)
       return "url(#diagonal-stripe-" + styleIndex + ")"
-    },
+    }
+    ,
     // 计算某个范围内, 在某些层级上的节点数量
     get_node_number: function (rangeStart, rangeEnd) {
       var self = this
@@ -1982,7 +1820,8 @@ define([
         }
       }
       return nodeNumber
-    },
+    }
+    ,
     get_class_name: function (classNameArray) {
       var className = ''
       for (var cI = 0; cI < classNameArray.length; cI++) {

@@ -100,7 +100,6 @@ define([
       //  点击某个选择的group之后, 取消选择group中的BarcodeTree
       Backbone.Events.on(Config.get('EVENTS')['REMOVE_SELECTION'], function (event) {
         var barId = event.barcodeTreeId
-        console.log('barId', barId)
         self.cancel_selection_highlight(barId)
       })
       Backbone.Events.on(Config.get('EVENTS')['HIGHLIGHT_LASSO_SELECTED'], function (event) {
@@ -144,9 +143,6 @@ define([
     //  关闭supertree视图
     trigger_close_supertree: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['CLOSE_SUPER_TREE'])
-    },
-    trigger_update_distribution: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_DISTRIBUTION_VIEW'])
     },
     //  更新选择的list
     trigger_update_selection_list: function () {
@@ -206,7 +202,6 @@ define([
           selectionList.push(dayRecordObj[item])
         }
         Variables.set('selectionBarcodeObject', selectionBarcodeObject)
-        console.log('selectionBarcodeObject', selectionBarcodeObject)
       }
       return selectionList
     },
@@ -619,7 +614,6 @@ define([
       }
       self.trigger_update_selection_list()
       window.Variables.update_barcode_attr()
-      barcodeCollection.update_after_remove_models()
       //  传递信号, 在服务器端更新dataCenter删除选中的item数组, 进而更新superTree
       window.Datacenter.request_remove_item(barIdArray)
     },
@@ -746,7 +740,6 @@ define([
           .attr('y', histogramHeight - comparisonLoc)
           .attr('height', 2)
       }
-      console.log('sameNodeNumObj', sameNodeNumObj)
     },
     /**
      * 按照相似度更新histogram视图中的颜色映射
@@ -927,11 +920,8 @@ define([
       Variables.set('selectItemNameArray', [])
       //  清空brush的范围的矩形
       self.clear_brush_range_rect()
-      //  关闭superTree视图
-      self.trigger_close_supertree()
       //  更新distribution视图, 即直接清空distribution
       barcodeCollection.update_barcode_node_attr_array()
-      self.trigger_update_distribution()
     }
   }, SVGBase))
 })

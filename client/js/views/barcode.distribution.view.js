@@ -9,7 +9,7 @@ define([
   'pagination',
   'variables',
   'text!templates/barcodeDistribution.tpl'
-], function (require, Mn, _, Backbone, Config, d3, d3BarChart, pagination, Variables, Tpl) {
+], function (require, Mn, _, Backbone, Config, d3, d3Barchart, pagination, Variables, Tpl) {
   'use strict'
 
   return Mn.LayoutView.extend({
@@ -21,18 +21,35 @@ define([
     initialize: function () {
       var self = this
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_DISTRIBUTION_VIEW'], function () {
-        self.render_distribution_histogram()
+        var barcodeNodeCollectionObj = Variables.get('barcodeNodeCollectionObj')
+        var distributionType = 'overall-distribution'
+        self.render_distribution_histogram(barcodeNodeCollectionObj, distributionType)
+      })
+      Backbone.Events.on(Config.get('EVENTS')['UPDATE_BRUSH_DISTRIBUTION_VIEW'], function () {
+        var brushBarcodeNodeCollectionObj = Variables.get('brushBarcodeNodeCollectionObj')
+        var distributionType = 'brush-distribution'
+        self.render_distribution_histogram(brushBarcodeNodeCollectionObj, distributionType)
+      })
+      //  清空所有的节点分布视图
+      Backbone.Events.on(Config.get('EVENTS')['CLEAR_ALL'], function (event) {
+        self.clear_all_distribution_views()
       })
     },
     onShow: function () {
       var self = this
     },
-    render_distribution_histogram: function () {
+    //  清空distribution视图中的所有分布视图
+    clear_all_distribution_views: function () {
+      var self = this
+      d3.selectAll('.distribution-levels').remove()
+    },
+    //  绘制全部选择的barcode节点属性分布柱状图
+    render_distribution_histogram: function (barcodeNodeCollectionObj, distributionType) {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       var barcodeConfigDivHeight = $('#barcode-distribution-view').height()
       var panelHeaderHeight = $('#barcode-distribution-view .panel-header').height()
-      var barcodeNodeCollectionObj = Variables.get('barcodeNodeCollectionObj')
+      var brushBarcodeNodeCollectionObj = Variables.get('brushBarcodeNodeCollectionObj')
       var histogramViewNum = 0
       for (var item in barcodeNodeCollectionObj) {
         histogramViewNum = histogramViewNum + 1
@@ -131,7 +148,6 @@ define([
       } else {
         yTicksValueArray = self._get_display_ticks_value_array(maxHistogramData, rangeNum)
       }
-      console.log('yTicksValueArray', yTicksValueArray)
       var _yTicksValueArray = []
       for (var yI = 0; yI < yTicksValueArray.length; yI++) {
         var yTicksValue = Math.round(yTicksValueArray[yI])
@@ -141,7 +157,6 @@ define([
           }
         }
       }
-      console.log('_yTicksValueArray', _yTicksValueArray)
       yTicksValueArray = _yTicksValueArray
       var xLabel = null
       if (distribution_level === 'ratio') {
@@ -239,6 +254,9 @@ define([
     brush_trigger: function (real_brush_start, real_brush_end, distribution_level) {
       var self = this
       var barcodeNodeCollectionObjWithId = Variables.get('barcodeNodeCollectionObjWithId')
+      if (!d3.selectAll('.barcode-node.possible').empty()) {
+        barcodeNodeCollectionObjWithId = Variables.get('brushBarcodeNodeCollectionObjWithId')
+      }
       var barcodeNodeArray = barcodeNodeCollectionObjWithId[distribution_level]
       var highlightObjArray = Variables.get('brushHighlightObjArray')
       if (typeof (barcodeNodeArray) !== 'undefined') {

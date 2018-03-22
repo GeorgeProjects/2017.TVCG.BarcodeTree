@@ -11,5 +11,5 @@
     </div>
 </div>
 <div id = "barcode-view"></div>
-<div id = 'barcode-single-view'></div>
+<!--<div id = 'barcode-single-view'></div>-->
 <div id = 'barcode-node-config' class = 'ui-widget-content'></div>
