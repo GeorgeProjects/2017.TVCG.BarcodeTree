@@ -8,24 +8,28 @@ var removeUpdateCurrentSuperTree = function (request, response) {
   //  读取传递的的数据
   var reqBody = request.body
   var dataItemNameArray = reqBody['removedDataItemNameArray']
+  var allSelectedDataItemNameArray = reqBody['allSelectedDataItemNameArray']
   var dataSetName = reqBody.dataSetName
   var globalSuperTreeObj = dataCenter.get_super_tree_obj()
+  globalSuperTreeObj.itemNameArray = allSelectedDataItemNameArray
   var currentItemNameArray = globalSuperTreeObj.itemNameArray
-  //  遍历原始的dataItemNameArray, 在dataItemNameArray去除选中的dataItem数组
-  for (var dI = 0; dI < dataItemNameArray.length; dI++) {
-    var item = dataItemNameArray[dI]
-    if (typeof (currentItemNameArray) !== 'undefined') {
-      var itemIndex = currentItemNameArray.indexOf(item)
-      if (itemIndex === -1) {
-        dataItemNameArray.splice(itemIndex, 1)
-      }
-    }
-  }
+  // //  遍历原始的dataItemNameArray, 在dataItemNameArray去除选中的dataItem数组
+  // for (var dI = 0; dI < dataItemNameArray.length; dI++) {
+  //   var item = dataItemNameArray[dI]
+  //   if (typeof (currentItemNameArray) !== 'undefined') {
+  //     var itemIndex = currentItemNameArray.indexOf(item)
+  //     if (itemIndex === -1) {
+  //       dataItemNameArray.splice(itemIndex, 1)
+  //     }
+  //   }
+  // }
   var unionTreeArray = []
-  for (var dI = 0; dI < dataItemNameArray.length; dI++) {
-    var dataItem = dataItemNameArray[dI]
-    var originalData = dataCenter.get_single_original_data(dataSetName, dataItem)
-    unionTreeArray.push(originalData)
+  if (typeof (allSelectedDataItemNameArray) !== 'undefined') {
+    for (var dI = 0; dI < allSelectedDataItemNameArray.length; dI++) {
+      var dataItem = allSelectedDataItemNameArray[dI]
+      var originalData = dataCenter.get_single_original_data(dataSetName, dataItem)
+      unionTreeArray.push(originalData)
+    }
   }
   var unionTree = hierarchicalDataProcessor.buildUnionTree(unionTreeArray)
   dataCenter.update_super_tree_obj_item_array(dataItemNameArray)

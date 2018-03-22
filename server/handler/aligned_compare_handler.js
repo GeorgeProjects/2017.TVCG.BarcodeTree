@@ -40,7 +40,9 @@ var handlerBuildSuperTree = function (request, response) {
     for (var sI = 0; sI < dataItemNameArray.length; sI++) {
       var subtreeObj = dataCenter.get_subtree_id_index_data(dataSetName, dataItemNameArray[sI], rootId)
       if (typeof(subtreeObj) !== 'undefined') {
-        subtreeObjArray.push(subtreeObj)
+        var filteredSubtreeObj = JSON.parse(JSON.stringify(subtreeObj))
+        filter_depth(filteredSubtreeObj, maxLevel)
+        subtreeObjArray.push(filteredSubtreeObj)
       }
     }
   }
@@ -88,6 +90,23 @@ var handlerBuildSuperTree = function (request, response) {
     //  根据线性化的节点序列得到节点的位置属性
     var superTreeNodeLocArray = hierarchicalDataProcessor.computeOriginalNodeLocation(treeNodeArray, barcode_width_array, selected_levels, barcode_height, barcode_node_interval)
     return superTreeNodeLocArray
+  }
+
+  //  根据当前最深的层级筛选当前的树
+  function filter_depth(subtreeObj, maxLevel) {
+    if (subtreeObj.depth === maxLevel) {
+      if (typeof (subtreeObj.children) !== 'undefined') {
+        delete subtreeObj.children
+      }
+    }
+    var subtreeChildren = subtreeObj.children
+    if (typeof (subtreeChildren) !== 'undefined') {
+      for (var sI = 0; sI < subtreeChildren.length; sI++) {
+        var subtree = subtreeChildren[sI]
+        filter_depth(subtree, maxLevel)
+      }
+    }
+    return subtree
   }
 
   /**
@@ -145,6 +164,9 @@ var handlerBuildSuperTree = function (request, response) {
       } else {
         var depth = treeObj['depth']
         var nodeWidth = barcodeWidthArray[depth]
+        if (typeof (nodeWidth) === 'undefined') {
+          nodeWidth = 0
+        }
         treeObj.subtreeWidth = nodeWidth
       }
     }

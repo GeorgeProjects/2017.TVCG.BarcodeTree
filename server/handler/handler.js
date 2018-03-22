@@ -38,21 +38,23 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
   }
   var logger = v_logger
   //  之前的测试程序, 将name中的数字变成字符
+  // preprocess()
   // num_to_character_preprocess()
   //  执行对于NBAdata的预处理函数NBA_preprocess时, 需要在originalData文件夹中改变文件名称为1946 - 2017.json
   //  NBA_preprocess()
   //  对于recordTree数据的预处理函数
   function preprocess() {
-    var filePath = './server/data/DailyRecordTree/originalData/'
+    console.log('preprocess')
+    var filePath = './server/data/DailyRecordTree/rawData/'
     fs.readdir(filePath, function (err, files) {
       if (err) {
         console.log('err', err)
       }
       files.forEach(function (f) {
         if (f !== '.DS_Store') {
-          var originalTreeObj = require('../data/DailyRecordTree/originalData/' + f)
+          var originalTreeObj = require('../data/DailyRecordTree/rawData/' + f)
           var originalTreeObj1 = addCategoryNameToObj(originalTreeObj)
-          fs.writeFile(('./server/data/DailyRecordTree/originalData1/' + f), JSON.stringify(originalTreeObj1), 'utf8', function (err) {
+          fs.writeFile(('./server/data/DailyRecordTree/originalData/' + f), JSON.stringify(originalTreeObj1), 'utf8', function (err) {
             if (err) {
               console.log('err', err)
             }
@@ -73,7 +75,7 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
         if (f !== '.DS_Store') {
           var originalTreeObj = require('../data/DailyRecordTree/originalData/' + f)
           var originalTreeObj1 = changeObjNameAttr(originalTreeObj)
-          fs.writeFile(('./server/data/DailyRecordTree/originalData4/' + f), JSON.stringify(originalTreeObj1), 'utf8', function (err) {
+          fs.writeFile(('./server/data/DailyRecordTree/originalData/' + f), JSON.stringify(originalTreeObj1), 'utf8', function (err) {
             if (err) {
               console.log('err', err)
             }
@@ -474,8 +476,10 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
     return originalTreeObj
     function inner_change_obj_name_attr(originalTreeObj) {
       if (originalTreeObj.name !== 'root') {
-        // originalTreeObj.name = change_number_character(originalTreeObj.name)
-        originalTreeObj.name = change_node_name(originalTreeObj.name)
+        if (originalTreeObj.name.length === 3) {
+          // originalTreeObj.name = change_number_character(originalTreeObj.name)
+          originalTreeObj.name = change_node_name(originalTreeObj.name)
+        }
       }
       if (typeof (originalTreeObj.children) !== 'undefined') {
         for (var oI = 0; oI < originalTreeObj.children.length; oI++) {
@@ -543,7 +547,9 @@ function initialize(root, dataProcessor, handlerObj, v_logger, fs) {
         }
       }
       if (depth === 3) {
-        delete originalTreeObj.children
+        for (var cI = 0; cI < originalTreeObj.children.length; cI++) {
+          originalTreeObj.children[cI].name = originalTreeObj.children[cI].name + '-' + originalTreeObj.name + '-' + cI
+        }
       }
       if (typeof (originalTreeObj.children) !== 'undefined') {
         for (var oI = 0; oI < originalTreeObj.children.length; oI++) {

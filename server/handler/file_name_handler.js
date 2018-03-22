@@ -6,31 +6,46 @@ var hierarchicalDataProcessor = require('../processor/signaltree_processor')
 
 var fileNameHandler = function (request, response) {
   var dataSetName = request.body.DataSetName
-  var directoryName = './server/data/' + dataSetName + '/originalData/'//'../data/' + sampleDataName + '/originalData/'
-  var readFileDirectory = '../data/' + dataSetName + '/originalData/'
-  Date.prototype.getDifference = function (date2) {
-    var date1 = this
-    var dateDifference = date1.getTime() - date2.getTime()
-    return dateDifference
-  }
-  var init_begin = new Date()
-  dataCenter.clear_all()
-  //  read_directory_file函数传入的有两个函数, 一个是处理结束的函数, 一个是继续的数据处理函数
-  read_directory_file(dataSetName, directoryName, readFileDirectory, function (fileInfoObj, dataSetObj, linearObj) {
-    dataCenter.add_original_data_set(dataSetName, dataSetObj)
-    dataCenter.add_linear_data_set(dataSetName, linearObj)
+  initilize_original_dataset(dataSetName, sendFileInfoObj)
+  //  发送读取的数据
+  function sendFileInfoObj(fileInfoObj) {
     response.setHeader('Content-Type', 'application/json')
     response.setHeader('Access-Control-Allow-Origin', '*')
     response.send(JSON.stringify(fileInfoObj, null, 3))
-  }, function (idIndexObj, compactDataSetObj, compactLinearObj, selectedLevels) {
-    var init_end = new Date()
-    dataCenter.add_id_index_data_set(dataSetName, idIndexObj)
-    dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
-    dataCenter.add_compact_linear_data(dataSetName, compactLinearObj)
-    dataCenter.update_select_levels(dataSetName, selectedLevels)
-  }, function (err) {
-    throw err;
-  })
+  }
+}
+
+function initilize_original_dataset(dataSetName, sendFileInfoObj) {
+  var directoryName = './server/data/' + dataSetName + '/originalData/'//'../data/' + sampleDataName + '/originalData/'
+  var readFileDirectory = '../data/' + dataSetName + '/originalData/'
+  if (!dataCenter.is_dataset_existed(dataSetName)) {
+    console.log(dataSetName)
+    //  read_directory_file函数传入的有两个函数, 一个是处理结束的函数, 一个是继续的数据处理函数
+    read_directory_file(dataSetName, directoryName, readFileDirectory, function (fileInfoObj, dataSetObj, linearObj) {
+      dataCenter.set_file_info_obj(dataSetName, fileInfoObj)
+      dataCenter.add_original_data_set(dataSetName, dataSetObj)
+      dataCenter.add_linear_data_set(dataSetName, linearObj)
+      console.log('read file finish')
+      //  发送fileObject
+      if (typeof (sendFileInfoObj) !== 'undefined') {
+        sendFileInfoObj(fileInfoObj)
+      }
+    }, function (idIndexObj, compactDataSetObj, compactLinearObj, selectedLevels) {
+      dataCenter.add_id_index_data_set(dataSetName, idIndexObj)
+      dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
+      dataCenter.add_compact_linear_data(dataSetName, compactLinearObj)
+      dataCenter.update_select_levels(dataSetName, selectedLevels)
+    }, function (err) {
+      throw err;
+    })
+  } else {
+    console.log('datasetName', dataSetName)
+    //  发送fileObject
+    if (typeof (sendFileInfoObj) !== 'undefined') {
+      var fileInfoObj = dataCenter.get_file_info_obj(dataSetName)
+      sendFileInfoObj(fileInfoObj)
+    }
+  }
 }
 
 function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEnd, dataProcess, onError) {
@@ -94,6 +109,10 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
           "name": fileNameRemovedJson
         })
       }
+    })
+    //  按照时间先后对于fileInfoArray数组进行排序
+    fileInfoArray = fileInfoArray.sort(function (f1, f2) {
+      return f1.name > f2.name
     })
     fileInfoObj.fileInfo = fileInfoArray
     fileInfoObj.maxDepth = maxDepthObj.maxDepth
@@ -265,3 +284,4 @@ function sort_children(tree) {
 }
 
 exports.fileNameHandler = fileNameHandler
+exports.initilizeOriginalDataset = initilize_original_dataset

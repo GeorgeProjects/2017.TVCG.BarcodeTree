@@ -62,7 +62,9 @@ var handleOriginalData = function (request, response) {
   var reqBody = request.body
   var dataSetName = reqBody.dataSetName
   var dataItemNameArray = reqBody['dataItemNameArray']
+  var allSelectedDataItemNameArray = reqBody['allSelectedDataItemNameArray']
   var dataItemType = typeof(dataItemNameArray)
+  var allSelectedItemType = typeof(allSelectedDataItemNameArray)
   var selectedLevels = reqBody['selectedLevels']
   var barcodeWidthArray = reqBody['barcodeWidthArray']
   var barcodeHeight = reqBody['barcodeHeight']
@@ -86,6 +88,9 @@ var handleOriginalData = function (request, response) {
   if (dataItemType === 'string') {
     dataItemNameArray = [dataItemNameArray]
   }
+  if (allSelectedItemType === 'string') {
+    allSelectedDataItemNameArray = [allSelectedDataItemNameArray]
+  }
   //  现在传递的barcodeWidthArray是将所有层级的节点的宽度都进行了赋值, 但是对于某一些层级的节点应该是0
   //  这样才能保证barcode的节点之间是紧密排布的, 所以需要将在barcodeWidthArray中不存在的层级的宽度赋值为0
   // for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
@@ -94,9 +99,14 @@ var handleOriginalData = function (request, response) {
   //   }
   // }
   // var originalTreeObjObject = read_original_tree_object(dataItemNameArray, dataSetName)
+  var globalSuperTreeObj = dataCenter.get_super_tree_obj()
+
+  //  删除之后allSelectedDataItemNameArray所包含的元素是需要读取的barcodeItem
   var originalTreeObjObject = dataCenter.get_original_data(dataSetName, dataItemNameArray)
 
-  var linearTreeNodeArrayObject = dataCenter.get_linear_data(dataSetName, dataItemNameArray)
+  // var allSelectedOriginalTreeObjObject = dataCenter.get_original_data(dataSetName, allSelectedDataItemNameArray)
+
+  var linearTreeNodeArrayObject = dataCenter.get_linear_data(dataSetName, dataItemNameArray, selectedLevels)
 
   var linearizedTreeNodeLocArrayObj = compute_node_location(linearTreeNodeArrayObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
 
@@ -105,7 +115,7 @@ var handleOriginalData = function (request, response) {
   // console.log('originalTreeObjObject', originalTreeObjObject)
   sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeLocArrayObj)
   //  更新构建的superTree
-  buildUpdateSuperTree(originalTreeObjObject)
+  buildUpdateSuperTree(originalTreeObjObject, allSelectedDataItemNameArray)
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeArrayObj) {
     response.setHeader('Content-Type', 'application/json')
@@ -118,33 +128,25 @@ var handleOriginalData = function (request, response) {
   }
 
   /**
-   * 构建superTree
+   * 构建superTree, 在已经对齐的情况下, 用户在刷选之后需要将刷选的barcodeTree马上进行对齐
+   * 所以需要提升构建superTree的效率
    */
-  function buildUpdateSuperTree(originalTreeObjObject) {
+  function buildUpdateSuperTree(originalTreeObjObject, allSelectedDataItemNameArray) {
     var globalSuperTreeObj = dataCenter.get_super_tree_obj()
-    var currentItemNameArray = []
-    if ((typeof (globalSuperTreeObj.itemNameArray) !== 'undefined') && (globalSuperTreeObj.itemNameArray != null)) {
-      currentItemNameArray = globalSuperTreeObj.itemNameArray
-    }
     var unionTreeArray = []
     if ((typeof (globalSuperTreeObj.superTreeObj) !== 'undefined') && (globalSuperTreeObj.superTreeObj != null)) {
-      superTreeObj = globalSuperTreeObj.superTreeObj
+      var superTreeObj = globalSuperTreeObj.superTreeObj
       unionTreeArray.push(superTreeObj)
     }
-    if (typeof (currentItemNameArray) !== 'undefined') {
-      for (var item in originalTreeObjObject) {
-        if (currentItemNameArray.indexOf(item) === -1) {
-          var originalTreeObj = originalTreeObjObject[item]
-          unionTreeArray.push(originalTreeObj)
-          currentItemNameArray.push(item)
-        }
-      }
+    for (var item in originalTreeObjObject) {
+      var originalTreeObj = originalTreeObjObject[item]
+      unionTreeArray.push(originalTreeObj)
     }
     var unionTree = hierarchicalDataProcessor.buildUnionTree(unionTreeArray)
     //  构建unionTree时在节点上增加node Num的属性
     if (unionTree != null) {
       hierarchicalDataProcessor.add_node_num(unionTree)
-      dataCenter.update_super_tree_obj_item_array(currentItemNameArray)
+      dataCenter.update_super_tree_obj_item_array(allSelectedDataItemNameArray)
       dataCenter.update_super_tree_obj_super_tree(unionTree)
     }
   }

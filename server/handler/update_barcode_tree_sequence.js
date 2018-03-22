@@ -123,9 +123,11 @@ var updateBarcodeTreeSequence = function (request, response) {
         var alignedNodeId = alignedObjPercentageArray[aI].alignedNodeId
         columnSequenceObj[alignedNodeId] = []
         var nextPercentageArray = alignedObjPercentageArray[aI].nextPercentageArray
-        for (var nI = 0; nI < nextPercentageArray.length; nI++) {
-          var barcodeNodeId = nextPercentageArray[nI].barcodeNode_id
-          columnSequenceObj[alignedNodeId].push(barcodeNodeId)
+        if (typeof (nextPercentageArray) !== 'undefined') {
+          for (var nI = 0; nI < nextPercentageArray.length; nI++) {
+            var barcodeNodeId = nextPercentageArray[nI].barcodeNode_id
+            columnSequenceObj[alignedNodeId].push(barcodeNodeId)
+          }
         }
       }
     }
@@ -176,17 +178,19 @@ function subtree_reordering(reorderingSequenceObj, alignedObjPercentageArrayObjA
     //  这里的aI代表的是一行的barcodeTree
     var alignedObjPercentageArrayObj = alignedObjPercentageArrayObjArray[aI]
     var alignedObjPercentageArray = alignedObjPercentageArrayObj.alignedObjPercentageArray
-    for (var pI = 0; pI < alignedObjPercentageArray.length; pI++) {
-      var alignedNodeId = alignedObjPercentageArray[pI].alignedNodeId
-      var reorderingSequence = reorderingSequenceObj[alignedNodeId]
-      var nextPercentageArray = alignedObjPercentageArray[pI].nextPercentageArray
-      alignedObjPercentageArray[pI].nextPercentageArray = nextPercentageArray.sort(function (a, b) {
-        var aId = a.barcodeNode_id
-        var bId = b.barcodeNode_id
-        var aIndex = reorderingSequence.indexOf(aId)
-        var bIndex = reorderingSequence.indexOf(bId)
-        return aIndex > bIndex
-      })
+    if (typeof (alignedObjPercentageArray) !== 'undefined') {
+      for (var pI = 0; pI < alignedObjPercentageArray.length; pI++) {
+        var alignedNodeId = alignedObjPercentageArray[pI].alignedNodeId
+        var reorderingSequence = reorderingSequenceObj[alignedNodeId]
+        var nextPercentageArray = alignedObjPercentageArray[pI].nextPercentageArray
+        alignedObjPercentageArray[pI].nextPercentageArray = nextPercentageArray.sort(function (a, b) {
+          var aId = a.barcodeNode_id
+          var bId = b.barcodeNode_id
+          var aIndex = reorderingSequence.indexOf(aId)
+          var bIndex = reorderingSequence.indexOf(bId)
+          return aIndex > bIndex
+        })
+      }
     }
   }
 }
@@ -201,26 +205,28 @@ function update_subtree_aligned_obj_value(alignedObjPercentageArrayObjArray) {
     var alignedObjPercentageArray = alignedObjPercentageArrayObj.alignedObjPercentageArray
     var sumValue = 0
     //  这里的pI代表的是有几个aligned的部分
-    for (var pI = 0; pI < alignedObjPercentageArray.length; pI++) {
-      var alignedNodeId = alignedObjPercentageArray[pI].alignedNodeId
-      var nextPercentageArray = alignedObjPercentageArray[pI].nextPercentageArray
-      //  如果该对齐的子树的根节点在统计的alignedNodeObj对象中没有出现过, 那么就新建一个对象
-      if (typeof (alignedNodeObjRecordingValue[alignedNodeId]) === 'undefined') {
-        alignedNodeObjRecordingValue[alignedNodeId] = {}
-      }
-      //  这里的nI代表的是aligned部分的节点, 对于每个节点的计算值依次累加
-      var reorderingColNum = nextPercentageArray.length
-      for (var nI = 0; nI < nextPercentageArray.length; nI++) {
-        var reorderingNodesId = nextPercentageArray[nI].barcodeNode_id
-        if (typeof (alignedNodeObjRecordingValue[alignedNodeId][reorderingNodesId]) === 'undefined') {
-          alignedNodeObjRecordingValue[alignedNodeId][reorderingNodesId] = 0
+    if (typeof (alignedObjPercentageArray) !== 'undefined') {
+      for (var pI = 0; pI < alignedObjPercentageArray.length; pI++) {
+        var alignedNodeId = alignedObjPercentageArray[pI].alignedNodeId
+        var nextPercentageArray = alignedObjPercentageArray[pI].nextPercentageArray
+        //  如果该对齐的子树的根节点在统计的alignedNodeObj对象中没有出现过, 那么就新建一个对象
+        if (typeof (alignedNodeObjRecordingValue[alignedNodeId]) === 'undefined') {
+          alignedNodeObjRecordingValue[alignedNodeId] = {}
         }
-        var existedPercentage = nextPercentageArray[nI].existed_percentage
-        if (typeof (existedPercentage) === 'undefined') {
-          nextPercentageArray[nI].existed_percentage = 0
+        //  这里的nI代表的是aligned部分的节点, 对于每个节点的计算值依次累加
+        var reorderingColNum = nextPercentageArray.length
+        for (var nI = 0; nI < nextPercentageArray.length; nI++) {
+          var reorderingNodesId = nextPercentageArray[nI].barcodeNode_id
+          if (typeof (alignedNodeObjRecordingValue[alignedNodeId][reorderingNodesId]) === 'undefined') {
+            alignedNodeObjRecordingValue[alignedNodeId][reorderingNodesId] = 0
+          }
+          var existedPercentage = nextPercentageArray[nI].existed_percentage
+          if (typeof (existedPercentage) === 'undefined') {
+            nextPercentageArray[nI].existed_percentage = 0
+          }
+          alignedNodeObjRecordingValue[alignedNodeId][reorderingNodesId] = alignedNodeObjRecordingValue[alignedNodeId][reorderingNodesId] + existedPercentage * Math.pow(2, reorderingRowNum - aI)
+          sumValue = sumValue + existedPercentage * Math.pow(2, reorderingColNum - nI)
         }
-        alignedNodeObjRecordingValue[alignedNodeId][reorderingNodesId] = alignedNodeObjRecordingValue[alignedNodeId][reorderingNodesId] + existedPercentage * Math.pow(2, reorderingRowNum - aI)
-        sumValue = sumValue + existedPercentage * Math.pow(2, reorderingColNum - nI)
       }
     }
     alignedObjPercentageArrayObj.sum_value = sumValue

@@ -5,8 +5,8 @@ var express = require('express')
 var app = express()
 
 var bodyParser = require('body-parser')
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit: 200000}));
+app.use(bodyParser.json({limit: "150mb"}));
+app.use(bodyParser.urlencoded({limit: "150mb", extended: true, parameterLimit: 400000}));
 var multer = require('multer')
 
 app.use(bodyParser.json())

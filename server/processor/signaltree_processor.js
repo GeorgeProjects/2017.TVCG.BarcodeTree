@@ -67,21 +67,23 @@ function treeLinearization(treeObj, initDepth, originalSequenceState) {
   //  线性化barcodeTree的节点, 得到treeNodeArray
   function innerLinearizeTreeObj(treeObj, depth, treeNodeArray, originalSequenceState) {
     var nodeName = treeObj.name
+    var nodeId = ""
     var categoryName = treeObj.categoryName
     if (typeof (nodeName) === 'undefined') {
       nodeName = ""
     }
     if (is_numeric(nodeName)) {
-      nodeName = zFill(nodeName)
+      nodeId = zFill(nodeName)
     } else {
-      nodeName = transfrom_name_id(nodeName)
+      nodeId = transfrom_name_id(nodeName)
     }
     depth = +depth
-    treeObj.id = nodeName
-    treeObj.index = 'node-' + depth + '-' + nodeName
+    treeObj.id = nodeId
+    treeObj.name = nodeName
+    treeObj.index = 'node-' + depth + '-' + nodeId
     treeObj.depth = +depth
     treeNodeArray.push(treeObj)
-    var treeNodeId = 'node-' + depth + '-' + nodeName
+    var treeNodeId = 'node-' + depth + '-' + nodeId
     if ((typeof (treeObj.children) !== 'undefined') && (treeObj.children != null)) {
       depth = depth + 1
       //  对于该节点的孩子节点进行排序
@@ -149,7 +151,7 @@ function computeOriginalNodeLocation(treeNodeArray, widthArray, selectedLevels, 
     xLoc = +xLoc.toFixed(2)
     treeNodeLocObj.x = xLoc
     treeNodeLocObj.y = 0
-    treeNodeLocObj.category = treeNodeObj.id
+    treeNodeLocObj.category = treeNodeObj.name
     treeNodeLocObj.categoryName = treeNodeObj.categoryName
     treeNodeLocObj.id = treeNodeObj.index
     treeNodeLocObj.depth = depth
@@ -209,7 +211,6 @@ function transfrom_name_id(name) {
       .replaceAll('\'', '')
       .replaceAll('?', '')
       .replaceAll('=', '')
-      .replaceAll(' ', '-')
       .replaceAll('>', '')
       .replaceAll('[', '')
       .replaceAll(']', '')
@@ -218,6 +219,11 @@ function transfrom_name_id(name) {
       .replaceAll('+', '')
       .replaceAll('/', '')
       .replaceAll('@', '')
+      .replaceAll('*', '')
+      .replaceAll('#', '')
+      .replaceAll('$', '')
+    var nodeId = id.replaceAll(' ', '-')
+    return nodeId
   }
   return id
 }
@@ -1039,7 +1045,13 @@ function mergeTwoTreeObj(treeObj1, treeObj2) {
     } else {
       treeObj2MaxNum = +treeObj2['num']
     }
-    superTreeObj['maxnum'] = treeObj1MaxNum > treeObj2MaxNum ? treeObj1MaxNum : treeObj2MaxNum
+    if ((typeof (treeObj2MaxNum) !== 'undefined') && (typeof (treeObj1MaxNum) !== 'undefined')) {
+      superTreeObj['maxnum'] = treeObj1MaxNum > treeObj2MaxNum ? treeObj1MaxNum : treeObj2MaxNum
+    } else if (typeof (treeObj2MaxNum) === 'undefined') {
+      superTreeObj['maxnum'] = treeObj1MaxNum
+    } else if (typeof (treeObj1MaxNum) !== 'undefined') {
+      superTreeObj['maxnum'] = treeObj2MaxNum
+    }
     if (typeof (treeObj1.children) !== 'undefined') {
       superTreeObj.children = treeObj1.children
       if (typeof (superTreeObj.children) === 'undefined') {
@@ -1228,27 +1240,27 @@ function computeOriginalNodeLocation(treeNodeArray, widthArray, selectedLevels, 
   for (var i = 0; i < treeNodeArray.length; i++) {
     var treeNodeObj = treeNodeArray[i]
     var depth = treeNodeObj.depth
-    var treeNodeLocObj = {}
-    var rectWidth = widthArray[depth]
-    xLoc = +xLoc.toFixed(2)
-    treeNodeLocObj.x = xLoc
-    treeNodeLocObj.y = 0
-    treeNodeLocObj.category = treeNodeObj.id
-    treeNodeLocObj.categoryName = treeNodeObj.categoryName
-    treeNodeLocObj.id = treeNodeObj.index
-    treeNodeLocObj.depth = depth
-    treeNodeLocObj.width = 0
-    treeNodeLocObj.height = barcodeHeight
-    treeNodeLocObj.maxnum = treeNodeObj.maxnum
-    treeNodeLocObj.num = treeNodeObj.num
-    treeNodeLocObj.nodeNum = treeNodeObj.nodeNum
     if (selectedLevels.indexOf(depth) !== -1) {
+      var treeNodeLocObj = {}
+      var rectWidth = widthArray[depth]
+      xLoc = +xLoc.toFixed(2)
+      treeNodeLocObj.x = xLoc
+      treeNodeLocObj.y = 0
+      treeNodeLocObj.category = treeNodeObj.name
+      treeNodeLocObj.categoryName = treeNodeObj.categoryName
+      treeNodeLocObj.id = treeNodeObj.index
+      treeNodeLocObj.depth = depth
+      treeNodeLocObj.width = 0
+      treeNodeLocObj.height = barcodeHeight
+      treeNodeLocObj.maxnum = treeNodeObj.maxnum
+      treeNodeLocObj.num = treeNodeObj.num
+      treeNodeLocObj.nodeNum = treeNodeObj.nodeNum
       treeNodeLocObj.width = rectWidth
       if (widthArray[depth] !== 0) {
         xLoc = xLoc + widthArray[depth] + barcodeNodeInterval
       }
+      treeNodeLocArray.push(treeNodeLocObj)
     }
-    treeNodeLocArray.push(treeNodeLocObj)
   }
   return treeNodeLocArray
 }

@@ -1,6 +1,7 @@
 //  构建全局的数据对象, 防止用户对于本地数据的重复读取
 var globalOriginalObjDataCenter = {}
 var globalIdIndexObjDataCenter = {}
+var globalFileNameObjDataCenter = {}
 var globalLinearTreeNodeArrayCenter = {}
 var globalCompactOriginalObjDataCenter = {}
 var globalCompactLinearTreeNodeArrayCenter = {}
@@ -75,17 +76,31 @@ function get_original_data(data_set_name, data_item_name_array) {
 }
 
 //  从全局的数据对象中获取线性化之后的结果数据
-function get_linear_data(data_set_name, data_item_name_array) {
+function get_linear_data(data_set_name, data_item_name_array, selectedLevels) {
   var linearTreeObjObject = {}
   if (typeof (data_item_name_array) !== 'undefined') {
     for (var dI = 0; dI < data_item_name_array.length; dI++) {
       var dataItemName = data_item_name_array[dI]
       var dataItem = globalLinearTreeNodeArrayCenter[data_set_name][dataItemName]
       var originalTreeObj = clone(dataItem)
+      originalTreeObj = filter_data_item(originalTreeObj, selectedLevels)
       linearTreeObjObject[dataItemName] = originalTreeObj
     }
   }
   return linearTreeObjObject
+}
+
+//  对于线性化之后的数组进行筛选
+function filter_data_item(originalTreeObj, selectedLevels) {
+  var filteredOriginalTree = []
+  for (var dI = 0; dI < originalTreeObj.length; dI++) {
+    var depth = originalTreeObj[dI].depth
+    var itemIndex = selectedLevels.indexOf(depth)
+    if (itemIndex !== -1) {
+      filteredOriginalTree.push(originalTreeObj[dI])
+    }
+  }
+  return filteredOriginalTree
 }
 
 //  从全局的数据对象中获取线性化之后的compact的结果数据
@@ -149,6 +164,14 @@ function update_compact_original_data(selected_levels) {
   }
 }
 
+//  判断某个barcode的数据集是否存在
+function is_dataset_existed(data_set_name) {
+  if (typeof (globalOriginalObjDataCenter[data_set_name]) === 'undefined') {
+    return false
+  } else {
+    return true
+  }
+}
 
 //  清空选择的对象
 function clear_selected_obj() {
@@ -179,12 +202,29 @@ function get_row_sorting_sequence() {
 function clear_all() {
   globalOriginalObjDataCenter = {}
   globalLinearTreeNodeArrayCenter = {}
+  globalFileNameObjDataCenter = {}
   globalSuperTreeObjCenter = {}
   globalSelectedObjData = {}
   globalColumnSequenceObj = {}
   globalRowSequenceArray = []
 }
 
+//  设置fileinfo object
+function set_file_info_obj(data_set_name, file_info_obj) {
+  globalFileNameObjDataCenter[data_set_name] = file_info_obj
+}
+
+//  获取file info object
+function get_file_info_obj(data_set_name) {
+  if (typeof (globalFileNameObjDataCenter[data_set_name]) !== 'undefined') {
+    return globalFileNameObjDataCenter[data_set_name]
+  }
+}
+
+exports.set_file_info_obj = set_file_info_obj
+exports.get_file_info_obj = get_file_info_obj
+
+exports.is_dataset_existed = is_dataset_existed
 exports.add_id_index_data_set = add_id_index_data_set
 exports.get_subtree_id_index_data = get_subtree_id_index_data
 
