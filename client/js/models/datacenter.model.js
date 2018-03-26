@@ -675,16 +675,16 @@ define([
      * 更新barcodeTree中的节点的排列顺序
      */
     update_barcode_tree_sequence: function (collectionAlignedObjPercentageArrayObjArray) {
-      var self = this
-      var url = 'update_barcode_tree_sequence'
-      var selectedItemsArray = Variables.get('selectItemNameArray')
-      var formData = {
-        'alignedObjPercentageArrayObjArray': collectionAlignedObjPercentageArrayObjArray,
-        'dataItemNameArray': selectedItemsArray
-      }
-      var buildSuperTreeSuccessFunc = function (result) {
-      }
-      self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
+      // var self = this
+      // var url = 'update_barcode_tree_sequence'
+      // var selectedItemsArray = Variables.get('selectItemNameArray')
+      // var formData = {
+      //   'alignedObjPercentageArrayObjArray': collectionAlignedObjPercentageArrayObjArray,
+      //   'dataItemNameArray': selectedItemsArray
+      // }
+      // var buildSuperTreeSuccessFunc = function (result) {
+      // }
+      // self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
     },
     build_super_tree_handler: function (rootId, rootLevel, rootCategory, result, deferObj) {
       var self = this
