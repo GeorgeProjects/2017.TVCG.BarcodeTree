@@ -122,7 +122,7 @@ define([
       var toolbarViewDivHeight = +$('#toolbar-view-div').height()
       var histogramViewHeight = +$('#histogram-view').height()
       var topToolbarViewHeight = +$('#top-toolbar-container').height()
-      $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + topToolbarViewHeight) + 'px')
+      $('#supertree-view-toggle').css('top', topToolbarViewHeight + 'px')
     },
     //  清空superTree视图中的所有元素
     clear_all_supertree_elements: function () {
@@ -1312,7 +1312,7 @@ define([
       $('#supertree-scroll-panel').css('height', superTreeHeight + 'px')
       var toolbarViewDivHeight = +$('#toolbar-view-div').height()
       var histogramViewHeight = +$('#histogram-view').height()
-      $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + barcodeTreeConfigHeight + superTreeHeight) + 'px')
+      $('#supertree-view-toggle').css('top', (barcodeTreeConfigHeight + superTreeHeight) + 'px')
       $('#barcodetree-scrollpanel').css('top', (barcodeTreeConfigHeight + superTreeHeight) + 'px')
       window.Variables.update_barcode_attr()
       barcodeCollection.change_layout_mode()
@@ -1329,7 +1329,7 @@ define([
       var histogramHeightRem = Variables.get('histogramHeightRem')
       var toolbarViewDivHeight = +$('#toolbar-view-div').height()
       var histogramViewHeight = +$('#histogram-view').height()
-      $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + barcodeTreeConfigHeight) + 'px')
+      $('#supertree-view-toggle').css('top', barcodeTreeConfigHeight + 'px')
       $('#barcodetree-scrollpanel').css('top', barcodeTreeConfigHeight + 'px')
       $('#supertree-scroll-panel').css('height', '0px')
       window.Variables.update_barcode_attr()

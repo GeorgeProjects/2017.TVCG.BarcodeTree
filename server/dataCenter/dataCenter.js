@@ -11,6 +11,7 @@ var globalColumnSequenceObj = {}
 var globalRowSequenceArray = []
 var globalSelectedLevels = []
 var clone = require('clone')
+var hierarchicalDataProcessor = require('../processor/signaltree_processor')
 
 //  更新superTree对象中的itemNameArray以及构建superTree的基本元素
 function update_super_tree_obj_item_array(item_name_array) {
@@ -90,6 +91,25 @@ function get_linear_data(data_set_name, data_item_name_array, selectedLevels) {
   return linearTreeObjObject
 }
 
+//  按照selectedLevel的最大层级筛选fileObj
+function filter_fileobj_max_level(originalTreeObj, max_level) {
+  inner_filtering(originalTreeObj)
+  function inner_filtering(originalTreeObj) {
+    if (typeof (originalTreeObj) !== 'undefined') {
+      var depth = originalTreeObj.depth
+      if (depth >= max_level) {
+        delete originalTreeObj.children
+      }
+      var children = originalTreeObj.children
+      if (typeof (children) !== 'undefined') {
+        for (var cI = 0; cI < children.length; cI++) {
+          inner_filtering(children[cI])
+        }
+      }
+    }
+  }
+}
+
 //  对于线性化之后的数组进行筛选
 function filter_data_item(originalTreeObj, selectedLevels) {
   var filteredOriginalTree = []
@@ -104,19 +124,61 @@ function filter_data_item(originalTreeObj, selectedLevels) {
 }
 
 //  从全局的数据对象中获取线性化之后的compact的结果数据
-function get_compact_linear_data(data_set_name, data_item_name_array) {
+function get_compact_linear_data(data_set_name, data_item_name_array, selectedLevels) {
   var compactLinearTreeObjObject = {}
   if (typeof (data_item_name_array) !== 'undefined') {
     for (var dI = 0; dI < data_item_name_array.length; dI++) {
       var dataItemName = data_item_name_array[dI]
-      var dataItem = globalCompactLinearTreeNodeArrayCenter[data_set_name][dataItemName]
-      var compactLinearTreeNodeArray = clone(dataItem)
+      // var compactTreeNodeArrayObj = globalCompactLinearTreeNodeArrayCenter[data_set_name][dataItemName]
+      //  首先从数据集中获取原始的数据
+      //
+      // var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
+      //   compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
+      //   var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
+      //   compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
+      //
+      var originalDataObj = get_original_data(data_set_name, [dataItemName])
+      //  计算最大的level的值
+      var maxLevel = 0
+      for (var sI = 0; sI < selectedLevels.length; sI++) {
+        var level = selectedLevels[sI]
+        if (level > maxLevel) {
+          maxLevel = level
+        }
+      }
+      //  按照selectedLevels的属性对于数据集中的对象进行筛选
+      var originalData = originalDataObj[dataItemName]
+      filter_fileobj_max_level(originalData, maxLevel)
+      var compactTreeNodeArrayObj = get_linear_compact_obj(originalData, selectedLevels)
+      var compactLinearTreeNodeArray = clone(compactTreeNodeArrayObj)
+      console.log('compactLinearTreeNodeArray', compactLinearTreeNodeArray)
       compactLinearTreeObjObject[dataItemName] = compactLinearTreeNodeArray
     }
   }
   return compactLinearTreeObjObject
 }
-
+/**
+ * 读linear的compact的treeObject
+ */
+function get_linear_compact_obj(fileObject, selectedLevels) {
+  //  获取compact之后treeObject的结果
+  var compactTreeObjectObj = get_compact_obj(fileObject, selectedLevels)
+  var compactTreeNodeArrayObj = {}
+  for (var item in compactTreeObjectObj) {
+    var compactTreeObject = compactTreeObjectObj[item]
+    //  计算compact之后的barcodeTree的节点数组
+    compactTreeNodeArrayObj[item] = hierarchicalDataProcessor.compact_tree_linearization(compactTreeObject)
+  }
+  return compactTreeNodeArrayObj
+}
+/**
+ * 读compact的treeObject
+ */
+function get_compact_obj(fileObject, selectedLevels) {
+  var compactTreeObj = clone(fileObject)
+  var compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
+  return compactTreeObjectObj
+}
 //  从全局获取单个数据对象
 function get_single_original_data(data_set_name, data_item_name) {
   var dataItem = globalOriginalObjDataCenter[data_set_name][data_item_name]

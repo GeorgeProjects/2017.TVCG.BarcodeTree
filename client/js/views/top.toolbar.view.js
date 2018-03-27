@@ -288,6 +288,7 @@ define([
       alignedLevelText.text("L" + displayedLevel)
       var displayedFixedAlignedLevel = fixed_aligned_level
       self.activeAlignedLevel(displayedFixedAlignedLevel, displayedLevel)
+      $('#align-level-control>.level-btn').unbind("click")
       $('#align-level-control>.level-btn').click(function () {
         var displayLevel = +$(this).text()
         var realLevel = displayLevel - 1

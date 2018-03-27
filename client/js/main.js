@@ -44,7 +44,7 @@ require.config({
     'datacenter': 'models/datacenter.model',
     'config': 'models/config.model',
     'variables': 'models/variables.model',
-    'barcodeCollection': 'collections/barcode.collection'
+    'barcodeCollection': 'collections/barcode.collection',
   }
 })
 //  在外面的require的内容加在完以后，才会加载内部的require中的内容

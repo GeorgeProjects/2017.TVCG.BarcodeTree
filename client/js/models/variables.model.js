@@ -47,31 +47,31 @@ define([
       //  power的参数
       POW_EXPONENT: 0.4,
       //  标记各层的bar的宽度
-      barcodeWidthArray: [18, 12, 8, 4, 1],
+      barcodeWidthArray: [40, 32, 24, 16, 8],
       //  最大的barcode的宽度
-      maxBarcodeWidth: 18,
+      maxBarcodeWidth: 30,
       //  最小的barcode的宽度
-      minBarcodeWidth: 2,
+      minBarcodeWidth: 4,
       //  barcode节点的最小宽度
-      barcodeNodeWidthMinValue: 2,
+      barcodeNodeWidthMinValue: 0,
       //  barcode节点的最大宽度
-      barcodeNodeWidthMaxValue: 40,
+      barcodeNodeWidthMaxValue: 80,
       //  改变之间的状态的属性: 各层的bar的宽度
-      barcodeWidthArray_previous: [18, 12, 8, 4, 1],
+      barcodeWidthArray_previous: [40, 32, 24, 16, 8],
       //  barcode的节点之间的间距
       barcodeNodeInterval: 5,
       //  改变之间的状态的属性: barcode的节点之间的间距
       barcodeNodeInterval_previous: 5,
       //  barcode节点间距的最小值
-      barcodeNodeIntervalMinValue: 3,
+      barcodeNodeIntervalMinValue: 0,
       //  barcode节点间距的最大值
-      barcodeNodeIntervalMaxValue: 10,
+      barcodeNodeIntervalMaxValue: 20,
       //  标记barcode的高度
-      barcodeHeight: 40,
+      barcodeHeight: 60,
       //  标记barcode的最大高度
-      barcodeNodeHeightMinValue: 10,
+      barcodeNodeHeightMinValue: 0,
       //  标记barcode的最小高度
-      barcodeNodeHeightMaxValue: 100,
+      barcodeNodeHeightMaxValue: 200,
       //  =======================================================
       //  当前渲染的barcode数据集
       currentDataSetName: 'DailyRecordTree', //'DailyRecordTree', 'NBATeamTree', 'LibraryRecordTree'

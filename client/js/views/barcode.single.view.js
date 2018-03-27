@@ -363,6 +363,10 @@ define([
         }
         //  barcode的label的位置的左边界是紧邻着barcode的右侧的label
         var barcodeLabelX = self.barcodeTextPaddingLeft
+        var barcodeTreeId = treeDataModel.get('barcodeTreeId')
+        var selectItemNameArray = Variables.get('selectItemNameArray')
+        var barcodeTreeIndex = selectItemNameArray.indexOf(barcodeTreeId)
+        var barcodeTreeName = 'tree-' + barcodeTreeIndex
         self.singleTree.append('text')
           .attr('id', 'label-' + barcodeTreeId)
           .attr('class', 'barcode-label barcode-class')
@@ -371,7 +375,7 @@ define([
           .attr('text-anchor', 'start')
           .attr('alignment-baseline', 'middle')
           .style("cursor", "pointer")
-          .text(barcodeTreeLabelMonthDday)
+          .text(barcodeTreeName)
           .on('mouseover', function (d, i) {
             self.d3el.select('.bg').classed('hovering-highlight', true)
             self.trigger_hovering_event()
@@ -732,6 +736,40 @@ define([
         })
       },
       /**
+       * 计算所有的padding 节点的最大值和最小值
+       */
+      compute_all_padding_value_max_min: function (paddingNodeObjArray) {
+        var self = this
+        if (typeof (paddingNodeObjArray) !== 'undefined') {
+          if (paddingNodeObjArray.length > 0) {
+            var based_maxpaddingNodeAttrNum = paddingNodeObjArray[0].maxpaddingNodeAttrNum
+            var based_maxpaddingNodeNumber = paddingNodeObjArray[0].maxpaddingNodeNumber
+            var based_minpaddingNodeAttrNum = paddingNodeObjArray[0].minpaddingNodeAttrNum
+            var based_minpaddingNodeNumber = paddingNodeObjArray[0].minpaddingNodeNumber
+            for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
+              if (paddingNodeObjArray[pI].maxpaddingNodeAttrNum > based_maxpaddingNodeAttrNum) {
+                based_maxpaddingNodeAttrNum = paddingNodeObjArray[pI].maxpaddingNodeAttrNum
+              }
+              if (paddingNodeObjArray[pI].maxpaddingNodeNumber > based_maxpaddingNodeNumber) {
+                based_maxpaddingNodeNumber = paddingNodeObjArray[pI].maxpaddingNodeNumber
+              }
+              if (paddingNodeObjArray[pI].minpaddingNodeAttrNum < based_minpaddingNodeAttrNum) {
+                based_minpaddingNodeAttrNum = paddingNodeObjArray[pI].minpaddingNodeAttrNum
+              }
+              if (paddingNodeObjArray[pI].minpaddingNodeNumber < based_minpaddingNodeNumber) {
+                based_minpaddingNodeNumber = paddingNodeObjArray[pI].minpaddingNodeNumber
+              }
+            }
+            for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
+              paddingNodeObjArray[pI].maxpaddingNodeAttrNum = based_maxpaddingNodeAttrNum
+              paddingNodeObjArray[pI].maxpaddingNodeNumber = based_maxpaddingNodeNumber
+              paddingNodeObjArray[pI].minpaddingNodeAttrNum = based_minpaddingNodeAttrNum
+              paddingNodeObjArray[pI].minpaddingNodeNumber = based_minpaddingNodeNumber
+            }
+          }
+        }
+      },
+      /**
        * 渲染覆盖在padding barcode上面带有纹理的矩形
        */
       render_padding_cover_rect: function () {
@@ -739,10 +777,14 @@ define([
         var treeDataModel = self.model
         var barcodeNodeHeight = treeDataModel.get('barcodeNodeHeight') * 0.8
         var paddingNodeObjArray = self.get_padding_node_array()
+        if (typeof (paddingNodeObjArray) === 'undefined') {
+          return
+        }
         var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
         var barcodeNodePaddingLength = BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH']
         var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
         var Subtree_Compact = BARCODETREE_GLOBAL_PARAS['Subtree_Compact']
+        self.compute_all_padding_value_max_min(paddingNodeObjArray)
         self.d3el.select('#barcode-container')
           .selectAll('.padding-covered-rect')
           .remove()
@@ -908,19 +950,22 @@ define([
           }
         }
         //  删除所有先前存在的barcode节点
-        self.d3el.select('#barcode-container')
-          .selectAll('.barcode-node').remove()
         if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
           //  表示从original模式变换到compact模式
           var initCompactLevel = maxCompactLevel
           var stopCompactLevel = minCompactLevel
+          console.log('render_shrink_compact_barcode_tree', 'initCompactLevel', initCompactLevel, 'stopCompactLevel', stopCompactLevel)
+          render_shrink_compact_barcode_tree_start(initCompactLevel, stopCompactLevel)
         } else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) || ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL))) {
           //  表示从compact模式变换到original模式
           var initCompactLevel = minCompactLevel
           var stopCompactLevel = maxCompactLevel
+          console.log('render_expand_compact_barcode_tree', 'initCompactLevel', initCompactLevel, 'stopCompactLevel', stopCompactLevel)
+          console.log('initCompactLevel', initCompactLevel)
+          render_expand_compact_barcode_tree_start((initCompactLevel + 2), stopCompactLevel)
         }
-        render_compact_barcode_tree(initCompactLevel, stopCompactLevel)
-        function render_compact_barcode_tree(compactLevel, stopCompactLevel) {
+        //  在shrink情况下的动画效果
+        function render_shrink_compact_barcode_tree_start(compactLevel, stopCompactLevel) {
           var barcodeNodeAttrArray = compactBarcodeNodeAttrArrayObj[compactPrefix + compactLevel]
           var displayMode = Variables.get('displayMode')
           var isDisplayModeGlobal = (displayMode === Config.get('CONSTANT').GLOBAL)
@@ -930,7 +975,81 @@ define([
             .selectAll('.barcode-node')
             .data(barcodeNodeAttrArray.filter(function (d, i) {
               // return !((isDisplayModeGlobal && (!isShowPaddngNode)) && (!d.existed))
-              return !(((!isShowPaddngNode)) && (!d.existed))
+              return (!(((!isShowPaddngNode)) && (!d.existed))) && (!(d.compactAttr === "TEMPLATE"))
+            }), function (d, i) {
+              return d.id
+            })
+          barcodeNode.enter()
+            .append('rect')
+            .attr('class', function (d, i) {
+              return self.node_class_name_handler(d, i)
+            })
+            .attr('id', function (d, i) {
+              return d.id
+            })
+            .attr('x', function (d) {
+              if (isNaN(+d.x)) {
+                return 0
+              }
+              return +d.x
+            })
+            .attr('y', function (d) {
+              return +self.y_handler(d)
+            })
+            .attr('width', function (d) {
+              return +d.width
+            })
+            .attr('height', function (d) {
+              return self.height_handler(d)
+            })
+            .style("cursor", "pointer")
+            .on('mouseover', function (d, i) {
+              self.node_mouseover_handler(d, self)
+            })
+            .style("fill", function (d, i) {
+              return self.fill_handler(d, i, self)
+            })
+          barcodeNode.attr('width', function (d) {
+            return +d.width
+          })
+            .transition()
+            .duration(DURATION)
+            .attr('height', function (d) {
+              return self.height_handler(d)
+            })
+            .attr('y', function (d) {
+              return +self.y_handler(d)
+            })
+            .style("fill", function (d, i) {
+              return self.fill_handler(d, i, self)
+            })
+            .call(self.endall, function (d, i) {
+              if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
+                if (compactLevel < stopCompactLevel) {
+                  //  不需要每一个barcodeTree执行完成animation都需要trigger信号
+                  if (barcodeIndex === 0) {
+                    self.trigger_update_barcode_view()
+                  }
+                } else {
+                  render_shrink_compact_barcode_tree_end(compactLevel, stopCompactLevel)
+                }
+              }
+            })
+          barcodeNode.exit().remove()
+        }
+
+        //  shrink 的第二个步骤, 修改x的坐标
+        function render_shrink_compact_barcode_tree_end(compactLevel, stopCompactLevel) {
+          var barcodeNodeAttrArray = compactBarcodeNodeAttrArrayObj[compactPrefix + compactLevel]
+          var displayMode = Variables.get('displayMode')
+          var isDisplayModeGlobal = (displayMode === Config.get('CONSTANT').GLOBAL)
+          var isShowPaddngNode = Variables.get('is_show_padding_node')
+          var DURATION = Config.get('TRANSITON_DURATION')
+          var barcodeNode = self.d3el.select('#barcode-container')
+            .selectAll('.barcode-node')
+            .data(barcodeNodeAttrArray.filter(function (d, i) {
+              // return !((isDisplayModeGlobal && (!isShowPaddngNode)) && (!d.existed))
+              return (!(((!isShowPaddngNode)) && (!d.existed))) && (!(d.compactAttr === "TEMPLATE"))
             }), function (d, i) {
               return d.id
             })
@@ -975,12 +1094,6 @@ define([
               }
               return +d.x
             })
-            .attr('height', function (d) {
-              return self.height_handler(d)
-            })
-            .attr('y', function (d) {
-              return +self.y_handler(d)
-            })
             .style("fill", function (d, i) {
               return self.fill_handler(d, i, self)
             })
@@ -994,22 +1107,199 @@ define([
                     self.trigger_update_barcode_view()
                   }
                 } else {
-                  render_compact_barcode_tree(compactLevel, stopCompactLevel)
-                }
-              } else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) || ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL))) {
-                compactLevel = compactLevel + 1
-                if (compactLevel > stopCompactLevel) {
-                  // next_step_func()
-                  //  不需要每一个barcodeTree执行完成animation都需要trigger信号
-                  if (barcodeIndex === 0) {
-                    self.trigger_update_barcode_view()
-                  }
-                } else {
-                  render_compact_barcode_tree(compactLevel, stopCompactLevel)
+                  display_current_level_template(barcodeNodeAttrArray)
+                  render_shrink_compact_barcode_tree_start(compactLevel, stopCompactLevel)
                 }
               }
             })
           barcodeNode.exit().remove()
+        }
+
+        //  在expand情况第一个阶段开始的动画效果, 首先移动x
+        function render_expand_compact_barcode_tree_start(compactLevel, stopCompactLevel) {
+          remove_current_level_template(barcodeNodeAttrArray)
+          var barcodeNodeAttrArray = compactBarcodeNodeAttrArrayObj[compactPrefix + compactLevel]
+          var displayMode = Variables.get('displayMode')
+          var isDisplayModeGlobal = (displayMode === Config.get('CONSTANT').GLOBAL)
+          var isShowPaddngNode = Variables.get('is_show_padding_node')
+          var DURATION = Config.get('TRANSITON_DURATION')
+          var barcodeNode = self.d3el.select('#barcode-container')
+            .selectAll('.barcode-node')
+            .data(barcodeNodeAttrArray.filter(function (d, i) {
+              // return !((isDisplayModeGlobal && (!isShowPaddngNode)) && (!d.existed))
+              return (!(((!isShowPaddngNode)) && (!d.existed))) && (!(d.compactAttr === "TEMPLATE"))
+            }), function (d, i) {
+              return d.id
+            })
+          barcodeNode.enter()
+            .append('rect')
+            .attr('class', function (d, i) {
+              return self.node_class_name_handler(d, i)
+            })
+            .attr('id', function (d, i) {
+              return d.id
+            })
+            .attr('x', function (d) {
+              if (isNaN(+d.x)) {
+                return 0
+              }
+              return +d.x
+            })
+            .attr('width', function (d) {
+              return +d.width
+            })
+            .attr('height', function (d) {
+              return self.height_handler(d)
+            })
+            .style("cursor", "pointer")
+            .on('mouseover', function (d, i) {
+              self.node_mouseover_handler(d, self)
+            })
+            .style("fill", function (d, i) {
+              return self.fill_handler(d, i, self)
+            })
+          barcodeNode.attr('width', function (d) {
+            return +d.width
+          })
+            .transition()
+            .duration(DURATION)
+            .attr('x', function (d) {
+              if (isNaN(+d.x)) {
+                return 0
+              }
+              return +d.x
+            })
+            .style("fill", function (d, i) {
+              return self.fill_handler(d, i, self)
+            })
+            .call(self.endall, function (d, i) {
+              if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) || ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL))) {
+                if (compactLevel > stopCompactLevel) {
+                  // next_step_func()
+                  //  不需要每一个barcodeTree执行完成animation都需要trigger信号
+                } else {
+                  render_expand_compact_barcode_tree_end(compactLevel, stopCompactLevel)
+                }
+              }
+            })
+          barcodeNode.exit().remove()
+        }
+
+        //  在expand情况第二个阶段下结束的动画效果,这个阶段移动y,并且变化具体的height的值
+        function render_expand_compact_barcode_tree_end(compactLevel, stopCompactLevel) {
+          var barcodeNodeAttrArray = compactBarcodeNodeAttrArrayObj[compactPrefix + compactLevel]
+          var displayMode = Variables.get('displayMode')
+          var isDisplayModeGlobal = (displayMode === Config.get('CONSTANT').GLOBAL)
+          var isShowPaddngNode = Variables.get('is_show_padding_node')
+          var DURATION = Config.get('TRANSITON_DURATION')
+          var barcodeNode = self.d3el.select('#barcode-container')
+            .selectAll('.barcode-node')
+            .data(barcodeNodeAttrArray.filter(function (d, i) {
+              // return !((isDisplayModeGlobal && (!isShowPaddngNode)) && (!d.existed))
+              return (!(((!isShowPaddngNode)) && (!d.existed))) && (!(d.compactAttr === "TEMPLATE"))
+            }), function (d, i) {
+              return d.id
+            })
+          barcodeNode.enter()
+            .append('rect')
+            .attr('class', function (d, i) {
+              return self.node_class_name_handler(d, i)
+            })
+            .attr('id', function (d, i) {
+              return d.id
+            })
+            .attr('x', function (d) {
+              if (isNaN(+d.x)) {
+                return 0
+              }
+              return +d.x
+            })
+            .attr('width', function (d) {
+              return +d.width
+            })
+            .attr('height', function (d) {
+              return self.height_handler(d)
+            })
+            .style("cursor", "pointer")
+            .on('mouseover', function (d, i) {
+              self.node_mouseover_handler(d, self)
+            })
+            .style("fill", function (d, i) {
+              return self.fill_handler(d, i, self)
+            })
+          barcodeNode.attr('width', function (d) {
+            return +d.width
+          })
+            .transition()
+            .duration(DURATION)
+            .attr('height', function (d) {
+              return self.height_handler(d)
+            })
+            .attr('y', function (d) {
+              return +self.y_handler(d)
+            })
+            .style("fill", function (d, i) {
+              return self.fill_handler(d, i, self)
+            })
+            .call(self.endall, function (d, i) {
+              if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) || ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL))) {
+                compactLevel = compactLevel + 1
+                if (compactLevel > stopCompactLevel) {
+                } else {
+                  render_expand_compact_barcode_tree_start(compactLevel, stopCompactLevel)
+                }
+              }
+            })
+          barcodeNode.exit().remove()
+        }
+
+        // 显示当前层级的template节点
+        function display_current_level_template(barcodeNodeAttrArray) {
+          var barcodeNode = self.d3el.select('#barcode-container')
+            .selectAll('.barcode-node')
+            .data(barcodeNodeAttrArray.filter(function (d, i) {
+              // return !((isDisplayModeGlobal && (!isShowPaddngNode)) && (!d.existed))
+              return (d.compactAttr === "TEMPLATE")
+            }), function (d, i) {
+              return d.id
+            })
+          barcodeNode.enter()
+            .append('rect')
+            .attr('class', function (d, i) {
+              return self.node_class_name_handler(d, i)
+            })
+            .attr('id', function (d, i) {
+              return d.id
+            })
+            .attr('x', function (d) {
+              if (isNaN(+d.x)) {
+                return 0
+              }
+              return +d.x
+            })
+            .attr('y', function (d) {
+              return +self.y_handler(d)
+            })
+            .attr('width', function (d) {
+              return +d.width
+            })
+            .attr('height', function (d) {
+              return self.height_handler(d)
+            })
+            .style("cursor", "pointer")
+            .on('mouseover', function (d, i) {
+              self.node_mouseover_handler(d, self)
+            })
+            .style("fill", function (d, i) {
+              return self.fill_handler(d, i, self)
+            })
+        }
+
+        //  删除当前层级的template节点
+        function remove_current_level_template(barcodeNodeAttrArray) {
+          var barcodeNode = self.d3el.select('#barcode-container')
+            .selectAll('.template')
+            .remove()
         }
       },
       /**
@@ -1025,6 +1315,7 @@ define([
         var isDisplayModeGlobal = (displayMode === Config.get('CONSTANT').GLOBAL)
         var isShowPaddngNode = Variables.get('is_show_padding_node')
         //  TODO
+
         var barcodeNodeAttrArray = self.get_barcode_node_array()
         var DURATION = Config.get('TRANSITON_DURATION')
         var selectedLevels = Variables.get('selectedLevels')
@@ -1083,8 +1374,8 @@ define([
         barcodeNode.attr('width', function (d) {
           return +d.width
         })
-        // .transition()
-        // .duration(DURATION)
+          .transition()
+          .duration(DURATION)
           .attr('x', function (d) {
             if (isNaN(+d.x)) {
               return 0
@@ -3084,14 +3375,17 @@ define([
         if (d.existed) {
           //  在将d3-tip的类变成d3-tip-flip的情况下, 需要将d3-tip-flip再次变成d3-tip
           $('.d3-tip-flip').removeClass('d3-tip-flip').addClass('d3-tip')
-          if (typeof(d.categoryName) !== 'undefined') {
-            tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.categoryName + ", " + d.num + "</span></span>"
-          } else {
-            var category = d.category
-            var categoryArray = category.split('-')
-            var categoryName = categoryArray[0]
-            tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + categoryName + ", " + d.num + "</span></span>"
-          }
+          // if (typeof(d.categoryName) !== 'undefined') {
+          //   tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + d.categoryName + ", " + d.num + "</span></span>"
+          // } else {
+          //   var category = d.category
+          //   var categoryArray = category.split('-')
+          //   var categoryName = categoryArray[0]
+          //   tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + categoryName + ", " + d.num + "</span></span>"
+          // }
+          var category = d.category
+          category = category.replaceAll('_', '-')
+          tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + category + ", " + d.num + "</span></span>"
           //  如果tooptip的显示状态是true
           if (Config.get('BARCODETREE_TOOLTIP_ENABLE')) {
             tip.show(tipValue)

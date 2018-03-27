@@ -30,10 +30,10 @@ function initilize_original_dataset(dataSetName, sendFileInfoObj) {
       if (typeof (sendFileInfoObj) !== 'undefined') {
         sendFileInfoObj(fileInfoObj)
       }
-    }, function (idIndexObj, compactDataSetObj, compactLinearObj, selectedLevels) {
+    }, function (idIndexObj, selectedLevels) {
       dataCenter.add_id_index_data_set(dataSetName, idIndexObj)
-      dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
-      dataCenter.add_compact_linear_data(dataSetName, compactLinearObj)
+      // dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
+      // dataCenter.add_compact_linear_data(dataSetName, compactLinearObj)
       dataCenter.update_select_levels(dataSetName, selectedLevels)
     }, function (err) {
       throw err;
@@ -116,17 +116,17 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     })
     fileInfoObj.fileInfo = fileInfoArray
     fileInfoObj.maxDepth = maxDepthObj.maxDepth
-    //  下面是对于数据继续的处理过程, 处理结束之后的结果会调用dataProcess函数进行存储
-    for (var filename in fileNameObject) {
-      var fileObject = fileNameObject[filename]
-      var fileNameRemovedJson = filename.replace('.json', '')
-      //  将树的对象进行compact得到compact之后的节点数组
-      var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
-      compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
-      var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
-      compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
-    }
-    dataProcess(idIndexObj, compactDataSetObj, compactLinearObj, selectedLevels)
+    // //  下面是对于数据继续的处理过程, 处理结束之后的结果会调用dataProcess函数进行存储
+    // for (var filename in fileNameObject) {
+    //   var fileObject = fileNameObject[filename]
+    //   var fileNameRemovedJson = filename.replace('.json', '')
+    //   //  将树的对象进行compact得到compact之后的节点数组
+    //   var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
+    //   compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
+    //   var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
+    //   compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
+    // }
+    dataProcess(idIndexObj, selectedLevels) // compactDataSetObj, compactLinearObj
     fileReadEnd(fileInfoObj, dataSetObj, linearObj)
   });
 }

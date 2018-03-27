@@ -439,10 +439,10 @@ define([
         'compactNum': window.compactNum,
         'maxDepth': Variables.get('maxDepth')
       }
-      // var originalDatasuccessFunc = function (result) {
-      //   self.compact_tree_object_request_handler(result)
-      // }
-      // self.requestDataFromServer(url, formData, originalDatasuccessFunc)
+      var originalDatasuccessFunc = function (result) {
+        self.compact_tree_object_request_handler(result)
+      }
+      self.requestDataFromServer(url, formData, originalDatasuccessFunc)
     },
     /**
      *  在histogram-main中调用这个方法, 获取compact形式的BarcodeTree节点数组
@@ -675,16 +675,16 @@ define([
      * 更新barcodeTree中的节点的排列顺序
      */
     update_barcode_tree_sequence: function (collectionAlignedObjPercentageArrayObjArray) {
-      // var self = this
-      // var url = 'update_barcode_tree_sequence'
-      // var selectedItemsArray = Variables.get('selectItemNameArray')
-      // var formData = {
-      //   'alignedObjPercentageArrayObjArray': collectionAlignedObjPercentageArrayObjArray,
-      //   'dataItemNameArray': selectedItemsArray
-      // }
-      // var buildSuperTreeSuccessFunc = function (result) {
-      // }
-      // self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
+      var self = this
+      var url = 'update_barcode_tree_sequence'
+      var selectedItemsArray = Variables.get('selectItemNameArray')
+      var formData = {
+        'alignedObjPercentageArrayObjArray': collectionAlignedObjPercentageArrayObjArray,
+        'dataItemNameArray': selectedItemsArray
+      }
+      var buildSuperTreeSuccessFunc = function (result) {
+      }
+      self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
     },
     build_super_tree_handler: function (rootId, rootLevel, rootCategory, result, deferObj) {
       var self = this

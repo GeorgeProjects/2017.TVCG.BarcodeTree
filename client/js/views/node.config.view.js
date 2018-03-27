@@ -35,7 +35,7 @@ define([
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_SELECTED_LEVELS'], function (event) {
         self.render_barcode_node_config_view()
       })
-      self.listenTo(Variables, 'change:barcodeHeight', self.update_height_slider_value)
+      // self.listenTo(Variables, 'change:barcodeHeight', self.update_height_slider_value)
     },
     //  触发删除barcode视图中mouseout的事件
     trigger_mouse_out: function () {
@@ -165,13 +165,16 @@ define([
             controllerHanlder.text($(this).slider("value"))
           },
           slide: function (event, ui) {
-            var value = +ui.value
-            controllerHanlder.text(value);
+            controllerHanlder.text($(this).slider("value"));
           },
           stop: function (event, ui) {
             var value = +ui.value
             controllerHanlder.text(value);
+            //  判断barcode的高度是否超出边界
             var id = $(this).attr('id').replace('-control-slider', '')
+            if(Variables.get('barcodeHeight') < value){
+              Variables.set('barcodeHeight', value)
+            }
             handler(value, id)
           }
         })
@@ -207,7 +210,6 @@ define([
       // 改变barcode高度的监听函数
       function heightChangeHandler(value, id) {
         var barcodeNodeHeightMinValue = Variables.get('barcodeNodeHeightMinValue')
-        Variables.set('barcodeHeight', value)
         //  trigger change height
         window.barcodeHeight = value
         Datacenter.barcodeCollection.change_barcode_height()

@@ -88,6 +88,7 @@ body {
       width: 100%;
       box-shadow: 0 0 3px #c8c8c8;
       background-color: #fafafa;
+      display: none;
       #toolbar {
         width: 100%;
         height: 100%;
@@ -116,7 +117,7 @@ body {
     //第三个视图 barcode view视图
     #barcode-view {
       position: absolute;
-      top: @barcode-view_top; //~"calc(12rem + 2.5rem)";
+      top: ~"calc(12rem + 2.5rem)";
       bottom: 0%;
       width: 100%;
       background-color: white;
@@ -186,6 +187,7 @@ body {
           border-radius: 0 0 0.4rem 0.4rem;
           z-index: 1;
           opacity: 0.3;
+          visibility: hidden;
           span {
             margin-top: -0.3rem;
           }
@@ -221,6 +223,7 @@ body {
           //visibility: hidden;
           padding: 0.3rem 1rem;
           opacity: 0.3;
+          visibility: hidden;
           span {
             margin-left: -0.6rem;
           }

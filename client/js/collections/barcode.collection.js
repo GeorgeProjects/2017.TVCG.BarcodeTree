@@ -669,6 +669,7 @@ define([
     add_super_subtree: function (rootId, rootLevel, rootCategory, alignedLevel, finishAlignDeferObj) {
       var self = this
       self.update_aligned_node_array(rootId, rootLevel, rootCategory)
+      console.log("add_super_subtree")
       //  当addedSubtreeDeferObj对象被resolved的时候, 标志着对齐的子树节点数组被插入到子树的节点数组中, 并且相应的状态已经被更新
       var addedSubtreeDeferObj = $.Deferred()
       $.when(addedSubtreeDeferObj)
@@ -676,6 +677,7 @@ define([
           //  在barcode collection中的model里面增加了super subtree之后如何对齐节点的位置
           self.compute_aligned_subtree_range()
           // window.Datacenter.barcodeCollection.update_all_barcode_view()
+          console.log('finishAlignDeferObj.resolve()')
           finishAlignDeferObj.resolve()
           window.finish_build_supertree_collection511 = new Date()
         })
@@ -1269,7 +1271,7 @@ define([
             console.log('defer fail')
           })
         var beginIndex = 0
-        self._align_single_operation_item(selectedAlignedItemList, beginIndex, deferObj)
+        self._align_single_operation_item(selectedAlignedItemList, beginIndex, deferObj, 1)
       }
       //  判断节点是否处于align的状态
       function is_exist_aligned_subtree_array(operationItemId, alignedSubtreeArray) {
@@ -1308,7 +1310,7 @@ define([
     /**
      *  传入当前选择的节点数组, 依次按照顺序对于选择的节点进行对齐
      */
-    _align_single_operation_item: function (operation_item_list, operation_index, finish_align_defer) {
+    _align_single_operation_item: function (operation_item_list, operation_index, finish_align_defer, a) {
       var self = this
       var alignedLevel = Variables.get('alignedLevel')
       if ((operation_index === operation_item_list.length) || (operation_item_list.length === 0)) {
@@ -1325,7 +1327,7 @@ define([
         var finishAlignDeferObj = $.Deferred()
         $.when(finishAlignDeferObj)
           .done(function () {
-            self._align_single_operation_item(operation_item_list, (operation_index + 1), finish_align_defer)
+            self._align_single_operation_item(operation_item_list, (operation_index + 1), finish_align_defer, 0)
           })
         //  具体对齐选中的子树
         self.add_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishAlignDeferObj)
@@ -2791,6 +2793,8 @@ define([
       // var updatedHeight = +new Number(barcodeViewHeight / selectItemNameArray.length).toFixed(1)
       // window.barcodeHeight = +updatedHeight > +barcodeHeight ? +barcodeHeight : +updatedHeight
       var barcodeContainerHeight = +window.barcodeHeight
+      console.log('barcodeContainerHeight', barcodeContainerHeight)
+      Variables.set('barcodeHeight', barcodeContainerHeight)
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeHistogramRatio = Variables.get('barcodeHistogramRatio')
       var barcodeOriginalNodeHeight = barcodeContainerHeight * barcodeHeightRatio

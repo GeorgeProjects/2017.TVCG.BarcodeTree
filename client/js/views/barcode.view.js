@@ -240,11 +240,12 @@ define([
       var toolbarHistogramHeight = histogramHeightRem * window.rem_px
       var barcodePaddingLeft = Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft')
       var barcodeTreeConfigHeight = $('#top-toolbar-container').height()
-      var toolbarViewDivHeight = +$('#toolbar-view-div').height()
-      var histogramViewHeight = +$('#histogram-view').height()
+      // var toolbarViewDivHeight = +$('#toolbar-view-div').height()
+      // var histogramViewHeight = +$('#histogram-view').height()
       var topToolbarViewHeight = +$('#top-toolbar-container').height()
       // $('#top-toolbar-container').css('height', barcodeTreeConfigHeight + 'px')
-      $('#supertree-view-toggle').css('top', (toolbarViewDivHeight + histogramViewHeight + topToolbarViewHeight) + 'px')
+      console.log('topToolbarViewHeight', topToolbarViewHeight)
+      $('#supertree-view-toggle').css('top', (topToolbarViewHeight) + 'px')
     }
     // ,
     // update_barcode_width: function (barcodeMaxX) {
