@@ -33,11 +33,7 @@ define([
       'barcodeNodeConfig': '#barcode-node-config'
     },
     events: {
-      'click #select-all': 'select_all_items',
       'click #clear-all': 'clear_all_items'
-    },
-    select_all_items: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')['SELECT_ALL'])
     },
     clear_all_items: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['CLEAR_ALL'])
@@ -55,14 +51,6 @@ define([
       //  另一个阶段是将部分barcode绘制好之后,停止视图的加载条
       $(document).ready(function () {
         $('#loading').css({visibility: 'visible'})
-        // self.listenTo(Variables, 'change:loading', function (model, loading) {
-        //   if (loading) {
-        //     $('#loading').removeClass('hidden')
-        //   } else {
-        //     $('#loading').addClass('hidden')
-        //     window.NProgress.done()
-        //   }
-        // })
         window.tip = d3.tip()
           .attr('class', 'd3-tip')
           .offset([-10, 0])
@@ -200,14 +188,6 @@ define([
       }
       window.split_character = ""
     },
-    // //  初始化控制barcode的参数的视图
-    // render_single_view: function () {
-    //   var self = this
-    //   //  初始化barcodeView
-    //   self.showChildView('singleView', new SingleView({
-    //     model: Datacenter.singleBarcodeModel
-    //   }))
-    // },
     //  初始化控制显示barcode进行比较的视图
     render_barcodetree_view: function () {
       var self = this

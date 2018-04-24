@@ -46,6 +46,7 @@ define([
     //  绘制全部选择的barcode节点属性分布柱状图
     render_distribution_histogram: function (barcodeNodeCollectionObj, distributionType) {
       var self = this
+      self.clear_all_distribution_views()
       var barcodeCollection = self.options.barcodeCollection
       var barcodeConfigDivHeight = $('#barcode-distribution-view').height()
       var panelHeaderHeight = $('#barcode-distribution-view .panel-header').height()
@@ -61,6 +62,7 @@ define([
         distributionHistogramHeight = 90
       }
       self.distributionHistogramHeight = distributionHistogramHeight
+
       var distribution_histogram_prefix = 'distribution-level-'
       d3.selectAll('.distribution-levels')
         .each(function (d, i) {
@@ -111,6 +113,7 @@ define([
     add_distribution_histogram: function (distribution_level, raw_data_array) {
       var self = this
       var intervals = 100
+      console.log('raw_data_array.max()', raw_data_array.max())
       intervals = raw_data_array.max() > intervals ? raw_data_array.max() : intervals
       var eachIntervalRange = self.get_each_interval_range(raw_data_array, intervals)
       var histogramDataArray = self.get_distribution_histogram(raw_data_array, intervals, eachIntervalRange)
@@ -259,6 +262,8 @@ define([
       }
       var barcodeNodeArray = barcodeNodeCollectionObjWithId[distribution_level]
       var highlightObjArray = Variables.get('brushHighlightObjArray')
+      console.log('real_brush_start', real_brush_start)
+      console.log('real_brush_end', real_brush_end)
       if (typeof (barcodeNodeArray) !== 'undefined') {
         for (var bI = 0; bI < barcodeNodeArray.length; bI++) {
           if ((barcodeNodeArray[bI].value >= real_brush_start) && (barcodeNodeArray[bI].value <= real_brush_end)) {

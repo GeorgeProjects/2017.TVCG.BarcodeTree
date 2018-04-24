@@ -288,6 +288,7 @@ define([
       alignedLevelText.text("L" + displayedLevel)
       var displayedFixedAlignedLevel = fixed_aligned_level
       self.activeAlignedLevel(displayedFixedAlignedLevel, displayedLevel)
+      $('#align-level-control>.level-btn').unbind("click")
       $('#align-level-control>.level-btn').click(function () {
         var displayLevel = +$(this).text()
         var realLevel = displayLevel - 1
@@ -422,7 +423,9 @@ define([
       var barcodeCollection = self.options.barcodeCollection
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       if (!BarcodeGlobalSetting['Align_Lock']) {
-        barcodeCollection.remove_all_selected_node()
+        if (Variables.get('displayMode') !== Config.get('CONSTANT').GLOBAL) {
+          barcodeCollection.remove_all_selected_node()
+        }
       } else {
         //  增加所有选择的节点到highlight children的数组中
         barcodeCollection.add_selected_obj_into_children_nodes()

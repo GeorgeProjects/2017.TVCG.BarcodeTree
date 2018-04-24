@@ -199,6 +199,10 @@ define([
                 .select('#' + childNode.id)
                 .classed({"not_possible": false, "possible": true})
             }
+            d3.select('#barcodetree-svg')
+              .select('#' + barcodetreeId)
+              .select('#' + fatherObj.id)
+              .classed({"not_possible": false, "possible": true})
           }
         })
       }

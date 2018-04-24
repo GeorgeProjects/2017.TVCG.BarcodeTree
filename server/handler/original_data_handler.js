@@ -4,6 +4,7 @@ var clone = require('clone')
 
 var handleCompactData = function (request, response) {
 //  读取传递的的数据
+  console.log('handleCompactData')
   var reqBody = request.body
   var dataSetName = reqBody.dataSetName
   var dataItemNameArray = reqBody['dataItemNameArray']
@@ -40,7 +41,7 @@ var handleCompactData = function (request, response) {
   // }
   // var originalTreeObjObject = read_original_tree_object(dataItemNameArray, dataSetName)
 
-  var compactLinearTreeNodeArrayObject = dataCenter.get_compact_linear_data(dataSetName, dataItemNameArray)
+  var compactLinearTreeNodeArrayObject = dataCenter.get_compact_linear_data(dataSetName, dataItemNameArray, selectedLevels)
   var compactLinearTreeNodeLocArrayObject = compute_compact_node_location(compactLinearTreeNodeArrayObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval, compactNum)
   // var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
   // var categoryNodeObjWithLocArray = linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)

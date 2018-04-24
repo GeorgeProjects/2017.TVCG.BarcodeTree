@@ -1437,12 +1437,15 @@ define([
     //  将节点的id转换成节点的id的character的数组
     _transform_node_id_node_id_array: function (node_data_id) {
       var self = this
-      var nodeDataIdArray = node_data_id.split('-')
-      var nodeDataId = nodeDataIdArray[nodeDataIdArray.length - 1]
-      //  选择的节点的id数组
-      var splitCharacter = window.split_character
-      var nodeDataIdArray = nodeDataId.split(splitCharacter)
-      return nodeDataIdArray
+      if (typeof (node_data_id) !== 'undefined') {
+        var nodeDataIdArray = node_data_id.split('-')
+        var nodeDataId = nodeDataIdArray[nodeDataIdArray.length - 1]
+        //  选择的节点的id数组
+        var splitCharacter = window.split_character
+        var nodeDataIdArray = nodeDataId.split(splitCharacter)
+        return nodeDataIdArray
+      }
+      return []
     },
     /**
      * 取消barcode中的某个子树对齐

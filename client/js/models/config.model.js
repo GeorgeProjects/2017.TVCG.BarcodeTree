@@ -149,8 +149,6 @@ define([
         'UPDATE_FILTERING_HIGHLIGHT_NODES': 'update-filtering-highlight-nodes',
         //  更新barcode视图的宽度
         'UPDATE_BARCODE_VIEW_WIDTH': 'update-barcode-view-width',
-        //  选中视图中的所有元素
-        'SELECT_ALL': 'select-all',
         //  在barcodeComparison视图中删除一个barcodeTree
         'REMOVE_SELECTION': 'remove-selection',
         //  渲染supertree

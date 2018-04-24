@@ -14,7 +14,7 @@ var removeFromSuperTreeHandler = require('./server/handler/remove_from_super_tre
 var handlerObj =
 {
   '/barcode_original_data': originalDataHandler.handleOriginalData,
-  // '/barcode_compact_data': originalDataHandler.handleCompactData,
+  '/barcode_compact_data': originalDataHandler.handleCompactData,
   '/build_super_tree': alignedCompareHandler.handlerBuildSuperTree,
   '/and_operation_result': setOperationHandler.handlerAndOperation,
   '/or_operation_result': setOperationHandler.handlerOrOperation,

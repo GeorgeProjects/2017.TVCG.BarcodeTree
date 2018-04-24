@@ -1026,6 +1026,7 @@ define([
         var isShowPaddngNode = Variables.get('is_show_padding_node')
         //  TODO
         var barcodeNodeAttrArray = self.get_barcode_node_array()
+        console.log('barcodeNodeAttrArray', barcodeNodeAttrArray)
         var DURATION = Config.get('TRANSITON_DURATION')
         var selectedLevels = Variables.get('selectedLevels')
         var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')

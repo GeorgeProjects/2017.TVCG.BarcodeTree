@@ -843,6 +843,22 @@ define([
       result.className = 'barcodetree-class'
       //  设置读取数据的相应属性, maxDepth - 树的最大深度, fileInfo - 树的基本信息
       histogramModel.set('histogramDataObject', result)
+      var fileInfo = result.fileInfo
+      var sumNodeNum = 0
+      var maxNodeNum = 0
+      var maxNodeFileName = null
+      for (var fI = 0; fI < fileInfo.length; fI++) {
+        sumNodeNum = sumNodeNum + fileInfo[fI].nodenum
+      }
+      for (var fI = 0; fI < fileInfo.length; fI++) {
+        if (fileInfo[fI].nodenum > maxNodeNum) {
+          maxNodeNum = fileInfo[fI].nodenum
+          maxNodeFileName = fileInfo[fI].name
+        }
+      }
+      console.log('maxNodeFileName', maxNodeFileName)
+      console.log('maxNodeNum', maxNodeNum)
+      console.log('average node num', sumNodeNum / fileInfo.length)
       //  更新barcode选定的层级以及层级的宽度
       Variables.set('fileMaxDepth', result.maxDepth)  //默认的情况下显示4层的barcodeTree
       self.init_selected_levels()

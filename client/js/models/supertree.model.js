@@ -20,7 +20,6 @@ define([
       alignedTreeObject[ alignedTreeId ] = {}
       alignedTreeObject[ alignedTreeId ].alignedTreeNodeArray = alignedTreeNodeArray
       alignedTreeObject[ alignedTreeId ].alignedTreeNodeX = alignedTreeNodeX
-    },
-
+    }
   })
 })

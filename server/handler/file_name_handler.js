@@ -19,27 +19,24 @@ function initilize_original_dataset(dataSetName, sendFileInfoObj) {
   var directoryName = './server/data/' + dataSetName + '/originalData/'//'../data/' + sampleDataName + '/originalData/'
   var readFileDirectory = '../data/' + dataSetName + '/originalData/'
   if (!dataCenter.is_dataset_existed(dataSetName)) {
-    console.log(dataSetName)
     //  read_directory_file函数传入的有两个函数, 一个是处理结束的函数, 一个是继续的数据处理函数
     read_directory_file(dataSetName, directoryName, readFileDirectory, function (fileInfoObj, dataSetObj, linearObj) {
       dataCenter.set_file_info_obj(dataSetName, fileInfoObj)
       dataCenter.add_original_data_set(dataSetName, dataSetObj)
       dataCenter.add_linear_data_set(dataSetName, linearObj)
-      console.log('read file finish')
       //  发送fileObject
       if (typeof (sendFileInfoObj) !== 'undefined') {
         sendFileInfoObj(fileInfoObj)
       }
-    }, function (idIndexObj, compactDataSetObj, compactLinearObj, selectedLevels) {
+    }, function (idIndexObj, selectedLevels) {
       dataCenter.add_id_index_data_set(dataSetName, idIndexObj)
-      dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
-      dataCenter.add_compact_linear_data(dataSetName, compactLinearObj)
+      // dataCenter.add_compact_original_data_set(dataSetName, compactDataSetObj)
+      // dataCenter.add_compact_linear_data(dataSetName, compactLinearObj)
       dataCenter.update_select_levels(dataSetName, selectedLevels)
     }, function (err) {
       throw err;
     })
   } else {
-    console.log('datasetName', dataSetName)
     //  发送fileObject
     if (typeof (sendFileInfoObj) !== 'undefined') {
       var fileInfoObj = dataCenter.get_file_info_obj(dataSetName)
@@ -116,17 +113,17 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     })
     fileInfoObj.fileInfo = fileInfoArray
     fileInfoObj.maxDepth = maxDepthObj.maxDepth
-    //  下面是对于数据继续的处理过程, 处理结束之后的结果会调用dataProcess函数进行存储
-    for (var filename in fileNameObject) {
-      var fileObject = fileNameObject[filename]
-      var fileNameRemovedJson = filename.replace('.json', '')
-      //  将树的对象进行compact得到compact之后的节点数组
-      var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
-      compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
-      var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
-      compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
-    }
-    dataProcess(idIndexObj, compactDataSetObj, compactLinearObj, selectedLevels)
+    // //  下面是对于数据继续的处理过程, 处理结束之后的结果会调用dataProcess函数进行存储
+    // for (var filename in fileNameObject) {
+    //   var fileObject = fileNameObject[filename]
+    //   var fileNameRemovedJson = filename.replace('.json', '')
+    //   //  将树的对象进行compact得到compact之后的节点数组
+    //   var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
+    //   compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
+    //   var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
+    //   compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
+    // }
+    dataProcess(idIndexObj, selectedLevels) // compactDataSetObj, compactLinearObj
     fileReadEnd(fileInfoObj, dataSetObj, linearObj)
   });
 }
