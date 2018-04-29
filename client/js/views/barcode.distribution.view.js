@@ -113,7 +113,6 @@ define([
     add_distribution_histogram: function (distribution_level, raw_data_array) {
       var self = this
       var intervals = 100
-      console.log('raw_data_array.max()', raw_data_array.max())
       intervals = raw_data_array.max() > intervals ? raw_data_array.max() : intervals
       var eachIntervalRange = self.get_each_interval_range(raw_data_array, intervals)
       var histogramDataArray = self.get_distribution_histogram(raw_data_array, intervals, eachIntervalRange)

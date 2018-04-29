@@ -145,7 +145,7 @@
 					<span id = "set-operation-panel" class = "config-div">
 							<span class = "operation-label">SET</span>
 							<span id = "set-selection" class="btn-group dropdown keep-open" role="group">
-											<button type="button" id="set-selection-toggle" class="btn btn-default btn-lg config-button" aria-label="Left Align" id="item-filter-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<button type="button" id="set-selection-toggle" class="btn btn-default btn-lg config-button" aria-label="Left Align" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 														<i class="fa fa-filter" data-toggle = "tooltip" title = "filter" aria-hidden="true"></i> <span class="caret" id="adaptive"></span>
 							    </button>
 											<div class="dropdown-menu keep-open" id = "filter-drop-menu">

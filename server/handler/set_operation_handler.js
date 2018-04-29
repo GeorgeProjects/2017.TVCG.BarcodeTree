@@ -1,4 +1,4 @@
-var hierarchicalDataProcessor = require('../processor/signaltree_processor')
+var hierarchicalDataProcessor = require('../processor/barcodetree_processor')
 var dataCenter = require('../dataCenter/dataCenter')
 var clone = require('clone')
 
@@ -38,9 +38,6 @@ var handlerAndOperation = function (request, response) {
   var andTreeNodeArrayObj = {}
   andTreeNodeArrayObj[groupId] = andTreeNodeArray
   var andTreeNodeLocArray = read_tree_node_array_obj(andTreeNodeArrayObj, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
-  // var linearizedTreeNodeArrayObj = read_tree_node_array_obj(originalTreeObjObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
-  // var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
-  // var categoryNodeObjWithLocArray = linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
   sendTreeNodeArray(andTreeObject, andTreeNodeLocArray)
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeArrayObj) {
@@ -90,9 +87,6 @@ var handlerOrOperation = function (request, response) {
   var orTreeNodeArrayObj = {}
   orTreeNodeArrayObj[groupId] = orTreeNodeArray
   var orTreeLocNodeArray = read_tree_node_array_obj(orTreeNodeArrayObj, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
-  // var linearizedTreeNodeArrayObj = read_tree_node_array_obj(originalTreeObjObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
-  // var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
-  // var categoryNodeObjWithLocArray = linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
   sendTreeNodeArray(orTreeObject, orTreeLocNodeArray)
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeArrayObj) {
@@ -142,9 +136,6 @@ var handlerComplementOperation = function (request, response) {
   var complementTreeNodeArrayObj = {}
   complementTreeNodeArrayObj[groupId] = complementTreeNodeArray
   var complementTreeNodeLocArray = read_tree_node_array_obj(complementTreeNodeArrayObj, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
-  // var linearizedTreeNodeArrayObj = read_tree_node_array_obj(originalTreeObjObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
-  // var compactTreeNodeArrayObj = innerHandleCompactTreeNodeObj(dataItemType, dataItemNameArray, selectedLevelStr, dataSetName, selectedLevels, barcodeWidthArray, barcodeHeight, compactNum, maxDepth, barcodeNodeInterval)
-  // var categoryNodeObjWithLocArray = linearize2NodeArray(categoryObj, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
   sendTreeNodeArray(complementTreeObject, complementTreeNodeLocArray)
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeArrayObj) {
@@ -167,7 +158,7 @@ function read_tree_node_array_obj(originalTreeNodeArrayObj, selectedLevels, barc
   var treeNodeArrayObj = {}
   for (var item in originalTreeNodeArrayObj) {
     var originalTreeObj = clone(originalTreeNodeArrayObj[item])
-    var treeNodeArray = hierarchicalDataProcessor.loadOriginalSingleData(originalTreeObj, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval)
+    var treeNodeArray = hierarchicalDataProcessor.computeOriginalNodeLocation(originalTreeObj, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval)
     treeNodeArrayObj[item] = treeNodeArray
   }
   return treeNodeArrayObj

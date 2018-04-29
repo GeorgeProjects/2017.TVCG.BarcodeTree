@@ -23,15 +23,6 @@ define([
       self.listenTo(this.collection, 'remove', self.remove)
       self.listenTo(Variables, 'change:barcodeNodexMaxX', self.update_barcode_view_width)
       self.listenTo(Variables, 'change:barcodeNodeyMaxY', self.update_barcode_view_height)
-      Backbone.Events.on(Config.get('EVENTS')['UPDATE_BARCODE_ATTR'], function (event) {
-        // self.update_barcode_attr()
-      })
-      Backbone.Events.on(Config.get('EVENTS')['RESET_BARCODE_ATTR'], function (event) {
-        self.reset_barcode_attr()
-      })
-      Backbone.Events.on(Config.get('EVENTS')['SHOW_LOADING_ICON'], function (event) {
-        self.show_loading_icon()
-      })
       Backbone.Events.on(Config.get('EVENTS')['HIDE_LOADING_ICON'], function (event) {
         self.hide_loading_icon()
       })
@@ -91,17 +82,6 @@ define([
     ,
     remove: function () {
       var self = this
-    }
-    ,
-    update_barcode_attr: function () {
-      var self = this
-    }
-    ,
-    reset_barcode_attr: function () {
-      var self = this
-      var defaultSettings = Config.get('DEFAULT_SETTINGS')
-      var defaultHeight = defaultSettings.default_barcode_height
-      Variables.set('barcodeHeight', defaultHeight)
     }
     ,
     hovering_barcode: function (barcodeTreeId) {

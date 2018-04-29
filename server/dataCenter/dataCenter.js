@@ -11,7 +11,7 @@ var globalColumnSequenceObj = {}
 var globalRowSequenceArray = []
 var globalSelectedLevels = []
 var clone = require('clone')
-var hierarchicalDataProcessor = require('../processor/signaltree_processor')
+var hierarchicalDataProcessor = require('../processor/barcodetree_processor')
 
 //  更新superTree对象中的itemNameArray以及构建superTree的基本元素
 function update_super_tree_obj_item_array(item_name_array) {

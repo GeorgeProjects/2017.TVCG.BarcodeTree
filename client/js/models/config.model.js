@@ -57,20 +57,6 @@ define([
         TOPOLOGY: 'TOPOLOGY'
       },
       BARCODETREE_TOOLTIP_ENABLE: true,
-      //  初始情况下的barcode比较的状态
-      INIT_BARCODETREE_GLOBAL_PARAS: {
-        Selection_State: 'NULL', //'SUBTREE', 'NODE', 'NULL'
-        Subtree_Compact: false, //subbarcodeTree是否是comapct的展示模式
-        Align_State: false, //subbarcodeTree是否是comapct的展示模式
-        Comparison_Result_Display: false, //  展示barcodeTree的比较结果
-        Max_Real_Level: 3,
-        Align_Lock: false,
-        Sort_Option: 'DATE',//'DATE', 'DAY', 'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
-        Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
-        Node_Arrangement: false,
-        Vertical_Fit_In_Screen: false,
-        Horizontal_Fit_In_Screen: false
-      },
       //  展示barcode的不同状态, 包括原始状态, compact状态, global的状态
       'CONSTANT': {
         'ORIGINAL': 'ORIGINAL',
@@ -96,18 +82,6 @@ define([
         'ADD_NODE_COLOR': '#a1d76a',
         'MISS_NODE_COLOR': '#e9a3c9',
         'SAME_NODE_COLOR': 'black'
-      },
-      'DEFAULT_SETTINGS': {
-        'default_dataset': 'DailyRecordTree', //'DailyRecordTree', 'NBATeamTree', 'LibraryRecordTree'
-        'default_mode': 'original',
-        'compact_num': 5,
-        'init_width': 1600,
-        'init_height': 900,
-        'barcode_node_interval': 3,
-        'original_width_array': [18, 12, 8, 4, 0],
-        'default_width_array': [18, 12, 8, 4, 0],// large screen
-        'default_barcode_height': 40,
-        'default_selected_levels': [0, 1, 2, 3]
       },
       'TABLE_LENS_PARA': {
         'minimum_ratio': 0.25,
@@ -135,10 +109,6 @@ define([
         'ADD_LOCKED_ALIGN_CLASS': 'add-locked-align-class',
         //  删除barcode节点中的locked aligned的class
         'REMOVE_LOCKED_ALIGN_CLASS': 'remove-locked-align-class',
-        //  切换到节点的非resorting状态
-        'CHANGE_TO_NOT_RESORTING': 'change-to-not-resorting',
-        //  切换到节点的resorting状态
-        'CHANGE_TO_RESORTING': 'change-to-resorting',
         // ====================================================================
         //  设置选择的颜色
         'SET_PRECLICK_COLOR': 'set-preclick-color',
@@ -151,18 +121,8 @@ define([
         'UPDATE_BARCODE_VIEW_WIDTH': 'update-barcode-view-width',
         //  在barcodeComparison视图中删除一个barcodeTree
         'REMOVE_SELECTION': 'remove-selection',
-        //  渲染supertree
-        'RENDER_SUPERTREE': 'render-supertree',
-        //  渲染histogram视图
-        'RENDER_HISTOGRAM': 'render-histogram',
-        //  更新histogram视图中的颜色映射
-        'UPDATE_HISTOGRAM_ENCODE': 'update-histogram-encode',
-        //  渲染完成视图之后, 将加载的进度条消失
-        'FINISH_RENDER_VIEW': 'finish-render-view',
-        //  开始渲染视图(在获取数据的基础信息之后,即柱状图相关的信息)
-        'BEGIN_RENDER_HISTOGRAM_VIEW': 'begin-render-histogram-view',
         //  开始渲染barcode视图
-        'BEGIN_RENDER_BARCODE_VIEW': 'begin-render-barcode-view',
+        // 'BEGIN_RENDER_BARCODE_VIEW': 'begin-render-barcode-view',
         //***************************
         //  清空选中视图中的所有元素
         'CLEAR_ALL': 'clear-all',
@@ -174,26 +134,14 @@ define([
         'CLOSE_SUPER_TREE': 'close-super-tree',
         //***************************
         // superTree视图上的信号
-        //  高亮supertree上排序的节点
-        'HOVERING_SORT_BARCODE_NODE': 'hovering-sort-barcode-node',
         //  在superTree视图中鼠标放在上方的节点上
         'HIGHLIGHT_ALL_RELATED_NODE': 'highlight-all-related-node',
         //  在superTree视图中鼠标点击选择的节点
         'HIGHLIGHT_ALL_SELECTED_NODE_SUPERTREEVIEW': 'highlight-all-selected-node',
-        //  在superTree视图中鼠标从上方的节点上移开
-        'UNHIGHLIGHT_ALL_RELATED_NODE': 'unhighlight-all-related-node',
-        //  取消高亮supertree上排序的节点
-        'UNHOVERING_SORT_BARCODE_NODE': 'unhovering-sort-barcode-node',
         //  取消在单个视图上的高亮效果
         'NODE_MOUSEOUT': 'node-mouseout',
         //***************************
         // barcode.collection视图上发出的信号
-        //  更新barcode的高度以及位置
-        'UPDATE_BARCODE_ATTR': 'update-barcode-attr',
-        //  重新设置barcode的相关参数
-        'RESET_BARCODE_ATTR': 'reset-barcode-attr',
-        //  显示loading的标志
-        'SHOW_LOADING_ICON': 'show-loading-icon',
         //  隐藏loading的标志
         'HIDE_LOADING_ICON': 'hide-loading-icon',
         //  更新superTree视图中的aligned icon
@@ -203,7 +151,6 @@ define([
         //  渲染覆盖在barcode的上面的带有斜纹的矩形
         //  支持lasso的功能的信号
         'ENABLE_LASSO_FUNCTION': 'enable-lasso-function',
-        'RENDER_HOVER_RECT': 'render-hover-rect',
         //  高亮相关的节点
         'HIGH_RELATED_NODES': 'highlight-related-nodes',
         //  在barcodeview里点击选中的barcode取消选中barcode
@@ -218,28 +165,16 @@ define([
         'UN_HOVERING_BARCODE_EVENT': 'unhovering-barcode',
         //  鼠标悬浮在某个barcode上面广播的事件
         'HOVERING_BARCODE_EVENT': 'hovering-barcode',
-        //  视图的barcode的节点更新
-        'VIEW_UPDATE': 'view-update',
-        //  删除barcode视图上方的options按钮
-        'REMOVE_OPTIONS_BUTTTON': 'remove_options_button',
         //  更新barcode的配置视图
         'UPDATE_TREE_CONFIG_VIEW': 'update-tree-config-view',
         //  删除总结的柱状图
         'REMOVE_SUMMARY_STATE': 'remove-summary-state',
         //  展示总结的柱状图
         'SHOW_SUMMARY_STATE': 'show-summary-state',
-        //  更新align部分的subtree
-        'UPDATE_FOCUS_SUBTREE': 'update-focus-subtree',
         //***************************
         //  从barcode comparison视图中发出的信号
         'HIGHLIGHT_LASSO_SELECTED': 'highlight-lasso-selected',
         'UNHIGHLIGHT_LASSO_SELECTED': 'unhighlight-lasso-selected',
-        //***************************
-        //  从toolbar视图中发出的信号
-        //  将barcode从original模式转换为compact模式
-        'TRANSITON_ORIGINAL_TO_COMPACT': 'transition-original-to-compact', // para: null
-        //  将barcode从compact模式转换为original模式
-        'TRANSITON_COMPACT_TO_ORIGINAL': 'transition-compact-to-original', // para: null
         //***************************
         //  从tree.config视图中发出的信号
         //  用户点击attribute按钮时, 用户打开distribution视图
@@ -260,64 +195,10 @@ define([
         'UPDATE_ANIATION_BARCODE_VIEW': 'update_animation-barcode-view',
         //*******************************************
         //  删除的属性
-        //*******************************************
-        //*******************************************
-        'UPDATE_ALIGN_LEVEL': 'update-align-level',
-        //  单树模式下高亮nodelink树中的节点
-        'HIGHLIGHT_NODELINK_NODE': 'highlight-nodelink-node',
-        //  单树模式下取消高亮nodelink树中的节点
-        'UNHIGHLIGHT_NODELINK_NODE': 'unhighlight-nodelink-node',
-        //  单树模式下高亮barcode树中的节点
-        'HIGHLIGHT_BARCODE_NODE': 'highlight-barcode-node',
-        //  单树模式下取消高亮barcode树中的节点
-        'UNHIGHLIGHT_BARCODE_NODE': 'unhighlight-barcode-node',
-        //  单树模式下, 上传完成之后开始渲染nodelinktree
-        'RENDER_UPLOAD_NODELINK_TREE': 'render-upload-nodelink-tree',
-        //  单树模式下, 上传完成之后开始渲染barcodetree
-        'RENDER_UPLOAD_BARCODE_TREE': 'render-upload-barcode-tree',
         //  更新barcode的位置
         'UPDATE_BARCODE_LOC': 'update-barcode-loc',
         //  更新barcode比较的summary
         'UPDATE_SUMMARY': 'update-summary',
-        //  增加barcode model
-        'ADD_MODEL': 'add-model',
-        //  改变barcode的宽度
-        'CHANGE_BARCODE_WIDTH': 'render-barcode-width-controller',
-        //  绘制barcode
-        'RENDER_BARCODE': 'render-barcode', // para: null
-        //  渲染superTree中的节点
-        'RENDER_SUPERTREE_BARCODE': 'render-supertree-barcode', // para: null
-        //  鼠标离开节点时候发出的信号
-        'NODE_MOUSE_OUT': 'node-mouse-out', // para: null
-        //  渲染superTreeline的时候发出的信号
-        'RENDER_SUPERTREELINE_BARCODE': 'render-supertreeline-barcode', // para: null
-        //
-        'RENDER_WHOLE_TO_SUPERTREE': 'render-whole-to-supertree', // para: null
-        'RENDER_DATELINE_CHART': 'render-datelinechart',
-        //  高亮当前选中的节点
-        'HIGHLIGHT_SELECTED_TREE': 'highlight-selected-tree', //
-        //  高亮supertree上的节点
-        'HIGHLIGHT_SUPERTREE_NODE': 'highlight-supertree-node',
-        //  高亮histogram
-        'HIGHLIGHT_ADDED_HISTOGRAM': 'highlight-added-histogram',
-        //  从supertree中高亮barcodematrix中的节点
-        'HIGHLIGHT_BARCODEMATRIX_NODE': 'highlight-barcodematrix-node',
-        //  从supertree中点击高亮barcodematrix中的节点
-        'CLICK_HIGHLIGHT_BARCODEMATRIX_NODE': 'click-highlight-barcodematrix-node',
-        //从supertree中点击取消高亮barcodematrix中的节点
-        'CLICK_UNHIGHLIGHT_BARCODEMATRIX_NODE': 'click_unhighlight_barcodematrix_node',
-        //  刷选进行选中,查看分布
-        'BRUSH_SELECTION_HIGHLIGHT': 'brush_selection_highlight',
-        //  取消高亮supertree上的节点
-        'UNHIGHLIGHT_SUPERTREE_NODE': 'unhighlight-supertree-node',
-        'UNHIGHLIGHT_SELECTED_TREE': 'unhighlight-selected-tree',
-        'TO_FILTERING_BARCODE_MATRIX_NODE': 'to-filtering-barcode-matrix-node',
-        'TO_FILTERING_DISTRIBUTION_HISTOGRAM': 'to-filtering-distribution-histogram',
-        'ADD_SORT_ICON': 'add-sort-icon',
-        //  在直方图上进行刷选从而筛选节点
-        'BRUSH_HISTOGRAM': 'brush_histogram',
-        'RESIZE': 'resize',
-        'RENDER_ARCLINK': 'render-arclink',
       },
       'PREFIX': {
         'BARCODE_G': 'barcode-g-'

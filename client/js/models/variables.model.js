@@ -20,6 +20,15 @@ define([
         Node_Arrangement: false,
         Horizontal_Fit_In_Screen: false
       },
+      BARCODE_COLOR: {
+        ROOT_COLOR: '#000000',
+        LEAF_COLOR: '#DCDCDC',
+        ADD_NODE_COLOR: '#a1d76a',
+        MISS_NODE_COLOR: '#e9a3c9',
+        SAME_NODE_COLOR: 'black'
+      },
+      //  允许的最小的icon size的大小, iconsize也要随着屏幕的大小的变化相应的变化
+      minIconSize: 20,
       //  是否使用padding显示不存在的节点
       is_show_padding_node: false,
       //  是否对于节点进行高亮的选项
@@ -46,26 +55,6 @@ define([
       MIN_HEIGHT: 0,
       //  power的参数
       POW_EXPONENT: 0.4,
-      //  标记各层的bar的宽度
-      barcodeWidthArray: [18, 12, 8, 4, 1],
-      //  最大的barcode的宽度
-      maxBarcodeWidth: 18,
-      //  最小的barcode的宽度
-      minBarcodeWidth: 2,
-      //  barcode节点的最小宽度
-      barcodeNodeWidthMinValue: 2,
-      //  barcode节点的最大宽度
-      barcodeNodeWidthMaxValue: 40,
-      //  改变之间的状态的属性: 各层的bar的宽度
-      barcodeWidthArray_previous: [18, 12, 8, 4, 1],
-      //  barcode的节点之间的间距
-      barcodeNodeInterval: 5,
-      //  改变之间的状态的属性: barcode的节点之间的间距
-      barcodeNodeInterval_previous: 5,
-      //  barcode节点间距的最小值
-      barcodeNodeIntervalMinValue: 3,
-      //  barcode节点间距的最大值
-      barcodeNodeIntervalMaxValue: 10,
       //  标记barcode的高度
       barcodeHeight: 40,
       //  标记barcode的最大高度
@@ -73,8 +62,6 @@ define([
       //  标记barcode的最小高度
       barcodeNodeHeightMaxValue: 100,
       //  =======================================================
-      //  当前渲染的barcode数据集
-      currentDataSetName: 'DailyRecordTree', //'DailyRecordTree', 'NBATeamTree', 'LibraryRecordTree'
       //  当前的barcode比较视图的宽度
       barcodetreeViewWidth: 0,
       //  当前的barcode比较视图的高度
@@ -125,7 +112,7 @@ define([
       //  标记编辑节点的颜色
       edit_icon_color: 'white',
       //  标记选择节点的颜色
-      select_icon_color: 'white',
+      select_icon_color: 'black',
       //  用于计算barcode collection视图的高度
       barcodeViewPaddingBottom: 5,
       //  barcodeTree在Original模式下的最小的高度
@@ -133,14 +120,8 @@ define([
       //****************************************************
       //  在barcode.collection.view视图中的参数
       // barcodeViewPaddingRight: 20,
-      //  barcode的前的label距离barcode左边界的宽度
-      barcodeTextPaddingLeft: 15,
-      //  barcode的边界宽度
-      barcodePaddingLeft: 45,
       //  最大的subtree的sawtooth的宽度
       globalCompressPaddingNodeWidth: null, // 初始值是null
-      //  barcode视图中最大的sawtooth的长度
-      maxBarcodePaddingNodeWidth: 300,
       //****************************************************
       //  top.toolbar.view视图中的参数
       alignedBarcodeLevel: 0,
@@ -160,6 +141,48 @@ define([
       selectionColor: null,
       histogramHeightRem: 14,
       //****************************************************
+      //  BarcodeTree的设置参数
+      //  1. 当前渲染的barcode数据集
+      currentDataSetName: 'DailyRecordTree', //'DailyRecordTree', 'NBATeamTree', 'LibraryRecordTree'
+      //  2. barcode当前的显示模式
+      barcodeMode: 'original', //'DailyRecordTree', 'NBATeamTree', 'LibraryRecordTree'
+      //  3. 每一列barcode压缩的数量
+      compactNum: 5,
+      //  4. barcode的节点之间的间距
+      barcodeNodeInterval: 3,
+      //  4.1. 改变之间的状态的属性: barcode的节点之间的间距
+      barcodeNodeInterval_previous: 3,
+      //  4.2. barcode节点间距的最小值
+      barcodeNodeIntervalMinValue: 3,
+      //  4.3. barcode节点间距的最大值
+      barcodeNodeIntervalMaxValue: 10,
+      //  5. 标记各层的bar的宽度
+      barcodeWidthArray: [18, 12, 8, 4, 0],
+      //  5.1. 最大的barcode的宽度
+      maxBarcodeWidth: 18,
+      //  5.2. 最小的barcode的宽度
+      minBarcodeWidth: 2,
+      //  5.3. barcode节点的最小宽度
+      barcodeNodeWidthMinValue: 2,
+      //  5.4. barcode节点的最大宽度
+      barcodeNodeWidthMaxValue: 40,
+      //  5.5. 改变之间的状态的属性: 各层的bar的宽度
+      barcodeWidthArray_previous: [18, 12, 8, 4, 0],
+      //  6. 当前显示的节点的层次数组, 出现在这个数组的层级的节点会显示
+      selectedLevels: [0, 1, 2, 3],
+      //  7. barcode视图中最大的sawtooth的长度
+      maxBarcodePaddingNodeWidth: 300,
+      //  8. barcode的前的label距离barcode左边界的宽度
+      barcodeTextPaddingLeft: 15,
+      //  9. barcode的边界宽度
+      barcodePaddingLeft: 45,
+      //  10. comparison result的宽度
+      comparisonResultPadding: 80,
+      //  11. 默认情况下的视图宽度
+      init_width: 1600,
+      //  12. 默认情况下的视图高度
+      init_height: 900,
+      //****************************************************
       'finishInit': false,
       //  whether loading page show
       'loading': true,
@@ -178,8 +201,6 @@ define([
       'virtualNodeDescription': 'virtual',
       //  存储最后一个被选中的bar对应的数据在文件数组中的index，即时间维的index
       'lastSelectBarIndex': 2,
-      //  当前显示的节点的层次数组, 出现在这个数组的层级的节点会显示
-      'selectedLevels': [],
       //  displayed Last Level
       'displayedLastLevel': 3,
       //  supertree的高度
@@ -256,10 +277,6 @@ define([
       barcodeWidthObject: {},
       //  barcode的高度
       maxBarcodeHeight: 0,
-      //  每一列barcode压缩的数量
-      compactNum: 5,
-      //  barcode当前的显示模式
-      barcodeMode: 'original',
       //  渲染的树的最大深度
       maxDepth: 3,
       //  当前实现的树的最大的个数
@@ -356,12 +373,61 @@ define([
       var self = this
       $("#range-input-height").val(barcodeHeight)
     },
-    initNodesColor: function () {
+    //  更新barcodeTree中的选中的层级以及选中层级的对应宽度
+    update_max_depth: function (max_depth) {
+      var self = this
+      // 更新barcode选定的层级以及层级的宽度, 默认的情况下显示4层的barcodeTree
+      self.set('fileMaxDepth', max_depth)
+      //  根据更新的层次结构数据的层级更新选中的层级
+      self.init_selected_levels()
+      //  计算barcodeTree每一个层级的宽度
+      self.update_selected_levels_width()
+      //  在得到了barcode的最大深度之后, 需要初始化barcode不同层级节点的颜色
+      self.init_nodes_color()
+    },
+    // 根据更新的层次结构数据的层级更新选中的层级(默认情况下选中的层级为所有的层级)
+    init_selected_levels: function () {
+      var self = this
+      var max_depth = self.get('maxDepth')
+      var selectedLevels = []
+      for (var level = 0; level <= max_depth; level++) {
+        selectedLevels.push(level)
+      }
+      window.selectedLevels = selectedLevels
+      self.set('selectedLevels', selectedLevels)
+    },
+    //  更新barcode选定的层级以及层级的宽度, 目前的做法是只显示barcodeTree的前四层,逐层向下地进行探索
+    update_selected_levels_width: function () {
+      var self = this
+      var max_depth = self.get('maxDepth')
+      var barcodeWidthArray = []
+      for (var level = 0; level <= max_depth; level++) {
+        //  将所有的层级添加到selectedLevel数组中
+        var width = self.uniform_width_for_each_level(level, max_depth)
+        barcodeWidthArray.push(width)
+      }
+      //  更新barcode的宽度,以及选定的barcode的层级
+      window.barcodeWidthArray = barcodeWidthArray
+      self.set('barcodeWidthArray', barcodeWidthArray)
+    },
+    //  采用平均的方法计算barcode的节点的宽度
+    uniform_width_for_each_level: function (level, max_depth) {
+      var self = this
+      var maxBarcodeWidth = self.get('maxBarcodeWidth')
+      var minBarcodeWidth = self.get('minBarcodeWidth')
+      var barcodeLevelPerWidth = Math.round(maxBarcodeWidth / max_depth)
+      if (level === max_depth) {
+        return minBarcodeWidth
+      }
+      return (max_depth - level) * barcodeLevelPerWidth
+    },
+    //  初始化节点的颜色
+    init_nodes_color: function () {
       var self = this
       var maxDepth = self.get('maxDepth') + 1
       var barcodeNodeColorArray = self.get('barcodeNodeColorArray')
-      var RootColor = Config.get('BARCODE_COLOR')['ROOT_COLOR']
-      var LeafColor = Config.get('BARCODE_COLOR')['LEAF_COLOR']
+      var RootColor = self.get('BARCODE_COLOR')['ROOT_COLOR']
+      var LeafColor = self.get('BARCODE_COLOR')['LEAF_COLOR']
       var linear = d3.scale.linear()
         .domain([0, maxDepth])
         .range([0, 1])

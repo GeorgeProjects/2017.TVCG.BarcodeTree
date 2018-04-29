@@ -442,7 +442,6 @@ define([
         barcodeModel.tablelens_single_subtree()
         self.add(barcodeModel)
       }
-      console.log('is fit in screen', Variables.get('BARCODETREE_GLOBAL_PARAS')['Horizontal_Fit_In_Screen'])
       self.update_barcode_model_default_index()
       for (var bI = 0; bI < barcodeModelArray.length; bI++) {
         var barcodeModel = barcodeModelArray[bI]
@@ -1456,9 +1455,6 @@ define([
       var selectedAlignedItemList = [{nodeData: nodeData}]
       self.remove_aligned_part(selectedAlignedItemList)
       finishRemoveAlignDeferObj.resolve()
-      // self.remove_unaligned_item(nodeData)
-      // self.remove_operation_item(nodeData)
-      // self.remove_super_subtree(nodeData.id, nodeData.depth, nodeData.category, alignedLevel, finishRemoveAlignDeferObj)
     },
     /**
      * 改变subtree的展示模式
@@ -1882,12 +1878,6 @@ define([
       var self = this
       self.uniform_layout()
       self.update_data_all_view()
-    }
-    ,
-    //  trigger出的信号所表示的是已经完成了对于barcode数据的准备, 接下来app.view中开始调用render_barcodetree_view进行渲染
-    request_barcode_dataset: function () {
-      var self = this
-      Backbone.Events.trigger(Config.get('EVENTS')['BEGIN_RENDER_BARCODE_VIEW'])
     },
     reset_attribute: function () {
       var self = this
@@ -2343,85 +2333,6 @@ define([
         var alignedNodeLevel = alignedNodeObjArray[aligned_node_obj_index].alignedNodeLevel
         var alignedNodeCategory = alignedNodeObjArray[aligned_node_obj_index].alignedNodeCategory
         self.add_super_subtree(alignedNodeId, alignedNodeLevel, alignedNodeCategory, alignedLevel, finishAlignDeferObj)
-      }
-    }
-    ,
-    /**
-     * 在singleBarcodeTree视图中再次点击节点取消选中子树的对齐
-     */
-    remove_super_subtree: function (rootId, rootLevel, rootCategory, alignedLevel, finishRemoveAlignDeferObj) {
-      var self = this
-      //  alignedNodeIdArray记录已经对齐的节点数组
-      var alignedNodeIdArray = self.alignedNodeIdArray
-      var alignedNodeObjArray = self.alignedNodeObjArray
-      var rootIdIndex = self.alignedNodeIdArray.indexOf(rootId)
-      if (rootIdIndex !== -1) {
-        self.alignedNodeIdArray.splice(rootIdIndex, 1)
-        removeNodeObjFromObjArray(rootId, self.alignedNodeObjArray)
-        // if (alignedNodeIdArray.length === 0) {
-        //   self.alignedNodeIdArray = ['node-0-root']
-        //   self.alignedNodeObjArray = [{
-        //     alignedNodeId: 'node-0-root',
-        //     alignedNodeLevel: 0,
-        //     alignedNodeCategory: 'root'
-        //   }]
-        //   alignedLevel = 0
-        //   Variables.set('alignedLevel', alignedLevel)
-        // }
-        //  当没有align对齐的节点的情况下, 将root节点添加到align节点的数组中
-      } else {
-        finishRemoveAlignDeferObj.resolve()
-      }
-      if (alignedNodeIdArray.length === 0) {
-        //  重新设置alignedLevel为0
-        console.log('**************remove_super_subtree***********')
-        Variables.set('alignedLevel', 0)
-        refresh_existed_barcodtree()
-      } else {
-        //  如果仍然存在需要对齐的节点
-        align_existed_subtree(rootId, rootLevel, rootCategory, alignedLevel, finishRemoveAlignDeferObj)
-      }
-      //  重新更新现在的barcodeTree
-      function refresh_existed_barcodtree() {
-        var url = 'barcode_original_data'
-        var selectItemNameArray = Variables.get('selectItemNameArray')
-        var alignExistTree = false
-        //  在这里的更新是全部删除, 因此是不需要像逐个删除barcodeTree一样重新将所有的树对齐
-        window.Datacenter.requestDataCenter(url, selectItemNameArray, alignExistTree)
-      }
-
-      //  对齐现在存在的需要对齐的节点
-      function align_existed_subtree(rootId, rootLevel, rootCategory, alignedLevel, finishRemoveAlignDeferObj) {
-        var addedSubtreeDeferObj = $.Deferred()
-        //  当addedSubtreeDeferObj对象被resolved的时候, 标志着对齐的子树节点数组被插入到子树的节点数组中, 并且相应的状态已经被更新
-        $.when(addedSubtreeDeferObj)
-          .done(function () {
-            //  在barcode collection中的model里面增加了super subtree之后如何对齐节点的位置
-            self.compute_aligned_subtree_range()
-            finishRemoveAlignDeferObj.resolve()
-            // Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
-          })
-          .fail(function () {
-            console.log('defer fail')
-          })
-        //  根据选择对齐的barcode的节点层级更新当前的对齐层级, 当前的对齐层级是最深的层级
-        // var nodeDepth = rootLevel
-        // var currentAligneLevel = Variables.get('alignedLevel')
-        // if (currentAligneLevel < nodeDepth) {
-        //   Variables.set('alignedLevel', nodeDepth)
-        // }
-        // window.Datacenter.buildSuperTree(rootId, rootLevel, rootCategory, addedSubtreeDeferObj, alignedLevel)
-        window.Datacenter.removeSuperTree(rootId, rootLevel, rootCategory, addedSubtreeDeferObj, alignedLevel)
-      }
-
-      //  从nodeObj数组中删除节点id为rootId的节点
-      function removeNodeObjFromObjArray(rootId, alignedNodeObjArray) {
-        for (var aI = 0; aI < alignedNodeObjArray.length; aI++) {
-          if (alignedNodeObjArray[aI].alignedNodeId === rootId) {
-            alignedNodeObjArray.splice(aI, 1)
-            break
-          }
-        }
       }
     }
     ,
@@ -3393,9 +3304,6 @@ define([
       }
       if (alignedRangeObjArray.length !== 0) {
         self.sort_accord_similarity()
-        //  对于histogram视图相对应的改变
-        // self.trigger_color_encoding()
-        // self.trigger_histogram_location_comparison()
       } else {
         self.sort_based_as_first()
       }
@@ -3479,70 +3387,6 @@ define([
       }
       //  有的情况下basedTree没有排在最上方, 所以需要增加一个sort_based_as_first排序
       self.sort_based_as_first()
-    }
-    ,
-    /**
-     * 在histogram视图中更新颜色按照相似度进行编码
-     */
-    trigger_color_encoding: function () {
-      var self = this
-      var colorEncodingObj = {}
-      self.each(function (model) {
-        var barcodeIndex = model.get('barcodeIndex')
-        var barcodeTreeId = model.get('barcodeTreeId')
-        var encodedColor = self.get_color_accord_similarity(barcodeIndex)
-        if (!model.get('compareBased')) {
-          colorEncodingObj[barcodeTreeId] = encodedColor
-        }
-      })
-      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_HISTOGRAM_ENCODE'], {
-        colorEncodingObj: colorEncodingObj
-      })
-    }
-    ,
-    /**
-     * 在histogram视图中更新比较barcode的相同节点的位置
-     */
-    trigger_histogram_location_comparison: function () {
-      var self = this
-      var sameNodeNumObj = {}
-      var differentNodeNumObj = {}
-      self.each(function (model) {
-        var barcodeTreeId = model.get('barcodeTreeId')
-        var alignedComparisonResultArray = model.get('alignedComparisonResultArray')
-        var sameNodeIdSum = 0
-        var differentNodeIdSum = 0
-        for (var aI = 0; aI < alignedComparisonResultArray.length; aI++) {
-          var singleAlignedResult = alignedComparisonResultArray[aI]
-          var sameNodeIdArray = singleAlignedResult.sameNodeIdArray
-          var addedNodeIdArray = singleAlignedResult.addedNodeIdArray
-          var missedNodeIdArray = singleAlignedResult.missedNodeIdArray
-          sameNodeIdSum = sameNodeIdSum + sameNodeIdArray.length
-          differentNodeIdSum = differentNodeIdSum + addedNodeIdArray.length + missedNodeIdArray.length
-        }
-        sameNodeNumObj[barcodeTreeId] = sameNodeIdSum
-        differentNodeNumObj[barcodeTreeId] = differentNodeIdSum
-      })
-      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_HISTOGRAM_COMPARISON_LOC'], {
-        sameNodeNumObj: sameNodeNumObj,
-        differentNodeNumObj: differentNodeNumObj
-      })
-    }
-    ,
-    /**
-     * 在histogram视图中更新颜色按照还原之前的编码方式
-     */
-    trigger_null_color_encoding: function () {
-      var self = this
-      var colorEncodingObj = {}
-      self.each(function (model) {
-        var barcodeIndex = model.get('barcodeIndex')
-        var barcodeTreeId = model.get('barcodeTreeId')
-        colorEncodingObj[barcodeTreeId] = null
-      })
-      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_HISTOGRAM_ENCODE'], {
-        colorEncodingObj: colorEncodingObj
-      })
     }
     ,
     get_color_accord_similarity: function (barcodeIndex) {
@@ -3814,8 +3658,8 @@ define([
       }
       // update view
       $.when.apply(null, deferredsArray).done(function () {
-        Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW_WIDTH'])
-        Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
+        self.trigger_barcode_view_width()
+        self.trigger_update_barcode_view()
       })
 
       function get_aligned_obj(alignedNodeId) {
@@ -3869,8 +3713,11 @@ define([
         rootAttr.alignedNodeMaxX = alignedNodeMaxX
         return rootAttr
       }
-    }
-    ,
+    },
+    trigger_update_barcode_view: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_BARCODE_VIEW'])
+      Backbone.Events.trigger(Config.get('EVENTS')['RENDER_SUPERTREE'])
+    },
     /**
      * trigger信号更新superTree视图中的aligned icon
      */
@@ -3885,19 +3732,6 @@ define([
     trigger_close_supertree_view: function () {
       var self = this
       Backbone.Events.trigger(Config.get('EVENTS')['CLOSE_SUPER_TREE'])
-    }
-    ,
-    /**
-     * 在向barcode collection中增加了barcode model之后更新barcode view视图
-     */
-    // trigger_barcode_view_render_update: function () {
-    //   var self = this
-    //   self.trigger_barcode_loc()
-    //   self.trigger_barcode_view_width()
-    // },
-    trigger_render_supertree: function (subtreeNodeArrayObj) {
-      var self = this
-      Backbone.Events.trigger(Config.get('EVENTS')['RENDER_SUPERTREE'])
     }
     ,
     /**
@@ -3922,15 +3756,12 @@ define([
       Backbone.Events.trigger(Config.get('EVENTS')['UPDATE_SUMMARY'])
     }
     ,
-    //  trigger 更新supertree视图的信号
-    trigger_super_view_update: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')['RENDER_SUPERTREE'])
-    }
-    ,
-    clear_barcode_dataset: function () {
+    /**
+     * 在向barcode collection中增加了barcode model之后更新barcode view视图
+     */
+    trigger_render_supertree: function (subtreeNodeArrayObj) {
       var self = this
-      self.reset()
-      Backbone.Events.trigger(Config.get('EVENTS')['RESET_BARCODE_ATTR'])
+      Backbone.Events.trigger(Config.get('EVENTS')['RENDER_SUPERTREE'])
     }
     ,
     update_covered_rect_obj: function () {

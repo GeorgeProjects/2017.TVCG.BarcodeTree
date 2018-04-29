@@ -1,4 +1,4 @@
-var hierarchicalDataProcessor = require('../processor/signaltree_processor')
+var hierarchicalDataProcessor = require('../processor/barcodetree_processor')
 var dataCenter = require('../dataCenter/dataCenter')
 var clone = require('clone')
 var ITERATION_NUM = 200

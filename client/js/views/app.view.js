@@ -13,10 +13,9 @@ define([
   'views/histogram-main.view',
   'views/barcode.view',
   'views/toolbar.view',
-  'views/single.view',
   'views/node.config.view',
   'text!templates/layoutDiv.tpl',
-], function (require, Mn, _, $, Backbone, Datacenter, Variables, Config, Tooltip, Huebee, RangeSlider, HistogramView, BarcodeView, ToolBarView, SingleView, NodeConfig, Tpl) {
+], function (require, Mn, _, $, Backbone, Datacenter, Variables, Config, Tooltip, Huebee, RangeSlider, HistogramView, BarcodeView, ToolBarView, NodeConfig, Tpl) {
   'use strict'
   return Mn.LayoutView.extend({
     tagName: 'div',
@@ -28,91 +27,61 @@ define([
       'toolbarView': '#toolbar-view',
       'histogramView': '#histogram-main-panel',
       'barcodeView': '#barcode-view',
-      // 'singleView': '#barcode-single-view',
       'colorButton': '#color-picker',
       'barcodeNodeConfig': '#barcode-node-config'
     },
     events: {
       'click #clear-all': 'clear_all_items'
     },
-    clear_all_items: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')['CLEAR_ALL'])
-    },
-    set_preclick_color: function (color) {
-      Backbone.Events.trigger(Config.get('EVENTS')['SET_PRECLICK_COLOR'], {
-        color: color
-      })
-    },
-    initialize: function (options) {
+    //  app view视图的初始化函数
+    initialize: function () {
       var self = this
+      //  DataCenter的初始化, 开始从server端请求数据
+      window.Datacenter.start()
+      //  初始化监听函数, 因为需要监听histogram中的变量, 所以需要先初始化DataCenter
+      self.init_event()
       self.init_common_func()
-      //  系统在初始化的时间点会预先绘制一部分barcode, 在绘制好这部分barcode之后会结束loading,直接显示。
-      //  因此在视图的整个初始化过程中有两个阶段, 一个阶段是在从服务器端获取数据的统计信息, (即柱状图的相关数据)之后, 开始渲染视图
-      //  另一个阶段是将部分barcode绘制好之后,停止视图的加载条
-      $(document).ready(function () {
-        $('#loading').css({visibility: 'visible'})
-        window.tip = d3.tip()
-          .attr('class', 'd3-tip')
-          .offset([-10, 0])
-          .html(function (d) {
-            return d//"<span style='color:steelblue'>" + d + "</span>"
-          })
-        window.histogramTip = d3.tip()
-          .attr('class', 'd3-histogram-tip')
-          .offset([-10, 0])
-          .html(function (d) {
-            return d//"<span style='color:steelblue'>" + d + "</span>"
-          })
-        Backbone.Events.on(Config.get('EVENTS')['FINISH_RENDER_VIEW'], function () {
-          $('#loading').addClass('hidden')
-          window.NProgress.done()
-        })
-        //  此时加载完成histogram视图, 表示预处理工作也已经完成
-        Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_HISTOGRAM_VIEW'], function () {
-          $('#loading').css({visibility: 'hidden'})
-          self.render_toolbar_view()
-          self.render_histogram_view()
-          // self.render_single_view()
-          self.render_barcode_node_config_view()
-          self.render_barcodetree_view()
-        })
-        // Backbone.Events.on(Config.get('EVENTS')['BEGIN_RENDER_BARCODE_VIEW'], function () {
-        //   console.log('BEGIN_RENDER_BARCODE_VIEW')
-        //   self.render_barcodetree_view()
-        // })
-        Backbone.Events.on(Config.get('EVENTS')['RESET_SELECTION_COLOR'], function (event) {
-          self.reset_color_button()
-        })
-        // var defaultSettings = Config.get('DEFAULT_SETTINGS')
-        // var windowHeight = $('body').width()
-        // var barcodeHeight = windowHeight / 30
-        // defaultSettings.barcodeHeight = barcodeHeight
-        // Variables.set('barcodeHeight', barcodeHeight)
-        //  初始化视图中的字体大小
-        init_font_size()
-        //  初始化缺失节点的stroke的宽度
-        init_missed_stroke_width()
-        Datacenter.start()
-        // window.barcodeHeight = barcodeHeight
-        //  初始化选择颜色的工具
-        var elem = document.querySelector('#color-picker')
-        var hueb = new Huebee(elem, {})
-        hueb.on('change', function (color, hue, sat, lum) {
-          setColorButton(color)
-          Variables.set('selectionColor', color)
-          // resetCurrentPreClick(color)
-        })
-        //  双击color picker的button的时候会还原颜色设置
-        $('#color-picker').dblclick(function () {
-          Variables.set('selectionColor', null)
-          $('#color-picker').css('background-color', 'white')
-          $('#color-picker-text').css('-webkit-text-fill-color', 'black')
-        })
+      self.init_tip()
+    },
+    //  加载完成DOM元素之后的函数
+    onShow: function () {
+      init_em_px_transform()
+      //  初始化缺失节点的stroke的宽度
+      init_missed_stroke_width()
+      //  初始化视图中的字体大小
+      init_font_size()
+      /**
+       * 设置loading视图为visible,
+       * loading的标志必须在设置完成了text的font size之后才能更新为visible,
+       * 否则loading图标的大小会发生改变
+       **/
+      init_loading_visible()
+      //  初始化选择颜色的工具
+      var elem = document.querySelector('#color-picker')
+      var hueb = new Huebee(elem, {})
+      hueb.on('change', function (color, hue, sat, lum) {
+        setColorButton(color)
+        Variables.set('selectionColor', color)
       })
-      //  初始化视图中的font-size
-      function init_font_size() {
+      //  双击color picker的button的时候会还原颜色设置
+      $('#color-picker').dblclick(function () {
+        Variables.set('selectionColor', null)
+        $('#color-picker').css('background-color', 'white')
+        $('#color-picker-text').css('-webkit-text-fill-color', 'black')
+      })
+      //  初始化loading视图为visible
+      function init_loading_visible() {
+        $('#loading').css('visibility', 'visible')
+      }
+
+      //  初始化em和px之间的变换
+      function init_em_px_transform() {
         var viewWidth = $(document).width()
         window.rem_px = viewWidth / 160
+      }
+
+      //  初始化视图中的font-size
+      function init_font_size() {
         document.getElementsByTagName('html')[0].style.fontSize = window.rem_px + 'px';
       }
 
@@ -123,35 +92,49 @@ define([
         var strokeWidth = strokeWidthRatio * rem_px
         Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
         Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
-        //  之前是检验屏幕的长宽来设置miss的节点的stroke的宽度, 现在是根据不同的节点类型设置stroke的宽度
-        // if (strokeWidth <= 0.5) {
-        //   //  将节点的class设置为min-stroke
-        //   Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
-        //   Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MIN_STROKE'])
-        // } else if (strokeWidth >= 0.5) {
-        //   //  将节点的class设置为max-stroke
-        //   Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
-        //   Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT_MAX_STROKE'])
-        // } else {
-        //   //  将节点的class设置为scale-stroke
-        //   Variables.set('missed_node_class', Config.get('MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
-        //   Variables.set('general_missed_node_class', Config.get('GENERAL_MISSED_NODE_CLASS')['MISS_NODE_HIGHLIGHT'])
-        // }
       }
 
-      //  之前的设定是预先选择一定的barcode的histogram, 然后选择颜色就可以支持在预先选择的barcode上面增加颜色
-      // function resetCurrentPreClick(color) {
-      //   self.set_preclick_color(color)
-      //   // var selectionColor =
-      // }
+      //  设置选择颜色按钮的button的颜色
       function setColorButton(color) {
         $('#color-picker').css("background-color", color)
       }
     },
-    //  重置color button的颜色
-    reset_color_button: function () {
-      $('#color-picker').css('background-color', 'white')
+    //  在histogram视图中, 点击之后所有选中的barcodeTree都会消失
+    clear_all_items: function () {
+      Backbone.Events.trigger(Config.get('EVENTS')['CLEAR_ALL'])
     },
+    //  设置点击选中或者刷选的barcodeTree的着色
+    set_preclick_color: function (color) {
+      Backbone.Events.trigger(Config.get('EVENTS')['SET_PRECLICK_COLOR'], {
+        color: color
+      })
+    },
+    //  初始化视图中的事件
+    init_event: function () {
+      var self = this
+      //  此时读取了histogram视图中的数据之后会更新histogramModel变量, 表示预处理工作也已经完成, 那么就加载所有的视图
+      self.listenTo(window.Datacenter.histogramModel, 'change:histogramDataObject', self.render_view)
+      //  监听选择颜色的函数
+      Backbone.Events.on(Config.get('EVENTS')['RESET_SELECTION_COLOR'], function (event) {
+        self.reset_color_button()
+      })
+    },
+    //  初始化在barcodeTree系统中的tip
+    init_tip: function () {
+      window.tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function (d) {
+          return d
+        })
+      window.histogramTip = d3.tip()
+        .attr('class', 'd3-histogram-tip')
+        .offset([-10, 0])
+        .html(function (d) {
+          return d
+        })
+    },
+    //  初始化视图中公共的函数
     init_common_func: function () {
       String.prototype.replaceAll = function (find, replace) {
         var str = this
@@ -188,14 +171,25 @@ define([
       }
       window.split_character = ""
     },
+    //  重置color button的颜色
+    reset_color_button: function () {
+      $('#color-picker').css('background-color', 'white')
+    },
+    //  开始渲染视图的函数
+    render_view: function () {
+      var self = this
+      $('#loading').css({visibility: 'hidden'})
+      self.render_toolbar_view()
+      self.render_histogram_view()
+      self.render_barcode_node_config_view()
+      self.render_barcodetree_view()
+    },
     //  初始化控制显示barcode进行比较的视图
     render_barcodetree_view: function () {
       var self = this
       //  初始化barcodeView
       self.showChildView('barcodeView', new BarcodeView({
-        barcodeCollection: Datacenter.barcodeCollection,
-        categoryModel: Datacenter.categoryModel,
-        supertreeModel: Datacenter.supertreeModel
+        barcodeCollection: Datacenter.barcodeCollection
       }))
       $('#supertree-scroll-panel').scroll(function () {
         $('#barcodetree-scrollpanel').scrollLeft($(this).scrollLeft())
@@ -208,11 +202,7 @@ define([
     render_toolbar_view: function () {
       var self = this
       //  初始化toolbar视图
-      self.showChildView('toolbarView', new ToolBarView({
-        model: Datacenter.histogramModel,
-        barcodeCollection: Datacenter.barcodeCollection,
-        singleBarcodeModel: Datacenter.singleBarcodeModel
-      }))
+      self.showChildView('toolbarView', new ToolBarView())
     },
     // 初始化视图上方的柱状图视图
     render_histogram_view: function () {

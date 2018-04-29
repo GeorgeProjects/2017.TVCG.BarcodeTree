@@ -45,7 +45,6 @@ define([
       'click #show-padding-node': 'showing_padding_node',
       'click #node-number-comparison': 'node_number_comparison',
       'click #global-display-controller': 'global_comparison',
-      'click #structure-comparison': 'structure_comparison',
       'click #refresh-comparison': 'refresh_comparison',
       // 排序
       'click #sort-options': 'sort_options',
@@ -56,12 +55,10 @@ define([
       // 相似性排序
       'click #similarity-resorting': 'similarity_resorting',
       'click #similarity-refresh': 'similarity_refresh',
-      'click #similarity-range': 'similarity_range',
       // 配置视图
       'click #node-config-panel-toggle': 'node_config_panel_toggle_handler',
       'click #tree-config-panel-toggle': 'tree_config_panel_toggle_handler',
       // 对于子树的交并补操作
-      'click #item-filter-toggle': 'item_filter_toggle',
       'click #and-operation-toggle': 'and_operation_toggle',
       'click #or-operation-toggle': 'or_operation_toggle',
       'click #complement-operation-toggle': 'complement_operation_toggle'
@@ -74,25 +71,17 @@ define([
     //  initEvent
     initEvent: function () {
       var self = this
-      Backbone.Events.on(Config.get('EVENTS')['UPDATE_FOCUS_SUBTREE'], function () {
-        self.subtree_node_focus()
-      })
+      //  更新group事件中的选中的barcodeTree的列表, 分别按照星期对于选中的barcodeTree进行分类
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_SELECTION_LIST'], function (event) {
         var selectionList = event.selectionList
         self.add_selection_list(selectionList)
       })
-      //  鼠标在comparisonview中点击选中barcode广播的事件
+      //  鼠标在comparisonview中点击选中barcode广播的事件, 将选中的barcodeTree作为基准树, 其他的树与基准树进行比较
       Backbone.Events.on(Config.get('EVENTS')['SET_SELECT_BARCODE_EVENT'], function (event) {
         var barcodeTreeId = event.barcodeTreeId
         self.add_set_selection_barcode(barcodeTreeId)
       })
-      //  切换到节点的非resorting的状态
-      Backbone.Events.on(Config.get('EVENTS')['CHANGE_TO_RESORTING'], function () {
-        self.change_to_arrangement()
-      })
-      Backbone.Events.on(Config.get('EVENTS')['CHANGE_TO_NOT_RESORTING'], function () {
-        self.change_to_not_arrangement()
-      })
+      //  更新选中的barcdoeTree的层级
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_SELECTED_LEVELS'], function () {
         self.update_toolbar_align_control()
       })
@@ -143,7 +132,6 @@ define([
     },
     onShow: function () {
       var self = this
-      var barcodeCollection = self.options.barcodeCollection
       var fixedAlignedLevel = 0
       self.update_aligned_level_controller(fixedAlignedLevel)
       self.init_slider()
@@ -471,15 +459,6 @@ define([
       } else {
         swal("Subtree Expand Tips", "Select the interested subtree first -> Expand.");
       }
-
-      // var operationItemList = barcodeCollection.get_operation_item()
-      // for (var oI = 0; oI < operationItemList.length; oI++) {
-      //   var nodeData = operationItemList[oI].nodeData
-      //   barcodeCollection.uncollapse_subtree(nodeData.id, nodeData.depth)
-      // }
-      // barcodeCollection.update_data_all_view()
-      // $('#subtree-collapse-operation .config-button').removeClass('active')
-      // $('#barcode-selection #subtree-collapse-operation').addClass('active')
     },
     /**
      *  对于当前选择的比较状态的节点进行锁定
@@ -718,29 +697,6 @@ define([
       barcodeCollection.change_subtree_display_mode()
     },
     /**
-     * 改变barcode当前的显示模式
-     */
-    // change_subtree_display_mode: function () {
-    //   var self = this
-    //   var barcodeCollection = self.options.barcodeCollection
-    //   var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
-    //   if (!$('#change-subtree-display-mode').hasClass('active')) {
-    //     $('#change-subtree-display-mode').addClass('active')
-    //     BarcodeGlobalSetting['Subtree_Compact'] = true
-    //     if (!$('#align-compare').hasClass('active')) {
-    //       $('#align-compare').addClass('active')
-    //       barcodeCollection.align_node_in_selected_list()
-    //       BarcodeGlobalSetting['Align_State'] = true
-    //       self.update_aligned_level()
-    //       return
-    //     }
-    //   } else {
-    //     $('#change-subtree-display-mode').removeClass('active')
-    //     BarcodeGlobalSetting['Subtree_Compact'] = false
-    //   }
-    //   barcodeCollection.change_subtree_display_mode()
-    // },
-    /**
      * 更新当前对齐的层级
      */
     update_aligned_level: function () {
@@ -806,31 +762,6 @@ define([
         .text('\uf08d')
         .style('fill', selectIconColor)
         .style('font-size', (iconSize + 2) + 'px')
-    },
-    //  在点击操作的barcode的节点上方增加icon
-    add_current_edit_icon: function (src_element, barcodeTreeId) {
-      var nodeX = +d3.select(src_element).attr('x')
-      var nodeWidth = +d3.select(src_element).attr('width')
-      var nodeY = +d3.select(src_element).attr('y')
-      var nodeHeight = +d3.select(src_element).attr('height')
-      var iconSize = nodeWidth > nodeHeight ? nodeHeight : nodeWidth
-      var iconX = nodeX + nodeWidth / 2
-      var iconY = nodeY + nodeHeight / 2
-      var editIconColor = Variables.get('edit_icon_color')
-      d3.selectAll('.edit-icon').remove()
-      d3.select('g#' + barcodeTreeId)
-        .select('#barcode-container')
-        .append('text')
-        .attr('text-anchor', 'middle')
-        .attr('dominant-baseline', 'middle')
-        .attr('cursor', 'pointer')
-        .attr('class', 'edit-icon')
-        .attr('font-family', 'FontAwesome')
-        .attr('x', iconX)
-        .attr('y', iconY)
-        .text('\uf08d')
-        .style('fill', editIconColor)
-        .style('font-size', (nodeWidth + 2) + 'px')
     },
     //  传入unalignedNodeItemArray, 逐个删除其对齐的状态
     _unalign_single_operation_item: function (operation_item_list, operation_index, finish_align_defer) {
@@ -1023,17 +954,12 @@ define([
       self.trigger_super_view_update()
     }
     ,
-    structure_comparison: function () {
-
-    }
-    ,
     refresh_comparison: function () {
       var self = this
       self._remove_summary_comparison()
       self._node_number_comparison()
     }
     ,
-    // 排序
     /**
      * 降序排列
      */
@@ -1123,13 +1049,6 @@ define([
       $('#node-arrangement').addClass('active')
     }
     ,
-    /**
-     *  按照选择的子树或者节点的相似性进行排序
-     */
-    similarity_sorting: function () {
-      var self = this
-    }
-    ,
     uniform_date_sort_handler: function (asc_desc_para) {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
@@ -1172,9 +1091,6 @@ define([
       $('#tree-operation .config-button').removeClass('active')
     }
     ,
-    similarity_range: function () {
-    }
-    ,
     // 打开barcode节点的配置视图
     node_config_panel_toggle_handler: function () {
       if ($('#config-operation #node-config-panel-toggle').hasClass('active')) {
@@ -1198,11 +1114,6 @@ define([
         $('#tree-config-div').css({visibility: 'visible'})
         $('#config-operation #tree-config-panel-toggle').addClass('active')
       }
-    }
-    ,
-    //  过滤操作的按钮
-    item_filter_toggle: function () {
-      var self = this
     }
     ,
     //  触发点击barcodetree选择的操作
@@ -1367,7 +1278,7 @@ define([
       }
     }
     ,
-    //  增加选择的barcodeTree
+    //  与选择BarcodeTree进行交互的部分, 当点击选择的时候, 在set operation中选择的BarcodeTree的数量会发生变化
     add_set_selection_barcode: function (selectedBarcodeTreeId) {
       var self = this
       var selectionBarcodeObject = Variables.get('selectionBarcodeObject')
@@ -1421,16 +1332,6 @@ define([
         $('.list-group-item#' + groupId + ' .remove-icon').css({visibility: 'hidden'})
         e.stopPropagation();
       })
-      // $('.list-group-item:not(#element-added)').click(function (e) {
-      //   var groupId = $(this).attr('id')
-      //   if ($(this).hasClass('active')) {
-      //     $('.list-group-item').removeClass('active')
-      //   } else {
-      //     $('.list-group-item').removeClass('active')
-      //     $('.list-group-item#' + groupId).addClass('active')
-      //   }
-      //   e.stopPropagation();
-      // })
     }
     ,
     //  交集操作的按钮

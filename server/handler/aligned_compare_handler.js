@@ -1,11 +1,10 @@
-var hierarchicalDataProcessor = require('../processor/signaltree_processor')
+var hierarchicalDataProcessor = require('../processor/barcodetree_processor')
 var clone = require('clone')
 var dataCenter = require('../dataCenter/dataCenter')
 
 var handlerBuildSuperTree = function (request, response) {
   var reqBody = request.body
   var dataSetName = reqBody.dataSetName
-  // var subtreeObjArray = reqBody.subtreeObjArray
   var dataItemNameArray = reqBody['dataItemNameArray']
   var dataItemType = typeof(dataItemNameArray)
   var selectedLevels = reqBody['selectedLevels']
@@ -17,8 +16,6 @@ var handlerBuildSuperTree = function (request, response) {
   var maxLevel = +reqBody.maxLevel
   var alignedLevel = reqBody.alignedLevel
   var originalSequenceState = reqBody.originalSequenceState
-  var displayMode = reqBody.displayMode
-  var compactNum = reqBody.compactNum
   //  将barcodeWidth的数组内部的元素转换为数字
   for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
     barcodeWidthArray[bI] = +barcodeWidthArray[bI]
@@ -30,7 +27,7 @@ var handlerBuildSuperTree = function (request, response) {
   for (var sI = 0; sI < selectedLevels.length; sI++) {
     selectedLevels[sI] = +selectedLevels[sI]
   }
-  var original_compact_superTreeNodeObj = null
+  //  如果只是一个文件, 需要将该文件名称的string类型转换为数组类型
   if (dataItemType === 'string') {
     dataItemNameArray = [dataItemNameArray]
   }
@@ -69,10 +66,7 @@ var handlerBuildSuperTree = function (request, response) {
   }
   var initDepth = rootLevel
   var superTreeNodeLocArray = get_node_location_array(unionTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState)
-  // console.log('59 superTreeNodeLocArray', superTreeNodeLocArray)
-  // console.log('superTreeNodeLocArray', superTreeNodeLocArray)
   var maxNodeNumTreeNodeLocArray = get_node_location_array(maxNumTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState)
-  // console.log('59 maxNodeNumTreeNodeLocArray', maxNodeNumTreeNodeLocArray)
   var maxSubtreeWidth = hierarchicalDataProcessor.compute_max_subtree_width(maxNodeNumTreeNodeLocArray, barcodeWidthArray, barcodeNodeInterval)
   superTreeNodeLocArray[0].subtreeWidth = maxSubtreeWidth
   maxNodeNumTreeNodeLocArray[0].subtreeWidth = maxSubtreeWidth
@@ -108,36 +102,6 @@ var handlerBuildSuperTree = function (request, response) {
     }
     return subtree
   }
-
-  /**
-   * 1. 从文件中读取tree object对象
-   * 2. 将treeObject对象进行线性化转换成treeNodeArray数组
-   function getSuperTreeNodeObj (fileNameArray, selectedLevelStr, rootId) {
-      var treeNodeArrayObj = {}
-      var fileName = null
-      var filePath = '../data/' + dataSetName + '/originalData/'
-      var superTreeNodeArray = dataProcessor.getSuperTreeNodes(fileNameArray, existedFileObj, barcodeWidthArray, selectedLevels, rootId)
-
-      for (var fI = 0; fI < fileNameArray.length; fI++) {
-        var dataItemName = fileNameArray[ fI ]
-        var dataItemNameWithOptions = dataItemName + selectedLevelStr
-        fileName = dataItemName + '.json'
-        treeNodeArrayObj[ dataItemName ] = treeNodeArray
-        if (typeof (existedFileObj[ dataItemNameWithOptions ]) === 'undefined') {
-          existedFileObj[ dataItemNameWithOptions ] = {}
-          var originalTreeObj = clone(require(filePath + fileName))
-          existedFileObj[ dataItemNameWithOptions ][ 'originalTreeObj' ] = originalTreeObj
-          var treeNodeArray = dataProcessor.loadOriginalSingleData(originalTreeObj, barcodeWidthArray, existedFileObj[ dataItemNameWithOptions ], selectedLevels)
-          treeNodeArrayObj[ dataItemName ] = treeNodeArray
-        } else {
-          var fileObjData = existedFileObj[ dataItemNameWithOptions ]
-          var treeNodeArray = fileObjData[ 'treeNodeLocArray' ]
-          treeNodeArrayObj[ dataItemName ] = treeNodeArray
-        }
-      }
-      return treeNodeArrayObj
-    }
-   */
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(superTreeObj) {
     response.setHeader('Content-Type', 'application/json')

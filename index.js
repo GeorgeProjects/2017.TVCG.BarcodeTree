@@ -1,32 +1,16 @@
 var root = __dirname
 var logger = require('./server/logger.js').initialize()
-var fs = require('fs')
 
-// 数据集的处理器
-var signalTreeProcessor = require('./server/processor/signaltree_processor')
-var originalDataHandler = require('./server/handler/original_data_handler')
-var updateBarcodeTreeSequence = require('./server/handler/update_barcode_tree_sequence')
-var updateBarcodeTreeVerticalSequence = require('./server/handler/update_barcode_tree_vertical_sequence')
-var alignedCompareHandler = require('./server/handler/aligned_compare_handler')
-var setOperationHandler = require('./server/handler/set_operation_handler')
+//  server打开的时候初始化读取数据的函数
 var fileNameHandler = require('./server/handler/file_name_handler')
-var removeFromSuperTreeHandler = require('./server/handler/remove_from_super_tree_handler')
-var handlerObj =
-{
-  '/barcode_original_data': originalDataHandler.handleOriginalData,
-  '/barcode_compact_data': originalDataHandler.handleCompactData,
-  '/build_super_tree': alignedCompareHandler.handlerBuildSuperTree,
-  '/and_operation_result': setOperationHandler.handlerAndOperation,
-  '/or_operation_result': setOperationHandler.handlerOrOperation,
-  '/complement_operation_result': setOperationHandler.handlerComplementOperation,
-  '/remove_from_super_tree': removeFromSuperTreeHandler.removeUpdateCurrentSuperTree,
-  '/file_name': fileNameHandler.fileNameHandler,
-  '/update_barcode_tree_sequence': updateBarcodeTreeSequence.updateBarcodeTreeSequence,
-  '/update_barcode_tree_vertical_sequence': updateBarcodeTreeVerticalSequence.updateBarcodeTreeVerticalSequence
-}
-//  初始化读入默认的数据集, 默认的数据集为DailyRecordTree数据集
-var defaultDataSetName = "DailyRecordTree"
-fileNameHandler.initilizeOriginalDataset(defaultDataSetName)
-var handle = require('./server/handler/handler').initialize(root, signalTreeProcessor, handlerObj, logger, fs)
+var DEFAULT_DATASET_NAME = "DailyRecordTree"
+
+//  初始化默认的数据集, 将数据集中需要的文件预先读入到缓存中
+fileNameHandler.initilizeOriginalDataset(DEFAULT_DATASET_NAME)
+
+//  初始化用于处理客户端数据请求的handler
+var handle = require('./server/handler/handler').initialize(root, logger)
+//  初始化引导请求的router, 即将请求对应到具体的handler函数上
 var router = require('./server/router/router').initialize(handle, logger)
+//  将router传入server, 并且对于server进行初始化
 var server = require('./server/server').initialize(router)

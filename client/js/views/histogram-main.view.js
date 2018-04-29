@@ -20,8 +20,7 @@ define([
       id: 'histogram-main-svg'
     },
     events: {},
-    initialize: function (options) {
-      //  初始化的时候请求一个默认的数据
+    initialize: function () {
       var self = this
       //  清空所有选择的barcodeTree
       self.clear_all_items()
@@ -34,11 +33,6 @@ define([
       Backbone.Events.on(Config.get('EVENTS')['SET_PRECLICK_COLOR'], function (event) {
         var color = event.color
         self.set_preclick_color(color)
-      })
-      //  在改变数据集的时候渲染histogram
-      Backbone.Events.on(Config.get('EVENTS')['RENDER_HISTOGRAM'], function (event) {
-        var dataSetName = event.dataSetName
-        self.draw_histogram(dataSetName)
       })
       //  鼠标悬浮在barcode上面广播的事件
       Backbone.Events.on(Config.get('EVENTS')['HOVERING_BARCODE_EVENT'], function (event) {
@@ -69,23 +63,11 @@ define([
         var barcodeTreeId = event.barcodeTreeId
         self.set_unselect_histogram(barcodeTreeId)
       })
-      //
-      Backbone.Events.on(Config.get('EVENTS')['UPDATE_HISTOGRAM_ENCODE'], function (event) {
-        var colorEncodingObj = event.colorEncodingObj
-        self.update_histogram_color_encode(colorEncodingObj)
-      })
-      //  在histogram视图中更新histogram的位置
-      // Backbone.Events.on(Config.get('EVENTS')['UPDATE_HISTOGRAM_COMPARISON_LOC'], function (event) {
-      //   console.log('listen UPDATE_HISTOGRAM_COMPARISON_LOC')
-      //   var sameNodeNumObj = event.sameNodeNumObj
-      //   var differentNodeNumObj = event.differentNodeNumObj
-      //   self.update_histogram_comparison_loc_encode(sameNodeNumObj, differentNodeNumObj)
-      // })
       //  用户点击clear all的按钮, 清空选中所有的element
       Backbone.Events.on(Config.get('EVENTS')['CLEAR_ALL'], function (event) {
         self.clear_all_items()
       })
-      //  点击某个group之后,选择group中的BArcodeTree
+      //  在集合操作中, 点击某个group之后,选择group中的BarcodeTree
       Backbone.Events.on(Config.get('EVENTS')['SELECT_GROUP_BARCODETREE'], function (event) {
         var selectionArray = event.selectionArray
         self.set_unselect_all_histogram()
@@ -93,7 +75,7 @@ define([
           self.set_select_histogram(selectionArray[sI])
         }
       })
-      //  点击某个选择的group之后, 取消选择group中的BarcodeTree
+      //  在集合操作中, 点击某个选择的group之后, 取消选择group中的BarcodeTree
       Backbone.Events.on(Config.get('EVENTS')['UNSELECT_GROUP_BARCODETREE'], function () {
         self.set_unselect_all_histogram()
       })
@@ -110,10 +92,6 @@ define([
         self.unhighlight_all_lasso_selected()
       })
     },
-    //  选择数据之后,数据无法马上显示,可以展示loading的icon
-    trigger_show_loading_icon: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')['SHOW_LOADING_ICON'])
-    },
     //  鼠标悬浮在histogram的每一个bar上, 需要与下方的barcode进行联动, 传递出这个barcodeTree的id信号
     trigger_hovering_barcode_event: function (barId) {
       Backbone.Events.trigger(Config.get('EVENTS')['HOVERING_BARCODE_EVENT'], {
@@ -121,7 +99,7 @@ define([
       })
     },
     //  鼠标离开histogram的bar上, 可以取消对于barcode的高亮
-    trigger_un_hovering_barcode_event: function (barcodeId) {
+    trigger_unhovering_barcode_event: function (barcodeId) {
       Backbone.Events.trigger(Config.get('EVENTS')['UN_HOVERING_BARCODE_EVENT'], {
         'barcodeTreeId': barcodeId
       })
@@ -131,10 +109,6 @@ define([
       Backbone.Events.trigger(Config.get('EVENTS')['NODE_MOUSEOUT'], {
         'eventView': 'HISTOGRAM'
       })
-    },
-    //  发出mouseout的信号
-    trigger_option_button: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')['REMOVE_OPTIONS_BUTTTON'])
     },
     //  更新supertree视图的信号
     trigger_super_view_update: function () {
@@ -212,17 +186,7 @@ define([
       var self = this
       var divWidth = $('#histogram-main-panel').width()
       var divHeight = $('#histogram-main-panel').height()
-      d3.select(self.el)
-        .attr('width', divWidth)
-        .attr('height', divHeight)
-        .on('click', function () {
-          self.trigger_option_button()
-        })
-      var marginTop = window.rem_px * 1.5
-      var marginRight = window.rem_px
-      var marginBottom = window.rem_px * 2
-      var marginLeft = window.rem_px * 3
-      var margin = {top: marginTop, right: marginRight, bottom: marginBottom, left: marginLeft}
+      var margin = {top: window.rem_px * 1.5, right: window.rem_px, bottom: window.rem_px * 2, left: window.rem_px * 3}
       var histogramWidth = divWidth - margin.left - margin.right
       var histogramHeight = divHeight - margin.top - margin.bottom
       //  增加histogram的高度, 用于计算整个histogram的纵向的scale
@@ -231,15 +195,8 @@ define([
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
         .attr('id', 'histogram-g')
-      d3.select(self.el)
-        .append('g')
-        .attr('transform', 'translate(' + (divWidth - margin.right) + ',' + margin.top + ')')
-        .attr('id', 'control-g')
       self.draw_histogram(histogramWidth, histogramHeight, margin)
       d3.select('#histogram-main-panel')
-        .on('mouseover', function (d, i) {
-          // self.trigger_mouseout_event()
-        })
         .on('click', function (d, i) {
           self.trigger_mouseout_event()
         })
@@ -251,7 +208,6 @@ define([
       var selectElements = self.d3el.selectAll('.pre-click-highlight')[0]
       for (var sI = 0; sI < selectElements.length; sI++) {
         d3.select(selectElements[sI]).style('fill', color)
-        // console.log('selectElements[sI]', selectElements[ sI ])
       }
       self.brushSelectionItems()
     },
@@ -269,15 +225,15 @@ define([
       var fileInfoData = histogramDataObject.fileInfo
       var histogramDataArray = []
       var histogramDataObj = {}
-      var yLabel = '#num'
       for (var hI = 0; hI < fileInfoData.length; hI++) {
         histogramDataArray[hI] = {}
         histogramDataArray[hI].x1 = hI
         histogramDataArray[hI].x2 = hI + 1
         if (histogramDataObject.scaleType === 'log') {
-          yLabel = '#log(num)'
+          var yLabel = '#log(num)'
           histogramDataArray[hI].y = Math.log(fileInfoData[hI]['num'])
         } else {
+          var yLabel = '#num'
           histogramDataArray[hI].y = fileInfoData[hI]['num']
         }
         histogramDataArray[hI].id = fileInfoData[hI]['name']
@@ -294,11 +250,6 @@ define([
       var yTicksFormatArray = histogramDataObject.yTicksFormatArray
       var xTicksValueArray = histogramDataObject.xTicksValueArray
       var xTicksFormatArray = histogramDataObject.xTicksFormatArray
-      if (histogramDataObject.scaleType === 'log') {
-
-      } else if (histogramDataObject.scaleType === 'linear') {
-
-      }
       //  在brush开始的时候首先将之前选择的barcode的pre-click-highlight取消
       var brushstart = function () {
         d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
@@ -403,6 +354,7 @@ define([
       }
       //  点击histogram上面的bar选中调用的函数
       var selectBarItem = function (barId) {
+        console.log('barId', barId)
         self.selectBarItem(barId)
       }
       //  再次点击histogram上面的bar取消选中调用的函数
@@ -412,7 +364,7 @@ define([
       //  鼠标移开bar节点的时候所调用的函数
       var unhoveringBarItem = function (d) {
         var barcodeId = d.id
-        self.trigger_un_hovering_barcode_event(barcodeId)
+        self.trigger_unhovering_barcode_event(barcodeId)
         histogramTip.hide()
       }
       //
@@ -627,7 +579,7 @@ define([
     },
     //  从dataCenter中请求数据
     requestData: function (selectedItemsArray) {
-      var self = this
+      //  当前已经选择的所有的barcodeTree
       var selectItemNameArray = Variables.get('selectItemNameArray')
       for (var sI = 0; sI < selectedItemsArray.length; sI++) {
         if (selectItemNameArray.indexOf(selectedItemsArray[sI]) === -1) {
@@ -675,14 +627,6 @@ define([
       Variables.set('selectedItemColorObj', selectedItemColorObj)
       self.requestData(selectedItemsArray)
       self.trigger_update_selection_list()
-      //  在brush完成之后, 将Variable中的selectionColor设置为null
-      // Variables.set('selectionColor', null)
-      // $('#color-picker').css('background-color', 'white')
-
-      // d3.select(self.el).selectAll('.library-bar.pre-click-highlight')
-      //   .classed('pre-click-highlight', false)
-      // self.clear_brush_range_rect()
-      // var selectItemNameArray = Variables.get('selectItemNameArray')
     },
     //  点击brush上面的删除按钮, 表示删除选中brush的部分
     brushUnSelectionItems: function () {

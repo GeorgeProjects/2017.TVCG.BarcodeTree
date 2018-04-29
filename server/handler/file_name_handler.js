@@ -2,7 +2,7 @@ var dataCenter = require('../dataCenter/dataCenter')
 var clone = require('clone')
 var fs = require('fs')
 var process = require('process')
-var hierarchicalDataProcessor = require('../processor/signaltree_processor')
+var hierarchicalDataProcessor = require('../processor/barcodetree_processor')
 
 var fileNameHandler = function (request, response) {
   var dataSetName = request.body.DataSetName
@@ -15,8 +15,9 @@ var fileNameHandler = function (request, response) {
   }
 }
 
+//  server开启时初始化数据的函数
 function initilize_original_dataset(dataSetName, sendFileInfoObj) {
-  var directoryName = './server/data/' + dataSetName + '/originalData/'//'../data/' + sampleDataName + '/originalData/'
+  var directoryName = './server/data/' + dataSetName + '/originalData/'
   var readFileDirectory = '../data/' + dataSetName + '/originalData/'
   if (!dataCenter.is_dataset_existed(dataSetName)) {
     //  read_directory_file函数传入的有两个函数, 一个是处理结束的函数, 一个是继续的数据处理函数
@@ -45,6 +46,7 @@ function initilize_original_dataset(dataSetName, sendFileInfoObj) {
   }
 }
 
+//  读取某个数据集的全部数据文件
 function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEnd, dataProcess, onError) {
   fs.readdir(dirname, function (err, filenames) {
     if (err) {
@@ -52,10 +54,8 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
       return;
     }
     var dataSetObj = {}
-    var compactDataSetObj = {}
     var idIndexObj = {}
     var linearObj = {}
-    var compactLinearObj = {}
     var fileInfoObj = {}
     var fileInfoArray = []
     var selectedLevels = []
@@ -76,9 +76,10 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
         hierarchicalDataProcessor.add_node_num(fileObject)
         //  对于树对象中的孩子节点进行排序
         sort_children(fileObject)
-        fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(fileObject), 'utf8', function (err) {
-          console.log('err', err)
-        })
+        console.log('finish initialize')
+        // fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(fileObject), 'utf8', function (err) {
+        //   console.log('err', err)
+        // })
         //  将树的对象线性化并且comapct返回compact并且线性化的节点数组
         //  初始化selected Levels
         for (var mI = 0; mI <= maxDepthObj.maxDepth; mI++) {
@@ -90,8 +91,7 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
         var originalTreeNodeObj = _init_original_tree_obj(fileObject)
         idIndexObj[fileNameRemovedJson] = originalTreeNodeObj
         //  将树的对象进行线性化得到线性化的节点数组
-        // var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
-        var treeNodeArray = get_linear_file_obj(dataSetName, filename, fileObject, initDepth)
+        var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
         linearObj[fileNameRemovedJson] = treeNodeArray
         fileNameObject[filename] = fileObject
         var fileObjNum = fileObject["num"]
@@ -113,20 +113,11 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
     })
     fileInfoObj.fileInfo = fileInfoArray
     fileInfoObj.maxDepth = maxDepthObj.maxDepth
-    // //  下面是对于数据继续的处理过程, 处理结束之后的结果会调用dataProcess函数进行存储
-    // for (var filename in fileNameObject) {
-    //   var fileObject = fileNameObject[filename]
-    //   var fileNameRemovedJson = filename.replace('.json', '')
-    //   //  将树的对象进行compact得到compact之后的节点数组
-    //   var compactTreeObjectObj = get_compact_obj(dataSetName, filename, fileObject, selectedLevels)
-    //   compactDataSetObj[fileNameRemovedJson] = compactTreeObjectObj
-    //   var compactTreeNodeArrayObj = get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj)
-    //   compactLinearObj[fileNameRemovedJson] = compactTreeNodeArrayObj
-    // }
     dataProcess(idIndexObj, selectedLevels) // compactDataSetObj, compactLinearObj
     fileReadEnd(fileInfoObj, dataSetObj, linearObj)
   });
 }
+
 /**
  * 将original的treeObject转换为originalTreeNodeObj, 以节点的id为索引的对象
  */
@@ -145,87 +136,7 @@ function _init_original_tree_obj(treeObj) {
     }
   }
 }
-/**
- * 读linear的compact的treeObject
- */
-function get_linear_compact_obj(dataSetName, filename, compactTreeObjectObj) {
-  var linearCompactFile = '../data/' + dataSetName + '/linearCompactData/' + filename
-  var compactTreeNodeArrayObj = null
-  // try {
-  //   console.log('find the file')
-  //   compactTreeNodeArrayObj = clone(require(linearCompactFile))
-  // } catch (e) {
-  //   if (e.code === 'MODULE_NOT_FOUND') {
-  //     compactTreeNodeArrayObj = compact_tree_obj_linearization(compactTreeObjectObj)
-  //     fs.writeFile(('./server/data/' + dataSetName + '/linearCompactData/' + filename), JSON.stringify(compactTreeNodeArrayObj), 'utf8', function (err) {
-  //       console.log('err', err)
-  //     })
-  //   }
-  // }
-  compactTreeNodeArrayObj = compact_tree_obj_linearization(compactTreeObjectObj)
-  return compactTreeNodeArrayObj
-}
-/**
- * 读compact的treeObject
- */
-function get_compact_obj(dataSetName, filename, fileObject, selectedLevels) {
-  var compactFile = '../data/' + dataSetName + '/compactData/' + filename
-  var compactTreeObjectObj = null
-  var compactTreeObj = null
-  // try {
-  //   compactTreeObjectObj = clone(require(compactFile))
-  // } catch (e) {
-  //   if (e.code === 'MODULE_NOT_FOUND') {
-  //     compactTreeObj = clone(fileObject)
-  //     compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
-  //     fs.writeFile(('./server/data/' + dataSetName + '/compactData/' + filename), JSON.stringify(compactTreeObjectObj), 'utf8', function (err) {
-  //       console.log('err', err)
-  //     })
-  //   }
-  // }
-  compactTreeObj = clone(fileObject)
-  compactTreeObjectObj = hierarchicalDataProcessor.transform_original_obj_compact_obj(compactTreeObj, selectedLevels)
-  return compactTreeObjectObj
-}
-/**
- * 读线性化的fileObject
- */
-function get_linear_file_obj(dataSetName, filename, fileObject, initDepth) {
-  var linearFile = '../data/' + dataSetName + '/linearData/' + filename
-  var treeNodeArray = null
-  // try {
-  //   treeNodeArray = clone(require(linearFile))
-  // } catch (e) {
-  //   treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
-  //   fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(treeNodeArray), 'utf8', function (err) {
-  //     console.log('err', err)
-  //   })
-  // }
-  treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
-  return treeNodeArray
-  // if (fs.existsSync(linearFile)) {
-  //   // Do something
-  //   console.log('linearData existed')
-  //   var treeNodeArray = clone(require(linearFile))
-  // } else {
-  //   var treeNodeArray = hierarchicalDataProcessor.treeLinearization(fileObject, initDepth)
-  //   fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(treeNodeArray), 'utf8', function (err) {
-  //     console.log('err', err)
-  //   })
-  // }
-  // return treeNodeArray
-}
-/**
- * compact模式的树的压缩
- */
-function compact_tree_obj_linearization(compactTreeObjectObj) {
-  var compactTreeNodeArrayObj = {}
-  for (var item in compactTreeObjectObj) {
-    var compactTreeObject = compactTreeObjectObj[item]
-    compactTreeNodeArrayObj[item] = hierarchicalDataProcessor.compact_tree_linearization(compactTreeObject)
-  }
-  return compactTreeNodeArrayObj
-}
+
 /**
  *  向读取的树的对象中增加depth属性, 同时计算所有的tree对象中的最大的深度
  */
@@ -241,6 +152,7 @@ function _add_depth_find_max_depth(initDepth, fileObject, maxDepthObj) {
     }
   }
 }
+
 /**
  * 对于对象形式的树的孩子节点label大小进行排序
  * @param tree: 对象形式的树

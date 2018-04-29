@@ -20,66 +20,30 @@ define([
     },
     initialize: function () {
     },
-    trigger_render_signal: function () {
-      // trigger出的信号所表示的含义是已经完成了对于histogram数据的准备, 接下来app.view中开始调用render_histogram_view进行渲染
-      Backbone.Events.trigger(Config.get('EVENTS')['BEGIN_RENDER_HISTOGRAM_VIEW'])
+    /**
+     * 根据从服务器端读取的histogram的数据更新histogram model
+     */
+    handle_histogram_data: function (histogram_result) {
+      var self = this
+      var histogramResult = histogram_result
+      //  对于result中的fileInfo进行排序
+      histogramResult.fileInfo = self.sort_higtogram_array_accord_time(histogramResult.fileInfo)
+      //  获得数据集中的最小值
+      histogramResult.minValue = self.get_min_value(histogramResult.fileInfo)
+      //  获取数据集中的最大值
+      histogramResult.maxValue = self.get_max_value(histogramResult.fileInfo)
+      histogramResult.scaleType = 'linear'
+      histogramResult.yTicksValueArray = self.get_y_ticks_value(histogramResult.maxValue, histogramResult.scaleType) //[ 100, 1000, result.maxValue ]
+      histogramResult.yTicksFormatArray = JSON.parse(JSON.stringify(histogramResult.yTicksValueArray))//[ '0.1k', '1k', '6k' ]
+      //  x轴上的标注
+      histogramResult.xTicksValueArray = self.get_x_ticks_object().xTicksValueArray
+      histogramResult.xTicksFormatArray = self.get_x_ticks_object().xTicksFormatArray
+      histogramResult.className = 'barcodetree-class'
+      //  更新barcode选定的层级以及层级的宽度
+      Variables.set('fileMaxDepth', histogramResult.maxDepth)  //默认的情况下显示4层的barcodeTree
+      //  更新histogramModel中的对应数据, histogramResult目的是绘制histogram视图
+      self.set('histogramDataObject', histogramResult)
     },
-    // request_histogram_dataset: function () {
-    //   var self = this
-    //   var dataSetName = Variables.get('currentDataSetName')
-    //   var formData = { 'DataSetName': dataSetName }
-    //   var successFunc = function (response) {
-    //     console.log('connect to server...')
-    //   }
-    //   requestDataFromServer('POST', 'file_name', formData, successFunc)
-    //   function requestDataFromServer (PostType, Url, formData, successPaperState) {
-    //     if (PostType === 'GET') {
-    //       var xmlhttp = null
-    //       if (window.XMLHttpRequest) {
-    //         // code for IE7+, Firefox, Chrome, Opera, Safari
-    //         xmlhttp = new window.XMLHttpRequest()
-    //       } else {
-    //         // code for IE6, IE5
-    //         xmlhttp = new ActiveXObject('Microsoft.XMLHTTP')
-    //       }
-    //       xmlhttp.onreadystatechange = function () {
-    //         successPaperState()
-    //       }
-    //       xmlhttp.open(PostType, Url, true)
-    //       xmlhttp.send(null)
-    //     } else if (PostType === 'POST') {
-    //       $.ajax({
-    //         url: Url,
-    //         type: 'POST',
-    //         datatype: 'json',
-    //         data: formData,
-    //         crossDomain: true,
-    //         success: function (result) {
-    //           result.fileInfo = self.sort_higtogram_array_accord_time(result.fileInfo)
-    //           result.minValue = self.get_min_value(result.fileInfo)
-    //           result.maxValue = self.get_max_value(result.fileInfo)
-    //           //  TODO 这个地方会修改成按照文件里面的属性决定scale的类型
-    //           result.scaleType = 'log'
-    //           //  y轴上的标注
-    //           result.yTicksValueArray = [100, 1000, result.maxValue]
-    //           result.yTicksFormatArray = ['0.1k', '1k', '6k']
-    //           //  x轴上的标注
-    //           result.xTicksValueArray = [5, 36, 66, 98, 128, 159, 189, 220, 252, 283]
-    //           result.xTicksFormatArray = ['Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec']
-    //           result.className = 'barcodetree-class'
-    //           //  设置读取数据的相应属性, maxDepth - 树的最大深度, fileInfo - 树的基本信息
-    //           self.set('histogramDataObject', result)
-    //           Variables.set('maxDepth', result.maxDepth)
-    //           //  trigger 渲染histogram的信号, histogram-main视图中会渲染得到相应的结果
-    //           self.trigger_render_signal()
-    //         },
-    //         error: function (result) {
-    //           console.log('error', result) // Optional
-    //         }
-    //       })
-    //     }
-    //   }
-    // },
     /**
      * 对于内部元素是文件名的histogram array进行排序
      * @param selectionBarArray: [

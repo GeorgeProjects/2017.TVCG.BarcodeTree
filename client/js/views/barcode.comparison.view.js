@@ -23,11 +23,6 @@ define([
       'id': 'barcodetree-svg',
       'style': 'height: 100%; width: 100%'
     },
-    //  触发删除barcode视图中option按钮的事件
-    trigger_remove_option_buttion: function () {
-      //  当点击视图的其他空白地方的时候, 需要将option的按钮进行隐藏
-      Backbone.Events.trigger(Config.get('EVENTS')['REMOVE_OPTIONS_BUTTTON'])
-    },
     //  触发删除barcode视图中mouseout的事件
     trigger_mouse_out: function () {
       //  当点击视图的其他空白地方的时候, 需要将option的按钮进行隐藏
@@ -49,7 +44,19 @@ define([
     },
     initialize: function () {
       var self = this
+      self.init_events()
+    },
+    init_events: function () {
+      var self = this
       var barcodeCollection = self.options.barcodeCollection
+      Backbone.Events.on(Config.get('EVENTS')['ENABLE_LASSO_FUNCTION'], function () {
+        self.enable_lasso_function()
+        self.enable_supertree_lasso_function()
+      })
+      Backbone.Events.on(Config.get('EVENTS')['DISABLE_LASSO_FUNCTION'], function () {
+        self.disable_lasso_function()
+      })
+      //  在修改了barcode之后更新lasso的视图的范围
       self.listenTo(Variables, 'change:barcodeNodexMaxX', self.enable_lasso_function)
       self.listenTo(Variables, 'change:barcodeNodeyMaxY', self.enable_lasso_function)
       barcodeCollection.on('add', function () {
@@ -61,23 +68,12 @@ define([
         self.enable_supertree_lasso_function()
       })
     },
-    enable_listener: function () {
-      var self = this
-      Backbone.Events.on(Config.get('EVENTS')['ENABLE_LASSO_FUNCTION'], function () {
-        self.enable_lasso_function()
-        self.enable_supertree_lasso_function()
-      })
-      Backbone.Events.on(Config.get('EVENTS')['DISABLE_LASSO_FUNCTION'], function () {
-        self.disable_lasso_function()
-      })
-    },
     onShow: function () {
       var self = this
       var barcodeCollection = self.options.barcodeCollection
       var barcodeCollectionView = new BarcodeCollectionView({
         collection: barcodeCollection
       })
-      self.enable_listener()
       self.showChildView('barcodeTreeContainer', barcodeCollectionView)
       var width = $('#barcodetree-view').width()
       var height = $('#barcodetree-view').height()
@@ -88,15 +84,12 @@ define([
         .attr('height', height)
         .attr('id', 'comparison-bg')
         .on('click', function (d, i) {
-          self.trigger_remove_option_buttion()
           self.trigger_mouse_out()
         })
         .on('mouseover', function () {
-          // self.trigger_mouse_out()
           self.trigger_unhovering_barcode()
         })
         .on('mouseout', function () {
-          // self.trigger_mouse_out()
           self.trigger_unhovering_barcode()
         })
         .attr('opacity', 0)
@@ -124,12 +117,11 @@ define([
           highlight_children_id_by_father(d)
         })
         lasso.items().each(function (d) {
-          // console.log('d', d)
           if (d3.select(this).classed('possible')) {
             d.possible = true
           }
         })
-        // // Style the not possible dot
+        // Style the not possible dot
         lasso.items().filter(function (d) {
           return d.possible === false
         })
@@ -214,13 +206,9 @@ define([
         return
       }
       var lasso_start = function () {
-        // lasso.items()
-        //   .attr("r", 3.5) // reset size
-        //   .style("fill", null) // clear all of the fills
-        //   .classed({"not_possible": true, "selected": false}); // style as not possible
       }
       var lasso_draw = function () {
-        // // Style the possible dots
+        //  Style the possible dots
         //  选择所有的possible为true的元素
         lasso.items().filter(function (d) {
           return d.possible === true
@@ -246,7 +234,6 @@ define([
           }
         })
         lasso.items().each(function (d) {
-          // console.log('d', d)
           if (d3.select(this).classed('possible')) {
             d.possible = true
           }
