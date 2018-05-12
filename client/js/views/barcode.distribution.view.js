@@ -6,10 +6,9 @@ define([
   'config',
   'd3',
   'd3Barchart',
-  'pagination',
   'variables',
   'text!templates/barcodeDistribution.tpl'
-], function (require, Mn, _, Backbone, Config, d3, d3Barchart, pagination, Variables, Tpl) {
+], function (require, Mn, _, Backbone, Config, d3, d3Barchart, Variables, Tpl) {
   'use strict'
 
   return Mn.LayoutView.extend({
