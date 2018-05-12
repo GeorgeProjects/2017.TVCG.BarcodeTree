@@ -32,7 +32,6 @@ require.config({
     'd3Barchart_dis': '../bower_components/d3_barchart_distribution/d3.barchart',
     'd3Lasso': '../bower_components/d3_lasso/d3.lasso',
     'jsColor': '../bower_components/jscolor/jscolor',
-    'pagination': '../bower_components/JqueryPagination/jquery.simplePagination',
     'tooltips': '../bower_components/d3-tip/d3-tip',
     'iconfont': '../icon_library/iconfont',
     'rangeslider': '../bower_components/rangeslider/dist/rangeslider',
