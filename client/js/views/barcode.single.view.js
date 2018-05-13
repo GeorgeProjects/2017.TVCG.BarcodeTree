@@ -953,6 +953,7 @@ define([
       },
       /**
        * 更新barcodeTree的内部节点
+       * 之前是将所有的节点依次进行绘制,
        */
       render_barcode_tree_node: function (next_step_func) {
         var self = this
@@ -1181,8 +1182,9 @@ define([
         var barcodePaddingLeft = self.barcodePaddingLeft
         var barcodePaddingTop = treeDataModel.get('barcodePaddingTop')
         var barcodeTreeYLocation = +treeDataModel.get('barcodeTreeYLocation')
-        self.d3el.transition()
-          .duration(Config.get('TRANSITON_DURATION'))
+        self.d3el
+          // .transition()
+          // .duration(Config.get('TRANSITON_DURATION'))
           .attr('transform', 'translate(' + 0 + ',' + barcodeTreeYLocation + ')')
         self.d3el.select('#barcode-container')
           .attr('transform', 'translate(' + barcodePaddingLeft + ',' + barcodePaddingTop + ')')
@@ -3099,7 +3101,8 @@ define([
         var barcodeIndex = treeDataModel.get('barcodeIndex')
         var barcodeTreeYLocation = treeDataModel.get('barcodeTreeYLocation')
         var basedModel = treeDataModel.get('basedModel')
-        self.d3el.transition()
+        self.d3el
+          .transition()
           .duration(Config.get('TRANSITON_DURATION'))
           .attr('transform', 'translate(' + 0 + ',' + barcodeTreeYLocation + ')')
         if (treeDataModel.get('compareBased')) {
