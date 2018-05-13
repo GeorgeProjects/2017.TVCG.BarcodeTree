@@ -1224,6 +1224,15 @@ define([
       if (alignedNodeObjArray.length > 0) {
         Variables.set('alignedLevel', alignedLevel)
       }
+      //  如果将所有的对齐部分的节点都删除, 那么需要将对齐的层级以及fixed的层级还原
+      console.log('alignedNodeIdArray.length', alignedNodeObjArray.length)
+      if (alignedNodeObjArray.length === 0) {
+        //  设置alignedLevel, 不是显示的层级
+        Variables.set('alignedLevel', 0)
+        Variables.set('displayFixedLevel', 0)
+        //  显示的barcode的对齐层级最小是1
+        Variables.set('displayAlignedLevel', 1)
+      }
     },
     /**
      * 根据在selectNodeId中的节点得到需要对齐的节点的列表
@@ -1596,15 +1605,6 @@ define([
       var findNodeDataIdIndex = self.uncollapse_subtree(nodeObjId, nodeObjDepth)
       var selectedAlignedItemList = [{nodeData: {id: nodeObjId, depth: nodeObjDepth}}]
       self.remove_aligned_part(selectedAlignedItemList)
-      var alignedNodeIdArray = self.alignedNodeIdArray
-      //  如果将所有的对齐部分的节点都删除, 那么需要将对齐的层级以及fixed的层级还原
-      if (alignedNodeIdArray.length === 0) {
-        //  设置alignedLevel, 不是显示的层级
-        Variables.set('alignedLevel', 0)
-        Variables.set('displayFixedLevel', 0)
-        //  显示的barcode的对齐层级最小是1
-        Variables.set('displayAlignedLevel', 1)
-      }
       if (findNodeDataIdIndex !== -1) {
         self.update_data_all_view()
         self.trigger_render_supertree()
