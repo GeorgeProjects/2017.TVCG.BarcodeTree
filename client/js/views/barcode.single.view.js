@@ -258,7 +258,7 @@ define([
           })
           .on('mouseover', function () {
             self.unhighlight_barcode_bg()
-            d3.select(this).classed('hovering-highlight', true)
+            self.highlight_barcode_bg()
             self.trigger_hovering_event()
             var dayArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
             if (barcodeTreeId.indexOf('-') !== -1) {
@@ -297,7 +297,7 @@ define([
           .style("cursor", "pointer")
           .text(barcodeTreeLabelMonthDday)
           .on('mouseover', function (d, i) {
-            self.d3el.select('.bg').classed('hovering-highlight', true)
+            self.highlight_barcode_bg()
             self.trigger_hovering_event()
           })
           .on('mouseout', function (d, i) {
@@ -2684,7 +2684,7 @@ define([
           flipTooltipRight()
           globalObj.trigger_hovering_event()
           self.unhighlight_barcode_bg()
-          self.d3el.select('.bg').classed('hovering-highlight', true)
+          self.highlight_barcode_bg()
           var thisNodeObj = d
           var highlightNode = Variables.get('highlight_node')
           var onlyHighlightNode = Variables.get('only_highlight_node')
@@ -3185,6 +3185,11 @@ define([
         self.d3el.select('.bg').classed('compare-based-selection', false)
       }
       ,
+    //  高亮barcode的背景矩形
+    highlight_barcode_bg: function(){
+      var self = this
+      self.d3el.select('.bg').classed('hovering-highlight', true)
+    },
 //  取消barcode背景的高亮
       unhighlight_barcode_bg: function () {
         var self = this
