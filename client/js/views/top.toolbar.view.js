@@ -71,6 +71,9 @@ define([
     //  initEvent
     initEvent: function () {
       var self = this
+      //  在对齐的层级以及固定的层级改变时,会自动更新
+      self.listenTo(Variables, 'change:displayFixedLevel', self.activeAlignedLevel)
+      self.listenTo(Variables, 'change:displayAlignedLevel', self.activeAlignedLevel)
       //  更新group事件中的选中的barcodeTree的列表, 分别按照星期对于选中的barcodeTree进行分类
       Backbone.Events.on(Config.get('EVENTS')['UPDATE_SELECTION_LIST'], function (event) {
         var selectionList = event.selectionList
@@ -158,8 +161,8 @@ define([
       //  固定的层级
       var fixedLevel = 0
       var alignedLevel = 1
-      self.activeAlignedLevel(fixedLevel, alignedLevel)
-      $('#aligned-level-text').text("L" + defaultLevel)
+      Variables.set('displayFixedLevel', fixedLevel)
+      Variables.set('displayAlignedLevel', alignedLevel)
       //  对齐层级设为0
       $('#compare-lock .fa').removeClass('fa-lock')
       self.change_to_compare_unlock_state()
@@ -248,21 +251,25 @@ define([
     /**
      * 根据对齐层级的数值更新对齐层级的具体显示
      */
-    activeAlignedLevel: function (fixedAlignedLevel, level) {
+    activeAlignedLevel: function (fixedAlignedLevel, displayLevel) {
       var self = this
+      //  选择层级的控制视图中对齐的层级
+      var displayAlignedLevel = Variables.get('displayAlignedLevel')
+      //  选择层级的控制视图中固定的层级
+      var displayFixedLevel = Variables.get('displayFixedLevel')
+      var alignedLevelText = $('#aligned-level-text')
+      alignedLevelText.text("L" + displayAlignedLevel)
       $('#aligned-level-menu #align-level-control>.btn').removeClass('active')
       //  将fixed的aligned level去掉
       self.enable_buttons($('#aligned-level-menu #align-level-control>.btn'))
-      for (var lI = fixedAlignedLevel; lI >= 0; lI--) {
+      for (var lI = displayFixedLevel; lI >= 0; lI--) {
         $('#aligned-level-menu #align-level-control>#btn-' + lI).addClass('active')
         //  对于已经aligned部分的节点fixed其aligned的部分
         self.disable_buttons($('#aligned-level-menu #align-level-control>#btn-' + lI))
       }
-      for (var lI = level; lI >= fixedAlignedLevel; lI--) {
+      for (var lI = displayAlignedLevel; lI >= displayFixedLevel; lI--) {
         $('#aligned-level-menu #align-level-control>#btn-' + lI).addClass('active')
       }
-      var alignedLevelText = $('#aligned-level-text')
-      alignedLevelText.text("L" + fixedAlignedLevel);
     },
     update_aligned_level_controller: function (fixed_aligned_level) {
       var self = this
@@ -270,18 +277,18 @@ define([
       var alignedBarcodeLevel = Variables.get('alignedLevel')
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       var Max_Real_Level = BarcodeGlobalSetting.Max_Real_Level
-      var alignedLevelText = $('#aligned-level-text')
       var barcodeCollection = self.options.barcodeCollection
       var displayedLevel = alignedBarcodeLevel + 1
-      alignedLevelText.text("L" + displayedLevel)
       var displayedFixedAlignedLevel = fixed_aligned_level
-      self.activeAlignedLevel(displayedFixedAlignedLevel, displayedLevel)
+      Variables.set('displayFixedLevel', displayedFixedAlignedLevel)
+      Variables.set('displayAlignedLevel', displayedLevel)
+      // self.activeAlignedLevel(displayedFixedAlignedLevel, displayedLevel)
       $('#align-level-control>.level-btn').unbind("click")
       $('#align-level-control>.level-btn').click(function () {
         var displayLevel = +$(this).text()
         var realLevel = displayLevel - 1
-        self.activeAlignedLevel(displayedFixedAlignedLevel, displayLevel)
-        alignedLevelText.text("L" + displayLevel);
+        Variables.set('displayFixedLevel', displayedFixedAlignedLevel)
+        Variables.set('displayAlignedLevel', displayLevel)
         Variables.set('alignedLevel', realLevel)
         barcodeCollection.align_node_in_selected_list()
         //  设置alignedLevel时, 会自动的将barcodeTree设置为aligned的状态
@@ -557,7 +564,9 @@ define([
         Variables.set('alignedLevel', 0)
         var fixedLevel = 0
         var alignedLevel = 1
-        self.activeAlignedLevel(fixedLevel, alignedLevel)
+        Variables.set('displayFixedLevel', fixedLevel)
+        Variables.set('displayAlignedLevel', alignedLevel)
+        // self.activeAlignedLevel(fixedLevel, alignedLevel)
         var selectedAlignedItemList = barcodeCollection.get_selected_aligned_item_list()
         barcodeCollection.remove_aligned_part(selectedAlignedItemList)
         BarcodeGlobalSetting['Align_State'] = false
@@ -568,8 +577,8 @@ define([
         barcodeCollection.align_node_in_selected_list()
         BarcodeGlobalSetting['Align_State'] = true
         self.disable_subtree_collapse_group()
+        self.update_aligned_level()
       }
-      self.update_aligned_level()
     },
     /**
      * 使用柱状图展示子树比较的结果
@@ -873,7 +882,6 @@ define([
       //var Max_Real_Level = Variables.get('maxDepth')
       var Max_Real_Level = Variables.get('alignedLevel')
       var MaxDisplayedLevel = Max_Real_Level + 1
-      var alignedLevelText = $('#aligned-level-text')
       var nodeObjId = 'node-0-root'
       var nodeObjDepth = 0
       if (!$('#global-display-controller').hasClass('active')) {
@@ -886,8 +894,8 @@ define([
         BarcodeGlobalSetting['Align_State'] = true
         self.change_to_compare_lock_state()
         var displayedFixedAlignedLevel = 0
-        self.activeAlignedLevel(displayedFixedAlignedLevel, MaxDisplayedLevel)
-        alignedLevelText.text("L" + MaxDisplayedLevel)
+        Variables.set('displayFixedLevel', displayedFixedAlignedLevel)
+        Variables.set('displayAlignedLevel', MaxDisplayedLevel)
         Variables.set('alignedLevel', Max_Real_Level)
         //  设置alignedLevel时, 会自动的将barcodeTree设置为aligned的状态
         $('#align-compare').addClass('active')
@@ -903,8 +911,8 @@ define([
         var displayedFixedAlignedLevel = 0
         var unalignedDisplayedLevel = 1
         var unalignedRealLevel = 0
-        self.activeAlignedLevel(displayedFixedAlignedLevel, unalignedDisplayedLevel)
-        alignedLevelText.text("L" + unalignedDisplayedLevel)
+        Variables.set('displayFixedLevel', displayedFixedAlignedLevel)
+        Variables.set('displayAlignedLevel', unalignedDisplayedLevel)
         var selectedAlignedItemList = barcodeCollection.get_selected_aligned_item_list()
         // barcodeCollection.remove_aligned_part(selectedAlignedItemList)
         Variables.set('alignedLevel', unalignedRealLevel)

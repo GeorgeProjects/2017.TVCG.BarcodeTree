@@ -210,27 +210,37 @@ define([
       self.each(function (model) {
         var barcodeRightLoc = 0, barcodeLeftLoc = 0
         //  判断这个对齐的对象是否准确的已知节点的边界
-        if (alignedNodeObj.accurate_subtree) {
-          //  如果节点的边界是准确的
-          barcodeRightLoc = model.get_right_loc(nodeId, nodeLevel)
-          barcodeLeftLoc = model.get_left_loc(nodeId, nodeLevel)
-        } else {
-          //  如果节点的边界是不准确的
-          // barcodeRightLoc = model.get_padding_node_right_loc(alignedNodeObj.accurate_subtree_id, nodeLevel)
-          var accurateBarcodeRightLoc = model.get_right_loc(nodeId, nodeLevel)
-          //  在计算superTree的节点右侧的边界时, 需要判断选择精确地边界还是有paddingNode的glyph确定的边界, 因为有可能用户展开最右侧的glyph从而得到精确的节点
-          // barcodeRightLoc = barcodeRightLoc > accurateBarcodeRightLoc ? barcodeRightLoc : accurateBarcodeRightLoc
-          barcodeRightLoc = accurateBarcodeRightLoc
-          // barcodeLeftLoc = model.get_padding_node_left_loc(alignedNodeObj.accurate_subtree_id, nodeLevel)
-          barcodeLeftLoc = model.get_left_loc(nodeId, nodeLevel)
+        //  如果节点的边界是准确的
+        barcodeRightLoc = model.get_right_loc(nodeId, nodeLevel)
+        barcodeLeftLoc = model.get_left_loc(nodeId, nodeLevel)
+        // if (alignedNodeObj.accurate_subtree) {
+        // } else {
+        //   //  如果节点的边界是不准确的
+        //   // barcodeRightLoc = model.get_padding_node_right_loc(alignedNodeObj.accurate_subtree_id, nodeLevel)
+        //   var accurateBarcodeRightLoc = model.get_right_loc(nodeId, nodeLevel)
+        //   //  在计算superTree的节点右侧的边界时, 需要判断选择精确地边界还是有paddingNode的glyph确定的边界, 因为有可能用户展开最右侧的glyph从而得到精确的节点
+        //   // barcodeRightLoc = barcodeRightLoc > accurateBarcodeRightLoc ? barcodeRightLoc : accurateBarcodeRightLoc
+        //   barcodeRightLoc = accurateBarcodeRightLoc
+        //   // barcodeLeftLoc = model.get_padding_node_left_loc(alignedNodeObj.accurate_subtree_id, nodeLevel)
+        //   barcodeLeftLoc = model.get_left_loc(nodeId, nodeLevel)
+        // }
+        if ((barcodeRightLoc != null) && (typeof (barcodeRightLoc) !== 'undefined') && (!isNaN(barcodeRightLoc))) {
+          if (barcodeRightLoc > barcodeMaxRightLoc) {
+            barcodeMaxRightLoc = barcodeRightLoc
+          }
+          //  如果初始设置的barcodeMaxRightLoc是一个不符合规定的数值, 那么就直接替换该数据
+          if ((barcodeMaxRightLoc == null) || (typeof (barcodeMaxRightLoc) === 'undefined') || (isNaN(barcodeMaxRightLoc))) {
+            barcodeMaxRightLoc = barcodeRightLoc
+          }
         }
-        if (barcodeRightLoc > barcodeMaxRightLoc) {
-          barcodeMaxRightLoc = barcodeRightLoc
-        } else {
-        }
-        if (barcodeLeftLoc < barcodeMinLeftLoc) {
-          barcodeMinLeftLoc = barcodeLeftLoc
-        } else {
+        if ((barcodeLeftLoc != null) && (typeof (barcodeLeftLoc) !== 'undefined') && (!isNaN(barcodeLeftLoc))) {
+          if (barcodeLeftLoc < barcodeMinLeftLoc) {
+            barcodeMinLeftLoc = barcodeLeftLoc
+          }
+          //  如果初始设置的barcodeMinLeftLoc是一个不符合规定的数值, 那么就直接替换该数据
+          if ((barcodeMinLeftLoc == null) || (typeof (barcodeMinLeftLoc) === 'undefined') || (isNaN(barcodeMinLeftLoc))) {
+            barcodeMinLeftLoc = barcodeLeftLoc
+          }
         }
       })
       var barcodeMaxWidth = barcodeMaxRightLoc - barcodeMinLeftLoc
@@ -440,6 +450,7 @@ define([
         // barcodeModel.tablelens_single_subtree()
         // self.collapse_all_subtree(barcodeModel)
         barcodeModel.tablelens_single_subtree()
+        console.log('barcodeModel', barcodeModel)
         self.add(barcodeModel)
       }
       self.update_barcode_model_default_index()
@@ -1232,8 +1243,7 @@ define([
         selectedAlignedItemList.push({nodeData: nodeData, barcodeTreeId: barcodeTreeId})
       }
       return selectedAlignedItemList
-    }
-    ,
+    },
     /**
      *  传入当前选择的节点数组, 对于选择的节点数组中的节点进行对齐, 更新数据完成只有控制视图的更新
      */
@@ -1586,6 +1596,15 @@ define([
       var findNodeDataIdIndex = self.uncollapse_subtree(nodeObjId, nodeObjDepth)
       var selectedAlignedItemList = [{nodeData: {id: nodeObjId, depth: nodeObjDepth}}]
       self.remove_aligned_part(selectedAlignedItemList)
+      var alignedNodeIdArray = self.alignedNodeIdArray
+      //  如果将所有的对齐部分的节点都删除, 那么需要将对齐的层级以及fixed的层级还原
+      if (alignedNodeIdArray.length === 0) {
+        //  设置alignedLevel, 不是显示的层级
+        Variables.set('alignedLevel', 0)
+        Variables.set('displayFixedLevel', 0)
+        //  显示的barcode的对齐层级最小是1
+        Variables.set('displayAlignedLevel', 1)
+      }
       if (findNodeDataIdIndex !== -1) {
         self.update_data_all_view()
         self.trigger_render_supertree()
@@ -2738,7 +2757,7 @@ define([
           treeDataModel.set('barcodeNodeHeight', barcodeContainerHeight)
           treeDataModel.set('barcodeTreeYLocation', barcodeYLocation)
           treeDataModel.set('barcodeOriginalSummaryHeight', barcodeOriginalSummaryHeight)
-          treeDataModel.set('viewHeightUpdateValue', (treeDataModel.get('viewHeightUpdateValue') + 1) % 2)
+          treeDataModel.set('viewUpdateConcurrentValue', (treeDataModel.get('viewUpdateConcurrentValue') + 1) % 2)
           barcodeYLocation = barcodeYLocation + barcodeContainerHeight
         }
       }

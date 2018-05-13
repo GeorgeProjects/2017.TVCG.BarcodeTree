@@ -27,6 +27,10 @@ define([
         MISS_NODE_COLOR: '#e9a3c9',
         SAME_NODE_COLOR: 'black'
       },
+      //  固定的BarcodeTree的fixed节点
+      displayFixedLevel: -1,
+      //  固定的BarcodeTree的对齐节点
+      displayAlignedLevel: -1,
       //  允许的最小的icon size的大小, iconsize也要随着屏幕的大小的变化相应的变化
       minIconSize: 20,
       //  是否使用padding显示不存在的节点

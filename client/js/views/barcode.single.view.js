@@ -29,7 +29,6 @@ define([
       init_event: function () {
         var self = this
         var treeDataModel = self.model
-        self.listenTo(treeDataModel, 'change:viewHeightUpdateValue', self.render_barcode_tree)
         self.listenTo(treeDataModel, 'change:viewUpdateSelectionState', self.node_mouseout_handler)
         self.listenTo(treeDataModel, 'change:selectionUpdateValue', self.selection_update_handler)
         self.listenTo(treeDataModel, 'change:filterState', self.change_filtered_state)
@@ -753,6 +752,7 @@ define([
        * 绘制barcodeTree
        */
       render_barcode_tree: function () {
+        console.log('render_barcode_tree')
         var self = this
         self.update_barcode_font()
         self.update_barcode_bg()
@@ -1182,6 +1182,7 @@ define([
         var barcodePaddingLeft = self.barcodePaddingLeft
         var barcodePaddingTop = treeDataModel.get('barcodePaddingTop')
         var barcodeTreeYLocation = +treeDataModel.get('barcodeTreeYLocation')
+        console.log('barcodeTreeYLocation', barcodeTreeYLocation)
         self.d3el
           // .transition()
           // .duration(Config.get('TRANSITON_DURATION'))
@@ -3176,7 +3177,7 @@ define([
         self.d3el.select('.bg').classed('compare-based-selection', true)
       }
       ,
-//  删除当前的compare_based的标记
+    //  删除当前的compare_based的标记
       remove_compare_based_anchor: function () {
         var self = this
         var treeDataModel = self.model
@@ -3190,13 +3191,13 @@ define([
       var self = this
       self.d3el.select('.bg').classed('hovering-highlight', true)
     },
-//  取消barcode背景的高亮
+    //  取消barcode背景的高亮
       unhighlight_barcode_bg: function () {
         var self = this
         d3.select('#barcodetree-svg').selectAll('.bg').classed('hovering-highlight', false)
       }
       ,
-//  鼠标点击节点的时候, 将superTree的视图打开
+    //  鼠标点击节点的时候, 将superTree的视图打开
       open_supertree_view: function () {
         var self = this
         Backbone.Events.trigger(Config.get('EVENTS')['OPEN_SUPER_TREE'])

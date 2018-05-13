@@ -413,44 +413,31 @@ define([
       var barcodeCollection = self.options.barcodeCollection
       var alignedNodeObjArray = barcodeCollection.get_aligned_subtree()
       var barcodeNodeAttrArray = self.get_super_tree_barcode_node_array()
+      //  所有对齐部分的节点数组
       var allAlignedNodesArray = []
+      //  首先在superTree中一定存在根节点作为对齐的节点, 所以将根节点作为对象push
       if (barcodeNodeAttrArray.length > 0) {
         var alignedNodeObj = JSON.parse(JSON.stringify(barcodeNodeAttrArray[0]))
-        if (barcodeCollection.is_exist_align_part()) {
-          alignedNodeObj.accurate_subtree = false // 如果存在align的部分, 根节点就按照不是精确节点的位置进行更新位置
-          alignedNodeObj.accurate_subtree_id = barcodeNodeAttrArray[0].id
-        } else {
-          alignedNodeObj.accurate_subtree = true // 否则按照精确节点的位置进行更新
-        }
         allAlignedNodesArray.push(alignedNodeObj)
       }
+      //  如果当前的状态不是全局对齐的状态, 而是用户选择子树部分进行对齐的状态
       if (Variables.get('displayMode') !== Config.get('CONSTANT').GLOBAL) {
         for (var aI = 0; aI < alignedNodeObjArray.length; aI++) {
-          alignedNodeObjArray[aI].id = alignedNodeObjArray[aI].alignedNodeId
-          alignedNodeObjArray[aI].depth = alignedNodeObjArray[aI].alignedNodeLevel
-          var fatherNodeArray = treeDataModel.find_father_current_nodes(alignedNodeObjArray[aI])
-          var fatherNodeArray = barcodeCollection.find_all_father_current_nodes(alignedNodeObjArray[aI])
-          var subtreeRootNode = null
-          var subtreeRootLevel = 1
-          for (var fI = 0; fI < fatherNodeArray.length; fI++) {
-            if (fatherNodeArray[fI].depth === subtreeRootLevel) {
-              subtreeRootNode = fatherNodeArray[fI]
-            }
-          }
+          var alignedNodeObj = alignedNodeObjArray[aI]
+          alignedNodeObj.id = alignedNodeObj.alignedNodeId
+          alignedNodeObj.depth = alignedNodeObj.alignedNodeLevel
+          //  找到该节点alignedNodeObj的所有父亲节点以及当前的节点
+          var fatherNodeArray = barcodeCollection.find_all_father_current_nodes(alignedNodeObj)
+          //  对于fatherNodeArray数组进行遍历
           for (var fI = 0; fI < fatherNodeArray.length; fI++) {
             var fatherNode = JSON.parse(JSON.stringify(fatherNodeArray[fI]))
-            if ((fatherNode.id === alignedNodeObjArray[aI].id) && (fatherNode.depth === alignedNodeObjArray[aI].depth)) {
-              fatherNode.accurate_subtree = true // 最下层的节点按照不是精确节点的位置进行更新位置, 否则按照精确节点的位置进行更新
-            } else {
-              fatherNode.accurate_subtree = false // 非最下层节点按照不是精确节点的位置进行更新位置
-              fatherNode.accurate_subtree_id = subtreeRootNode.id
-            }
             if (!is_exist(fatherNode, allAlignedNodesArray)) {
               allAlignedNodesArray.push(fatherNode)
             }
           }
         }
       }
+      //  构建allAlignedNodesObj, 按照层次进行划分, 不同层级的为不同的属性
       var allAlignedNodesObj = {}
       for (var aI = 0; aI < allAlignedNodesArray.length; aI++) {
         var nodeDepth = allAlignedNodesArray[aI].depth
@@ -480,6 +467,7 @@ define([
       var superTreeVisibleHeight = Variables.get('superTreeHeight')
       var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
       var levelNodeHeight = superTreeVisibleHeight / 2
+      //  获取得到对齐部分的节点对象
       var allAlignedNodesObj = self.get_aligned_nodes_different_level()
       var barcodeNodeAttrArray = self.get_super_tree_barcode_node_array()
       //  在global的模式下并且当前用户选择了focus的子树, 那么需要对于增加的冰柱图的节点进行筛选
@@ -504,9 +492,13 @@ define([
             var nodeDepth = fatherNodeArray[fI].depth
             append_icicle(nodeDepth, nodeId, levelNodeHeight, fatherNodeArray[fI])
             if (nodeDepth === maxLevel) {
+              //  如果当前是点击选择的节点的下一层节点
               var underLevel = maxLevel + 1
               if (underLevel < maxSelectedLevel) {
+                //  对于aligned节点的下层节点也需要进行区别, 如果是已经对齐的层, 那么也是准确的icice plot的节点, 否则是icicle plot中的成比例的节点
                 //  判断aligned level是否align到当前的层级, 即underLevel
+                console.log('alignedLevel', alignedLevel)
+                console.log('underLevel', underLevel)
                 if (alignedLevel < underLevel) {
                   //  如果没有align到当前的层级, 那么就在underLevel层级下面增加表示比例的proportion icicle
                   append_proportion_icicle(underLevel, nodeId, levelNodeHeight, fatherNodeArray[fI])
