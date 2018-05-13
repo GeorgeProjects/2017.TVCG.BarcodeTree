@@ -181,7 +181,7 @@ define([
       //  9. barcode的边界宽度
       barcodePaddingLeft: 45,
       //  10. comparison result的宽度
-      comparisonResultPadding: 80,
+      comparisonResultPadding: 50,
       //  11. 默认情况下的视图宽度
       init_width: 1600,
       //  12. 默认情况下的视图高度

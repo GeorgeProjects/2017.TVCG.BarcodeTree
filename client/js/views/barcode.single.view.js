@@ -1184,8 +1184,8 @@ define([
         var barcodeTreeYLocation = +treeDataModel.get('barcodeTreeYLocation')
         console.log('barcodeTreeYLocation', barcodeTreeYLocation)
         self.d3el
-          // .transition()
-          // .duration(Config.get('TRANSITON_DURATION'))
+        // .transition()
+        // .duration(Config.get('TRANSITON_DURATION'))
           .attr('transform', 'translate(' + 0 + ',' + barcodeTreeYLocation + ')')
         self.d3el.select('#barcode-container')
           .attr('transform', 'translate(' + barcodePaddingLeft + ',' + barcodePaddingTop + ')')
@@ -1980,6 +1980,8 @@ define([
         var barcodeNodeAttrArrayObj = treeDataModel.get('barcodeNodeAttrArrayObj')
         var thisBarcodeTreeId = treeDataModel.get('barcodeTreeId')
         self.d3el.select('#barcode-container').select('.select-icon#' + nodeObjId).remove()
+        var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+        var comparisonResultDisplay = BarcodeGlobalSetting['Comparison_Result_Display']
         if (barcodeTreeId === thisBarcodeTreeId) {
           var nodeData = barcodeNodeAttrArrayObj[nodeObjId]
           var nodeX = +self.d3el.select('#' + nodeObjId).attr('x')
@@ -1992,10 +1994,17 @@ define([
           var iconX = nodeX - 2
           var iconY = nodeY + nodeHeight / 2
           var selectIconColor = Variables.get('select_icon_color')
+          var comparisonResultPadding = Variables.get('comparisonResultPadding')
+          var textAnchorType = 'end'
+          //  如果当前的状态是显示selectIcon, 那么需要将selectIcon左移一部分距离, 避免与summaryHistogram的重叠
+          if (comparisonResultDisplay) {
+            iconX = iconX - (comparisonResultPadding / 4 * 3)
+            textAnchorType = 'start'
+          }
           if (nodeWidth !== 0) {
             self.d3el.select('#barcode-container')
               .append('text')
-              .attr('text-anchor', 'end')
+              .attr('text-anchor', textAnchorType)
               .attr('dominant-baseline', 'middle')
               .attr('cursor', 'pointer')
               .attr('class', 'select-icon')
@@ -3177,7 +3186,7 @@ define([
         self.d3el.select('.bg').classed('compare-based-selection', true)
       }
       ,
-    //  删除当前的compare_based的标记
+      //  删除当前的compare_based的标记
       remove_compare_based_anchor: function () {
         var self = this
         var treeDataModel = self.model
@@ -3186,18 +3195,18 @@ define([
         self.d3el.select('.bg').classed('compare-based-selection', false)
       }
       ,
-    //  高亮barcode的背景矩形
-    highlight_barcode_bg: function(){
-      var self = this
-      self.d3el.select('.bg').classed('hovering-highlight', true)
-    },
-    //  取消barcode背景的高亮
+      //  高亮barcode的背景矩形
+      highlight_barcode_bg: function () {
+        var self = this
+        self.d3el.select('.bg').classed('hovering-highlight', true)
+      },
+      //  取消barcode背景的高亮
       unhighlight_barcode_bg: function () {
         var self = this
         d3.select('#barcodetree-svg').selectAll('.bg').classed('hovering-highlight', false)
       }
       ,
-    //  鼠标点击节点的时候, 将superTree的视图打开
+      //  鼠标点击节点的时候, 将superTree的视图打开
       open_supertree_view: function () {
         var self = this
         Backbone.Events.trigger(Config.get('EVENTS')['OPEN_SUPER_TREE'])

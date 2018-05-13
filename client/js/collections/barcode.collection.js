@@ -1225,7 +1225,6 @@ define([
         Variables.set('alignedLevel', alignedLevel)
       }
       //  如果将所有的对齐部分的节点都删除, 那么需要将对齐的层级以及fixed的层级还原
-      console.log('alignedNodeIdArray.length', alignedNodeObjArray.length)
       if (alignedNodeObjArray.length === 0) {
         //  设置alignedLevel, 不是显示的层级
         Variables.set('alignedLevel', 0)
