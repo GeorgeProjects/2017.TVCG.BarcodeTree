@@ -2599,8 +2599,7 @@ define([
             }
           }
         }
-      }
-      ,
+      },
       //  更新标记当前选择的基准barcode的icon
       update_compare_based_anchor: function () {
         var self = this

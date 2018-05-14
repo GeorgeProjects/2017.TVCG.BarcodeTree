@@ -18,7 +18,8 @@ define([
         Sort_Option: 'DATE',//'DATE', 'DAY', 'ATTRIBUTE', 'NODENUMBER', 'SIMILARITY'
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
         Node_Arrangement: false,
-        Horizontal_Fit_In_Screen: false
+        Horizontal_Fit_In_Screen: false,
+        BarcodeTree_Split: true
       },
       BARCODE_COLOR: {
         ROOT_COLOR: '#000000',
@@ -182,6 +183,8 @@ define([
       barcodePaddingLeft: 45,
       //  10. comparison result的宽度
       comparisonResultPadding: 50,
+      //  10.1 将barcodeTree进行切分的宽度
+      BarcodeTree_Split_Width: 100,
       //  11. 默认情况下的视图宽度
       init_width: 1600,
       //  12. 默认情况下的视图高度
