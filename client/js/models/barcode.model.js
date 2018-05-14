@@ -954,6 +954,7 @@ define([
           if (nodeType === alignedBegin) {
             // barcodeNodeAttrArray[ bI ].x = barcodeNodeAttrArray[ bI - 1 ].x + barcodeNodePadding + comparisonResultPadding
             barcodeNodeAttrArray[bI].x = getAlignedNodeLoc(bI, alignedRangeObjArray, paddingNodeObjArray)
+            console.log('barcodeNodeAttrArray[bI].x', barcodeNodeAttrArray[bI].x)
           } else if (nodeType === alignedRange) {
             //  当节点的深度小于aligned的深度时, 此时不需要考虑节点是否存在, 对于每一个节点都要计算节点的位置进行排列
             if ((bI - 1) >= 0) {
@@ -1017,6 +1018,7 @@ define([
         }
         var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
         var alignedNodeLoc = 0
+        console.log('paddingNodeObjArray', paddingNodeObjArray)
         for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
           //  因为在padding node所代表的节点为空时, paddingNodeEndIndex是小于paddingNodeStartIndex的
           if ((nodeIndex >= paddingNodeObjArray[pI].paddingNodeStartIndex) || (nodeIndex >= paddingNodeObjArray[pI].paddingNodeEndIndex)) {
@@ -1044,12 +1046,17 @@ define([
                 if (maxPaddingNodeLength > 0) {
                   alignedNodeLoc = alignedNodeLoc + maxPaddingNodeLength + comparisonResultPadding + BarcodeTreeSplitWidth + barcodeNodeInterval
                 } else {
-                  alignedNodeLoc = alignedNodeLoc + comparisonResultPadding + BarcodeTreeSplitWidth
+                  if (paddingNodeObjArray[pI].paddingNodeStartIndex !== 0) {
+                    alignedNodeLoc = alignedNodeLoc + comparisonResultPadding + BarcodeTreeSplitWidth
+                  } else {
+                    alignedNodeLoc = alignedNodeLoc + comparisonResultPadding
+                  }
                 }
               }
             }
           }
         }
+        console.log('alignedNodeLoc after padding node', alignedNodeLoc)
         for (var aI = 0; aI < alignedRangeObjArray.length; aI++) {
           if (nodeIndex > alignedRangeObjArray[aI].rangeEndNodeIndex) {
             alignedNodeLoc = alignedNodeLoc + alignedRangeObjArray[aI].maxAlignedLength
