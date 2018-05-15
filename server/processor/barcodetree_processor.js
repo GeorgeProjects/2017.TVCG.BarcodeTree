@@ -1223,6 +1223,76 @@ function compactTreeLinearization(treeObj) {
 }
 /**
  *  对于线性化的节点数组, 数组中的每个节点存在节点中的状态描述
+ *  根据数组计算原始状态的barcode的每个节点的位置以及大小, 在barcodeTree的节点位置数组中需要考虑在切割BarcodeTree所带来的片段部分的距离
+ */
+function computePartitionNodeLocation(treeNodeArray, subtreeRange, widthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, alignedLevel, barcodeTreeSplitWidth) {
+  var xLoc = 0
+  var treeNodeLocArray = []
+  for (var i = 0; i < treeNodeArray.length; i++) {
+    var treeNodeObj = treeNodeArray[i]
+    var depth = +treeNodeObj.depth
+    //  如果该节点的前一个节点存在, 那么判断该节点是否是切割的层级的节点, 同时判断该节点的性质, 该节点的层级一定比前一个的节点的层级更浅
+    var startIndex = subtreeRange.startIndex
+    var endIndex = subtreeRange.endIndex
+    console.log('startIndex', startIndex)
+    console.log('endIndex', endIndex)
+    //  在对齐的范围内才会增加partition的间距
+    if ((i >= startIndex) && (i <= endIndex)) {
+      if ((i - 1) >= 0) {
+        // 如果该节点的层级是alignedLevel, 并且该节点的层级比下一个节点的层级更深, 即depth of current nodes < depth of previous node
+        if ((depth === (+alignedLevel)) && ((+treeNodeArray[i].depth) <= (+treeNodeArray[i - 1].depth))) {
+          xLoc = xLoc + barcodeTreeSplitWidth
+        }
+      }
+    }
+    if (selectedLevels.indexOf(depth) !== -1) {
+      var treeNodeLocObj = {}
+      var rectWidth = widthArray[depth]
+      xLoc = +xLoc.toFixed(2)
+      treeNodeLocObj.x = xLoc
+      treeNodeLocObj.y = 0
+      treeNodeLocObj.category = treeNodeObj.name
+      treeNodeLocObj.categoryName = treeNodeObj.categoryName
+      treeNodeLocObj.id = treeNodeObj.index
+      treeNodeLocObj.depth = depth
+      treeNodeLocObj.width = 0
+      treeNodeLocObj.height = barcodeHeight
+      treeNodeLocObj.maxnum = treeNodeObj.maxnum
+      treeNodeLocObj.num = treeNodeObj.num
+      treeNodeLocObj.nodeNum = treeNodeObj.nodeNum
+      treeNodeLocObj.width = rectWidth
+      if (widthArray[depth] !== 0) {
+        xLoc = xLoc + widthArray[depth] + barcodeNodeInterval
+      }
+      treeNodeLocArray.push(treeNodeLocObj)
+    }
+  }
+  return treeNodeLocArray
+}
+/**
+ * 根据根节点的id以及深度计算subtree的范围, 即起始节点的index以及末尾节点的index
+ */
+function getSubtreeRange(rootId, init_depth, treeNodeArray) {
+  var subtreeRangeObj = {}
+  var startIndex = 0
+  var endIndex = treeNodeArray.length - 1
+  for (var tI = 0; tI < treeNodeArray.length; tI++) {
+    if (treeNodeArray[tI].id === rootId) {
+      startIndex = tI
+    }
+  }
+  for (var tI = (startIndex + 1); tI < treeNodeArray.length; tI++) {
+    if (treeNodeArray[tI].depth === init_depth) {
+      endIndex = tI
+      break
+    }
+  }
+  subtreeRangeObj.startIndex = startIndex
+  subtreeRangeObj.endIndex = endIndex
+  return subtreeRangeObj
+}
+/**
+ *  对于线性化的节点数组, 数组中的每个节点存在节点中的状态描述
  *  根据数组计算原始状态的barcode的每个节点的位置以及大小
  */
 function computeOriginalNodeLocation(treeNodeArray, widthArray, selectedLevels, barcodeHeight, barcodeNodeInterval) {
@@ -1580,6 +1650,8 @@ exports.addSubtreeDepth = addSubtreeDepth
 exports.sortChildren = sortChildren
 exports.treeLinearization = treeLinearization
 exports.computeOriginalNodeLocation = computeOriginalNodeLocation
+exports.computePartitionNodeLocation = computePartitionNodeLocation
+exports.getSubtreeRange = getSubtreeRange
 exports.compute_max_subtree_width = compute_max_subtree_width
 
 exports.transform_original_obj_compact_obj = transform_original_obj_compact_obj

@@ -614,7 +614,6 @@ define([
       var tablelensSubtreeArray = self.tablelensSubtreeArray
       for (var nI = 0; nI < nodeDataArray.length; nI++) {
         var nodeData = nodeDataArray[nI]
-
       }
       //  将选择的节点增加到
       for (var nI = 0; nI < nodeDataArray.length; nI++) {
@@ -671,8 +670,7 @@ define([
       if (typeof (collectionAlignedObjPercentageArrayObjArray) !== 'undefined') {
         window.Datacenter.update_barcode_tree_sequence(collectionAlignedObjPercentageArrayObjArray)
       }
-    }
-    ,
+    },
     /**
      * 在singlebarcodetree视图中点击节点进行选中子树的对齐
      */
@@ -962,14 +960,14 @@ define([
     compute_align_node_max_length: function () {
       var self = this
       var basedModel = self.at(0)
-      var basedAlignedRangeObjArray = basedModel.get('alignedRangeObjArray')
+      var basedAlignedRangeObjArray = basedModel.get('_alignedRangeObjArray')
       var basedAlignedRangeObjObject = {}
       for (var bI = 0; bI < basedAlignedRangeObjArray.length; bI++) {
         var alignedObjIndex = basedAlignedRangeObjArray[bI].alignedObjIndex
         basedAlignedRangeObjObject[alignedObjIndex] = basedAlignedRangeObjArray[bI]
       }
       self.each(function (model) {
-        var alignedRangeObjArray = model.get('alignedRangeObjArray')
+        var alignedRangeObjArray = model.get('_alignedRangeObjArray')
         for (var aI = 0; aI < alignedRangeObjArray.length; aI++) {
           var alignedObjIndex = alignedRangeObjArray[aI].alignedObjIndex
           var alignedLength = alignedRangeObjArray[aI].alignedLength

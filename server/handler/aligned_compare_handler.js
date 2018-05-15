@@ -10,6 +10,7 @@ var handlerBuildSuperTree = function (request, response) {
   var selectedLevels = reqBody['selectedLevels']
   var barcodeWidthArray = reqBody['barcodeWidthArray']
   var barcodeHeight = reqBody['barcodeHeight']
+  var barcodeTreeSplitWidth = +reqBody['barcodeTreeSplitWidth']
   var barcodeNodeInterval = +reqBody['barcodeNodeInterval']
   var rootId = reqBody.rootId
   var rootLevel = +reqBody.rootLevel
@@ -66,7 +67,7 @@ var handlerBuildSuperTree = function (request, response) {
   }
   var initDepth = rootLevel
   var superTreeNodeLocArray = get_node_location_array(unionTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState)
-  var maxNodeNumTreeNodeLocArray = get_node_location_array(maxNumTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState)
+  var maxNodeNumTreeNodeLocArray = get_node_partition_location_array(rootId, maxNumTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState, alignedLevel, barcodeTreeSplitWidth)
   var maxSubtreeWidth = hierarchicalDataProcessor.compute_max_subtree_width(maxNodeNumTreeNodeLocArray, barcodeWidthArray, barcodeNodeInterval)
   superTreeNodeLocArray[0].subtreeWidth = maxSubtreeWidth
   maxNodeNumTreeNodeLocArray[0].subtreeWidth = maxSubtreeWidth
@@ -86,6 +87,18 @@ var handlerBuildSuperTree = function (request, response) {
     return superTreeNodeLocArray
   }
 
+  //  根据层次结构数据的对象计算带有位置属性的节点数组, 计算的是切割之后的barcodeTree的节点位置数组
+  function get_node_partition_location_array(rootId, tree_obj, init_depth, barcode_width_array, selected_levels, barcode_height, barcode_node_interval, originalSequenceState, alignedLevel, barcodeTreeSplitWidth) {
+    hierarchicalDataProcessor.sortChildren(tree_obj)
+    //  对于树对象进行线性化得到节点序列
+    console.log('get_node_partition_location_array')
+    var treeNodeArray = hierarchicalDataProcessor.treeLinearization(tree_obj, init_depth, originalSequenceState)
+    var subtreeRange = hierarchicalDataProcessor.getSubtreeRange(rootId, init_depth, treeNodeArray)
+    //  根据线性化的节点序列得到节点的位置属性
+    var superTreeNodeLocArray = hierarchicalDataProcessor.computePartitionNodeLocation(treeNodeArray, subtreeRange, barcode_width_array, selected_levels, barcode_height, barcode_node_interval, alignedLevel, barcodeTreeSplitWidth)
+    return superTreeNodeLocArray
+  }
+
   //  根据当前最深的层级筛选当前的树
   function filter_depth(subtreeObj, maxLevel) {
     if (subtreeObj.depth === maxLevel) {
@@ -102,6 +115,7 @@ var handlerBuildSuperTree = function (request, response) {
     }
     return subtree
   }
+
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(superTreeObj) {
     response.setHeader('Content-Type', 'application/json')

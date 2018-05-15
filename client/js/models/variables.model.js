@@ -19,7 +19,7 @@ define([
         Comparison_Mode: 'TOPOLOGY', //'TOPOLOGY' 'ATTRIBUTE'
         Node_Arrangement: false,
         Horizontal_Fit_In_Screen: false,
-        BarcodeTree_Split: true
+        BarcodeTree_Split: false
       },
       BARCODE_COLOR: {
         ROOT_COLOR: '#000000',

@@ -320,6 +320,12 @@ define([
       var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
       var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
       var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      //  切割BarcodeTree中不同段之间的距离, 在当前不处于切割状态的情况下, 那么将该数值置为0传递到后台部分
+      var BarcodeTree_Split = BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split']
+      var BarcodeTreeSplitWidth = 0
+      if (BarcodeTree_Split) {
+        BarcodeTreeSplitWidth = Variables.get('BarcodeTree_Split_Width')
+      }
       var Node_Arrangement_State = BARCODETREE_GLOBAL_PARAS['Node_Arrangement']
       var originalSequenceState = 'ORIGINAL'
       if (Node_Arrangement_State) {
@@ -338,6 +344,7 @@ define([
         'barcodeHeight': window.barcodeHeight * barcodeHeightRatio,
         'selectedLevels': window.selectedLevels,
         'barcodeNodeInterval': barcodeNodeInterval,
+        'barcodeTreeSplitWidth': BarcodeTreeSplitWidth,
         'rootId': rootId,
         'rootLevel': rootLevel,
         'maxLevel': maxDepth,
