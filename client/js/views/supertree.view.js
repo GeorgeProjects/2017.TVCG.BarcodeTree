@@ -497,8 +497,6 @@ define([
               if (underLevel < maxSelectedLevel) {
                 //  对于aligned节点的下层节点也需要进行区别, 如果是已经对齐的层, 那么也是准确的icice plot的节点, 否则是icicle plot中的成比例的节点
                 //  判断aligned level是否align到当前的层级, 即underLevel
-                console.log('alignedLevel', alignedLevel)
-                console.log('underLevel', underLevel)
                 if (alignedLevel < underLevel) {
                   //  如果没有align到当前的层级, 那么就在underLevel层级下面增加表示比例的proportion icicle
                   append_proportion_icicle(underLevel, nodeId, levelNodeHeight, fatherNodeArray[fI])

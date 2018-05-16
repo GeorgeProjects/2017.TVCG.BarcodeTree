@@ -1234,8 +1234,6 @@ function computePartitionNodeLocation(treeNodeArray, subtreeRange, widthArray, s
     //  如果该节点的前一个节点存在, 那么判断该节点是否是切割的层级的节点, 同时判断该节点的性质, 该节点的层级一定比前一个的节点的层级更浅
     var startIndex = subtreeRange.startIndex
     var endIndex = subtreeRange.endIndex
-    console.log('startIndex', startIndex)
-    console.log('endIndex', endIndex)
     //  在对齐的范围内才会增加partition的间距
     if ((i >= startIndex) && (i <= endIndex)) {
       if ((i - 1) >= 0) {

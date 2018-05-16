@@ -41,6 +41,7 @@ define([
       'click #compare-lock': 'compare_lock',
       'click #align-compare': 'align_compare',
       'click #summary-comparison': 'summary_comparison',
+      'click #barcodetree-segment': 'barcodetree_segment',
       'click #change-subtree-display-mode': 'change_subtree_display_mode',
       'click #show-padding-node': 'showing_padding_node',
       'click #node-number-comparison': 'node_number_comparison',
@@ -581,6 +582,25 @@ define([
       }
     },
     /**
+     * 对于BarcodeTree进行切割, 其中背后包含两个步骤:
+     * 1. 将BarcodeTree的切割的不同段之间增加一定的间距用来填充BarcodeTree不同部分之间的连线
+     * 2. 将BarcodeTree的model中的不同部分放置到不同的object中, 然后将object放置到一个数组中, 使用数组中的元素进行依次绘制
+     */
+    barcodetree_segment: function () {
+      var self = this
+      var barcodeCollection = self.options.barcodeCollection
+      var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      //  根据barcodetree-segment按钮的当前状态, 对于BARCODETREE_GLOBAL_PARAS具体的参数值进行改变
+      if ($('#compare-operation #barcodetree-segment').hasClass('active')) {
+        $('#compare-operation #barcodetree-segment').removeClass('active')
+        BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'] = false
+      } else {
+        $('#compare-operation #barcodetree-segment').addClass('active')
+        BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'] = true
+      }
+      barcodeCollection.align_node_in_selected_list()
+    },
+    /**
      * 使用柱状图展示子树比较的结果
      */
     summary_comparison: function () {
@@ -669,8 +689,7 @@ define([
           //  在调用完成之后转换到original模式之后删除tablelens的所有节点
           barcodeCollection.clear_tablelens_array()
         }
-      }
-      else {
+      } else {
         $('#change-subtree-display-mode').removeClass('active')
         //  在global模式下 取消子树的focus状态, 那么需要删除当前的tablelens的节点
         BarcodeGlobalSetting['Subtree_Compact'] = false

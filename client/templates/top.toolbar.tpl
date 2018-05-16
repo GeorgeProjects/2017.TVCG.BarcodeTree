@@ -59,6 +59,9 @@
 					          <!--<div id="structure-comparison-slider" class = "slider-div"><div id="structure-custom-handle" class="ui-slider-handle"></div></div>-->
 					        </div>
 					      </div>
+ 										<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "segmentation" aria-label="Right Align" id="barcodetree-segment">
+ 											  <i class="fa icon fa-scissors" aria-hidden="true"></i>
+        			</button>
 											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "summary histogram" aria-label="Right Align" id="summary-comparison">
 														<i class="fa icon iconfont icon-show-histogram"></i>
 							    </button>

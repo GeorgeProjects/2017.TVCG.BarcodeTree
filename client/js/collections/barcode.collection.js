@@ -450,7 +450,6 @@ define([
         // barcodeModel.tablelens_single_subtree()
         // self.collapse_all_subtree(barcodeModel)
         barcodeModel.tablelens_single_subtree()
-        console.log('barcodeModel', barcodeModel)
         self.add(barcodeModel)
       }
       self.update_barcode_model_default_index()
@@ -1278,6 +1277,8 @@ define([
               self.global_preprocess_barcode_model_data()
               self.global_process_barcode_model_data()
             }
+            //  在更新完成所有的视图之后, 用户需要首先改变BarcodeTree的model中存储barcodeTree节点的数组的数据结构
+            self.segment_all_barcodetree()
             self.update_data_all_view()
           })
           .fail(function () {
@@ -1297,6 +1298,34 @@ define([
       }
     }
     ,
+    //  改变barcodeTree的model中存储BarcodeTree节点数组的数据结构, 从而允许他们之间排序的状态不同
+    segment_all_barcodetree: function () {
+      var self = this
+      self.each(function (model) {
+        model.set_barcodetree_segmentation()
+      })
+      self.each(function (model) {
+        model.compute_max_barcodetree_length()
+      })
+      //  计算BarcodeTree中每个子树的最大的宽度
+      var basedBarcodeModel = self.at(0)
+      var basedBarcodeNodeRearrangeObjArray = basedBarcodeModel.get('barcodeNodeRearrangeObjArray')
+      self.each(function (model) {
+        var barcodeNodeRearrangeObjArray = model.get('barcodeNodeRearrangeObjArray')
+        for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
+          if (basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeLength < barcodeNodeRearrangeObjArray[bI].maxSubTreeLength) {
+            basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeLength = barcodeNodeRearrangeObjArray[bI].maxSubTreeLength
+          }
+        }
+      })
+      //  将计算得到的每个子树的maxSubTreeLength赋值到BarcodeTree中的每个subtree的属性上
+      self.each(function (model) {
+        var barcodeNodeRearrangeObjArray = model.get('barcodeNodeRearrangeObjArray')
+        for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
+          barcodeNodeRearrangeObjArray[bI].maxSubTreeLength = basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeLength
+        }
+      })
+    },
     //  寻找所有的父亲以及当前节点
     find_all_father_current_nodes: function (nodeObj) {
       var self = this
@@ -1699,8 +1728,7 @@ define([
       }
       self.add_selected_node_comparison_result(nodeObjId, basedFindingNodesObj)
       self.alignedTreeSelectedNodesIdObj = alignedTreeSelectedNodesIdObj
-    }
-    ,
+    },
     /**
      *  删除在aligned状态下的新增加的选择的节点
      */
@@ -1708,8 +1736,7 @@ define([
       var self = this
       var alignedTreeSelectedNodesIdObj = self.alignedTreeSelectedNodesIdObj
       delete alignedTreeSelectedNodesIdObj[nodeObjId]
-    }
-    ,
+    },
     //  更新当前的barcode视图的宽度
     updateBarcodeNodexMaxX: function () {
       var self = this
@@ -2941,8 +2968,7 @@ define([
         maxX = maxX > locationX ? maxX : locationX
       })
       return maxX
-    }
-    ,
+    },
     // recover_whole_barcode_model: function () {
     //   var self = this
     //   var modelArray = []
@@ -2971,54 +2997,9 @@ define([
       self.uniform_layout()
     },
     /**
-     *
-     * @param sort_para
+     * 按照barcodeTree的时序进行排序, 可以升序排序, 也可以降序排序
+     * @param asc_desc_para
      */
-    sort_whole_barcode_model: function (sort_para) {
-      var self = this
-      var modelArray = []
-      self.each(function (model) {
-        modelArray.push(model)
-      })
-      modelArray.sort(function (model_a, model_b) {
-        var nodeValueA = 0
-        var nodeValueB = 0
-        if (Variables.get('comparisonMode') === Variables.get('TOPOLOGICAL')) {
-          nodeValueA = getNodeNumber(model_a)
-          nodeValueB = getNodeNumber(model_b)
-        } else if (Variables.get('comparisonMode') === Variables.get('ATTRIBUTE')) {
-          nodeValueA = getSumValue(model_a)
-          nodeValueB = getSumValue(model_b)
-        }
-        if (sort_para === 'asc') {
-          return nodeValueA - nodeValueB
-        } else if (sort_para === 'desc') {
-          return nodeValueB - nodeValueA
-        }
-      })
-      function getNodeNumber(model) {
-        var barcodeNodeAttrArray = model.get('barcodeNodeAttrArray')
-        var nodeNumber = 0
-        for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-          if ((barcodeNodeAttrArray[bI].width !== 0) && (barcodeNodeAttrArray[bI].existed)) {
-            nodeNumber = nodeNumber + 1
-          }
-        }
-        return nodeNumber
-      }
-
-      function getSumValue(model) {
-        var barcodeNodeAttrArray = model.get('barcodeNodeAttrArray')
-        return barcodeNodeAttrArray[0].num
-      }
-
-      for (var mI = 0; mI < modelArray.length; mI++) {
-        modelArray[mI].set('barcodeIndex', mI)
-      }
-      self.uniform_layout()
-      // self.trigger_barcode_loc()
-    }
-    ,
     date_sort_barcode_model: function (asc_desc_para) {
       var self = this
       var barcodeModelArray = []
@@ -3041,9 +3022,7 @@ define([
           }
         })
       }
-      for (var mI = 0; mI < barcodeModelArray.length; mI++) {
-        barcodeModelArray[mI].set('barcodeIndex', mI)
-      }
+      self.set_barcodetree_sorting_result(barcodeModelArray)
       self.uniform_layout()
       self.update_data_all_view()
       //  library tree的排序函数
@@ -3093,11 +3072,15 @@ define([
         }
       }
     },
-    //  对于barcode model进行排序
+    /**
+     *  对于barcode model的属性进行排序, 可以升序也可以降序
+     *  @param asc_desc_para
+     */
     sort_barcode_model: function (asc_desc_para) {
       var self = this
       self.sortExistedConfigObj = {}
       var alignedTreeSelectedNodesIdObj = self.get_aligned_tree_selected_node()
+      var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
       var comparedNodeId = null
       for (var item in alignedTreeSelectedNodesIdObj) {
         comparedNodeId = item
@@ -3117,10 +3100,7 @@ define([
       modelArray = modelArray.sort(function (model_a, model_b) {
         return sort_handler(model_a, model_b, asc_desc_para, Selection_State, comparedNodeId, sortMode)
       })
-
-      for (var mI = 0; mI < modelArray.length; mI++) {
-        modelArray[mI].set('barcodeIndex', mI)
-      }
+      self.set_barcodetree_sorting_result(modelArray)
       self.uniform_layout()
       self.trigger_update_superview_aligned_icon()
 
@@ -3151,93 +3131,6 @@ define([
         }
       }
 
-      // var nodeValueA = 0
-      // var nodeValueB = 0
-      // if (Variables.get('comparisonMode') === Variables.get('TOPOLOGICAL')) {
-      //   nodeValueA = model_a.getSubtreeNodeNum()
-      //   nodeValueB = model_b.getSubtreeNodeNum()
-      // } else if (Variables.get('comparisonMode') === Variables.get('ATTRIBUTE')) {
-      //   nodeValueA = model_a.getSubtreeSumValue()
-      //   nodeValueB = model_b.getSubtreeSumValue()
-      // }
-      // if (parameter === 'asc') {
-      //   return nodeValueA - nodeValueB
-      // } else if (parameter === 'desc') {
-      //   return nodeValueB - nodeValueA
-      // }
-
-      function nodenum_sort_handler(model, parameter, Selection_State, comparedNodeId, sortMode) {
-        if (Selection_State === Config.get('CONSTANT')['SUBTREE_SELECTION']) {
-
-        } else if (Selection_State === Config.get('CONSTANT')['NODE_SELECTION']) {
-
-        }
-      }
-
-      function attribute_sort_handler(model_a, model_b, parameter, Selection_State, comparedNodeId, alignedTreeSelectedNodesIdObj, sortMode) {
-        if (Selection_State === Config.get('CONSTANT')['SUBTREE_SELECTION']) {
-
-        } else if (Selection_State === Config.get('CONSTANT')['NODE_SELECTION']) {
-
-        }
-      }
-
-      function structure_similarity_sort_handler() {
-        if (Selection_State === Config.get('CONSTANT')['SUBTREE_SELECTION']) {
-
-        } else if (Selection_State === Config.get('CONSTANT')['NODE_SELECTION']) {
-
-        }
-      }
-
-      function attribute_similarity_sort_handler() {
-        if (Selection_State === Config.get('CONSTANT')['SUBTREE_SELECTION']) {
-
-        } else if (Selection_State === Config.get('CONSTANT')['NODE_SELECTION']) {
-
-        }
-      }
-
-      //  计算得到总value值
-      function getSubtreeSumValue(model) {
-        var barcodeNodeAttrArray = model.get('barcodeNodeAttrArray')
-        var sumValue = 0
-        for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-          if (isInCompareNodesIdArray(barcodeNodeAttrArray[bI].id)) {
-            if ((barcodeNodeAttrArray[bI].width !== 0) && (barcodeNodeAttrArray[bI].existed)) {
-              sumValue = sumValue + barcodeNodeAttrArray[bI].num
-            }
-          }
-        }
-        return sumValue
-      }
-
-      //  计算得到subtree的节点数目
-      function getSubtreeNodeNum(model) {
-        var barcodeNodeAttrArray = model.get('barcodeNodeAttrArray')
-        var nodeDepth = null
-        var nodeCount = 0
-        for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-          if (nodeDepth != null) {
-            if (barcodeNodeAttrArray[bI].depth > nodeDepth) {
-              if ((barcodeNodeAttrArray[bI].width !== 0) && (barcodeNodeAttrArray[bI].existed)) {
-                nodeCount = nodeCount + 1
-              }
-            }
-            if (barcodeNodeAttrArray[bI].depth == nodeDepth) {
-              nodeDepth = null
-            }
-          }
-          if (isInCompareNodesIdArray(barcodeNodeAttrArray[bI].id)) {
-            if ((barcodeNodeAttrArray[bI].width !== 0) && (barcodeNodeAttrArray[bI].existed)) {
-              nodeDepth = barcodeNodeAttrArray[bI].depth
-              nodeCount = nodeCount + 1
-            }
-          }
-        }
-        return nodeCount
-      }
-
       //  判断节点的id是否出现在comparedNodeIdArray数组中
       function isInCompareNodesIdArray(nodeId) {
         var isExisted = false
@@ -3248,10 +3141,32 @@ define([
         }
         return isExisted
       }
-
-      // self.trigger_barcode_loc()
-    }
-    ,
+    },
+    /**
+     * 按照排序的结果设置排序中的barcodeModel中的属性值
+     */
+    set_barcodetree_sorting_result: function (modelArray) {
+      console.log('set_barcodetree_sorting_result')
+      var self = this
+      var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      var alignedTreeSelectedNodesIdObj = self.get_aligned_tree_selected_node()
+      var comparedNodeId = null
+      for (var item in alignedTreeSelectedNodesIdObj) {
+        comparedNodeId = item
+      }
+      if (comparedNodeId == null) {
+        return
+      }
+      for (var mI = 0; mI < modelArray.length; mI++) {
+        if (BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split']) {
+          //  如果当前处于切割的状态, 那么仅仅改变对应的segement的index值
+          modelArray[mI].set_barcode_segement_index(mI, comparedNodeId)
+        } else {
+          //  如果当前处于非切割状态, 那么改变整个barcodeTree的index数值
+          modelArray[mI].set('barcodeIndex', mI)
+        }
+      }
+    },
     /**
      *  取消barcode collection中的based model的设置
      */
