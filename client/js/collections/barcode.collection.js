@@ -844,6 +844,7 @@ define([
      * 而只是处理barcode model中的具体的节点的信息
      */
     process_barcode_model_data: function () {
+      console.log('process_barcode_model_data')
       var self = this
       //  更新barcode节点的属性数组
       self.update_barcode_node_attr_array()
@@ -1305,7 +1306,11 @@ define([
         model.set_barcodetree_segmentation()
       })
       self.each(function (model) {
-        model.compute_max_barcodetree_length()
+        model.compute_max_barcodetree_xaxis()
+      })
+      //  计算barcodeTree的每一部分节点的起始坐标值
+      self.each(function (model) {
+        model.compute_start_barcodetree_axis()
       })
       //  计算BarcodeTree中每个子树的最大的宽度
       var basedBarcodeModel = self.at(0)
@@ -1313,8 +1318,8 @@ define([
       self.each(function (model) {
         var barcodeNodeRearrangeObjArray = model.get('barcodeNodeRearrangeObjArray')
         for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-          if (basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeLength < barcodeNodeRearrangeObjArray[bI].maxSubTreeLength) {
-            basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeLength = barcodeNodeRearrangeObjArray[bI].maxSubTreeLength
+          if (basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeXAxis < barcodeNodeRearrangeObjArray[bI].maxSubTreeXAxis) {
+            basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeXAxis = barcodeNodeRearrangeObjArray[bI].maxSubTreeXAxis
           }
         }
       })
@@ -1322,7 +1327,9 @@ define([
       self.each(function (model) {
         var barcodeNodeRearrangeObjArray = model.get('barcodeNodeRearrangeObjArray')
         for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-          barcodeNodeRearrangeObjArray[bI].maxSubTreeLength = basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeLength
+          barcodeNodeRearrangeObjArray[bI].maxSubTreeXAxis = basedBarcodeNodeRearrangeObjArray[bI].maxSubTreeXAxis
+          barcodeNodeRearrangeObjArray[bI].maxSubTreeLength = barcodeNodeRearrangeObjArray[bI].maxSubTreeXAxis - barcodeNodeRearrangeObjArray[bI].minSubTreeXAxis
+          console.log('barcodeNodeRearrangeObjArray[bI].minSubTreeLength', barcodeNodeRearrangeObjArray[bI].minSubTreeLength)
         }
       })
     },
@@ -1509,8 +1516,11 @@ define([
       if ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL)) {
         self.update_zoomed_range_location()
       } else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL)) {
+        console.log('align_node_in_selected_list')
         self.process_barcode_model_data()
       }
+      //  在更新完成所有的视图之后, 用户需要首先改变BarcodeTree的model中存储barcodeTree节点的数组的数据结构
+      self.segment_all_barcodetree()
       self.update_data_all_view()
     },
     /**

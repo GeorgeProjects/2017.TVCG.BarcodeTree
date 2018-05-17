@@ -297,9 +297,25 @@ define([
           .text(barcodeTreeLabelMonthDday)
           .on('mouseover', function (d, i) {
             self.highlight_barcode_bg()
+            //  绘制barcodeTree的背景矩形
+            self.append_barcode_bg()
             self.trigger_hovering_event()
+            var dayArray = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+            if (barcodeTreeId.indexOf('-') !== -1) {
+              var dateInTip = barcodeTreeId.split('-')[1].replaceAll('_', '/')
+              var date = barcodeTreeId.split('-')[1].replaceAll('_', '-')
+              var curDay = new Date(date).getDay()
+              var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>date: " + dateInTip
+                + ", Day: " + dayArray[curDay] + "</span></span>"
+            } else {
+              var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + "Day: " + barcodeTreeId + "</span></span>"
+            }
+            if (Config.get('BARCODETREE_TOOLTIP_ENABLE')) {
+              tip.show(tipValue)
+            }
           })
           .on('mouseout', function (d, i) {
+            self.remove_barcode_bg()
             self.d3el.select('.bg').classed('hovering-highlight', false)
           })
         self.barcodeContainer = self.d3el.append('g')
@@ -313,6 +329,122 @@ define([
           })
           .attr('y', barcodeHeight / 2)
         self.add_label_dbclick_click_handler()
+      },
+      /**
+       * 在barcodeTree的背后增加背景矩形
+       */
+      append_barcode_bg: function () {
+        var self = this
+        var treeDataModel = self.model
+        var barcodeTreeId = treeDataModel.get('barcodeTreeId')
+        var barcodeIndex = treeDataModel.get('barcodeIndex')
+        var barcodeHeight = treeDataModel.get('barcodeNodeHeight')
+        var barcodeTreeYLocation = treeDataModel.get('barcodeTreeYLocation')
+        var containerWidth = $('#barcodetree-scrollpanel').width()
+        var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+        var BarcodeTreeSplit = BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split']
+        var barcodeNodeRearrangeObjArray = treeDataModel.get('barcodeNodeRearrangeObjArray')
+        var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+        //  sankey diagram的连接线是
+        var lineGenerator = d3.svg.line().x(function(d){return d[0]}).y(function(d){return d[1]}).interpolate('basis')
+        //  切割的不同的subtree object对应的背景矩形没有计算左侧的边界部分, 因此需要增加边界的部分
+        var barcodePaddingLeft = self.barcodePaddingLeft
+        if (BarcodeTreeSplit) {
+          //  如果是切割的barcodeTree, 那么需要在每一段的背后增加背景矩形
+          for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
+            var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
+            var subtreeIndex = barcodeNodeRearrangeObj.barcodeTreeIndex
+            var subtreeLocChange = 0
+            if ((typeof (subtreeIndex) !== 'undefined') && (typeof (barcodeIndex) !== 'undefined')) {
+              subtreeLocChange = (subtreeIndex - barcodeIndex) * barcodeHeight
+            }
+            var maxSubTreeLength = barcodeNodeRearrangeObj.maxSubTreeLength
+            var subtreeStartX = barcodeNodeRearrangeObj.subtreeStartX
+            //  下面实际绘制的barcodeTree背景矩形的起始位置以及宽度
+            var subtreeBgStartX = 0
+            var subtreeBgWidth = 0
+            var subtreeBgY = (+barcodeTreeYLocation) + subtreeLocChange
+            //  在增加背景矩形的时候, 在背景矩形的长度的基础上增加barcodeNodeInterval, 在横轴的坐标基础上减少barcodeNodeInterval, 从而能够显示barcodeTree的背景更加明显
+            if (bI === 0) {
+              subtreeBgStartX = 0
+              subtreeBgWidth = barcodePaddingLeft + maxSubTreeLength + barcodeNodeInterval
+              d3.select('#barcodetree-bg-g')
+                .append('rect')
+                .attr('class', function () {
+                  var colorClass = 'bg ' + 'barcode-bg ' + barcodeTreeId
+                  return colorClass
+                })
+                .attr('x', subtreeBgStartX)
+                .attr('y', subtreeBgY)
+                .attr('width', subtreeBgWidth)
+                .attr('height', barcodeHeight)
+            } else {
+              subtreeBgStartX = subtreeStartX + barcodePaddingLeft - barcodeNodeInterval
+              subtreeBgWidth = maxSubTreeLength + barcodeNodeInterval * 2
+              d3.select('#barcodetree-bg-g')
+                .append('rect')
+                .attr('class', function () {
+                  var colorClass = 'bg ' + 'barcode-bg ' + barcodeTreeId
+                  return colorClass
+                })
+                .attr('x', subtreeBgStartX)
+                .attr('y', subtreeBgY)
+                .attr('width', subtreeBgWidth)
+                .attr('height', barcodeHeight)
+            }
+            //  在绘制完成一个barcodeTree的背景矩形之后, 需要绘制barcodeTree的背景矩形与下一个背景矩形之间的连接curve
+            if ((bI + 1) < barcodeNodeRearrangeObjArray.length) {
+              var subtreeBgYCenter = subtreeBgY + barcodeHeight / 2
+              var subtreeBgEndX = subtreeBgStartX + subtreeBgWidth
+              //  下一个BarcodeTree背景矩形的起始坐标
+              var nextSubtreeBgStartX = barcodeNodeRearrangeObjArray[bI + 1].subtreeStartX + barcodePaddingLeft - barcodeNodeInterval
+              var nextSubtreeIndexX = barcodeNodeRearrangeObjArray[bI + 1].barcodeTreeIndex
+              var nextSubtreeLocChange = 0
+              if ((typeof (nextSubtreeBgStartX) !== 'undefined') && (typeof (barcodeIndex) !== 'undefined')) {
+                nextSubtreeLocChange = (nextSubtreeIndexX - barcodeIndex) * barcodeHeight
+              }
+              var nextSubtreeBgY = (+barcodeTreeYLocation) + nextSubtreeLocChange
+              var nextSubtreeBgYCenter = nextSubtreeBgY + barcodeHeight / 2
+              //  构建barcodeTree的背景的控制点之间的连线
+              var curvePoints = [
+                [subtreeBgEndX, subtreeBgYCenter],
+                [(subtreeBgEndX + nextSubtreeBgStartX) / 2, subtreeBgYCenter],
+                [(subtreeBgEndX + nextSubtreeBgStartX) / 2, nextSubtreeBgYCenter],
+                [nextSubtreeBgStartX, nextSubtreeBgYCenter]
+              ]
+              var pathData = lineGenerator(curvePoints);
+              d3.select('#barcodetree-bg-g')
+                .append('path')
+                .attr('class', 'barcodetree-link barcode-bg ' + barcodeTreeId)
+                .attr('d', pathData)
+                .style('stroke-width', barcodeHeight)
+            }
+          }
+        } else {
+          //  如果是完整的barcodeTree, 那么在整个barcodeTree的背后增加背景矩形
+          d3.select('#barcodetree-bg-g')
+            .append('rect')
+            .attr('class', function () {
+              var colorClass = 'bg ' + 'barcode-bg ' + barcodeTreeId
+              return colorClass
+            })
+            .attr('width', containerWidth)
+            .attr('height', barcodeHeight)
+            .attr('x', 0)
+            .attr('y', barcodeTreeYLocation)
+        }
+
+      },
+      /**
+       * 删除barcodeTree的背景矩形
+       */
+      remove_barcode_bg: function () {
+        var self = this
+        var treeDataModel = self.model
+        var barcodeTreeId = treeDataModel.get('barcodeTreeId')
+        d3.select('#barcodetree-bg-g')
+          .selectAll('.' + barcodeTreeId)
+          .remove()
       },
       /**
        *  计算得到barcodeTree前面的label的函数
@@ -991,14 +1123,14 @@ define([
             var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
             var barcodeNodeArray = barcodeNodeRearrangeObj.node_array
             var subtreeIndex = barcodeNodeRearrangeObj.barcodeTreeIndex
-            var maxSubTreeLength = barcodeNodeRearrangeObj.maxSubTreeLength
+            var maxSubTreeXAxis = barcodeNodeRearrangeObj.maxSubTreeXAxis
             append_barcode_node(barcodeNodeArray, subtreeIndex, barcodeTreeIndex)
             if ((bI + 1) < barcodeNodeRearrangeObjArray.length) {
               var nextBarcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI + 1]
               var nextSubtreeIndex = nextBarcodeNodeRearrangeObj.barcodeTreeIndex
               var subtreeOrder = bI
               //  除了前后的barcodeTree所处于的纵向index之外, 用户需要制定连接的barcodeTree的序列的index值
-              append_barcode_link(maxSubTreeLength, subtreeIndex, nextSubtreeIndex, barcodeTreeIndex, subtreeOrder)
+              append_barcode_link(maxSubTreeXAxis, subtreeIndex, nextSubtreeIndex, barcodeTreeIndex, subtreeOrder)
             }
           }
           // append_barcode_node(barcodeNodeAttrArray)
@@ -1014,7 +1146,6 @@ define([
           self.d3el.selectAll('.barcode-link')
             .remove()
         }
-
         //  绘制barcodeTree中的节点的渲染函数
         function append_barcode_node(barcodeNodeAttrArray, subtreeIndex, barcodeTreeIndex) {
           var subtreeLocChange = 0
@@ -1052,9 +1183,11 @@ define([
             .style("cursor", "pointer")
             .on('mouseover', function (d, i) {
               self.node_mouseover_handler(d, self)
+              self.append_barcode_bg()
             })
             .on('mouseout', function () {
               d3.select(this).classed('default-highlight', false)
+              self.remove_barcode_bg()
             })
             .style("fill", function (d, i) {
               return self.fill_handler(d, i, self)
@@ -1081,7 +1214,7 @@ define([
         }
 
         //  在切割BarcodeTree的情况下, 绘制barcodeTree之间的link的渲染函数
-        function append_barcode_link(maxSubTreeLength, beginSubtreeIndex, endSubtreeIndex, barcodeTreeIndex, subtreeOrder) {
+        function append_barcode_link(maxSubTreeXAxis, beginSubtreeIndex, endSubtreeIndex, barcodeTreeIndex, subtreeOrder) {
           var BarcodeTreeSplitWidth = Variables.get('BarcodeTree_Split_Width')
           var beginSubtreeLoc = 0
           var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
@@ -1098,9 +1231,9 @@ define([
             .append('line')
             .attr('class', 'barcode-link')
             .attr('id', barcodetreeLinkId)
-            .attr('x1', maxSubTreeLength + barcodeNodeInterval)
+            .attr('x1', maxSubTreeXAxis + barcodeNodeInterval)
             .attr('y1', beginSubtreeLoc)
-            .attr('x2', (maxSubTreeLength + BarcodeTreeSplitWidth))
+            .attr('x2', (maxSubTreeXAxis + BarcodeTreeSplitWidth))
             .attr('y2', endSubtreeLoc)
         }
 
@@ -1148,7 +1281,6 @@ define([
           return +d.height
         }
       },
-
       is_global_comparison_state_root_select: function () {
         var selectedNodesIdObj = window.Datacenter.barcodeCollection.get_selected_nodes_id()
         var alignedSelectedNodesIdObj = window.Datacenter.barcodeCollection.get_aligned_tree_selected_node()

@@ -3303,20 +3303,43 @@ define([
       self.set('barcodeNodeRearrangeObjArray', barcodeNodeRearrangeObjArray)
     },
     //  计算barcodeTree的最大的长度
-    compute_max_barcodetree_length: function () {
+    compute_max_barcodetree_xaxis: function () {
       var self = this
       var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-      var maxSubTreeLength = 0
+      var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
+      var maxSubTreeXAxis = 0
       for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
         var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
         var nodeArray = barcodeNodeRearrangeObj.node_array
-        for (var nI = (nodeArray.length - 1); nI >= 0; nI--) {
-          if (nodeArray[nI].existed) {
-            maxSubTreeLength = nodeArray[nI].x + nodeArray[nI].width
-            break
+        if (BarcodeGlobalSetting['Subtree_Compact'] && barcodeNodeRearrangeObj.category === 'padding') {
+          var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
+          var barcodeNodePaddingLength = BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH']
+          maxSubTreeXAxis = nodeArray[0].x + barcodeNodePaddingLength
+        } else {
+          for (var nI = (nodeArray.length - 1); nI >= 0; nI--) {
+            if (nodeArray[nI].existed) {
+              maxSubTreeXAxis = nodeArray[nI].x + nodeArray[nI].width
+              break
+            }
           }
         }
-        barcodeNodeRearrangeObj.maxSubTreeLength = maxSubTreeLength
+        barcodeNodeRearrangeObj.maxSubTreeXAxis = maxSubTreeXAxis
+        if ((typeof (nodeArray) !== 'undefined') && (nodeArray.length > 0)) {
+          var minSubTreeXAxis = nodeArray[0].x
+          barcodeNodeRearrangeObj.minSubTreeXAxis = minSubTreeXAxis
+        }
+      }
+    },
+    //  计算barcodeTree每一段的起始坐标
+    compute_start_barcodetree_axis: function () {
+      var self = this
+      var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
+      for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
+        var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
+        var nodeArray = barcodeNodeRearrangeObj.node_array
+        if ((typeof (nodeArray) !== 'undefined') && (nodeArray.length > 0)) {
+          barcodeNodeRearrangeObj.subtreeStartX = nodeArray[0].x
+        }
       }
     },
     //  将对齐部分的BarcodeTree按照当前对齐的层级进行切割

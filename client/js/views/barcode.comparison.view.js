@@ -77,6 +77,11 @@ define([
       self.showChildView('barcodeTreeContainer', barcodeCollectionView)
       var width = $('#barcodetree-view').width()
       var height = $('#barcodetree-view').height()
+      var barcodeTreeSortingPanelHeight = Variables.get('barcodeTreeSortingPanelHeight')
+      self.d3el.select('#barcodetree-bg-g')
+        .attr('transform', 'translate(' + 0 + ',' + barcodeTreeSortingPanelHeight + ')')
+      self.d3el.select('.barcode-tree-single-g')
+        .attr('transform', 'translate(' + 0 + ',' + barcodeTreeSortingPanelHeight + ')')
       //  在barcode比较视图中的背景矩形中增加click的事件
       self.d3el.select('.barcode-tree-single-g')
         .insert('rect')

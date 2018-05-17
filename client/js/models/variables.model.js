@@ -28,6 +28,8 @@ define([
         MISS_NODE_COLOR: '#e9a3c9',
         SAME_NODE_COLOR: 'black'
       },
+      //  barcodeTree comparison视图上方空余的绘制barcodeTree排序选项的视图
+      barcodeTreeSortingPanelHeight: 50,
       //  固定的BarcodeTree的fixed节点
       displayFixedLevel: -1,
       //  固定的BarcodeTree的对齐节点
@@ -349,7 +351,8 @@ define([
       var superTreeHeight = +$('#supertree-scroll-panel').height()
       var barcodeTreeConfigHeight = +$('#top-toolbar-container').height()//self.get('barcodeTreeConfigHeight')
       var barcodeViewPaddingBottom = self.get('barcodeViewPaddingBottom')
-      var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - barcodeViewPaddingBottom
+      var barcodeTreeSortingPanelHeight = self.get('barcodeTreeSortingPanelHeight')
+      var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - barcodeViewPaddingBottom - barcodeTreeSortingPanelHeight
       var updatedHeight = barcodeViewHeight / (selectItemNameArray.length + setOperationArray.length)
       var minimumRatio = Variables.get('minimumRatio')
       //  根据当前barcode的不同的模式变换barcode的高度
