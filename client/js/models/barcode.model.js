@@ -1053,6 +1053,10 @@ define([
 																}
 														}
 												}
+												//	如果在这个范围内的paddingNode的maxPaddingNodeLength为0, 那么就存在一个BarcodeTree的对齐的部分相连的情况
+												if (paddingNodeObjArray[pI].maxPaddingNodeLength === 0) {
+														alignedNodeLoc = alignedNodeLoc - BarcodeTreeSplitWidth
+												}
 										}
 								}
 								for (var aI = 0; aI < alignedRangeObjArray.length; aI++) {

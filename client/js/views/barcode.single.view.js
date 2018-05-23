@@ -1148,8 +1148,6 @@ define([
 														append_barcode_link(maxSubTreeXAxis, subtreeIndex, nextSubtreeIndex, barcodeTreeIndex, subtreeOrder)
 												}
 										}
-										// append_barcode_node(barcodeNodeAttrArray)
-										// append_barcode_node(barcodeNodeAttrArray)
 								} else {
 										var barcodeTreeIndex = treeDataModel.get('barcodeTreeIndex')
 										//  在不被切割的情况下, 根据BarcodeTreeNodeArray绘制BarcodeTree
@@ -1228,7 +1226,6 @@ define([
 												})
 										// barcodeNode.exit().remove()
 								}
-
 								//  在切割BarcodeTree的情况下, 绘制barcodeTree之间的link的渲染函数
 								function append_barcode_link(maxSubTreeXAxis, beginSubtreeIndex, endSubtreeIndex, barcodeTreeIndex, subtreeOrder) {
 										//	barcodeTree的不同的segment之间的连线存在一定的偏差, 因此增加barcodeLinkPadding用于调整这个偏差, 使其位于中心的位置

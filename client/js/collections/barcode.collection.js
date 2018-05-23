@@ -1034,9 +1034,7 @@ define([
 				update_barcode_node_attr_array: function () {
 						var self = this
 						self.each(function (model) {
-								// if (!BarcodeGlobalSetting['Node_Arrangement']) {
 								model.update_barcode_node_array()
-								// }
 								model.update_aligned_barcode_node()
 								model.update_unaligned_barcode_node()
 								model.update_align_followed_node()
