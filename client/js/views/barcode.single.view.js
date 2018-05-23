@@ -400,8 +400,7 @@ define([
 												}
 												//  在绘制完成一个barcodeTree的背景矩形之后, 需要绘制barcodeTree的背景矩形与下一个背景矩形之间的连接curve
 												if ((bI + 1) < barcodeNodeRearrangeObjArray.length) {
-														var subtreeLinkPadding = 2
-														var subtreeBgYCenter = subtreeBgY + barcodeHeight / 2 - subtreeLinkPadding
+														var subtreeBgYCenter = subtreeBgY + barcodeHeight / 2
 														var subtreeBgEndX = subtreeBgStartX + subtreeBgWidth
 														//  下一个BarcodeTree背景矩形的起始坐标
 														var nextSubtreeBgStartX = barcodeNodeRearrangeObjArray[bI + 1].subtreeStartX + barcodePaddingLeft - barcodeNodeInterval
@@ -411,7 +410,7 @@ define([
 																nextSubtreeLocChange = (nextSubtreeIndexX - barcodeIndex) * barcodeHeight
 														}
 														var nextSubtreeBgY = (+barcodeTreeYLocation) + nextSubtreeLocChange
-														var nextSubtreeBgYCenter = nextSubtreeBgY + barcodeHeight / 2 - subtreeLinkPadding
+														var nextSubtreeBgYCenter = nextSubtreeBgY + barcodeHeight / 2
 														if (!isNaN(nextSubtreeBgStartX)) {
 																//  构建barcodeTree的背景的控制点之间的连线
 																var curvePoints = [
@@ -1232,15 +1231,17 @@ define([
 
 								//  在切割BarcodeTree的情况下, 绘制barcodeTree之间的link的渲染函数
 								function append_barcode_link(maxSubTreeXAxis, beginSubtreeIndex, endSubtreeIndex, barcodeTreeIndex, subtreeOrder) {
+										//	barcodeTree的不同的segment之间的连线存在一定的偏差, 因此增加barcodeLinkPadding用于调整这个偏差, 使其位于中心的位置
+										var barcodeLinkPadding = barcodeHeight / 10
 										var BarcodeTreeSplitWidth = Variables.get('BarcodeTree_Split_Width')
 										var beginSubtreeLoc = 0
 										var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
 										if ((typeof (beginSubtreeIndex) !== 'undefined') && (typeof (barcodeTreeIndex) !== 'undefined')) {
-												beginSubtreeLoc = (beginSubtreeIndex - barcodeTreeIndex) * barcodeHeight + barcodeHeight / 2
+												beginSubtreeLoc = (beginSubtreeIndex - barcodeTreeIndex) * barcodeHeight + barcodeHeight / 2 - barcodeLinkPadding
 										}
 										var endSubtreeLoc = 0
 										if ((typeof (endSubtreeIndex) !== 'undefined') && (typeof (barcodeTreeIndex) !== 'undefined')) {
-												endSubtreeLoc = (endSubtreeIndex - barcodeTreeIndex) * barcodeHeight + barcodeHeight / 2
+												endSubtreeLoc = (endSubtreeIndex - barcodeTreeIndex) * barcodeHeight + barcodeHeight / 2 - barcodeLinkPadding
 										}
 										var barcodetreeLinkId = 'startsubtree' + subtreeOrder + '-endsubtree' + (subtreeOrder + 1)
 										self.d3el.select('#' + barcodetreeLinkId).remove()
