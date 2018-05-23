@@ -1,11 +1,13 @@
 <div id = 'top-toolbar-container'>
 </div>
-	<div id = 'supertree-scroll-panel'>
+<div id = 'supertree-scroll-panel'>
 					<div id = 'selected-item-list'>
 					</div>
 	    <div id = 'supertree-view'>
 	    </div>
-	</div>
+</div>
+<div id = 'sorting-panel'>
+</div>
 <div id = 'barcode-config'>
     <button id = "distribution-view-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title="Distribution View">
        <span id = "distribution-view-controller" class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

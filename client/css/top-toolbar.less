@@ -58,6 +58,9 @@
     //  padding-left: 7px;
     //  padding-right: 7px;
     //}
+    .config-button #barcode-selection-group {
+      padding-left: @config-button_padding-left;
+    }
     .config-button {
       padding: @config-button_padding; // 0.5rem 0.7rem 0.5rem 0.7rem
     }
@@ -120,16 +123,39 @@
       font-size: 1rem;
     }
     #aligned-level-text, #sort-options-text {
-      font-size: 1.2rem;
+      font-size: 1.4rem;
     }
     #options-attribute, #options-structure, #options-similarity {
       margin-top: 0.3rem;
     }
-    #aligned-level-menu {
+    //  对齐模式的下拉菜单
+    #aligned-mode-menu {
       text-align: left;
       padding-left: 1rem;
       padding-bottom: 1rem;
       min-width: 13.5rem;
+      left: 0rem;
+      #aligned-mode-menu-container {
+        #slider-label {
+          padding-bottom: 0.5rem;
+        }
+        #align-mode-control {
+          .control-btn {
+            padding: @level-btn-padding;
+            margin-left: 5px;
+          }
+          #align-selected-tree, #align-whole-tree {
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+    //  对齐层级的下拉菜单
+    #aligned-level-menu {
+      text-align: left;
+      padding-left: 1rem;
+      padding-bottom: 1rem;
+      min-width: 11rem;
       left: 2rem;
       #aligned-level-menu-container {
         #slider-label {
@@ -139,6 +165,28 @@
           .level-btn {
             padding: @level-btn-padding;
             margin-left: 5px;
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+    //  切割层级的下拉菜单
+    #segment-level-menu {
+      text-align: left;
+      padding-left: 1rem;
+      padding-right: 1rem;
+      padding-bottom: 1rem;
+      min-width: 11rem;
+      left: 4rem;
+      #segment-level-menu-container {
+        #slider-label {
+          padding-bottom: 0.5rem;
+        }
+        #segment-level-control {
+          .level-btn {
+            padding: @level-btn-padding;
+            margin-left: 5px;
+            font-size: 1rem;
           }
         }
       }

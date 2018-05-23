@@ -354,7 +354,6 @@ define([
       }
       //  点击histogram上面的bar选中调用的函数
       var selectBarItem = function (barId) {
-        console.log('barId', barId)
         self.selectBarItem(barId)
       }
       //  再次点击histogram上面的bar取消选中调用的函数
@@ -365,7 +364,7 @@ define([
       var unhoveringBarItem = function (d) {
         var barcodeId = d.id
         self.trigger_unhovering_barcode_event(barcodeId)
-        histogramTip.hide()
+        window.histogramTip.hide()
       }
       //
       var prehighlightBar = function (barId) {
@@ -454,7 +453,7 @@ define([
           var curDay = new Date(date).getDay()
           // var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
           var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + date + "/" + dayArray[curDay] + ", num: " + barValue + "</span></span>"
-          histogramTip.show(tipValue, document.getElementById(barId))
+          window.histogramTip.show(tipValue, document.getElementById(barId))
         }
       } else if (currentDataSetName === Config.get('DataSetCollection')['NBATeamTreeName']) {
         //  当前是NBA的数据集
@@ -462,7 +461,7 @@ define([
         var barValue = d.y
         var yearRemoveTree = barId.replace('tree', '')
         var tipValue = "<span id='tip-content' style='position:relative;'><span id='vertical-center'>" + "year:" + yearRemoveTree + ", num: " + Math.round(barValue) + "</span></span>"
-        histogramTip.show(tipValue, document.getElementById(barId))
+        window.histogramTip.show(tipValue, document.getElementById(barId))
       }
       //  如果存在比较高的tooltip移动了位置, 将类别变成d3-histogram-tip-flip; 需要先将d3-histogram-tip-flip变成d3-histogram-tip
       $('.d3-histogram-tip-flip').removeClass('d3-histogram-tip-flip').addClass('d3-histogram-tip')
@@ -813,7 +812,7 @@ define([
         if (typeof (nodeData.id) !== 'undefined') {
           // self.show_tip(nodeData)
           var tipValue = "<span id='tip-content-empty' style='position:relative;'><span id='vertical-center'></span></span>"
-          histogramTip.show(tipValue, document.getElementById(barcodeTreeId))
+          window.histogramTip.show(tipValue, document.getElementById(barcodeTreeId))
           $('.d3-histogram-tip-flip').removeClass('d3-histogram-tip-flip').addClass('d3-histogram-tip')
         }
       }
@@ -828,7 +827,7 @@ define([
         .select('.hovering-rect')
         .attr('x', 0)
         .attr('width', 0)
-      histogramTip.hide()
+      window.histogramTip.hide()
     },
     /*
      * 清空brush的范围的矩形

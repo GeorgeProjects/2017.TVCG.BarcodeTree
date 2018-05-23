@@ -5,6 +5,8 @@ var process = require('process')
 var hierarchicalDataProcessor = require('../processor/barcodetree_processor')
 
 var fileNameHandler = function (request, response) {
+  //  每次加载都清空所有的缓存的对象
+  // dataCenter.clear_all()
   var dataSetName = request.body.DataSetName
   initilize_original_dataset(dataSetName, sendFileInfoObj)
   //  发送读取的数据
@@ -76,7 +78,6 @@ function read_directory_file(dataSetName, dirname, readFileDirectory, fileReadEn
         hierarchicalDataProcessor.add_node_num(fileObject)
         //  对于树对象中的孩子节点进行排序
         sort_children(fileObject)
-        console.log('finish initialize')
         // fs.writeFile(('./server/data/' + dataSetName + '/linearData/' + filename), JSON.stringify(fileObject), 'utf8', function (err) {
         //   console.log('err', err)
         // })

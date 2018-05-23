@@ -25,6 +25,9 @@
 @top-toolbar-container_padding-top: 1/20rem;
 @btn-group_margin-right: 2.5rem;
 @config-button_padding: 0.45rem 0.45rem 0.4rem 0.45rem;
+
+@config-button_padding-left: 0.55rem;
+
 @config-button-similarity-sort_padding: 0.45rem 0.6rem 0.4rem 0.6rem;
 @fa_font-size: 1.6rem;
 @confirm-check_font-size: 12px;
@@ -43,6 +46,9 @@
 
 //  supertree视图的 top数值
 @supertree-scroll-panel_top: @top-toolbar-container_height;
+
+//sorting 视图的height数值
+@sorting-panel_height: 0rem;
 
 //  barcodetree-scrollpanel 的top的数值
 @barcodetree-scrollpanel_top: @top-toolbar-container_height;
@@ -93,13 +99,10 @@
 @his-left_width: 90%;
 @his-main_height: 100%;
 @his-info_width: 110px;
-@his-main_width: calc(~"100% - " @his-info_width);
-;
+
 @his-panel_height: 18%;
 @his-panel_width: 100%;
-@his-panel_left: @his-main_width;
 @his-info_height: 100%;
-@his-info_left: @his-main_width;
 @his-info_right: 0%;
 
 @barcode-view_width: @content-view_width;

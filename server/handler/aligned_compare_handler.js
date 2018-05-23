@@ -16,6 +16,7 @@ var handlerBuildSuperTree = function (request, response) {
   var rootLevel = +reqBody.rootLevel
   var maxLevel = +reqBody.maxLevel
   var alignedLevel = reqBody.alignedLevel
+  var segmentLevel = reqBody.segmentLevel
   var originalSequenceState = reqBody.originalSequenceState
   //  将barcodeWidth的数组内部的元素转换为数字
   for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
@@ -67,7 +68,7 @@ var handlerBuildSuperTree = function (request, response) {
   }
   var initDepth = rootLevel
   var superTreeNodeLocArray = get_node_location_array(unionTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState)
-  var maxNodeNumTreeNodeLocArray = get_node_partition_location_array(rootId, maxNumTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState, alignedLevel, barcodeTreeSplitWidth)
+  var maxNodeNumTreeNodeLocArray = get_node_partition_location_array(rootId, maxNumTree, initDepth, barcodeWidthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, originalSequenceState, alignedLevel, barcodeTreeSplitWidth, segmentLevel)
   var maxSubtreeWidth = hierarchicalDataProcessor.compute_max_subtree_width(maxNodeNumTreeNodeLocArray, barcodeWidthArray, barcodeNodeInterval)
   superTreeNodeLocArray[0].subtreeWidth = maxSubtreeWidth
   maxNodeNumTreeNodeLocArray[0].subtreeWidth = maxSubtreeWidth
@@ -88,14 +89,13 @@ var handlerBuildSuperTree = function (request, response) {
   }
 
   //  根据层次结构数据的对象计算带有位置属性的节点数组, 计算的是切割之后的barcodeTree的节点位置数组
-  function get_node_partition_location_array(rootId, tree_obj, init_depth, barcode_width_array, selected_levels, barcode_height, barcode_node_interval, originalSequenceState, alignedLevel, barcodeTreeSplitWidth) {
+  function get_node_partition_location_array(rootId, tree_obj, init_depth, barcode_width_array, selected_levels, barcode_height, barcode_node_interval, originalSequenceState, alignedLevel, barcodeTreeSplitWidth, segmentLevel) {
     hierarchicalDataProcessor.sortChildren(tree_obj)
     //  对于树对象进行线性化得到节点序列
-    console.log('get_node_partition_location_array')
     var treeNodeArray = hierarchicalDataProcessor.treeLinearization(tree_obj, init_depth, originalSequenceState)
     var subtreeRange = hierarchicalDataProcessor.getSubtreeRange(rootId, init_depth, treeNodeArray)
     //  根据线性化的节点序列得到节点的位置属性
-    var superTreeNodeLocArray = hierarchicalDataProcessor.computePartitionNodeLocation(treeNodeArray, subtreeRange, barcode_width_array, selected_levels, barcode_height, barcode_node_interval, alignedLevel, barcodeTreeSplitWidth)
+    var superTreeNodeLocArray = hierarchicalDataProcessor.computePartitionNodeLocation(treeNodeArray, subtreeRange, barcode_width_array, selected_levels, barcode_height, barcode_node_interval, alignedLevel, barcodeTreeSplitWidth, segmentLevel)
     return superTreeNodeLocArray
   }
 

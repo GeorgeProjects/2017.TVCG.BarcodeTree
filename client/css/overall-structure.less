@@ -1,6 +1,7 @@
 html {
   font-size: 10px; //62.5%
 }
+
 body {
   font-family: @font-family;
   font-size: 1rem;
@@ -128,7 +129,7 @@ body {
         top: 0%;
         padding-left: @top-toolbar-container_padding-left;
         height: @top-toolbar-container_height;
-        border-bottom: #eeeeee 1px;
+        border-bottom: #eeeeee 0.5px solid;
         background-color: white;
       }
       // barcodeview视图中的第二个视图, barcode-supertree.less一起控制视图
@@ -164,12 +165,24 @@ body {
           z-index: 1;
         }
       }
+      //  排序操作的控制视图, 该视图主要放置在superTree视图的下方, 用于放置操作barcodeTree的子树的排序的控制部分
+      #sorting-panel {
+        position: absolute;
+        overflow-x: auto;
+        overflow-y: auto;
+        top: @supertree-scroll-panel_top;
+        height: @sorting-panel_height;
+        right: 0%;
+        left: 0%;
+        background-color: white;
+        border-top: #eeeeee 0.5px solid;
+      }
       //  barcodeview中的第三个视图, barcodetree的主视图, 进行比较,同时这个视图支持用户进行滑动
       #barcodetree-scrollpanel {
         position: absolute;
         overflow-x: auto;
         overflow-y: hidden;
-        top: @barcodetree-scrollpanel_top;
+        top: @barcodetree-scrollpanel_top + @sorting-panel_height;
         left: 0%;
         right: 0%;
         bottom: 0%;

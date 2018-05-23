@@ -29,7 +29,7 @@ define([
         SAME_NODE_COLOR: 'black'
       },
       //  barcodeTree comparison视图上方空余的绘制barcodeTree排序选项的视图
-      barcodeTreeSortingPanelHeight: 50,
+      barcodeTreeSortingPanelHeight: 0,
       //  固定的BarcodeTree的fixed节点
       displayFixedLevel: -1,
       //  固定的BarcodeTree的对齐节点
@@ -63,7 +63,7 @@ define([
       //  power的参数
       POW_EXPONENT: 0.4,
       //  标记barcode的高度
-      barcodeHeight: 40,
+      barcodeHeight: 30,
       //  标记barcode的最大高度
       barcodeNodeHeightMinValue: 10,
       //  标记barcode的最小高度
@@ -79,6 +79,8 @@ define([
       barcodeNodeyMaxY: 0,
       //  barcode视图的margin
       comparisonViewMargin: {left: 30, right: 50},
+      //  切割的barcodeTree的层级
+      segmentLevel: -1,
       //  对齐的节点
       alignedLevel: 0,
       //  标记不同的barcode背景颜色的对象
@@ -351,8 +353,7 @@ define([
       var superTreeHeight = +$('#supertree-scroll-panel').height()
       var barcodeTreeConfigHeight = +$('#top-toolbar-container').height()//self.get('barcodeTreeConfigHeight')
       var barcodeViewPaddingBottom = self.get('barcodeViewPaddingBottom')
-      var barcodeTreeSortingPanelHeight = self.get('barcodeTreeSortingPanelHeight')
-      var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - barcodeViewPaddingBottom - barcodeTreeSortingPanelHeight
+      var barcodeViewHeight = (+$('#barcode-view').height()) - superTreeHeight - barcodeTreeConfigHeight - barcodeViewPaddingBottom
       var updatedHeight = barcodeViewHeight / (selectItemNameArray.length + setOperationArray.length)
       var minimumRatio = Variables.get('minimumRatio')
       //  根据当前barcode的不同的模式变换barcode的高度

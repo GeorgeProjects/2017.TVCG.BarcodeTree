@@ -1225,7 +1225,7 @@ function compactTreeLinearization(treeObj) {
  *  对于线性化的节点数组, 数组中的每个节点存在节点中的状态描述
  *  根据数组计算原始状态的barcode的每个节点的位置以及大小, 在barcodeTree的节点位置数组中需要考虑在切割BarcodeTree所带来的片段部分的距离
  */
-function computePartitionNodeLocation(treeNodeArray, subtreeRange, widthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, alignedLevel, barcodeTreeSplitWidth) {
+function computePartitionNodeLocation(treeNodeArray, subtreeRange, widthArray, selectedLevels, barcodeHeight, barcodeNodeInterval, alignedLevel, barcodeTreeSplitWidth, segmentLevel) {
   var xLoc = 0
   var treeNodeLocArray = []
   for (var i = 0; i < treeNodeArray.length; i++) {
@@ -1238,7 +1238,7 @@ function computePartitionNodeLocation(treeNodeArray, subtreeRange, widthArray, s
     if ((i >= startIndex) && (i <= endIndex)) {
       if ((i - 1) >= 0) {
         // 如果该节点的层级是alignedLevel, 并且该节点的层级比下一个节点的层级更深, 即depth of current nodes < depth of previous node
-        if ((depth === (+alignedLevel)) && ((+treeNodeArray[i].depth) <= (+treeNodeArray[i - 1].depth))) {
+        if ((depth === (+segmentLevel)) && ((+treeNodeArray[i].depth) <= (+treeNodeArray[i - 1].depth))) {
           xLoc = xLoc + barcodeTreeSplitWidth
         }
       }

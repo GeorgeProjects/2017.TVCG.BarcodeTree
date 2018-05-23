@@ -101,6 +101,10 @@ define([
         'COMPRESS_MODE': 'CompressMode'
       },
       'EVENTS': {
+        //  打开sorting视图
+        'OPEN_SORTING_VIEW': 'open-sorting-view',
+        //  关闭sorting视图
+        'CLOSE_SORTING_VIEW': 'close-sorting-view',
         //  更新barcode的参数值
         'UPDATE_BARCODE_PARAMETERS': 'update-barcode-parameters',
         'UPDATE_SELECTED_LEVELS': 'update-selected-levels',
