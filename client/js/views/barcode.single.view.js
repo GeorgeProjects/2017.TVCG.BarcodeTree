@@ -1193,7 +1193,7 @@ define([
 												.attr('height', function (d) {
 														return self.height_handler(d)
 												})
-												.style("cursor", "pointer")
+												.style("cursor", cursor_handler)
 												.on('mouseover', function (d, i) {
 														self.node_mouseover_handler(d, self)
 														self.append_barcode_bg()
@@ -1224,8 +1224,10 @@ define([
 												.style("fill", function (d, i) {
 														return self.fill_handler(d, i, self)
 												})
+												.style("cursor", cursor_handler)
 										// barcodeNode.exit().remove()
 								}
+
 								//  在切割BarcodeTree的情况下, 绘制barcodeTree之间的link的渲染函数
 								function append_barcode_link(maxSubTreeXAxis, beginSubtreeIndex, endSubtreeIndex, barcodeTreeIndex, subtreeOrder) {
 										//	barcodeTree的不同的segment之间的连线存在一定的偏差, 因此增加barcodeLinkPadding用于调整这个偏差, 使其位于中心的位置
@@ -1257,6 +1259,26 @@ define([
 										var compact_not_padding_state = BarcodeGlobalSetting['Subtree_Compact'] && (paddingStartIdArray.indexOf(d.id) === -1) && (paddingRangeIdArray.indexOf(d.id) === -1)
 										var not_compact = !BarcodeGlobalSetting['Subtree_Compact']
 										return (isShowPaddngNode || d.existed) && (compact_not_padding_state || not_compact)
+								}
+
+								//		得到BarcodeTree的cursor值的函数
+								function cursor_handler(d, i) {
+										var nodeId = d.id
+										//	处于可以比较的comparison的状态
+										var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+										var isLockedComparison = BarcodeGlobalSetting['Align_Lock']
+										//	处于padding状态
+										var isPaddingStart = treeDataModel.is_padding_start(nodeId)
+										var isPaddingRange = treeDataModel.is_padding_range(nodeId)
+										//	处于aligned状态
+										var isAlignedRange = treeDataModel.is_aligned_range(nodeId)
+										//	处于locked状态 && 范围是padding的范围内 => cursor是disable类型, 否则 => cursor是pointer类型
+										if ((isLockedComparison) && (isPaddingStart || isPaddingRange)) {
+												console.log('disabled')
+												return 'not-allowed'
+										} else {
+												return 'pointer'
+										}
 								}
 						},
 						/**
