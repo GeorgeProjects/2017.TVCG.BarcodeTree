@@ -820,13 +820,6 @@ define([
 						if (!$('#change-subtree-display-mode').hasClass('active')) {
 								$('#change-subtree-display-mode').addClass('active')
 								BarcodeGlobalSetting['Subtree_Compact'] = true
-								if (!$('#align-mode-controller').hasClass('active')) {
-										$('#align-mode-controller').addClass('active')
-										barcodeCollection.align_node_in_selected_list()
-										BarcodeGlobalSetting['Align_State'] = true
-										self.update_aligned_level()
-										return
-								}
 								//  如果当前处于global的模式下, 点击切换到padding模式, 那么需要删除当前的horizontal fit的状态
 								if (Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL) {
 										self.update_unfit_in_screen()

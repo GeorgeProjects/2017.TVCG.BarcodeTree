@@ -1524,6 +1524,7 @@ define([
 					*/
 				change_subtree_display_mode: function () {
 						var self = this
+						var sortingModel = Datacenter.sortingModel
 						if ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL)) {
 								self.update_zoomed_range_location()
 						} else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL)) {
@@ -1531,6 +1532,8 @@ define([
 						}
 						//  在更新完成所有的视图之后, 用户需要首先改变BarcodeTree的model中存储barcodeTree节点的数组的数据结构
 						self.segment_all_barcodetree()
+						//	sortingModel的sortingModelUpdate变量, 因此视图会更新
+						sortingModel.update_sorting_view()
 						self.update_data_all_view()
 				},
 				/**
