@@ -18,16 +18,18 @@ define([
 		'models/histogram.model',
 		'models/barcode.model',
 		'models/supertree.model',
+		'models/sorting.model',
 		'collections/barcode.collection'
-], function (require, Mn, _, Backbone, Variables, Config, HistogramModel, BarcodeModel, SuperTreeModel, BarcodeCollection) {
+], function (require, Mn, _, Backbone, Variables, Config, HistogramModel, BarcodeModel, SuperTreeModel, SortingModel, BarcodeCollection) {
 		'use strict'
 		window.Datacenter = new (Backbone.Model.extend({
 				defaults: {},
-				initialize: function (url) {
+				initialize: function () {
 						var self = this
 						self.histogramModel = new HistogramModel()
 						self.barcodeCollection = new BarcodeCollection()
 						self.supertreeModel = new SuperTreeModel()
+						self.sortingModel = new SortingModel()
 				},
 				//  DataCenter在初始化之后向服务器端请求histogram的数据
 				//  程序的默认状态, 由config中的变量控制

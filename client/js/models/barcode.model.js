@@ -3195,21 +3195,37 @@ define([
 						var self = this
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
 						return barcodeNodeAttrArray
-				}
-				,
+				},
+				/**
+					* 根据节点id => 获取一个节点的位置
+					*/
 				get_node_location: function (rootId) {
 						var self = this
 						var nodeLocation = null
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-								if (barcodeNodeAttrArray[bI].id === rootId) {
-										nodeLocation = barcodeNodeAttrArray[bI].x
-										break
+						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
+						var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+						if (BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split']) {
+								for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
+										var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
+										var nodeArray = barcodeNodeRearrangeObj.node_array
+										for (var nI = 0; nI < nodeArray.length; nI++) {
+												if (nodeArray[nI].id === rootId) {
+														nodeLocation = nodeArray[nI].x
+														break
+												}
+										}
+								}
+						} else {
+								for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
+										if (barcodeNodeAttrArray[bI].id === rootId) {
+												nodeLocation = barcodeNodeAttrArray[bI].x
+												break
+										}
 								}
 						}
 						return nodeLocation
-				}
-				,
+				},
 				align_barcode_subtree: function (alignedObjArray, alignedNodeIdArray) {
 						var self = this
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
@@ -3274,9 +3290,10 @@ define([
 												category: 'padding',
 												barcodeTreeIndex: barcodeTreeIndex
 										}
-										if (paddingNodeArray.length !== 0) {
-												barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
-										}
+										barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
+										// if (paddingNodeArray.length !== 0) {
+										//				barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
+										// }
 								}
 								var rangeEndNodeIndex = alignedRangeObj.rangeEndNodeIndex
 								//  aligned部分的节点范围
@@ -3289,9 +3306,10 @@ define([
 												category: 'align',
 												barcodeTreeIndex: barcodeTreeIndex
 										}
-										if (alignedNodeArray.length !== 0) {
-												barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
-										}
+										barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
+										// if (alignedNodeArray.length !== 0) {
+										// 		barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
+										// }
 								}
 								originalRangeStartNodeIndex = rangeEndNodeIndex + 1
 						}
@@ -3304,9 +3322,10 @@ define([
 										category: 'padding',
 										barcodeTreeIndex: barcodeTreeIndex
 								}
-								if (paddingNodeArray.length !== 0) {
-										barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
-								}
+								barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
+								// if (paddingNodeArray.length !== 0) {
+								//			barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
+								// }
 						}
 						self.set('barcodeNodeRearrangeObjArray', barcodeNodeRearrangeObjArray)
 				},
@@ -3406,6 +3425,60 @@ define([
 										//  遍历所有的节点, 找到compareNodeId节点所对应的segement, 设置改segmentation的对应的index数值
 										if (nodeId === comparedNodeId) {
 												barcodeNodeRearrangeObj.barcodeTreeIndex = mI
+										}
+								}
+						}
+				},
+				//	计算与compareNodeId具有相同的segment的的id数组
+				get_same_segment_node_id_array: function (comparedNodeId) {
+						var self = this
+						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
+						var nodeIdArray = []
+						var sameSegmentNodeArray = null
+						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
+								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
+								var nodeArray = barcodeNodeRearrangeObj.node_array
+								for (var nI = 0; nI < nodeArray.length; nI++) {
+										var nodeId = nodeArray[nI].id
+										//  遍历所有的节点, 找到compareNodeId节点所对应的segement, 设置改segmentation的对应的index数值
+										if (nodeId === comparedNodeId) {
+												sameSegmentNodeArray = nodeArray
+												break;
+										}
+								}
+						}
+						//	根据挑选得到的sameSegmentNodeArray, 进一步计算nodeIdArray
+						if (sameSegmentNodeArray != null) {
+								for (var sI = 0; sI < sameSegmentNodeArray.length; sI++) {
+										nodeIdArray.push(sameSegmentNodeArray[sI].id)
+								}
+						}
+						return nodeIdArray
+				},
+				//	设置barcodeTree所有对应的segement的index值
+				set_all_barcode_segement_index: function (mI) {
+						var self = this
+						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
+						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
+								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
+								barcodeNodeRearrangeObj.barcodeTreeIndex = mI
+						}
+				},
+				/**
+					*  根据node id计算对应的segment的index值
+					*/
+				get_segment_index: function (comparedNodeId) {
+						var self = this
+						console.log('comparedNodeId', comparedNodeId)
+						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
+						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
+								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
+								var nodeArray = barcodeNodeRearrangeObj.node_array
+								for (var nI = 0; nI < nodeArray.length; nI++) {
+										var nodeId = nodeArray[nI].id
+										if (nodeId === comparedNodeId) {
+												console.log('barcodeNodeRearrangeObj.barcodeTreeIndex', barcodeNodeRearrangeObj.barcodeTreeIndex)
+												return barcodeNodeRearrangeObj.barcodeTreeIndex
 										}
 								}
 						}

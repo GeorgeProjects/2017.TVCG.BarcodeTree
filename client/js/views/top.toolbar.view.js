@@ -270,6 +270,7 @@ define([
 					*/
 				activeSegmentLevel: function () {
 						var self = this
+						var sortingModel = self.model
 						var barcodeCollection = self.options.barcodeCollection
 						$('#segment-level-menu #segment-level-control>.btn').removeClass('active')
 						var segmentLevel = Variables.get('segmentLevel')
@@ -308,7 +309,7 @@ define([
 				},
 				update_segment_level_controller: function (segment_level) {
 						var self = this
-						var barcodeCollection = self.options.barcodeCollection
+						var sortingModel = self.model
 						var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
 						Variables.set('segmentLevel', segment_level)
 						$('#segment-level-control>.level-btn').unbind("click")
@@ -327,6 +328,7 @@ define([
 								} else {
 										BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'] = true
 								}
+								console.log('BarcodeTree_Split', BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'])
 						})
 				},
 				update_aligned_level_controller: function (fixed_aligned_level) {
@@ -610,7 +612,6 @@ define([
 						var self = this
 						var barcodeCollection = self.options.barcodeCollection
 						var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
-						console.log('change_to_compare_unlock_state')
 						$('#compare-lock .fa').removeClass('fa-lock')
 						$('#compare-lock .fa').addClass('fa-unlock')
 						BarcodeGlobalSetting['Align_Lock'] = false
@@ -735,6 +736,7 @@ define([
 				barcodetree_segment: function () {
 						var self = this
 						var barcodeCollection = self.options.barcodeCollection
+						var sortingModel = self.model
 						//	将segment的层级的控制视图展开, 那么就需要将aligned的层级控制视图取消显示
 						$('.comparison-dropdown-menu').css('visibility', 'hidden')
 						$('#segment-level-menu').css('visibility', 'visible')
@@ -1103,7 +1105,6 @@ define([
 								if (barcodeCollection.is_aligned_selected_node_empty()) {
 										swal("Sorting Tips", "Select the interested subtree first after locking -> Sorting.");
 								} else {
-										// self.change_to_compare_lock_state()
 										self.uniform_sort_handler(asc_desc_para)
 										$('#sort-operation .config-button').removeClass('active')
 								}
@@ -1117,7 +1118,6 @@ define([
 				sort_asc: function () {
 						var self = this
 						//  将比较状态切换到锁定的状态
-						// self.change_to_compare_lock_state()
 						var barcodeCollection = self.options.barcodeCollection
 						var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
 						var asc_desc_para = 'asc'
@@ -1173,15 +1173,13 @@ define([
 						barcodeCollection.align_node_in_selected_list()
 						window.Datacenter.update_barcode_tree_reordering_sequence()
 						$('#node-arrangement').addClass('active')
-				}
-				,
+				},
 				uniform_date_sort_handler: function (asc_desc_para) {
 						var self = this
 						var barcodeCollection = self.options.barcodeCollection
 						window.sort_state = true
 						barcodeCollection.date_sort_barcode_model(asc_desc_para)
-				}
-				,
+				},
 				uniform_sort_handler: function (asc_desc_para) {
 						var self = this
 						var barcodeCollection = self.options.barcodeCollection
@@ -1193,11 +1191,14 @@ define([
 				sort_refresh: function () {
 						var self = this
 						window.sort_state = false
+						var sortingModel = self.model
 						//  将比较状态切换到锁定的状态
 						var barcodeCollection = self.options.barcodeCollection
 						barcodeCollection.recover_barcode_model_sequence()
 						self.trigger_super_view_update()
 						$('#sort-operation .config-button').removeClass('active')
+						//	恢复原始的顺序
+						sortingModel.clear_sorting_data()
 				}
 				,
 				//  相似性排序
@@ -1458,8 +1459,7 @@ define([
 								$('.list-group-item#' + groupId + ' .remove-icon').css({visibility: 'hidden'})
 								e.stopPropagation();
 						})
-				}
-				,
+				},
 				//  交集操作的按钮
 				and_operation_toggle: function () {
 						var self = this
@@ -1471,8 +1471,7 @@ define([
 								var selectBarcodeArray = selectionBarcodeObject[selectedGroupId]
 								window.Datacenter.requestAndDataCenter(selectBarcodeArray, selectedGroupId)
 						}
-				}
-				,
+				},
 				//  并集操作的按钮
 				or_operation_toggle: function () {
 						var self = this
@@ -1482,8 +1481,7 @@ define([
 								var selectBarcodeArray = selectionBarcodeObject[selectedGroupId]
 								window.Datacenter.requestOrDataCenter(selectBarcodeArray, selectedGroupId)
 						}
-				}
-				,
+				},
 				//  补集操作的按钮
 				complement_operation_toggle: function () {
 						var self = this

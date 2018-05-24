@@ -189,6 +189,7 @@ define([
       var self = this
       //  初始化barcodeView
       self.showChildView('barcodeView', new BarcodeView({
+        sortingModel: Datacenter.sortingModel,
         barcodeCollection: Datacenter.barcodeCollection
       }))
       $('#supertree-scroll-panel').scroll(function () {

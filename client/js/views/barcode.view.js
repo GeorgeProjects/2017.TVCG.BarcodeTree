@@ -73,12 +73,14 @@ define([
 				onShow: function () {
 						var self = this
 						var barcodeCollection = self.options.barcodeCollection
+						var sortingModel = self.options.sortingModel
 						//  initBarcodeView的参数
 						self.init_barcodeview_para()
 						self.init_tooltip()
 						self.init_sync()
 						//  barcode视图上方的toolbar视图
 						var topToolBarView = new TopToolBarView({
+								model: sortingModel,
 								barcodeCollection: barcodeCollection
 						})
 						self.showChildView('topToolbarView', topToolBarView)
@@ -104,6 +106,7 @@ define([
 						self.showChildView('treeConfigView', treeConfigView)
 						//  绘制控制barcodeTree的视图
 						var sortingControlView = new SortingControlView({
+								model: sortingModel,
 								barcodeCollection: barcodeCollection
 						})
 						self.showChildView('sortingControlView', sortingControlView)

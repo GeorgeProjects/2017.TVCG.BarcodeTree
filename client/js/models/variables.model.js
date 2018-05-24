@@ -28,6 +28,18 @@ define([
         MISS_NODE_COLOR: '#e9a3c9',
         SAME_NODE_COLOR: 'black'
       },
+      Sorting_Icon_Obj: {
+        asc: 'fa-sort-amount-asc',
+        desc: 'fa-sort-amount-desc',
+        DATE: 'fa-calendar',
+        NODENUMBER: 'fa-circle',
+        ATTRIBUTE: 'fa-line-chart',
+        SIMILARITY: 'fa-share-alt'
+      },
+      //  用于标识对于整个树排序的nodeId
+      wholeTreeCompareNodeId: 'whole-tree',
+      //  排序视图的高度, 其数值指的是有几个rem
+      sortingPanelHeight: 3,
       //  barcodeTree comparison视图上方空余的绘制barcodeTree排序选项的视图
       barcodeTreeSortingPanelHeight: 0,
       //  固定的BarcodeTree的fixed节点
