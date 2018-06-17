@@ -60,8 +60,6 @@ define([
       enable_lasso: false,
       //  missed node class
       missed_node_class: 'missed-node-highlight',
-      //  general_missed_node_class
-      general_missed_node_class: 'node-missed',
       //  当前的barcode是否经过了mouseover
       mouseover_state: true,
       //  barcode的高度与barcode的container的占比, barcodeHeight传递到服务器端需要增加一定的比例, 因为barcode的节点的上部分与下部分都是存在一定的间隙
@@ -128,8 +126,6 @@ define([
       barcodeTreeIsLocked: true,
       //  display布局的方法
       displayMode: 'ORIGINAL',//或者 COMPACT ORIGINAL GLOBAL
-      //  当前hover的节点
-      currentHoveringBarcodeId: null,
       //  标记编辑节点的颜色
       edit_icon_color: 'white',
       //  标记选择节点的颜色

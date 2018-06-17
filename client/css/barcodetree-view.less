@@ -55,7 +55,6 @@
     .barcode-node {
       fill: @barcode-node-color;
     }
-
     .barcode-node.node-existed {
       fill: @barcode-node-color;
     }
@@ -68,12 +67,12 @@
       fill: @barcode-node-color;
     }
 
-    .barcode-node.node-none {
+    .barcode-node.node-hidden {
       opacity: 0;
       visibility: hidden;
     }
 
-    .barcode-node.template {
+    .barcode-node.template-stroke {
       //opacity: 0.4;
       //stroke: black !important;
       stroke-width: 0.05rem !important;
@@ -87,19 +86,15 @@
     }
 
     .barcode-node-level-3.node-missed {
-      stroke-width: 2px !important;
-    }
-
-    .barcode-node-level-3.node-missed {
-      stroke-width: 2px !important;
+      stroke-width: 1px !important;
     }
 
     .barcode-node-level-2.node-missed {
-      stroke-width: 3px !important;
+      stroke-width: 2px !important;
     }
 
     .barcode-node-level-1.node-missed {
-      stroke-width: 5px !important;
+      stroke-width: 3px !important;
     }
 
     .barcode-node[class~=default-highlight] {
@@ -134,6 +129,10 @@
 
     .barcode-node[class~=selection-unhighlight] {
       opacity: 0.2;
+    }
+    //  barcodeTree中的节点的padding的部分在locked的情况下的
+    .barcode-node[class~=cancel-node] {
+      opacity: 0.05;
     }
 
     .barcode-node.selection-sibling-highlight[class~=selection-unhighlight] {
@@ -235,7 +234,7 @@
     }
 
     .barcode-link {
-      stroke-width: 2px;
+      stroke-width: 1px;
       stroke: gray;
     }
 

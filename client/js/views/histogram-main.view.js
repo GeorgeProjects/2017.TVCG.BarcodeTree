@@ -104,12 +104,6 @@ define([
         'barcodeTreeId': barcodeId
       })
     },
-    //  发出mouseout的信号
-    trigger_mouseout_event: function () {
-      Backbone.Events.trigger(Config.get('EVENTS')['NODE_MOUSEOUT'], {
-        'eventView': 'HISTOGRAM'
-      })
-    },
     //  更新supertree视图的信号
     trigger_super_view_update: function () {
       Backbone.Events.trigger(Config.get('EVENTS')['RENDER_SUPERTREE'])
@@ -196,10 +190,6 @@ define([
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
         .attr('id', 'histogram-g')
       self.draw_histogram(histogramWidth, histogramHeight, margin)
-      d3.select('#histogram-main-panel')
-        .on('click', function (d, i) {
-          self.trigger_mouseout_event()
-        })
       var tip = window.histogramTip
       self.d3el.call(tip)
     },

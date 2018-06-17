@@ -330,7 +330,6 @@ define([
 						if (BarcodeTree_Split) {
 								BarcodeTreeSplitWidth = Variables.get('BarcodeTree_Split_Width')
 						}
-						console.log('BarcodeTreeSplitWidth', BarcodeTreeSplitWidth)
 						var Node_Arrangement_State = BARCODETREE_GLOBAL_PARAS['Node_Arrangement']
 						var originalSequenceState = 'ORIGINAL'
 						if (Node_Arrangement_State) {
@@ -377,10 +376,38 @@ define([
 						}
 						self.requestDataFromServer(url, formData, buildSuperTreeSuccessFunc)
 				},
+				//		获取barcodeTree的布局优化后的结果
+				request_optimization_result: function (barcodeTreeNum, segmentNum, segmentSimilarityArray3) {
+						var self = this
+						var Url = 'optimization'
+						var formData = {barcodeTreeNum: barcodeTreeNum, segmentNum: segmentNum, similarityarray: JSON.stringify(segmentSimilarityArray3)}
+						var originalDatasuccessFunc = function (result) {
+								console.log('result', result)
+								self.barcodeCollection.reorder_barcodetree_segment(result)
+						}
+						self.requestDataFromOptimizationServer(Url, formData, originalDatasuccessFunc)
+				},
+				//		与优化布局的服务器通信的方法
+				requestDataFromOptimizationServer: function (Url, formData, originalDatasuccessFunc) {
+						var self = this
+						$.ajax({
+								url: 'http://localhost:8000/' + Url,
+								type: 'POST',
+								dataType: "json",
+								headers: {'h1': 'v1'},
+								data: formData,
+								crossDomain: true,
+								success: function (result) {
+										originalDatasuccessFunc(result)
+								},
+								error: function (result) {
+										console.log('error', result)
+								}
+						})
+				},
 				//  与服务器端通信的方法, 在dataCenter.model中被调用
 				requestDataFromServer: function (Url, formData, originalDatasuccessFunc) {
 						var self = this
-						var barcodeTreeId = formData.dataItemName
 						$.ajax({
 								url: Url,
 								type: 'POST',

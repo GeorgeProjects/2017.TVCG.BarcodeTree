@@ -99,6 +99,9 @@
            <!--<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "align the whole tree" aria-label="Left Align" id="global-display-controller">
               <i class="fa fa-th"></i>
            </button>-->
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "lock selection" aria-label="Right Align" id="barcodetree-cluster">
+											   <i class="fa icon fa-cubes" aria-hidden="true"></i>
+       				</button>
 											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "lock selection" aria-label="Right Align" id="compare-lock">
 											   <i class="fa icon fa-unlock" aria-hidden="true"></i>
        				</button>

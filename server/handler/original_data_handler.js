@@ -46,6 +46,7 @@ var handleCompactData = function (request, response) {
 
 var handleOriginalData = function (request, response) {
   //  读取传递的的数据
+  console.log('request.headers', request.headers)
   var reqBody = request.body
   var dataSetName = reqBody.dataSetName
   var dataItemNameArray = reqBody['dataItemNameArray']
@@ -86,6 +87,7 @@ var handleOriginalData = function (request, response) {
   buildUpdateSuperTree(originalTreeObjObject, allSelectedDataItemNameArray)
   //  向客户端传递barcode的节点位置, 大小等信息
   function sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeArrayObj) {
+    console.log('response', response)
     response.setHeader('Content-Type', 'application/json')
     response.setHeader('Access-Control-Allow-Origin', '*')
     var treeNodeObject = {

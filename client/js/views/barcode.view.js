@@ -27,7 +27,7 @@ define([
 				regions: {
 						'topToolbarView': '#top-toolbar-container',
 						'supertreeView': '#supertree-view',
-						'sortingControlView': '#sorting-panel',
+						'sortingControlView': '#sorting-scroll-panel',
 						'barcodetreeView': '#barcodetree-view',
 						'distributionView': '#barcode-distribution-view',
 						'treeConfigView': '#tree-config-view'
@@ -208,7 +208,19 @@ define([
 						$('#supertree-scroll-panel').scroll(function () {
 								$('#barcodetree-scrollpanel').scrollLeft($(this).scrollLeft())
 						})
+						$('#supertree-scroll-panel').scroll(function () {
+								$('#sorting-scroll-panel').scrollLeft($(this).scrollLeft())
+						})
 						$('#barcodetree-scrollpanel').scroll(function () {
+								$('#supertree-scroll-panel').scrollLeft($(this).scrollLeft())
+						})
+						$('#barcodetree-scrollpanel').scroll(function () {
+								$('#sorting-scroll-panel').scrollLeft($(this).scrollLeft())
+						})
+						$('#sorting-scroll-panel').scroll(function () {
+								$('#barcodetree-scrollpanel').scrollLeft($(this).scrollLeft())
+						})
+						$('#sorting-scroll-panel').scroll(function () {
 								$('#supertree-scroll-panel').scrollLeft($(this).scrollLeft())
 						})
 				}

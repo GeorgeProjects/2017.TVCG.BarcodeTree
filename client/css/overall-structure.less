@@ -166,12 +166,12 @@ body {
         }
       }
       //  排序操作的控制视图, 该视图主要放置在superTree视图的下方, 用于放置操作barcodeTree的子树的排序的控制部分
-      #sorting-panel {
+      #sorting-scroll-panel {
         position: absolute;
         overflow-x: auto;
         overflow-y: auto;
         top: @supertree-scroll-panel_top;
-        height: @sorting-panel_height;
+        height: @sorting-scroll-panel_height;
         right: 0%;
         left: 0%;
         background-color: white;
@@ -185,6 +185,12 @@ body {
             display: inline-block;
             vertical-align: middle;
           }
+          .padding-icon {
+            position: absolute;
+            padding: 0.15rem 0.25rem;
+            display: inline-block;
+            vertical-align: middle;
+          }
         }
       }
       //  barcodeview中的第三个视图, barcodetree的主视图, 进行比较,同时这个视图支持用户进行滑动
@@ -192,7 +198,7 @@ body {
         position: absolute;
         overflow-x: auto;
         overflow-y: hidden;
-        top: @barcodetree-scrollpanel_top + @sorting-panel_height;
+        top: @barcodetree-scrollpanel_top + @sorting-scroll-panel_height;
         left: 0%;
         right: 0%;
         bottom: 0%;

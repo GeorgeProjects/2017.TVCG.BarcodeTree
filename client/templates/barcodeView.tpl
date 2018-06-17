@@ -6,7 +6,7 @@
 	    <div id = 'supertree-view'>
 	    </div>
 </div>
-<div id = 'sorting-panel'>
+<div id = 'sorting-scroll-panel'>
 </div>
 <div id = 'barcode-config'>
     <button id = "distribution-view-toggle" class = "btn btn-default btn-barcode-config" data-toggle = "tooltip" data-placement = "left" title="Distribution View">

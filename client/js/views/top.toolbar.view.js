@@ -48,6 +48,7 @@ define([
 						'click #change-subtree-display-mode': 'change_subtree_display_mode',
 						'click #show-padding-node': 'showing_padding_node',
 						'click #node-number-comparison': 'node_number_comparison',
+						'click #barcodetree-cluster': 'barcodetree_cluster',
 						'click #refresh-comparison': 'refresh_comparison',
 						// 排序
 						'click #sort-options': 'sort_options',
@@ -75,8 +76,7 @@ define([
 				initEvent: function () {
 						var self = this
 						//  在对齐的层级以及固定的层级改变时,会自动更新
-						self.listenTo(Variables, 'change:displayFixedLevel', self.activeAlignedLevel)
-						self.listenTo(Variables, 'change:displayAlignedLevel', self.activeAlignedLevel)
+						self.listenTo(Variables, 'change:alignedLevel', self.activeAlignedLevel)
 						self.listenTo(Variables, 'change:segmentLevel', self.activeSegmentLevel)
 						//  更新group事件中的选中的barcodeTree的列表, 分别按照星期对于选中的barcodeTree进行分类
 						Backbone.Events.on(Config.get('EVENTS')['UPDATE_SELECTION_LIST'], function (event) {
@@ -141,9 +141,15 @@ define([
 				},
 				onShow: function () {
 						var self = this
-						var fixedAlignedLevel = 0
-						self.update_aligned_level_controller(fixedAlignedLevel)
+						//	更新barcodeTree的对齐的控制视图
+						var alignedLevel = 0
+						Variables.set('alignedLevel', alignedLevel)
+						self.activeAlignedLevel()
+						self.update_aligned_level_controller()
+						//	更新segment的控制视图
 						var segmentLevel = 0
+						Variables.set('segmentLevel', segmentLevel)
+						self.activeSegmentLevel()
 						self.update_segment_level_controller(segmentLevel)
 						self.init_slider()
 						self.init_sort_options()
@@ -166,11 +172,6 @@ define([
 						$('#align-mode-controller').removeClass('active')
 						//  unalign之后 设置alignedLevel为0
 						Variables.set('alignedLevel', defaultLevel)
-						//  固定的层级
-						var fixedLevel = 0
-						var alignedLevel = 1
-						Variables.set('displayFixedLevel', fixedLevel)
-						Variables.set('displayAlignedLevel', alignedLevel)
 						//  对齐层级设为0
 						$('#compare-lock .fa').removeClass('fa-lock')
 						self.change_to_compare_unlock_state()
@@ -290,20 +291,13 @@ define([
 				activeAlignedLevel: function () {
 						var self = this
 						//  选择层级的控制视图中对齐的层级
-						var displayAlignedLevel = Variables.get('displayAlignedLevel')
+						var alignedLevel = Variables.get('alignedLevel')
+						var displayAlignedLevel = alignedLevel + 1
 						//  选择层级的控制视图中固定的层级
-						var displayFixedLevel = Variables.get('displayFixedLevel')
 						var alignedLevelText = $('#aligned-level-text')
 						alignedLevelText.text("L" + displayAlignedLevel)
 						$('#aligned-level-menu #align-level-control>.btn').removeClass('active')
-						//  将fixed的aligned level去掉
-						self.enable_buttons($('#aligned-level-menu #align-level-control>.btn'))
-						for (var lI = displayFixedLevel; lI >= 0; lI--) {
-								$('#aligned-level-menu #align-level-control>#btn-' + lI).addClass('active')
-								//  对于已经aligned部分的节点fixed其aligned的部分
-								self.disable_buttons($('#aligned-level-menu #align-level-control>#btn-' + lI))
-						}
-						for (var lI = displayAlignedLevel; lI >= displayFixedLevel; lI--) {
+						for (var lI = displayAlignedLevel; lI >= 0; lI--) {
 								$('#aligned-level-menu #align-level-control>#btn-' + lI).addClass('active')
 						}
 				},
@@ -316,11 +310,9 @@ define([
 						$('#segment-level-control>.level-btn').click(function () {
 								var displayLevel = +$(this).text()
 								var segmentLevel = displayLevel - 1
-								Variables.set('segmentLevel', segmentLevel)
 								var alignedLevel = Variables.get('alignedLevel')
 								if (segmentLevel > alignedLevel) {
 										Variables.set('alignedLevel', segmentLevel)
-										Variables.set('displayAlignedLevel', (segmentLevel + 1))
 								}
 								//	如果segement的层级为1, 那么就不进行切割
 								if (displayLevel === 1) {
@@ -328,27 +320,20 @@ define([
 								} else {
 										BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'] = true
 								}
-								console.log('BarcodeTree_Split', BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'])
+								//	设置了segmentLevel属性之后会监听该属性, 在对应的响应函数中对齐barcodeTree的各个部分
+								//	TODO 触发对齐的命令必须要放在函数的最后, 将所有的参数都设置完成之后再触发
+								Variables.set('segmentLevel', segmentLevel)
 						})
 				},
-				update_aligned_level_controller: function (fixed_aligned_level) {
+				update_aligned_level_controller: function () {
 						var self = this
 						var maxDepth = Variables.get('maxDepth')
-						var alignedBarcodeLevel = Variables.get('alignedLevel')
 						var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
-						var Max_Real_Level = BarcodeGlobalSetting.Max_Real_Level
 						var barcodeCollection = self.options.barcodeCollection
-						var displayedLevel = alignedBarcodeLevel + 1
-						var displayedFixedAlignedLevel = fixed_aligned_level
-						Variables.set('displayFixedLevel', displayedFixedAlignedLevel)
-						Variables.set('displayAlignedLevel', displayedLevel)
-						// self.activeAlignedLevel(displayedFixedAlignedLevel, displayedLevel)
 						$('#align-level-control>.level-btn').unbind("click")
 						$('#align-level-control>.level-btn').click(function () {
 								var displayLevel = +$(this).text()
 								var realLevel = displayLevel - 1
-								Variables.set('displayFixedLevel', displayedFixedAlignedLevel)
-								Variables.set('displayAlignedLevel', displayLevel)
 								Variables.set('alignedLevel', realLevel)
 								barcodeCollection.align_node_in_selected_list()
 								//	如果选择的alignedLevel比当前的segmentLevel层次更浅, 那么自动的更新segmentLevel的层级
@@ -601,7 +586,7 @@ define([
 						barcodeCollection.init_aligned_selected_node()
 						//  增加所有选择的节点到highlight children的数组中
 						barcodeCollection.add_selected_obj_into_children_nodes()
-						barcodeCollection.clear_aligned_selected_node()
+						// barcodeCollection.clear_aligned_selected_node()
 						//  更新所有的barcode视图, 在align的部分增加aligned-locked的class
 						barcodeCollection.update_all_barcode_view()
 				},
@@ -615,12 +600,13 @@ define([
 						$('#compare-lock .fa').removeClass('fa-lock')
 						$('#compare-lock .fa').addClass('fa-unlock')
 						BarcodeGlobalSetting['Align_Lock'] = false
+						//	将状态切换成unlocked的状态, 则将barcodeTree的选择节点恢复到原始的状态
+						barcodeCollection.clear_highlight_all_children_nodes_array()
 						$('#compare-lock').removeClass('active')
 						// 清空在aligned状态下所有选择的节点
-						barcodeCollection.clear_aligned_selected_node()
+						// barcodeCollection.clear_aligned_selected_node()
 						//  更新所有的barcode视图, 在align的部分增加aligned-locked的class
 						barcodeCollection.update_all_barcode_view()
-						barcodeCollection.clear_highlight_all_children_nodes_array()
 				},
 				/**
 					* barcodetree显示模式的控制视图
@@ -643,10 +629,6 @@ define([
 								$('#align-mode-controller').removeClass('active')
 								//  unalign之后 设置alignedLevel为0
 								Variables.set('alignedLevel', 0)
-								var fixedLevel = 0
-								var alignedLevel = 1
-								Variables.set('displayFixedLevel', fixedLevel)
-								Variables.set('displayAlignedLevel', alignedLevel)
 								// self.activeAlignedLevel(fixedLevel, alignedLevel)
 								var selectedAlignedItemList = barcodeCollection.get_selected_aligned_item_list()
 								barcodeCollection.remove_aligned_part(selectedAlignedItemList)
@@ -658,6 +640,8 @@ define([
 								//	取消选中子树部分的对齐, 需要将segement的状态设置为false
 								BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'] = false
 						} else {
+								//	将aligned的层级设置为barcodeTree中选择节点的最大深度
+								barcodeCollection.set_aligned_level_as_max_level()
 								//	对齐选中的子树部分
 								$('#align-selected-tree').addClass('active')
 								$('#align-mode-controller').addClass('active')
@@ -677,7 +661,6 @@ define([
 						//  对齐barcodeTree的最深的层级
 						//var Max_Real_Level = Variables.get('maxDepth')
 						var Max_Real_Level = Variables.get('alignedLevel')
-						var MaxDisplayedLevel = Max_Real_Level + 1
 						var nodeObjId = 'node-0-root'
 						var nodeObjDepth = 0
 						if (!$('#align-whole-tree').hasClass('active')) {
@@ -690,8 +673,6 @@ define([
 								BARCODETREE_GLOBAL_PARAS['Align_State'] = true
 								self.change_to_compare_lock_state()
 								var displayedFixedAlignedLevel = 0
-								Variables.set('displayFixedLevel', displayedFixedAlignedLevel)
-								Variables.set('displayAlignedLevel', MaxDisplayedLevel)
 								Variables.set('alignedLevel', Max_Real_Level)
 								//  设置alignedLevel时, 会自动的将barcodeTree设置为aligned的状态
 								$('#align-mode-controller').addClass('active')
@@ -706,14 +687,13 @@ define([
 								BARCODETREE_GLOBAL_PARAS['Align_State'] = false
 								self.change_to_compare_unlock_state()
 								//	取消对齐状态时, 设置aligned层级以及fixed层级
-								Variables.set('displayFixedLevel', 0)
-								Variables.set('displayAlignedLevel', 1)
 								var selectedAlignedItemList = barcodeCollection.get_selected_aligned_item_list()
 								// barcodeCollection.remove_aligned_part(selectedAlignedItemList)
 								Variables.set('alignedLevel', 0)
 								//	取消对齐状态时, 设置segment层级为0
 								Variables.set('segmentLevel', 0)
-								barcodeCollection.remove_selected_node(nodeObjId, nodeObjDepth)
+								var removedNodeObj = {nodeObjId: nodeObjId, nodeObjDepth: nodeObjDepth}
+								barcodeCollection.remove_selected_node([removedNodeObj])
 								//	取消对于BarcodeTree的对齐即恢复到原始的状态, 需要将segement的状态取消
 								BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'] = false
 						}
@@ -734,22 +714,9 @@ define([
 					* 2. 将BarcodeTree的model中的不同部分放置到不同的object中, 然后将object放置到一个数组中, 使用数组中的元素进行依次绘制
 					*/
 				barcodetree_segment: function () {
-						var self = this
-						var barcodeCollection = self.options.barcodeCollection
-						var sortingModel = self.model
 						//	将segment的层级的控制视图展开, 那么就需要将aligned的层级控制视图取消显示
 						$('.comparison-dropdown-menu').css('visibility', 'hidden')
 						$('#segment-level-menu').css('visibility', 'visible')
-						// var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
-						// //  根据barcodetree-segment按钮的当前状态, 对于BARCODETREE_GLOBAL_PARAS具体的参数值进行改变
-						// if ($('#compare-operation #barcodetree-segment').hasClass('active')) {
-						// 		$('#compare-operation #barcodetree-segment').removeClass('active')
-						// 		BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'] = false
-						// } else {
-						// 		$('#compare-operation #barcodetree-segment').addClass('active')
-						// 		BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split'] = true
-						// }
-						// barcodeCollection.align_node_in_selected_list()
 				},
 				/**
 					* 使用柱状图展示子树比较的结果
@@ -963,9 +930,6 @@ define([
 						var finishRemoveAlignDeferObj = $.Deferred()
 						$.when(finishRemoveAlignDeferObj)
 								.done(function () {
-										// barcodeCollection.clear_operation_item()
-										delete window.operated_node
-										delete window.operated_tree_id
 										barcodeCollection.update_all_barcode_view()
 										self.trigger_super_view_update()
 								})
@@ -1000,7 +964,6 @@ define([
 				_remove_summary_comparison: function () {
 						var self = this
 						var barcodeCollection = self.options.barcodeCollection
-						var nodeData = window.operated_node
 						var operationItemList = barcodeCollection.get_operation_item()
 						for (var oI = 0; oI < operationItemList.length; oI++) {
 								var nodeData = operationItemList[oI].nodeData
@@ -1012,6 +975,12 @@ define([
 								}
 						}
 						$('#compare-operation #summary-comparison').removeClass('active')
+				},
+				//	对于当前的barcodeTree进行聚类
+				barcodetree_cluster: function () {
+						var self = this
+						var barcodeCollection = self.options.barcodeCollection
+						barcodeCollection.cluster_barcode_tree()
 				},
 				//  对于子树进行节点数目的比较
 				node_number_comparison: function () {
@@ -1053,8 +1022,7 @@ define([
 								//  将所有的选择的节点清空
 								barcodeCollection.add_selected_obj_into_children_nodes()
 						}
-				}
-				,
+				},
 				//  删除节点数目的比较的功能
 				_node_number_comparison: function () {
 						var self = this
@@ -1089,46 +1057,27 @@ define([
 						var self = this
 						//  将比较状态切换到锁定的状态
 						// self.change_to_compare_lock_state()
-						var barcodeCollection = self.options.barcodeCollection
-						var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
 						var asc_desc_para = 'desc'
-						var sortOption = BarcodeGlobalSetting['Sort_Option']
-						if (!((sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DATE_SORT'])
-								|| (sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DAY_SORT']))) {
-								if (barcodeCollection.is_aligned_selected_node_empty()) {
-										swal("Sorting Tips", "Select the interested subtree first after locking -> Sorting.");
-								} else {
-										self.uniform_sort_handler(asc_desc_para)
-										$('#sort-operation .config-button').removeClass('active')
-								}
-						} else {
-								self.uniform_date_sort_handler(asc_desc_para)
-						}
+						self.unified_sort(asc_desc_para)
 				},
 				/**
 					* 升序排列
 					*/
 				sort_asc: function () {
 						var self = this
-						//  将比较状态切换到锁定的状态
+						var asc_desc_para = 'asc'
+						self.unified_sort(asc_desc_para)
+				},
+				/**
+					* 统一的对于barcodeTree排序的方法
+					*/
+				unified_sort: function (asc_desc_para) {
+						var self = this
 						var barcodeCollection = self.options.barcodeCollection
 						var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
-						var asc_desc_para = 'asc'
 						var sortOption = BarcodeGlobalSetting['Sort_Option']
-						if (!((sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DATE_SORT'])
-								|| (sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DAY_SORT']))) {
-								if (barcodeCollection.is_aligned_selected_node_empty()) {
-										//  将比较状态切换到锁定的状态
-										swal("Sorting Tips", "Select the interested subtree first after locking -> Sorting.");
-								} else {
-										self.uniform_sort_handler(asc_desc_para)
-										// self.change_to_compare_lock_state()
-										$('#sort-operation .config-button').removeClass('active')
-								}
-						} else {
-								console.log('sort asc...')
-								self.uniform_date_sort_handler(asc_desc_para)
-						}
+						var compareNodeId = self.get_compare_node_id(sortOption)
+						barcodeCollection.uniform_sort_handler(asc_desc_para, sortOption, compareNodeId)
 				},
 				/**
 					*  排列barcode中的节点的位置, 具有相似位置的节点排布在一起, 类似于matrix reordering
@@ -1167,19 +1116,31 @@ define([
 						window.Datacenter.update_barcode_tree_reordering_sequence()
 						$('#node-arrangement').addClass('active')
 				},
-				uniform_date_sort_handler: function (asc_desc_para) {
+				//		获取当前排序的基准节点
+				get_compare_node_id: function (sortOption) {
 						var self = this
 						var barcodeCollection = self.options.barcodeCollection
-						window.sort_state = true
-						barcodeCollection.date_sort_barcode_model(asc_desc_para)
+						var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+						//	获得用户点击选择的节点的id
+						var alignedTreeSelectedNodesIdObj = barcodeCollection.get_aligned_locked_selected_sort_obj()
+						var comparedNodeId = null
+						if (alignedTreeSelectedNodesIdObj != null) {
+								comparedNodeId = alignedTreeSelectedNodesIdObj.nodeObjId
+						}
+						if ((sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DATE_SORT'])
+								|| (sortOption === Config.get('BARCODETREE_STATE')['BARCODETREE_DAY_SORT'])) {
+								//	按照时间
+								if (BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split']) {	// 如果当前处于切割状态 => 只有comparedNodeId为null, comparedNodeId设置为wholeTreeCompareNodeId
+										if (comparedNodeId == null) {
+												comparedNodeId = Variables.get('wholeTreeCompareNodeId')
+										}
+								} else {//	当前不处于切割状态 => comparedNodeId设置为wholeTreeCompareNodeId
+										comparedNodeId = Variables.get('wholeTreeCompareNodeId')
+								}
+						}
+						//	如果按照属性值 => comparedNodeId为null或者点击的值
+						return comparedNodeId
 				},
-				uniform_sort_handler: function (asc_desc_para) {
-						var self = this
-						var barcodeCollection = self.options.barcodeCollection
-						window.sort_state = true
-						barcodeCollection.sort_barcode_model(asc_desc_para)
-				}
-				,
 				//  恢复原始序列
 				sort_refresh: function () {
 						var self = this
@@ -1190,7 +1151,7 @@ define([
 						barcodeCollection.recover_barcode_model_sequence()
 						self.trigger_super_view_update()
 						$('#sort-operation .config-button').removeClass('active')
-						//	恢复原始的顺序
+						//		恢复原始的顺序
 						sortingModel.clear_sorting_data()
 				}
 				,
