@@ -1452,6 +1452,15 @@ define([
 				compute_segment_similarity: function (basedSegmentObj, comparedSegmentObj) {
 						var self = this
 						var segmentSimilarity = 0
+						if ((typeof (basedSegmentObj) === 'undefined') && (typeof (comparedSegmentObj) === 'undefined')) {
+								//	当两个比较的部分都为空时, 那么两个部分的相似度为1
+								segmentSimilarity = 1
+								return segmentSimilarity
+						} else if (((typeof (basedSegmentObj) !== 'undefined') && (typeof (comparedSegmentObj) === 'undefined'))
+								|| ((typeof (basedSegmentObj) === 'undefined') && (typeof (comparedSegmentObj) !== 'undefined'))) {
+								//	当两个比较的部分一个为空, 一个不为空时, 那么两个部分的相似度为0
+								return segmentSimilarity
+						}
 						if (basedSegmentObj.category === 'align') {
 								var paddingArray1 = basedSegmentObj.padding
 								var paddingArray2 = comparedSegmentObj.padding
