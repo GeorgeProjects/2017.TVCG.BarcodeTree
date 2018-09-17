@@ -1,8 +1,5 @@
 #top-toolbar-container {
-  padding-left: @top-toolbar-container_padding-left; //2rem
-  padding-top: @top-toolbar-container_padding-top; //1/10rem
   text-align: center;
-  //line-height: @top-toolbar-container_inline-height;
   width: 100%;
   height: 100%;
   display: table;
@@ -11,77 +8,85 @@
     display: table-cell;
     vertical-align: middle;
     text-align: center;
+    .btn {
+      font-size: 1rem;
+    }
+    .config-button {
+      padding: 0.4rem 0.4rem 0.4rem 0.4rem;
+    }
+    .config-button#vertical-fit-toggle {
+      padding-left: 0.7rem;
+      padding-right: 0.7rem;
+    }
     #top-toolbar-center-span {
       float: none;
       margin: 0 auto;
     }
+    //  普通的下拉菜单的样式
     .dropdown-menu {
+      background-color: #222;
       min-width: 16rem;
       font-size: 1rem;
       padding-top: 1rem;
     }
-    #slider-dropdown-menu {
-      text-align: left;
-      min-width: 16rem;
-      min-height: 5rem;
+    //  参数控制窗口部分的sliderbar的样式
+    div#parameter-slider-controller > .dropdown-menu {
+      background-color: #222;
+      min-width: 18rem;
       font-size: 1rem;
-      padding-top: 1rem;
-      padding-left: 1em;
-      padding-right: 1em;
-      padding-bottom: 1em;
-      #slider-label {
-        margin-top: 1rem;
+      padding-top: 0.5rem;
+      padding-bottom: 1rem;
+      text-align: center;
+      .slider-item {
+        padding-top: 0.5rem;
       }
-      .slider-div {
-        margin: @slider-div_margin; //1rem 3rem 2rem 3rem
+      .slider-label {
+        width: 4rem;
+        display: inline-block;
+        color: white;
       }
-      #similarity-max-handle, #similarity-min-handle {
-        width: 1.4rem;
-        height: 1.4rem;
-        font-size: 1rem;
+      .slider.slider-horizontal {
+        width: 11rem;
+      }
+      .slider.slider-horizontal .slider-handle.triangle {
+        top: 60%;
+        transform: translateY(-0%);
+        border-bottom-color: #BABABA;
+      }
+      .slider-selection {
+        background: #dddddd;
+      }
+      //  在参数控制栏中的slider上的triangle的参数设置
+      .slider-handle.triangle {
+        border-width: 0 0.6rem 0.6rem 0.6rem;
+      }
+      #refresh-parameter {
+        margin-top: 0.5rem;
+        padding: 0.2rem 0.3rem 0.2rem 0.3rem;
       }
     }
+    //  每一组的button距离右侧的button的距离
     .btn-group {
-      margin-right: @btn-group_margin-right; //2rem
+      margin-right: 2.5rem; //2rem
     }
-    #selection-operation-span {
-      height: 100%;
+    //  barcode的的层次控制部分距离右侧button的距离, 相对于正常的距离会偏小
+    .btn-group#level-controller, .btn-group#display-mode {
+      margin-right: 1rem; //2rem
     }
-    .operation-container {
-      position: absolute;
+    .config-div#parameter-control-operation, .config-div#clear-operation-div, .config-div#refresh-operation-div {
+      margin-right: 2rem;
     }
-    //.config-panel-toggle {
-    //  padding-left: 5px;
-    //  padding-right: 5px;
-    //}
-    //.range-button {
-    //  padding-left: 7px;
-    //  padding-right: 7px;
-    //}
-    .config-button #barcode-selection-group {
-      padding-left: @config-button_padding-left;
-    }
-    .config-button {
-      padding: @config-button_padding; // 0.5rem 0.7rem 0.5rem 0.7rem
-    }
-    .config-button#similarity-sort {
-      padding: @config-button-similarity-sort_padding; // 0.5rem 0.7rem 0.5rem 0.7rem
-    }
-    .fa:not(.remove-cross):not(.fa-plus):not(.confirm-check):not(.check-icon) {
-      font-size: @fa_font-size; //1.5rem
-    }
-    .confirm-check {
-      font-size: @confirm-check_font-size; //1.2rem;
-    }
-    .remove-cross {
-      font-size: @remove-cross_font-size; //1.2rem;
-    }
+    //  在top.toolbar上的label的设计
     .operation-label {
       display: inline-block;
       vertical-align: middle;
-      font-size: 1.2rem;
       line-height: 1;
     }
+    //  在top.toolbar上的icon的标记
+    .fa {
+      font-size: 1.4rem;
+    }
+    //  在top.toolbar上的
     .config-div {
       display: inline-block;
       vertical-align: middle;
@@ -90,65 +95,6 @@
     #structure-comparison {
       border-top-right-radius: 0rem;
       border-bottom-right-radius: 0rem;
-      //padding-bottom: 0.35rem;
-    }
-    #sort-options {
-      //padding-bottom: 0.35rem;
-      //border-top-right-radius: 0rem;
-      //border-bottom-right-radius: 0rem;
-    }
-    #similarity-range {
-      border-top-right-radius: 0px;
-      border-bottom-right-radius: 0px;
-    }
-    #list-container-scroll {
-      max-height: @list-container-scroll_max-height; //20rem;
-      min-height: @list-container-scroll_min-height; //15rem
-      overflow-y: auto;
-    }
-    #subtree-operation-refresh {
-      padding: @subtree-operation-refresh_padding; //0.45rem 0.6rem 0.4rem 0.45rem
-    }
-    #sorting-option-menu {
-      text-align: left;
-      padding-left: 1rem;
-      padding-right: 1rem;
-      min-width: 12rem;
-      left: 8rem;
-      #label-structure, #label-attribute, #label-similarity {
-        font-size: 1rem;
-      }
-    }
-    #sorting-options {
-      font-size: 1rem;
-    }
-    #aligned-level-text, #sort-options-text {
-      font-size: 1.4rem;
-    }
-    #options-attribute, #options-structure, #options-similarity {
-      margin-top: 0.3rem;
-    }
-    //  对齐模式的下拉菜单
-    #aligned-mode-menu {
-      text-align: left;
-      padding-left: 1rem;
-      padding-bottom: 1rem;
-      min-width: 13.5rem;
-      left: 0rem;
-      #aligned-mode-menu-container {
-        #slider-label {
-          padding-bottom: 0.5rem;
-        }
-        #align-mode-control {
-          .control-btn {
-            padding: @level-btn-padding;
-            margin-left: 5px;
-          }
-          #align-selected-tree, #align-whole-tree {
-            font-size: 1rem;
-          }
-        }
-      }
     }
     //  对齐层级的下拉菜单
     #aligned-level-menu {
@@ -169,44 +115,6 @@
           }
         }
       }
-    }
-    //  切割层级的下拉菜单
-    #segment-level-menu {
-      text-align: left;
-      padding-left: 1rem;
-      padding-right: 1rem;
-      padding-bottom: 1rem;
-      min-width: 11rem;
-      left: 4rem;
-      #segment-level-menu-container {
-        #slider-label {
-          padding-bottom: 0.5rem;
-        }
-        #segment-level-control {
-          .level-btn {
-            padding: @level-btn-padding;
-            margin-left: 5px;
-            font-size: 1rem;
-          }
-        }
-      }
-    }
-    #filter-drop-menu {
-      float: right !important;
-      right: 0;
-      left: auto;
-      text-align: center;
-      #selection-group {
-        margin-top: 15px;
-        margin-bottom: 0px;
-        text-align: left;
-        #element-added {
-          text-align: center;
-        }
-      }
-    }
-    .remove-icon {
-      visibility: hidden;
     }
   }
 }

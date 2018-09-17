@@ -1,7 +1,22 @@
 //Overall的设置
-@font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+//@font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+@font-family: Abel,Yantramanav,Helvetica Neue,Helvetica,sans-serif!important;
 
 @toolbar-view_height: 2rem;
+// histogram视图上的参数
+@histogram-view_top: @toolbar-view_height;
+@histogram-view_height: 8rem;
+// barcode comparison视图上的top
+@barcode-view_top: @histogram-view_height + @toolbar-view_height;
+@top-toolbar-container_padding-left: 2rem;
+@top-toolbar-container_height: 3.2rem;
+@supertree-scroll-panel_top: 0rem;
+//sorting 视图的height数值
+@sorting-scroll-panel_height: 1.5rem;
+@btn-group_margin-right: 2.5rem;
+@barcode-group_inner-margin-right: 1rem;
+
+//%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 @toolbar-view_padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 @toolbar-view_font-size: 1rem;
 
@@ -10,26 +25,18 @@
 @toolbar-a_padding-bottom: 0.5rem;
 @toolbar-a_line-height: 1rem;
 
-// histogram视图上的参数
-@histogram-view_top: @toolbar-view_height;
-@histogram-view_height: 12rem;
-// barcode comparison视图上的top
-@barcode-view_top: @histogram-view_height + @toolbar-view_height;
 @toolbar-view_line-height: 1rem;
 
 //  top toolbar视图的高度, top toolbar包含在barcode视图中
-@top-toolbar-container_height: 3.2rem;
 @top-toolbar-container_inline-height: 2.8rem;
-@top-toolbar-container_padding-left: 2rem;
 @top-toolbar-container_padding-left: 1rem;
 @top-toolbar-container_padding-top: 1/20rem;
-@btn-group_margin-right: 2.5rem;
-@config-button_padding: 0.45rem 0.45rem 0.4rem 0.45rem;
+@level-controller_inner-margin-right: 0.5rem;
+@config-button_padding: 0.45rem 0.45rem 0.4rem 0.45rem;//0.2rem 0.3rem 0.15rem 0.3rem;
 
 @config-button_padding-left: 0.55rem;
 
 @config-button-similarity-sort_padding: 0.45rem 0.6rem 0.4rem 0.6rem;
-@fa_font-size: 1.6rem;
 @confirm-check_font-size: 12px;
 @remove-cross_font-size: 12px;
 @level-btn-padding: 0.3rem 0.6rem;
@@ -45,11 +52,7 @@
 @subtree-operation-refresh_padding: 0.45rem 0.6rem 0.4rem 0.45rem;
 
 //  supertree视图的 top数值
-@supertree-scroll-panel_top: @top-toolbar-container_height;
-
-//sorting 视图的height数值
-@sorting-scroll-panel_height: 0rem;
-
+@brush-selection: steelblue;
 //  barcodetree-scrollpanel 的top的数值
 @barcodetree-scrollpanel_top: @top-toolbar-container_height;
 
@@ -58,10 +61,6 @@
 @lasso-selected-color: steelblue;
 // 单个barcodeTree视图上的高度
 @barcode-single-view_top: 2.5rem;
-@barcode-mode-config-view_top: 6rem;
-@barcode-mode-config-view_width: 6%;
-@half-view_width: (100% - @barcode-mode-config-view_width)/2; // singleTree视图将视图分为barcodetree和node-link tree
-@single-nodelink-tree-view_left: @barcode-mode-config-view_width + @half-view_width;
 
 @box-shadow-style: 0 0 3px #c8c8c8;
 @toolbar-color: #fafafa;
@@ -91,7 +90,6 @@
 //the content view width of the view
 @content-view_width: 100%;
 //the histogram view settings
-@histogram-view_top: @toolbar-view_height;
 @histogram-view_bottom: ~"calc(15% + 35px)"; //20% is the height of the histogram-view
 @histogram-view_width: 100%;
 

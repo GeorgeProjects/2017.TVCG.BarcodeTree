@@ -2,7 +2,7 @@
   #histogram-main-panel {
     position: absolute;
     left: 0%;
-    right: 2.5rem;
+    right: 0%;
     top: 0%;
     bottom: 0%;
     text {
@@ -14,6 +14,7 @@
         fill: none;
         stroke: #000;
         shape-rendering: crispEdges;
+        visibility: hidden;
       }
       line { /*x轴上刻度标*/
         fill: none;
@@ -32,25 +33,18 @@
   .lasso-selected {
     fill: @lasso-selected-color !important;
   }
-  #histogram-control-panel {
-    position: absolute;
-    width: 2.5rem;
-    right: 0%;
-    top: 0%;
-    bottom: 0%;
-    padding-top: 1rem;
-    .btn#clear-all {
-      padding: 0.25rem 0.7rem;
-    }
-    .btn#color-picker {
-      padding: 0.3rem 0.6rem;
-    }
-    #remove-all-text {
-      font-size: 1.2rem;
-    }
-    #color-picker-text {
-      font-size: 1.2rem;
-    }
+  .barcodetree-class[class~=brush-selection] {
+    fill: @brush-selection !important;
   }
-
+  //#histogram-control-panel {
+  //  position: absolute;
+  //  width: 2rem;
+  //  right: 0%;
+  //  top: 0%;
+  //  bottom: 0%;
+  //  padding-top: 0.5rem;
+  //  .btn#clear-all {
+  //    padding: 0.15rem 0.4rem;
+  //  }
+  //}
 }

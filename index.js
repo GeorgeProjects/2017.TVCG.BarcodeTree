@@ -3,7 +3,7 @@ var logger = require('./server/logger.js').initialize()
 
 //  server打开的时候初始化读取数据的函数
 var fileNameHandler = require('./server/handler/file_name_handler')
-var DEFAULT_DATASET_NAME = "DailyRecordTree"
+var DEFAULT_DATASET_NAME = "LibraryRecordData"
 
 //  初始化默认的数据集, 将数据集中需要的文件预先读入到缓存中
 fileNameHandler.initilizeOriginalDataset(DEFAULT_DATASET_NAME)

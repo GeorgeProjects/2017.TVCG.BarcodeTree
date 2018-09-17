@@ -5,9 +5,9 @@
   }
   #toolbar-navbar-brand {
     height: @toolbar-view_height; // 3rem
-    padding: @toolbar-view_padding; // 0.6rem 0.5rem 0.5rem 0.5rem;
-    font-size: @toolbar-view_font-size; // 1.3rem
-    line-height: @toolbar-view_line-height;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem; // 0.6rem 0.5rem 0.5rem 0.5rem;
+    font-size: 1rem; // 1.3rem
+    line-height: 1rem;
   }
   #toolbar-container {
     margin-right: 0px;
@@ -15,57 +15,12 @@
     width: 100%;
   }
   #options-container .toolbar-a {
-    padding-top: @toolbar-a_padding-top; //0.25rem;
-    padding-bottom: @toolbar-a_padding-bottom; //0.25rem;
-    height: @toolbar-a_min-height; //3rem
-    line-height: @toolbar-a_line-height;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    height: @toolbar-view_height;
+    line-height: 1rem;
   }
-
-  #options-container .float-right {
-    float: right;
-  }
-
-  .dropdown-menu {
-    width: 18rem;
-    li {
-      width: 18rem;
-      height: 2rem;
-    }
-    .span-alignment-right {
-      float: right
-    }
-    .dataset-item {
-      padding: 0.3rem 2rem;
-      font-size: 1.0rem;
-    }
-  }
-
-  .ui-slider-handle {
-    width: 2em !important;
-    height: 1.6em !important;
-    top: 50% !important;
-    margin-top: -.8em !important;
-    text-align: center !important;
-    line-height: 1.6em !important;
-  }
-
-  .ui-state-default {
-    font-size: 5px;
-  }
-
-  .level-a {
-    margin-top: 5px;
-  }
-
-  .float-right-span {
-    float: right;
-  }
-
-  .dataset-check-icon {
-    visibility: hidden;
-  }
-
-  .mode-check-icon {
+  #open-histogram-view {
     visibility: hidden;
   }
 }

@@ -32,8 +32,6 @@ define([
 						'barcodeNodeAttrArray': [],
 						//  根据barcodeNodeAttrArray建立的object对象
 						'barcodeNodeAttrArrayObj': {},
-						//  根据barcodeNodeAttrArray建立的以categoryName为索引的object对象
-						'barcodeNodeAttrArrayCategoryIndexObj': {},
 						//  对齐的barcode节点的数组信息
 						'alignedBarcodeNodeAttrArray': [],
 						//  compact的barcode节点数组
@@ -47,7 +45,7 @@ define([
 						//  compact模式下的对齐节点的对象的信息
 						'compactAlignedBarcodeNodeAttrObj': {},
 						//  标志barcodeTree的位置
-						'barcodeTreeYLocation': 0,
+						'barcodeTreeYLocation': -1,
 						//  标志barcodeTree的index值,用于决定barcode背后的rect的颜色
 						'barcodeIndex': 0,
 						//  用于恢复原始顺序的originalBarcodeIndex
@@ -101,12 +99,16 @@ define([
 						//  选择的节点的比较结果
 						'selectedComparisonResults': {},
 						//  切割barcodeTree之后得到的结果
-						'barcodeNodeRearrangeObjArray': []
+						'barcodeNodeRearrangeObjArray': [],
+						//	折叠部分节点的id数组
+						'collapsedSubtreeIdArray': []
 				},
 				initialize: function () {
 						var self = this
 						//  在dataCenter中设置的参数都转移到initialize中进行设置
+						var barcodePaddingTopRatio = Variables.get('barcodePaddingTopRatio')
 						self.set('barcodeNodeHeight', window.barcodeHeight)
+						self.set('barcodePaddingTop', window.barcodeHeight * barcodePaddingTopRatio)
 						var selectItemNameArray = Variables.get('selectItemNameArray')
 						var barcodeTreeId = self.get('barcodeTreeId')
 						//  barcodeTree的位置的index值
@@ -122,7 +124,8 @@ define([
 						}
 						self.set('barcodeRectBgColor', barcodeBgColor)
 						//  设置当前的展示模式
-						self.initialize_tree_obj()
+						self.init_barcodetree_array()
+						self.update_tree_id_index_obj()
 						self.set('displayMode', Variables.get('displayMode'))
 						//  设置coveredRectObjArray
 						self.set('coveredRectObjArray', [])
@@ -131,11 +134,399 @@ define([
 						self.set('barcodeNodeAttrArrayObj', new Object())
 				},
 				/**
-					* 清空所有的padding节点
+					* 设置barcodeTree中距离上方的边距
 					*/
-				clear_global_padding_node: function () {
+				set_barcode_padding_top: function () {
 						var self = this
-						self.globalPaddingRangeObjArray1 = []
+						var barcodePaddingTopRatio = Variables.get('barcodePaddingTopRatio')
+						self.set('barcodePaddingTop', window.barcodeHeight * barcodePaddingTopRatio)
+				},
+				/**
+					* 获取当前barcodeTree的日期
+					*/
+				get_barcode_tree_date_day: function () {
+						var self = this
+						var DAY_ARRAY = Config.get('DAY_ARRAY')
+						var barcodeTreeId = self.get('barcodeTreeId')
+						var barcodeTreeDateStr = barcodeTreeId.split('-')[1].replaceAll('_', '-')
+						var barcodeTreeDate = new Date(barcodeTreeDateStr)
+						var barcodeTreeDay = DAY_ARRAY[barcodeTreeDate.getDay()]
+						return {
+								date: barcodeTreeDateStr,
+								day: barcodeTreeDay
+						}
+				},
+				/**
+					* 获取子树的高度和宽度
+					*/
+				get_tree_width_height: function (collapsedNodeIdArray) {
+						var self = this
+						var treeAttrObj = {}
+						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+						for (var cI = 0; cI < collapsedNodeIdArray.length; cI++) {
+								var treeAttr = self.get_subtree_width_height(collapsedNodeIdArray[cI], barcodeNodeAttrArray)
+								treeAttrObj[collapsedNodeIdArray[cI]] = treeAttr
+						}
+						return treeAttrObj
+				},
+				/**
+					* 获取barcodeTree label的对象
+					*/
+				get_barcode_tree_label_obj: function () {
+						var self = this
+						//	计算barcodeTree的label的大小
+						var barcodeTreeLabelSize = Variables.get('barcodeTreeTextMaxSize') > window.barcodeHeight ? window.barcodeHeight : Variables.get('barcodeTreeTextMaxSize')
+						var treeLabelObj = {}
+						var barcodeTreeId = self.get('barcodeTreeId')
+						var barcodeTreeLabelId = barcodeTreeId + '=label'
+						var barcodeTreeText = self.get_barcodetree_label()
+						var topBarcodeTreeTextPadding = Math.abs(window.barcodeHeight - barcodeTreeLabelSize) / 3
+						//	barcodeTreeYLocation是barcodeTree的距离上边界的距离
+						var barcodeTreeYLocation = self.get('barcodeTreeYLocation')
+						//	barcodePaddingTop是在barcodeTree的内部距离上边界的距离
+						var barcodePaddingTop = self.get('barcodePaddingTop')
+						//	具体的barcodeTree中的label的纵坐标位置
+						var barcodeTreeTextPaddingTop = topBarcodeTreeTextPadding + barcodePaddingTop
+						treeLabelObj[barcodeTreeLabelId] = {
+								y: barcodeTreeTextPaddingTop,
+								fontSize: barcodeTreeLabelSize,
+								text: barcodeTreeText,
+								barcodeTreeLabelId: barcodeTreeLabelId
+						}
+						return treeLabelObj
+				},
+				/**
+					*  在折叠的子树上增加三角形
+					*/
+				get_collapsed_triangle_point_array: function () {
+						var self = this
+						var barcodeCollection = window.Datacenter.barcodeCollection
+						var barcodeTreeIndex = self.get('originalBarcodeIndex')
+						var allTrianglePointObj = {}
+						var collapsedNodeIdArray = barcodeCollection.get_collapsed_nodes_id()
+						//	遍历全部的treeDataModel以及collapsedNode, 获取表示全集的wholeTreeAttrObj
+						var barcodeTreeId = self.get('barcodeTreeId')
+						//  计算层次结构数据的最大的宽度以及高度
+						var treeObj = self.get_tree_width_height(collapsedNodeIdArray)
+						var maxInfo = barcodeCollection.maxCollapseTriangleInfo
+						//	计算得到全部的triangle对象
+						for (var nodeId in treeObj) {
+								var collapsedTreeAttr = treeObj[nodeId]
+								var collapsedTreeWidth = collapsedTreeAttr.width
+								var collapsedTreeHeight = collapsedTreeAttr.height
+								var trianglePointArray = self.get_single_collapsed_triangle_point_array(nodeId, barcodeTreeIndex, maxInfo, collapsedTreeWidth, collapsedTreeHeight)
+								var triangleId = nodeId + '=' + barcodeTreeIndex
+								allTrianglePointObj[triangleId] = {trianglePointArray: trianglePointArray, barcodeTreeIndex: barcodeTreeIndex}
+						}
+						return allTrianglePointObj
+				},
+				//  根据节点id在节点的底部增加代表节点所代表子树的三角形
+				get_single_collapsed_triangle_point_array: function (nodeId, barcodeTreeIndex, maxInfo, collapsedTreeWidth, collapsedTreeHeight) {
+						var self = this
+						var maxWidth = maxInfo.width
+						var maxHeight = maxInfo.height
+						var rootWidth = window.barcodeWidthArray[0]
+						var minNodeWidth = window.barcodeWidthArray[window.barcodeWidthArray.length - 1]
+						var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+						var barcodeHeight = (+window.barcodeHeight)
+						var barcodeGapHeight = barcodeHeight * (1 - 0.8) * 0.5
+						var heightScale = d3.scale.linear().domain([0, maxHeight]).range([0, barcodeGapHeight])
+						var widthScale = d3.scale.linear().domain([0, maxWidth]).range([minNodeWidth, (rootWidth + barcodeNodeInterval)])
+						var subtreeWidth = widthScale(collapsedTreeWidth)
+						var subtreeHeight = heightScale(collapsedTreeHeight)
+						//  在barcodeTree中增加triangle
+						var barcodeNodeId = nodeId + '=' + barcodeTreeIndex
+						//	barcodePaddingTop是在barcodeTree的内部距离上边界的距离
+						var barcodePaddingTop = self.get('barcodePaddingTop')
+						//	对于具体的barcodeTree中的节点的纵坐标位置
+						var barcodeTreeNodePaddingTop = +barcodePaddingTop
+						var barcodeNodeObj = self.get_node_obj_by_id(nodeId)
+						if (typeof (barcodeNodeObj) === 'undefined') {
+								return
+						}
+						var barcodeNodeX = barcodeNodeObj.x + barcodeNodeObj.width / 2 + Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft')
+						var barcodeNodeY = barcodeNodeObj.y + barcodeNodeObj.height + barcodeTreeNodePaddingTop
+						subtreeHeight = subtreeHeight * 2
+						//  三角形的直线的点的数据
+						var lineDataArray = [{"x": 0, "y": 0}, {"x": -subtreeWidth / 2, "y": subtreeHeight},
+								{"x": subtreeWidth / 2, "y": subtreeHeight}, {"x": 0, "y": 0}]
+						//	绘制line的节点数组
+						var pointArray = []
+						for (var lI = 0; lI < lineDataArray.length; lI++) {
+								var lineDataObj = lineDataArray[lI]
+								pointArray.push(lineDataObj.x + barcodeNodeX)
+								pointArray.push(lineDataObj.y + barcodeNodeY)
+						}
+						return pointArray
+				},
+				//	计算barcodeTree节点的高度的scale
+				get_barcode_tree_node_height_scale: function () {
+						var barcodeTreeNodeMaxValue = Variables.get('barcodeTreeNodeMaxValue')
+						var miniHeight = Variables.get('MIN_HEIGHT')
+						var powExponenet = Variables.get('POW_EXPONENT')
+						var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
+						var barcodeHeight = window.barcodeHeight * barcodeHeightRatio
+						var heightScale = d3.scale.pow().exponent(powExponenet).domain([0, barcodeTreeNodeMaxValue]).range([miniHeight, barcodeHeight]).clamp(true)
+						return heightScale
+				},
+				//	计算得到所有的diagonal strip的节点
+				get_all_diagonal_strip_obj: function () {
+						var self = this
+						var allDiagonalStripObject = {}
+						var barcodeTreeIndex = self.get('originalBarcodeIndex')
+						var barcodeNodeHeight = window.barcodeHeight * 0.8
+						var paddingNodeObjArray = self.get('paddingNodeObjArray')
+						var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
+						var Subtree_Compact = BARCODETREE_GLOBAL_PARAS['Subtree_Compact']
+						var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
+						var barcodeNodePaddingLength = BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH']
+						var barcodeTreeNodePaddingLeft = Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft')
+						//	对于具体的barcodeTree中的节点的纵坐标位置
+						var barcodeTreeNodePaddingTop = self.get('barcodePaddingTop')
+						var heightScale = self.get_barcode_tree_node_height_scale()
+						var diagonalStripRectArray = []
+						for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
+								var paddingNodeObj = paddingNodeObjArray[pI]
+								if ((paddingNodeObj.paddingNodeStartIndex <= paddingNodeObj.paddingNodeEndIndex) && (Subtree_Compact)) {
+										var rectX = paddingNodeObj.paddingNodeX
+										if (isNaN(+rectX)) {
+												rectX = 0
+										}
+										//	我们使用stripe的宽度以及stripe间隙的宽度映射折叠子树部分的数据
+										//	映射主要有两个方面, 一个方面是折叠部分的节点数量, 一个方面是折叠部分的属性值大小,
+										// 节点数量映射到stripe的宽度, 属性值大小映射到stripe中的间隙的宽度
+										var maxpaddingNodeAttrNum = paddingNodeObj.maxpaddingNodeAttrNum
+										var minpaddingNodeAttrNum = paddingNodeObj.minpaddingNodeAttrNum
+										var paddingNodeAttrNum = paddingNodeObj.paddingNodeAttrNum
+										//	stripe部分的节点数量属性映射。 数量越大, 那么映射到对应的space的level应该越低
+										var maxpaddingNodeNumber = paddingNodeObj.maxpaddingNodeNumber
+										var minpaddingNodeNumber = paddingNodeObj.minpaddingNodeNumber
+										var paddingNodeNumber = paddingNodeObj.paddingNodeNumber
+										var paddingNodeStartIndex = paddingNodeObj.paddingNodeStartIndex
+										var paddingNodeEndIndex = paddingNodeObj.paddingNodeEndIndex
+										var stripeSpaceNum = Variables.get('stripeSpaceNum')
+										var stripeSpaceLevel = stripeSpaceNum - Math.round((paddingNodeNumber - minpaddingNodeNumber) / (maxpaddingNodeNumber - minpaddingNodeNumber) * stripeSpaceNum) + 1
+										//	将属性值映射到stripe的宽度属性上
+										var stripeDensityNum = Variables.get('stripeDensityNum')
+										var stripeDensityLevel = stripeDensityNum - (Math.round((paddingNodeNumber - minpaddingNodeNumber) / (maxpaddingNodeNumber - minpaddingNodeNumber) * (stripeDensityNum - 1)))
+										//	将节点数量映射到stripe间隙的宽度属性上
+										var stripeSpaceNum = Variables.get('stripeSpaceNum')
+										var diagonalStripId = paddingNodeObj.paddingNodeId + '=' + barcodeTreeIndex + '=diagonalstrip'
+										var rectWidth = barcodeNodePaddingLength
+										var rectHeight = barcodeNodeHeight
+										var diagonalStripRect = {
+												x: barcodeTreeNodePaddingLeft + rectX,
+												y: barcodeTreeNodePaddingTop,
+												y_value: barcodeTreeNodePaddingTop + rectHeight - heightScale(paddingNodeAttrNum),
+												width: +rectWidth,
+												height: +rectHeight,
+												height_value: heightScale(paddingNodeAttrNum),
+												id: diagonalStripId,
+												stripeDensityLevel: stripeDensityLevel,
+												startIndex: paddingNodeStartIndex,
+												endIndex: paddingNodeEndIndex,
+												attrNum: paddingNodeAttrNum
+										}
+										allDiagonalStripObject[diagonalStripId] = diagonalStripRect
+								}
+						}
+						return allDiagonalStripObject
+				},
+				/**
+					* 获取所选择的节点部分的box的边界位置
+					*/
+				get_all_box_attr_obj: function () {
+						var self = this
+						var allBoxAttr = {}
+						var selectedNodesId = window.Datacenter.barcodeCollection.selectedNodesId
+						var thisBarcodeTreeId = self.get('barcodeTreeId')
+						for (var nodeObjId in selectedNodesId) {
+								var boxNodeObjId = nodeObjId + '=nodebox'
+								var barcodeTreeId = selectedNodesId[nodeObjId].barcodeTreeId
+								if (thisBarcodeTreeId === barcodeTreeId) {
+										var boxAttr = self.get_single_box_node_attr(nodeObjId)
+										allBoxAttr[boxNodeObjId] = boxAttr
+								}
+						}
+						return allBoxAttr
+				},
+				/**
+					* 传入单个barcodeTree中节点的id, 得到该节点对应的子树的范围
+					*/
+				get_single_box_node_attr: function (nodeObjId) {
+						var self = this
+						var barcodeTreeNodePaddingLeft = Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft')
+						var selectedNodesId = window.Datacenter.barcodeCollection.selectedNodesId
+						var selectedChildrenNodeIdArray = selectedNodesId[nodeObjId].selectedChildrenNodeIdArray
+						var selectedAllChildrenNodeIdArray = selectedNodesId[nodeObjId].selectedAllChildrenNodeIdArray
+						var nodeObj = self.get_node_obj_by_id(nodeObjId)
+						var selectedBoxLeft = nodeObj.x
+						var selectedBoxRight = nodeObj.x + nodeObj.width
+						// if (selectedChildrenNodeIdArray.length > 0) {
+						// 		var rightMostNodeObj2 = selectedChildrenNodeIdArray[selectedChildrenNodeIdArray.length - 1]
+						// 		var rightMostNodeObjId2 = rightMostNodeObj2.id
+						// 		rightMostNodeObj2 = self.get_node_obj_by_id(rightMostNodeObjId2)
+						// 		var rightMostNodeRight2 = rightMostNodeObj2.x + rightMostNodeObj2.width
+						// 		if (rightMostNodeRight2 > selectedBoxRight) {
+						// 				selectedBoxRight = rightMostNodeRight2
+						// 		}
+						// }
+						if (selectedAllChildrenNodeIdArray.length > 0) {
+								var rightMostNodeObj = selectedAllChildrenNodeIdArray[selectedAllChildrenNodeIdArray.length - 1]
+								if ((rightMostNodeObj.width + rightMostNodeObj.x) > selectedBoxRight) {
+										selectedBoxRight = rightMostNodeObj.width + rightMostNodeObj.x
+								}
+								if (rightMostNodeObj.existed) {
+										var rightMostNodeObjId = rightMostNodeObj.id
+										rightMostNodeObj = self.get_node_obj_by_id(rightMostNodeObjId)
+										var rightMostNodeRight = rightMostNodeObj.x + rightMostNodeObj.width
+										if (rightMostNodeRight > selectedBoxRight) {
+												selectedBoxRight = rightMostNodeRight
+										}
+								} else {
+										var rightMostNodeObj = null
+										for (var sI = (selectedAllChildrenNodeIdArray.length - 1); sI >= 0; sI--) {
+												var nodeObj = selectedAllChildrenNodeIdArray[sI]
+												//	向前找到第一个不存在的节点, 且层次最高; 如果节点不存在, 并且节点的深度比前一个节点的深度更大或者等于, 那么可以继续向前;
+												// 否则就break, 该节点即是要找的节点
+												// => 如果节点存在, 那么一定会break, 停在这个地方; 但是如果是因为节点存在从而停止, 那么就需要判断具体的原因
+												if (!((!nodeObj.existed) && (selectedAllChildrenNodeIdArray[sI].depth >= selectedAllChildrenNodeIdArray[sI - 1].depth))) {
+														rightMostNodeObj = nodeObj
+														break
+												}
+										}
+										var rightMostNodeRight = rightMostNodeObj.x + rightMostNodeObj.width
+										if (rightMostNodeRight > selectedBoxRight) {
+												selectedBoxRight = rightMostNodeRight
+										}
+								}
+						}
+						var selectedBoxHeight = +window.barcodeHeight * (1 - Variables.get('barcodePaddingBottomRatio'))
+						selectedBoxLeft = selectedBoxLeft - window.barcodeNodeInterval / 2 + barcodeTreeNodePaddingLeft
+						selectedBoxRight = selectedBoxRight + window.barcodeNodeInterval / 2 + barcodeTreeNodePaddingLeft
+						var boxAttr = {
+								top: 0,
+								left: +selectedBoxLeft,
+								right: +selectedBoxRight,
+								bottom: +selectedBoxHeight
+						}
+						return boxAttr
+				},
+				/**
+					* 获取所选择的子树的label部分的box的边界位置
+					*/
+				get_all_box_label_obj: function () {
+						var self = this
+						var allBoxLabelAttr = {}
+						var thisBarcodeTreeId = self.get('barcodeTreeId')
+						var selectedNodesId = window.Datacenter.barcodeCollection.selectedNodesId
+						for (var nodeObjId in selectedNodesId) {
+								var boxLabelObjId = nodeObjId + '=labelbox'
+								var barcodeTreeId = selectedNodesId[nodeObjId].barcodeTreeId
+								if (barcodeTreeId === thisBarcodeTreeId) {
+										allBoxLabelAttr[boxLabelObjId] = self.get_single_box_label_attr()
+								}
+						}
+						return allBoxLabelAttr
+				},
+				/**
+					*  计算点击的节点的box
+					*/
+				get_single_box_label_attr: function () {
+						var selectedLabelBoxHeight = +window.barcodeHeight * (1 - Variables.get('barcodePaddingBottomRatio'))
+						var barcodeTreeNodePaddingLeft = Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft')
+						var selectedLabelLeft = 0
+						var selectedLabelRight = barcodeTreeNodePaddingLeft
+						var labelBoxAttr = {
+								top: +0,
+								left: +selectedLabelLeft,
+								right: +selectedLabelRight,
+								bottom: +selectedLabelBoxHeight
+						}
+						return labelBoxAttr
+				},
+				/**
+					* 获取节点为根的子树的宽度
+					*/
+				get_subtree_width_height: function (nodeId, barcodeNodeAttrArray) {
+						var self = this
+						var leveledNodeObj = self.get_leveled_node_obj(nodeId, barcodeNodeAttrArray)
+						var wholeWidth = 0
+						var height = 0
+						for (var item in leveledNodeObj) {
+								var barcodeLevelWidth = leveledNodeObj[item]
+								wholeWidth = wholeWidth + barcodeLevelWidth
+								height = height + 1
+						}
+						var treeAttr = {
+								width: wholeWidth / height,
+								height: height
+						}
+						return treeAttr
+				},
+				/**
+					* 将以节点为根节点的子树中的所有节点进行分层
+					*/
+				get_leveled_node_obj: function (nodeId, barcodeNodeAttrArray) {
+						var self = this
+						var nodeDepth = 0
+						var nodeStartIndex = 0
+						var nodeEndIndex = 0
+						var depthAttrPrefix = 'depth-'
+						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
+								if (barcodeNodeAttrArray[bI].id === nodeId) {
+										nodeStartIndex = bI
+										nodeDepth = barcodeNodeAttrArray[bI].depth
+										break
+								}
+						}
+						for (var bI = (nodeStartIndex + 1); bI < barcodeNodeAttrArray.length; bI++) {
+								if ((barcodeNodeAttrArray[bI].depth === nodeDepth) || (bI === (barcodeNodeAttrArray.length - 1))) {
+										nodeEndIndex = bI
+										break
+								}
+						}
+						var leveledNodeObj = {}
+						var barcodeWidthArray = Variables.get('barcodeWidthArray')
+						for (var bI = nodeStartIndex; bI < nodeEndIndex; bI++) {
+								var nodeDepth = barcodeNodeAttrArray[bI].depth
+								if (barcodeNodeAttrArray[bI].existed) {
+										if (barcodeWidthArray[nodeDepth] !== 0) {
+												var nodeDepthAttrName = depthAttrPrefix + nodeDepth
+												if (typeof (leveledNodeObj[nodeDepthAttrName]) !== 'undefined') {
+														//  已经被初始化了
+														leveledNodeObj[nodeDepthAttrName] = +leveledNodeObj[nodeDepthAttrName] + 1
+												} else {
+														//  还没有被初始化, 则设置初始值为1
+														leveledNodeObj[nodeDepthAttrName] = 1
+												}
+										}
+								}
+						}
+						return leveledNodeObj
+				}
+				,
+				/**
+					* 删除与选择的barcodeTree的子树部分的比较结果
+					*/
+				remove_comparison_results: function (removedNodeObjArray) {
+						var self = this
+						var selectedComparisonResults = self.get('selectedComparisonResults')
+						for (var rI = 0; rI < removedNodeObjArray.length; rI++) {
+								var removedNodeObj = removedNodeObjArray[rI]
+								var nodeObjId = removedNodeObj.nodeObjId
+								delete selectedComparisonResults[nodeObjId]
+						}
+				}
+				,
+				/**
+					* 通过节点的id获取barcodeTree数组中的节点对象
+					*/
+				get_node_obj_by_id: function (nodeId) {
+						var self = this
+						var barcodeNodeAttrArrayObj = self.get('barcodeNodeAttrArrayObj')
+						var nodeObj = barcodeNodeAttrArrayObj[nodeId]
+						return nodeObj
 				},
 				/**
 					* barcodeModel在添加的时候会默认增加barcode的index值, 在删除的时候需要默认的更新barcode的index值
@@ -148,53 +539,32 @@ define([
 						var barcodeTreeIndex = selectItemNameArray.indexOf(barcodeTreeId)
 						self.set('barcodeIndex', barcodeTreeIndex)
 						var barcodeTreeYLocation = self.get('barcodeTreeYLocation')
-				},
+				}
+				,
 				/**
 					* 初始化两个索引对象, 方便用户根据id获取子树以及节点, 这一部分在barcode绘制之后进行
 					*/
-				initialize_tree_obj: function () {
+				update_tree_id_index_obj: function () {
 						var self = this
 						//  设置barcodeTree的总量
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
 						self.set('sumAttributeValue', barcodeNodeAttrArray[0].num)
 						//  处理barcodeNodeAttrArray, 以barcodeNodeId为索引建立对象
-						var barcodeNodeAttrArrayObj = self.get('barcodeNodeAttrArrayObj')
+						var barcodeNodeAttrArrayObj = {}
 						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
 								var barcodeNodeId = barcodeNodeAttrArray[bI].id
-								barcodeNodeAttrArray[bI].existed = true
 								barcodeNodeAttrArrayObj[barcodeNodeId] = barcodeNodeAttrArray[bI]
 						}
-						//  处理barcodeNodeAttrArray, 以barcodeNodeCategoryName为索引建立对象
-						var barcodeNodeAttrArrayCategoryIndexObj = self.get('barcodeNodeAttrArrayCategoryIndexObj')
+						self.set('barcodeNodeAttrArrayObj', barcodeNodeAttrArrayObj)
+				},
+				/**
+					* 初始化barcodeTree中节点数组中节点的existed属性
+					*/
+				init_barcodetree_array: function () {
+						var self = this
+						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
 						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-								var barcodeNodeCategoryName = barcodeNodeAttrArray[bI].categoryName
-								if (typeof (barcodeNodeCategoryName) !== 'undefined') {
-										if (typeof (barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName]) === 'undefined') {
-												barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName] = [barcodeNodeAttrArray[bI]]
-										} else {
-												barcodeNodeAttrArrayCategoryIndexObj[barcodeNodeCategoryName].push(barcodeNodeAttrArray[bI])
-										}
-								}
-						}
-						//  将originalTreeObj变成另一种形式, 即originalTreeNodeObj, 以treeNodeId为索引建立对象
-						var originalTreeObj = self.get('originalTreeObj')
-						var originalTreeNodeObj = _init_original_tree_obj(originalTreeObj)
-						self.set('originalTreeNodeObj', originalTreeNodeObj)
-						//  将original的treeObject转换为originalTreeNodeObj, 以节点的id为索引的对象
-						function _init_original_tree_obj(treeObj) {
-								var originalTreeNodeObj = {}
-								var initDepth = 0
-								inner_traverse_original_tree(originalTreeNodeObj, treeObj, initDepth)
-								return originalTreeNodeObj
-								function inner_traverse_original_tree(originalTreeNodeObj, treeObj, initDepth) {
-										var nodeId = 'node-' + initDepth + '-' + treeObj.name
-										originalTreeNodeObj[nodeId] = treeObj
-										if (typeof (treeObj.children) !== 'undefined') {
-												for (var tI = 0; tI < treeObj.children.length; tI++) {
-														inner_traverse_original_tree(originalTreeNodeObj, treeObj.children[tI], (initDepth + 1))
-												}
-										}
-								}
+								barcodeNodeAttrArray[bI].existed = true
 						}
 				},
 				/**
@@ -218,7 +588,8 @@ define([
 						if (barcodeTreeGlobalParas['Comparison_Mode'] === barcodeTreeComparisonMode['ATTRIBUTE']) {
 								self.set('viewHeightUpdateValue', (self.get('viewHeightUpdateValue') + 1) % 2)
 						}
-				},
+				}
+				,
 				/**
 					*  获取该barcodeTree的scale
 					*/
@@ -232,7 +603,8 @@ define([
 						var powExponenet = Variables.get('POW_EXPONENT')
 						var heightScale = d3.scale.pow().exponent(powExponenet).domain([0, barcodeMaxAttribute]).range([miniHeight, barcodeHeight]).clamp(true)
 						return heightScale
-				},
+				}
+				,
 				/**
 					* 对于单个barcodeTree的对齐部分进行更新
 					*/
@@ -250,32 +622,20 @@ define([
 						var alignedReplacedNodesArray = alignedBarcodeNodeAttrArray.splice(alignedReplaceNodeObj.subtreeRootIndex, alignedReplaceNodeObj.subtreeLength,...cloneMaxNodeNumTreeNodeLocArray
 						)
 						var allReplacedNodesObj = self.get_all_replace_nodes_obj(replacedNodesArray)
+						//	对齐层级之后替换得到的对象
+						var allAlignedReplacedNodesObj = self.get_all_replace_nodes_obj(alignedReplacedNodesArray)
 						var replaceNodesObj = allReplacedNodesObj.replaceNodesObj
 						var replaceNotExistedNodesObj = allReplacedNodesObj.replaceNotExistedNodesObj
-						//  修改replace节点数组的nodeNum属性
+						// 修改replace节点数组的nodeNum属性
 						self.change_node_num_attr(replaceNodesObj, replaceNotExistedNodesObj, alignedBarcodeNodeAttrArray)
-						//  根据replace得到的节点修改对齐之后的节点是否存在的属性
+						// 根据replace得到的节点修改对齐之后的节点是否存在的属性
+						// self.reset_node_num_attr(replaceNodesObj, replaceNotExistedNodesObj, barcodeNodeAttrArray)
 						self.change_exist_num_attr(replacedNodesArray, replaceNodesObj, replaceNotExistedNodesObj, barcodeNodeAttrArray)
 						var alignedNodeIndexObjArray = self.get_aligned_node_index_array(barcodeNodeAttrArray)
-						var alignedLevel = Variables.get('alignedLevel')
-						var alignedObjPercentageArray = []
-						for (var aI = 0; aI < alignedNodeIndexObjArray.length; aI++) {
-								var alignedNodeId = alignedNodeIndexObjArray[aI].id
-								var alignedNodeIndex = alignedNodeIndexObjArray[aI].index
-								var alignedNodeDepth = alignedNodeIndexObjArray[aI].depth
-								var nextPercentageArrayObjArray = self.get_aligned_level_next_exist_percentage_array(alignedNodeId, alignedNodeIndex, alignedNodeDepth, barcodeNodeAttrArray, alignedLevel)
-								for (var nI = 0; nI < nextPercentageArrayObjArray.length; nI++) {
-										alignedObjPercentageArray.push(nextPercentageArrayObjArray[nI])
-								}
-						}
-						var alignedObjPercentageArrayObj = {
-								barcodeTreeId: barcodeTreeId,
-								alignedObjPercentageArray: alignedObjPercentageArray
-						}
-						barcodeCollection.add_aligned_obj_percentage_array(alignedObjPercentageArrayObj)
 						//  根据alignedbarcodeNodeAttrArray建立索引构建alignedBarcodeNodeAttrObj
 						self.build_aligned_barcode_node_obj()
-				},
+				}
+				,
 				/**
 					* 更新对于所增加的barcode的相关统计信息, 主要包括在不同的层级范围内的节点的数量信息
 					*/
@@ -308,26 +668,33 @@ define([
 						Variables.set('maxLeveledNumArray', maxLeveledNumArray)
 				},
 				/**
+					* 获取barcodeTree中节点数组中的最大的属性值
+					*/
+				get_max_node_value: function () {
+						var self = this
+						var maxNodeValue = 0
+						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
+								if ((barcodeNodeAttrArray[bI].existed) && (barcodeNodeAttrArray[bI].width !== 0)) {
+										var nodeValue = barcodeNodeAttrArray[bI].num
+										if (nodeValue > maxNodeValue) {
+												maxNodeValue = nodeValue
+										}
+								}
+						}
+						return maxNodeValue
+				},
+				/**
 					* 按照uniform布局模式更新barcode的高度
 					*/
 				uniform_layout_height_update: function () {
 						var self = this
 						var selectItemNameArray = Variables.get('selectItemNameArray')
-						var barcodeHeight = Variables.get('barcodeHeight')
 						var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
-						var barcodeTreeConfigHeight = Variables.get('barcodeTreeConfigHeight')
-						var updatedHeight = window.barcodeHeight
-						var barcodeContainerHeight = +updatedHeight > +barcodeHeight ? +barcodeHeight : +updatedHeight
-						var barcodeOriginalNodeHeight = barcodeContainerHeight * barcodeHeightRatio
-						var ABSOLUTE_COMPACT_FATHER = Config.get('CONSTANT')['ABSOLUTE_COMPACT_FATHER']
-						self.set('barcodeOriginalNodeHeight', barcodeOriginalNodeHeight)
-						self.set_barcode_padding_top()
-						var barcodeCompactNodeHeight = barcodeOriginalNodeHeight / (compactNum + (compactNum - 1) / 4)
-						self.set('barcodeCompactNodeHeight', barcodeCompactNodeHeight)
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
 						var heightScale = self.get_height_scale()
 						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-								barcodeNodeAttrArray[bI].height = barcodeOriginalNodeHeight
+								barcodeNodeAttrArray[bI].height = window.barcodeHeight * barcodeHeightRatio
 								barcodeNodeAttrArray[bI].height_value = heightScale(barcodeNodeAttrArray[bI].num)
 						}
 				},
@@ -351,7 +718,8 @@ define([
 								var collapseNodeDepth = collapsedNodeObjArray[cI].depth
 								self.collapse_subtree(collapsedNodeId, collapseNodeDepth)
 						}
-				},
+				}
+				,
 				/**
 					* 按照现有的tablelens方法使用tablelens的方法对于传入的进行变形
 					*/
@@ -363,7 +731,8 @@ define([
 						if ((ratioAndSubtreeObj != null) && (tablelensSubtreeArray.length !== 0)) {
 								self.tablelens_interested_subtree(tablelensSubtreeArray, ratioAndSubtreeObj)
 						}
-				},
+				}
+				,
 				/**
 					* 获取子树在原始节点数组中替换的范围
 					*/
@@ -397,10 +766,6 @@ define([
 														subtreeRootIndex = bI
 														break
 												}
-												// if (thisCategory > rootCategoryNum) {
-												//   subtreeRootIndex = bI
-												//   break
-												// }
 										}
 								}
 								subtreeLength = 0
@@ -415,7 +780,8 @@ define([
 						replacedNodeObj.subtreeRootIndex = subtreeRootIndex
 						replacedNodeObj.subtreeLength = subtreeLength
 						return replacedNodeObj
-				},
+				}
+				,
 				/**
 					* 判断两个category的数值的先后关系
 					*/
@@ -436,7 +802,37 @@ define([
 								}
 						}
 						return false
-				},
+				}
+				,
+				/**
+					* 为了计算包围点击的barcodeTree中子树的box, 因此计算
+					*/
+				get_all_children_node_x: function (nodeObjId) {
+						var self = this
+						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+						var nodeIndex = 0
+						var nodeDepth = 0
+						var maxRightChildX = 0
+						for (nodeIndex = 0; nodeIndex < barcodeNodeAttrArray.length; nodeIndex++) {
+								var barcodeNodeObj = barcodeNodeAttrArray[nodeIndex]
+								if (barcodeNodeObj.id === nodeObjId) {
+										nodeDepth = barcodeNodeObj.depth
+										break
+								}
+						}
+						for (; nodeIndex < barcodeNodeAttrArray.length; nodeIndex++) {
+								var barcodeNodeObj = barcodeNodeAttrArray[nodeIndex]
+								var rightChildX = barcodeNodeObj.x + barcodeNodeObj.width
+								if (rightChildX > maxRightChildX) {
+										maxRightChildX = rightChildX
+								}
+								if (nodeDepth === barcodeNodeObj.depth) {
+										break
+								}
+						}
+						return maxRightChildX
+				}
+				,
 				/**
 					* 为alignedBarcode中的节点建立索引, 从而构成alignedBarcodeNodeAttrObj对象
 					*/
@@ -451,6 +847,22 @@ define([
 						self.set('alignedBarcodeNodeAttrObj', alignedBarcodeNodeAttrObj)
 				},
 				/**
+					* 重新设置节点的属性值
+					*/
+				// reset_node_num_attr: function (replaceNodesObj, replaceNotExistedNodesObj, barcodeNodeAttrArray) {
+				// 		var self = this
+				// 		for (var aI = 0; aI < barcodeNodeAttrArray.length; aI++) {
+				// 				var nodeId = barcodeNodeAttrArray[aI].id
+				// 				if (typeof(replaceNodesObj[nodeId]) !== 'undefined') {
+				// 						// replaceNodesObj[nodeId].sumNodeNum = alignedBarcodeNodeAttrArray[aI].nodeNum
+				// 						alignedBarcodeNodeAttrArray[aI].nodeNum
+				// 				}
+				// 				if (typeof(replaceNotExistedNodesObj[nodeId]) !== 'undefined') {
+				// 						replaceNotExistedNodesObj[nodeId].sumNodeNum = alignedBarcodeNodeAttrArray[aI].nodeNum
+				// 				}
+				// 		}
+				// },
+				/**
 					* 改变replacedNodesArray中的node num的节点属性值
 					*/
 				change_node_num_attr: function (replaceNodesObj, replaceNotExistedNodesObj, alignedBarcodeNodeAttrArray) {
@@ -458,10 +870,11 @@ define([
 						for (var aI = 0; aI < alignedBarcodeNodeAttrArray.length; aI++) {
 								var nodeId = alignedBarcodeNodeAttrArray[aI].id
 								if (typeof(replaceNodesObj[nodeId]) !== 'undefined') {
-										replaceNodesObj[nodeId].sumNodeNum = alignedBarcodeNodeAttrArray[aI].nodeNum
+										alignedBarcodeNodeAttrArray[aI].num = replaceNodesObj[nodeId].num
+										alignedBarcodeNodeAttrArray[aI].color_value = replaceNodesObj[nodeId].color_value
 								}
 								if (typeof(replaceNotExistedNodesObj[nodeId]) !== 'undefined') {
-										replaceNotExistedNodesObj[nodeId].sumNodeNum = alignedBarcodeNodeAttrArray[aI].nodeNum
+										alignedBarcodeNodeAttrArray[aI].num = replaceNotExistedNodesObj[nodeId].num
 								}
 						}
 				},
@@ -484,7 +897,8 @@ define([
 								replaceNotExistedNodesObj: replaceNotExistedNodesObj
 						}
 						return allReplaceNodesObj
-				},
+				}
+				,
 				/**
 					* 将新增加的nodeArray中的属性existed赋值为true
 					*/
@@ -505,30 +919,24 @@ define([
 						for (var cI = 0; cI < barcodeNodeAttrArray.length; cI++) {
 								var nodeId = barcodeNodeAttrArray[cI].id
 								if (typeof(replaceNodesObj[nodeId]) !== 'undefined') {
+										//	如果这个节点存在
 										barcodeNodeAttrArray[cI].existed = true
-										barcodeNodeAttrArray[cI].sumNum = barcodeNodeAttrArray[cI].num
 										barcodeNodeAttrArray[cI].num = replaceNodesObj[nodeId].num
-										barcodeNodeAttrArray[cI].sumNodeNum = replaceNodesObj[nodeId].sumNodeNum
-										barcodeNodeAttrArray[cI].nodeNum = replaceNodesObj[nodeId].nodeNum
-										barcodeNodeAttrArray[cI].existed_percentage = barcodeNodeAttrArray[cI].nodeNum / barcodeNodeAttrArray[cI].sumNodeNum
-										barcodeNodeAttrArray[cI].height_value = heightScale(barcodeNodeAttrArray[cI].num)
+										// barcodeNodeAttrArray[cI].height_value = heightScale(barcodeNodeAttrArray[cI].num)
+										barcodeNodeAttrArray[cI].height_value = replaceNodesObj[nodeId].height_value
+										barcodeNodeAttrArray[cI].color_value = replaceNodesObj[nodeId].color_value
 										barcodeNodeAttrArrayObj[nodeId] = barcodeNodeAttrArray[cI]
-										// barcodeNodeAttrArray[ cI ].existed = false
 								} else if (typeof (replaceNotExistedNodesObj[nodeId]) !== 'undefined') {
+										//	如果这个节点不存在
 										barcodeNodeAttrArray[cI].existed = false
 										barcodeNodeAttrArray[cI].height_value = 0
 										barcodeNodeAttrArray[cI].similarity = 0
 										//  计算的是barcode节点上的属性值大小
-										barcodeNodeAttrArray[cI].sumNum = barcodeNodeAttrArray[cI].num
 										barcodeNodeAttrArray[cI].num = 0
-										//  计算的是barcode节点上的节点数目的大小
-										barcodeNodeAttrArray[cI].sumNodeNum = replaceNotExistedNodesObj[nodeId].sumNodeNum
-										barcodeNodeAttrArray[cI].nodeNum = 0
-										barcodeNodeAttrArray[cI].existed_percentage = 0
-										// barcodeNodeAttrArray[cI].width = 0
 								}
 						}
-				},
+				}
+				,
 				/**
 					* 获取get_aligned_node_array
 					*/
@@ -547,177 +955,103 @@ define([
 						}
 						return alignedNodeIndexObjArray
 				},
-				// /**
-				//  * 获取aligned层次的下一层的percentage的值
-				//  */
-				// get_aligned_level_next_exist_percentage_array: function (alignedNodeId, alignedNodeIndex, alignedNodeDepth, barcodeNodeAttrArray, alignedLevel) {
-				//   var self = this
-				//   var nextPercentageArrayObj = {}
-				//   var nextPercentageArray = []
-				//   var alignedNodeObj = barcodeNodeAttrArray[alignedNodeIndex]
-				//   var alignedNodeObjLevel = alignedNodeObj.depth
-				//   for (var resortingLevel = (alignedNodeObjLevel + 1); resortingLevel < alignedLevel; resortingLevel++) {
-				//     for (var bI = alignedNodeIndex; bI < barcodeNodeAttrArray.length; bI++) {
-				//       var barcodeNode = barcodeNodeAttrArray[bI]
-				//       if ((barcodeNode.depth <= alignedNodeDepth) && (barcodeNode.id !== alignedNodeId)) {
-				//         break
-				//       }
-				//       if (barcodeNode.depth === resortingLevel) {
-				//         nextPercentageArray.push({
-				//           barcodeNode_id: barcodeNode.id,
-				//           existed_percentage: barcodeNode.existed_percentage
-				//         })
-				//       }
-				//     }
-				//   }
-				//   nextPercentageArrayObj.nextPercentageArray = nextPercentageArray
-				//   nextPercentageArrayObj.alignedNodeId = alignedNodeId
-				//   return nextPercentageArrayObj
-				// },
-				/**
-					* 获取aligned层次的下一层的percentage的值
-					*/
-				get_aligned_level_next_exist_percentage_array: function (alignedNodeId, alignedNodeIndex, alignedNodeDepth, barcodeNodeAttrArray, alignedLevel) {
-						var self = this
-						var nextPercentageArrayObjArray = []
-						if (alignedNodeDepth === alignedLevel) {
-								var barcodeNode = barcodeNodeAttrArray[alignedNodeIndex]
-								nextPercentageArrayObjArray.push({
-										alignedNodeId: barcodeNode.id,
-										nextPercentageArray: [{
-												barcodeNode_id: barcodeNode.id,
-												existed_percentage: barcodeNode.existed_percentage
-										}]
-								})
-						} else {
-								//  从对齐节点的下一层节点开始依次到toptoolbar视图上控制的对齐节点为止
-								for (var innerAlignedNodeLevel = alignedNodeDepth; innerAlignedNodeLevel < alignedLevel; innerAlignedNodeLevel++) {
-										//  innerAligned的层级所表示的是以此为根的节点的层级
-										var resortingLevel = innerAlignedNodeLevel + 1
-										for (var bI = alignedNodeIndex; bI < barcodeNodeAttrArray.length; bI++) {
-												var barcodeNode = barcodeNodeAttrArray[bI]
-												if ((barcodeNode.depth <= alignedNodeDepth) && (barcodeNode.id !== alignedNodeId)) {
-														break
-												}
-												if (barcodeNode.depth === innerAlignedNodeLevel) {
-														nextPercentageArrayObjArray.push({
-																alignedNodeId: barcodeNode.id,
-																nextPercentageArray: []
-														})
-												}
-												if (barcodeNode.depth === resortingLevel) {
-														var nextPercentageArray = nextPercentageArrayObjArray[nextPercentageArrayObjArray.length - 1].nextPercentageArray
-														var barcodeNodeExistedPercentage = barcodeNode.existed_percentage
-														if (typeof (barcodeNodeExistedPercentage) === 'undefined') {
-																barcodeNodeExistedPercentage = 0
-														}
-														nextPercentageArray.push({
-																barcodeNode_id: barcodeNode.id,
-																existed_percentage: barcodeNodeExistedPercentage
-														})
-												}
-										}
-								}
-						}
-						return nextPercentageArrayObjArray
-				},
 				/**
 					* 更新当前的barcode zoomed子树的范围
 					*/
-				update_zoomed_range_location: function () {
-						var self = this
-						var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
-						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						var globalZoomRangeObjArray = self.get('globalZoomRangeObjArray')
-						var globalPaddingRangeObjArray = self.get('globalPaddingRangeObjArray1')
-						//  如果global zoom对象数组为空, 或者global padding的对象数组为空
-						if ((globalZoomRangeObjArray.length === 0) || (globalPaddingRangeObjArray.length === 0)) {
-								return
-						}
-						var nodeLoc = 0
-						var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
-						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-								barcodeNodeAttrArray[bI].x = nodeLoc
-								if (is_in_global_padding_range(bI, globalPaddingRangeObjArray)) {
-										if (is_global_padding_end(bI, globalPaddingRangeObjArray)) {
-												//  判断节点是否处在padding节点的end位置处
-												var barcodeNodePaddingLength = BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH']
-												nodeLoc = nodeLoc + barcodeNodePaddingLength + barcodeNodeInterval
-										}
-										var isPaddingNodeStart = is_global_padding_start(bI, globalPaddingRangeObjArray)
-										if (isPaddingNodeStart !== -1) {
-												//  判断节点是否处在padding节点的start位置处
-												globalPaddingRangeObjArray[isPaddingNodeStart].paddingNodeX = nodeLoc
-										}
-								} else if (is_in_global_zoom_range(bI, globalZoomRangeObjArray)) {
-										nodeLoc = nodeLoc + barcodeNodeAttrArray[bI].width + barcodeNodeInterval
-								}
-						}
-						//  是否在global padding的范围内
-						function is_in_global_padding_range(bI, globalPaddingRangeObjArray) {
-								for (var gI = 0; gI < globalPaddingRangeObjArray.length; gI++) {
-										var paddingNodeStartIndex = globalPaddingRangeObjArray[gI].paddingNodeStartIndex
-										var paddingNodeEndIndex = globalPaddingRangeObjArray[gI].paddingNodeEndIndex
-										if ((bI >= paddingNodeStartIndex) && (bI <= paddingNodeEndIndex)) {
-												return true
-										}
-								}
-								return false
-						}
-
-						//  判断节点是否在global zoom的范围内
-						function is_in_global_zoom_range(bI, globalZoomRangeObjArray) {
-								for (var gI = 0; gI < globalZoomRangeObjArray.length; gI++) {
-										var rangeStartNodeIndex = globalZoomRangeObjArray[gI].rangeStartNodeIndex
-										var rangeEndNodeIndex = globalZoomRangeObjArray[gI].rangeEndNodeIndex
-										if ((bI >= rangeStartNodeIndex) && (bI <= rangeEndNodeIndex)) {
-												return true
-										}
-								}
-								return false
-						}
-
-						//  判断节点是否在padding的开始位置处
-						function is_global_padding_end(bI, globalPaddingRangeObjArray) {
-								for (var gI = 0; gI < globalPaddingRangeObjArray.length; gI++) {
-										var paddingNodeEndIndex = globalPaddingRangeObjArray[gI].paddingNodeEndIndex
-										if (bI === paddingNodeEndIndex) {
-												return true
-										}
-								}
-								return false
-						}
-
-						//  判断节点是否在padding的开始位置处
-						function is_global_padding_start(bI, globalPaddingRangeObjArray) {
-								for (var gI = 0; gI < globalPaddingRangeObjArray.length; gI++) {
-										var paddingNodeStartIndex = globalPaddingRangeObjArray[gI].paddingNodeStartIndex
-										if (bI === paddingNodeStartIndex) {
-												return gI
-										}
-								}
-								return -1
-						}
-				},
+				// update_zoomed_range_location: function () {
+				// 		var self = this
+				// 		var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
+				// 		var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+				// 		var globalZoomRangeObjArray = self.get('globalZoomRangeObjArray')
+				// 		var globalPaddingRangeObjArray = self.get('globalPaddingRangeObjArray1')
+				// 		//  如果global zoom对象数组为空, 或者global padding的对象数组为空
+				// 		if ((globalZoomRangeObjArray.length === 0) || (globalPaddingRangeObjArray.length === 0)) {
+				// 				return
+				// 		}
+				// 		var nodeLoc = 0
+				// 		var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+				// 		for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
+				// 				barcodeNodeAttrArray[bI].x = nodeLoc
+				// 				if (is_in_global_padding_range(bI, globalPaddingRangeObjArray)) {
+				// 						if (is_global_padding_end(bI, globalPaddingRangeObjArray)) {
+				// 								//  判断节点是否处在padding节点的end位置处
+				// 								var barcodeNodePaddingLength = BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH']
+				// 								nodeLoc = nodeLoc + barcodeNodePaddingLength + barcodeNodeInterval
+				// 						}
+				// 						var isPaddingNodeStart = is_global_padding_start(bI, globalPaddingRangeObjArray)
+				// 						if (isPaddingNodeStart !== -1) {
+				// 								//  判断节点是否处在padding节点的start位置处
+				// 								globalPaddingRangeObjArray[isPaddingNodeStart].paddingNodeX = nodeLoc
+				// 						}
+				// 				} else if (is_in_global_zoom_range(bI, globalZoomRangeObjArray)) {
+				// 						nodeLoc = nodeLoc + barcodeNodeAttrArray[bI].width + barcodeNodeInterval
+				// 				}
+				// 		}
+				// 		//  是否在global padding的范围内
+				// 		function is_in_global_padding_range(bI, globalPaddingRangeObjArray) {
+				// 				for (var gI = 0; gI < globalPaddingRangeObjArray.length; gI++) {
+				// 						var paddingNodeStartIndex = globalPaddingRangeObjArray[gI].paddingNodeStartIndex
+				// 						var paddingNodeEndIndex = globalPaddingRangeObjArray[gI].paddingNodeEndIndex
+				// 						if ((bI >= paddingNodeStartIndex) && (bI <= paddingNodeEndIndex)) {
+				// 								return true
+				// 						}
+				// 				}
+				// 				return false
+				// 		}
+				//
+				// 		//  判断节点是否在global zoom的范围内
+				// 		function is_in_global_zoom_range(bI, globalZoomRangeObjArray) {
+				// 				for (var gI = 0; gI < globalZoomRangeObjArray.length; gI++) {
+				// 						var rangeStartNodeIndex = globalZoomRangeObjArray[gI].rangeStartNodeIndex
+				// 						var rangeEndNodeIndex = globalZoomRangeObjArray[gI].rangeEndNodeIndex
+				// 						if ((bI >= rangeStartNodeIndex) && (bI <= rangeEndNodeIndex)) {
+				// 								return true
+				// 						}
+				// 				}
+				// 				return false
+				// 		}
+				//
+				// 		//  判断节点是否在padding的开始位置处
+				// 		function is_global_padding_end(bI, globalPaddingRangeObjArray) {
+				// 				for (var gI = 0; gI < globalPaddingRangeObjArray.length; gI++) {
+				// 						var paddingNodeEndIndex = globalPaddingRangeObjArray[gI].paddingNodeEndIndex
+				// 						if (bI === paddingNodeEndIndex) {
+				// 								return true
+				// 						}
+				// 				}
+				// 				return false
+				// 		}
+				//
+				// 		//  判断节点是否在padding的开始位置处
+				// 		function is_global_padding_start(bI, globalPaddingRangeObjArray) {
+				// 				for (var gI = 0; gI < globalPaddingRangeObjArray.length; gI++) {
+				// 						var paddingNodeStartIndex = globalPaddingRangeObjArray[gI].paddingNodeStartIndex
+				// 						if (bI === paddingNodeStartIndex) {
+				// 								return gI
+				// 						}
+				// 				}
+				// 				return -1
+				// 		}
+				// },
 				/**
 					* 清空global的对齐情况下的zoom子树的范围
 					*/
-				clear_global_zoom_ralated_range: function () {
-						var self = this
-						self.set('globalZoomRangeObjArray', [])
-						self.set('globalPaddingRangeObjArray', [])
-						self.set('global_padding_start_id_array', [])
-						self.set('global_padding_range_id_array', [])
-				},
+				// clear_global_zoom_ralated_range: function () {
+				// 		var self = this
+				// 		self.set('globalZoomRangeObjArray', [])
+				// 		self.set('globalPaddingRangeObjArray', [])
+				// 		self.set('global_padding_start_id_array', [])
+				// 		self.set('global_padding_range_id_array', [])
+				// },
 				/**
 					* 计算global的对齐情况下的zoom子树的范围
 					*/
-				compute_global_zoom_subtree_range: function (globalAlignedNodeIdArray) {
-						var self = this
-						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						var globalZoomRangeObjArray = self.compute_aligned_node_range_stat(barcodeNodeAttrArray, globalAlignedNodeIdArray)
-						self.set('globalZoomRangeObjArray', globalZoomRangeObjArray)
-				},
+				// compute_global_zoom_subtree_range: function (globalAlignedNodeIdArray) {
+				// 		var self = this
+				// 		var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+				// 		var globalZoomRangeObjArray = self.compute_aligned_node_range_stat(barcodeNodeAttrArray, globalAlignedNodeIdArray)
+				// 		self.set('globalZoomRangeObjArray', globalZoomRangeObjArray)
+				// },
 				/**
 					* 计算每个barcode对齐的节点范围以及节点对齐的长度
 					*/
@@ -729,7 +1063,8 @@ define([
 						var alignedBarcodeNodeAttrArray = self.get('alignedBarcodeNodeAttrArray')
 						var _alignedRangeObjArray = self.compute_aligned_node_range_stat(alignedBarcodeNodeAttrArray, alignedNodeIdArray)
 						self.set('_alignedRangeObjArray', _alignedRangeObjArray)
-				},
+				}
+				,
 				/**
 					* 传入节点数组和对齐的节点的id的数组, 具体计算对齐节点的范围以及统计信息
 					*/
@@ -795,7 +1130,8 @@ define([
 										return barcodeNodeAttrArray.length - 1
 								}
 						}
-				},
+				}
+				,
 				/**
 					*  计算global对齐的情况下的padding子树的范围
 					*/
@@ -805,7 +1141,8 @@ define([
 						var globalZoomRangeObjArray = self.get('globalZoomRangeObjArray')
 						var globalPaddingRangeObjArray = self.compute_padding_node_range_stat(globalZoomRangeObjArray, barcodeNodeAttrArray)
 						self.set('globalPaddingRangeObjArray', globalPaddingRangeObjArray)
-				},
+				}
+				,
 				/**
 					* 计算padding node的节点位置, 并且计算padding node伸展情况下的长度
 					*/
@@ -819,7 +1156,8 @@ define([
 						var alignedBarcodeNodeAttrArray = self.get('alignedBarcodeNodeAttrArray')
 						var _paddingNodeObjArray = self.compute_padding_node_range_stat(_alignedRangeObjArray, alignedBarcodeNodeAttrArray)
 						self.set('_paddingNodeObjArray', _paddingNodeObjArray)
-				},
+				}
+				,
 				/**
 					* 计算padding node节点的范围
 					*/
@@ -855,6 +1193,7 @@ define([
 						})
 						for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
 								var paddingNodeStatisticObj = computePaddingNodeStatistic(paddingNodeObjArray[pI], barcodeNodeAttrArray)
+								paddingNodeObjArray[pI].paddingNodeId = paddingNodeStatisticObj.paddingNodeId
 								paddingNodeObjArray[pI].maxNodeWidth = paddingNodeStatisticObj.maxNodeWidth
 								//  计算得到paddingNode的长度
 								paddingNodeObjArray[pI].maxPaddingNodeLength = paddingNodeStatisticObj.paddingNodeLength
@@ -873,6 +1212,7 @@ define([
 								var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
 								var paddingNodeStartIndex = +paddingNodeObj.paddingNodeStartIndex
 								var paddingNodeEndIndex = +paddingNodeObj.paddingNodeEndIndex
+								var paddingNodeId = barcodeNodeAttrArray[paddingNodeStartIndex].id
 								var selectedLevels = Variables.get('selectedLevels')
 								var paddingNodeLength = 0
 								var paddingNodeNumber = 0
@@ -884,7 +1224,9 @@ define([
 												maxNodeWidth = barcodeNodeAttrArray[pI].width
 										}
 										if (selectedLevels.indexOf(depth) !== -1) {
-												paddingNodeLength = paddingNodeLength + barcodeNodeAttrArray[pI].width + barcodeNodeInterval
+												if (barcodeNodeAttrArray[pI].width !== 0) {
+														paddingNodeLength = paddingNodeLength + barcodeNodeAttrArray[pI].width + barcodeNodeInterval
+												}
 										}
 										var deepestLevel = selectedLevels.max()
 										if ((barcodeNodeAttrArray[pI].existed) && (selectedLevels.indexOf(depth) !== -1)) {
@@ -897,6 +1239,7 @@ define([
 								}
 								//  paddingNodeLength是所有的paddingNode的长度, paddingNodeNumber是所有的padding的长度, paddingNodeAttrNum是所有paddingNode的属性值之和
 								var paddingNodeStatisticObj = {
+										paddingNodeId: paddingNodeId,
 										maxNodeWidth: maxNodeWidth,
 										paddingNodeLength: paddingNodeLength,
 										paddingNodeNumber: paddingNodeNumber,
@@ -905,7 +1248,8 @@ define([
 								// paddingNodeLength = paddingNodeLength - barcodeNodeInterval
 								return paddingNodeStatisticObj
 						}
-				},
+				}
+				,
 				/*
 					* 在计算得到padding node和aligned node之后, 更新barcodeNodeAttr的节点的属性
 					* 在singleView中对于paddingNodeArray与alignedNodeArray进行更新之后, 调用这个方法可以更新barcodeNodeAttr的属性值
@@ -1072,14 +1416,16 @@ define([
 								}
 								return alignedNodeLoc
 						}
-				},
+				}
+				,
 				//	获取padding节点的object对象
 				get_padding_range_obj: function (nodeId) {
 						var self = this
 						var padding_node_id2padding_obj = self.get('padding_node_id2padding_obj')
 						var paddingRangeObj = padding_node_id2padding_obj[nodeId]
 						return paddingRangeObj
-				},
+				}
+				,
 				/**
 					* 更新align相关的节点的id
 					*/
@@ -1103,7 +1449,8 @@ define([
 						}
 						self.set('align_start_id_array', alignStartIdArray)
 						self.set('align_range_id_array', alignRangeIdArray)
-				},
+				}
+				,
 				/**
 					* 更新全局状态下的padding相关的节点的id
 					*/
@@ -1128,7 +1475,8 @@ define([
 						}
 						self.set('global_padding_start_id_array', paddingStartIdArray)
 						self.set('global_padding_range_id_array', paddingRangeIdArray)
-				},
+				}
+				,
 				/**
 					* 更新padding相关的节点的id
 					*/
@@ -1158,7 +1506,8 @@ define([
 						self.set('padding_start_id_array', paddingStartIdArray)
 						self.set('padding_range_id_array', paddingRangeIdArray)
 						self.set('padding_node_id2padding_obj', paddingNodeId2paddingObj)
-				},
+				}
+				,
 				/*
 					按照alignedBarcodeNodeAttrObj获得已经align的节点的位置从而进行更新
 					*/
@@ -1198,7 +1547,8 @@ define([
 								}
 								return 0
 						}
-				},
+				}
+				,
 				/**
 					* 删除barcode model中的对齐的部分
 					*/
@@ -1248,7 +1598,8 @@ define([
 								}
 								return unalignedRangeObjArray
 						}
-				},
+				}
+				,
 				/**
 					*  判断节点是否存在
 					*/
@@ -1262,7 +1613,8 @@ define([
 								nodeExisted = true
 						}
 						return nodeExisted
-				},
+				}
+				,
 				/**
 					*  是否处于aligned状态
 					*/
@@ -1273,7 +1625,8 @@ define([
 								return false
 						}
 						return true
-				},
+				}
+				,
 				is_aligned_start: function (nodeObjId) {
 						var self = this
 						var alignStartIdArray = self.get('align_start_id_array')
@@ -1281,7 +1634,8 @@ define([
 								return true
 						}
 						return false
-				},
+				}
+				,
 				is_aligned_range: function (nodeObjId) {
 						var self = this
 						var alignRangeIdArray = self.get('align_range_id_array')
@@ -1289,7 +1643,8 @@ define([
 								return true
 						}
 						return false
-				},
+				}
+				,
 				is_padding_start: function (nodeObjId) {
 						var self = this
 						var paddingStartIdArray = self.get('padding_start_id_array')
@@ -1297,7 +1652,8 @@ define([
 								return true
 						}
 						return false
-				},
+				}
+				,
 				is_padding_range: function (nodeObjId) {
 						var self = this
 						var paddingRangeIdArray = self.get('padding_range_id_array')
@@ -1305,7 +1661,8 @@ define([
 								return true
 						}
 						return false
-				},
+				}
+				,
 				//  根据节点的index, 计算节点所述的类型
 				_node_category: function (nodeObjId) {
 						var self = this
@@ -1327,84 +1684,20 @@ define([
 						}
 				},
 				/**
-					* 还原到之前的barcode的节点宽度
+					*  计算得到barcodeTree前面的label的函数
 					*/
-				recover_barcode_width: function () {
+				get_barcodetree_label: function () {
 						var self = this
-						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						var xLoc = 0
-						var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
-						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-								var barcodeNodeDepth = barcodeNodeAttrArray[bI].depth
-								barcodeNodeAttrArray[bI].width = window.barcodeWidthArray[barcodeNodeDepth]
-								barcodeNodeAttrArray[bI].x = xLoc + barcodeNodeAttrArray[bI].width + barcodeNodeInterval
-								xLoc = barcodeNodeAttrArray[bI].x
+						var barcodeTreeId = self.get('barcodeTreeId')
+						var currentDataSetName = Variables.get('currentDataSetName')
+						if (barcodeTreeId.indexOf('-') !== -1) {
+								var barcodeTreeLabelYearMonthDday = barcodeTreeId.split('-')[1]
+								var barcodeTreeLabelMonthDday = barcodeTreeLabelYearMonthDday.substring(5, barcodeTreeLabelYearMonthDday.length).replaceAll('_', '/')
+						} else {
+								barcodeTreeLabelMonthDday = barcodeTreeId.split('_')[0]
+								barcodeTreeLabelMonthDday = barcodeTreeLabelMonthDday.toUpperCase()
 						}
-				},
-				/**
-					* 改变barcode的高度
-					*/
-				change_barcode_height: function () {
-						var self = this
-						var barcodeHeightRatio = Variables.get('barcodeHeightRatio')
-						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						barcodeNodeAttrArray[0].height = Variables.get('barcodeHeight') * barcodeHeightRatio
-						var heightScale = self.get_height_scale()
-						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-								barcodeNodeAttrArray[bI].height = Variables.get('barcodeHeight') * barcodeHeightRatio
-								barcodeNodeAttrArray[bI].height_value = heightScale(barcodeNodeAttrArray[bI].num)
-						}
-				},
-				/**
-					* 得到当前的barcodeModel的changeRatio的大小
-					* @returns {number}
-					*/
-				get_change_ratio: function () {
-						var self = this
-						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						var barcodeNodeMaxWidth = barcodeNodeAttrArray[barcodeNodeAttrArray.length - 1].x + barcodeNodeAttrArray[barcodeNodeAttrArray.length - 1].width
-						var barcodeTextPaddingLeft = Variables.get('barcodeTextPaddingLeft')
-						//  在视图的js文件中的barcodePaddingLeft是barcode的实际的node距离左边界的距离
-						var barcodePaddingLeft = Variables.get('barcodePaddingLeft')
-						var barcodeComparisonViewWidth = $('#barcodetree-scrollpanel').width()
-						var globalViewPaddingLeft = 10
-						var barcodeTreeWidth = barcodeComparisonViewWidth - barcodePaddingLeft - barcodeTextPaddingLeft - globalViewPaddingLeft
-						var barcodeNodeChangeRatio = barcodeTreeWidth / barcodeNodeMaxWidth
-						//  为了防止出现过barcode宽度过大的现象, 计算barcode变化的最大的ratio, 然后控制changeRatio不能超过maxRatio的值
-						var currentRootWidth = window.barcodeWidthArray[0]
-						var maxWidth = Variables.get('maxWidth')
-						var maxRatio = maxWidth / currentRootWidth
-						barcodeNodeChangeRatio = barcodeNodeChangeRatio < maxRatio ? barcodeNodeChangeRatio : maxRatio
-						return barcodeNodeChangeRatio
-				},
-				/**
-					* 将barcodeTree更新到一个视图的宽度的大小
-					*/
-				update_fit_in_screen: function (minRatio) {
-						var self = this
-						var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
-						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-								barcodeNodeAttrArray[bI].x = barcodeNodeAttrArray[bI].x * minRatio
-								barcodeNodeAttrArray[bI].width = barcodeNodeAttrArray[bI].width * minRatio
-						}
-						var globalPaddingRangeObjArray = self.get('globalPaddingRangeObjArray1')
-						for (var gI = 0; gI < globalPaddingRangeObjArray.length; gI++) {
-								globalPaddingRangeObjArray[gI].paddingNodeX = globalPaddingRangeObjArray[gI].paddingNodeX * minRatio
-						}
-						var paddingNodeObjArray = self.get('paddingNodeObjArray')
-						for (var pI = 0; pI < paddingNodeObjArray.length; pI++) {
-								paddingNodeObjArray[pI].paddingNodeX = paddingNodeObjArray[pI].paddingNodeX * minRatio
-						}
-				},
-				get_sorting_value: function (Selection_State, sortOption, comparedNodeId) {
-						var self = this
-						if (Selection_State === Config.get('CONSTANT')['NODE_SELECTION']) {
-								return self.get_sorting_node_value(sortOption, comparedNodeId)
-						} else if ((Selection_State === Config.get('CONSTANT')['SUBTREE_SELECTION'])
-								|| (Selection_State === Config.get('CONSTANT')['NULL_SELECTION'])) {
-								return self.get_sorting_subtree_value(sortOption, comparedNodeId)
-						}
+						return barcodeTreeLabelMonthDday
 				},
 				/**
 					* 在点击选择一个节点的情况下, 获取排序依据的指标的大小
@@ -1421,7 +1714,8 @@ define([
 								//  依据子树相似度排序
 								return self.get_node_similarity(comparedNodeId)
 						}
-				},
+				}
+				,
 				/**
 					* 在点击选择一个子树的情况下, 获取排序依据的子树的指标的大小
 					*/
@@ -1437,7 +1731,8 @@ define([
 								//  依据子树相似度排序
 								return self.get_subtree_similarity(comparedNodeId)
 						}
-				},
+				}
+				,
 				/**
 					*  singleView视图中获取比较的结果
 					*/
@@ -1449,7 +1744,8 @@ define([
 								selectedNodeComparisonResult = null
 						}
 						return selectedNodeComparisonResult
-				},
+				}
+				,
 				/**
 					*  单个节点的相似性
 					*/
@@ -1462,7 +1758,8 @@ define([
 						} else {
 								return 0
 						}
-				},
+				}
+				,
 				/**
 					*  单个子树的相似性
 					*/
@@ -1485,6 +1782,7 @@ define([
 						var barcodeCollection = window.Datacenter.barcodeCollection
 						var selectedComparisonResults = self.get('selectedComparisonResults')
 						var barcodeNodeAttrArrayObj = self.get('barcodeNodeAttrArrayObj')
+						//	获取得到barcodeTree中的node对应的对象
 						var nodeObj = barcodeNodeAttrArrayObj[nodeObjId]
 						if (typeof (nodeObj) === 'undefined') {
 								nodeObj = barcodeCollection.get_node_obj_from_id(nodeObjId)
@@ -1492,6 +1790,7 @@ define([
 						if (typeof (nodeObj) !== 'undefined') {
 								var thisFindingNodesObj = self.find_related_nodes(nodeObj)
 								var comparedResultsObj = self.compareNodes(basedFindingNodesObj, thisFindingNodesObj, nodeObj)
+								comparedResultsObj.currentSelectedNode = nodeObj
 								selectedComparisonResults[nodeObjId] = comparedResultsObj
 						}
 				},
@@ -1564,68 +1863,6 @@ define([
 						}
 				},
 				/**
-					*  与选择的节点进行比较, 得到比较的结果
-					*/
-				// compareNodes: function (basedFindingNodesObj, thisTreeFindingNodesObj) {
-				//   var self = this
-				//   var globalCompareResult = {}
-				//   var basedFindingNodesObj = JSON.parse(JSON.stringify(basedFindingNodesObj))
-				//   var thisTreeFindingNodesObj = JSON.parse(JSON.stringify(thisTreeFindingNodesObj))
-				//   console.log('basedFindingNodesObj.childrenNodes', basedFindingNodesObj.childrenNodes)
-				//   console.log('thisTreeFindingNodesObj.childrenNodes', thisTreeFindingNodesObj.childrenNodes)
-				//   globalCompareResult.childrenNodes = innerCompare(basedFindingNodesObj.childrenNodes, thisTreeFindingNodesObj.childrenNodes)
-				//   // globalCompareResult.fatherCurrentNodes = innerCompare(basedFindingNodesObj.fatherCurrentNodes, thisTreeFindingNodesObj.fatherCurrentNodes)
-				//   // globalCompareResult.siblingNodes = innerCompare(basedFindingNodesObj.siblingNodes, thisTreeFindingNodesObj.siblingNodes)
-				//   return globalCompareResult
-				//   function innerCompare(array1, array2) {
-				//     if (typeof (array1) !== 'undefined') {
-				//       for (var a1I = 0; a1I < array1.length; a1I++) {
-				//         for (var a2I = 0; a2I < array2.length; a2I++) {
-				//           if (array1[a1I].id === array2[a2I].id) {
-				//             array1[a1I].compare_result = 'same'
-				//             array2[a2I].compare_result = 'same'
-				//           }
-				//         }
-				//       }
-				//     }
-				//     if (typeof (array1) !== 'undefined') {
-				//       for (var a1I = 0; a1I < array1.length; a1I++) {
-				//         if (array1[a1I].compare_result !== 'same') {
-				//           array1[a1I].compare_result = 'miss'
-				//         }
-				//       }
-				//     }
-				//     for (var a2I = 0; a2I < array2.length; a2I++) {
-				//       if (array2[a2I].compare_result !== 'same') {
-				//         array2[a2I].compare_result = 'add'
-				//       }
-				//     }
-				//     var compareResultObj = {}
-				//     compareResultObj.same = []
-				//     compareResultObj.add = []
-				//     compareResultObj.miss = []
-				//     if (typeof (array1) !== 'undefined') {
-				//       for (var a1I = 0; a1I < array1.length; a1I++) {
-				//         if (array1[a1I].compare_result === 'same') {
-				//           compareResultObj.same.push(array1[a1I])
-				//         } else if (array1[a1I].compare_result === 'miss') {
-				//           compareResultObj.miss.push(array1[a1I])
-				//         }
-				//       }
-				//     }
-				//     for (var a2I = 0; a2I < array2.length; a2I++) {
-				//       if (array2[a2I].compare_result === 'add') {
-				//         compareResultObj.add.push(array2[a2I])
-				//       }
-				//     }
-				//     // //  array1 是based Tree所发现的节点, 所以当based Tree中的节点为空时, 返回的是另一个tree中的节点, 即array2
-				//     // if ((typeof (array1) === 'undefined') || (array1.length === 0)) {
-				//     //   compareResultObj.same = JSON.parse(JSON.stringify(array2))
-				//     // }
-				//     return compareResultObj
-				//   }
-				// },
-				/**
 					*  对于当前的图书馆目录的数据, sumValue指的就是点击的节点的value值
 					*  但是对于其他类型的数据, 应该计算的sunValue是节点的num之和
 					*/
@@ -1638,7 +1875,8 @@ define([
 								comparedNodeValue = barcodeNodeAttrArrayObj[comparedNodeId].num
 						}
 						return comparedNodeValue
-				},
+				}
+				,
 				/**
 					* 计算得到subtree的节点数目
 					*/
@@ -1671,7 +1909,8 @@ define([
 								}
 						}
 						return nodeCount
-				},
+				}
+				,
 				/**
 					* 计算得到单个节点的节点数量
 					*/
@@ -1684,7 +1923,8 @@ define([
 								singleNodeNum = 0
 						}
 						return singleNodeNum
-				},
+				}
+				,
 				//  更新barcode的subtree的范围
 				update_single_barcode_padding_subtree_range: function () {
 						var self = this
@@ -1707,23 +1947,8 @@ define([
 								}
 						}
 						self.set('paddingSubtreeRangeObject', paddingSubtreeRangeObject)
-				},
-				update_height: function () {
-						// var self = this
-						// self.barcodeNodeHeight = window.barcodeHeight
-						// var barcodeTreeId = self.get('barcodeTreeId')
-						// var barcodeIndex = self.get('barcodeIndex')
-						// self.set('barcodeNodeHeight', window.barcodeHeight)
-						// var barcodeTreeYLocation = self.barcodeNodeHeight * barcodeIndex + barcodeIndex
-						// self.set('barcodeTreeYLocation', barcodeTreeYLocation)
-				},
-				update_sort_after_loc: function () {
-						var self = this
-						self.barcodeNodeHeight = window.barcodeHeight
-						// var barcodeIndex = self.get('barcodeIndex')
-						// var barcodeTreeYLocation = self.barcodeNodeHeight * barcodeIndex + barcodeIndex
-						// self.set('barcodeTreeYLocation', barcodeTreeYLocation)
-				},
+				}
+				,
 				reset_attribute: function () {
 						var self = this
 						self.set('alignedBarcodeNodeAttrObj', {})
@@ -1737,7 +1962,8 @@ define([
 						self.set('compactPaddingNodeObjArray', [])
 						self.set('_compactPaddingNodeObjArray', [])
 						d3.selectAll('.stat-summary').remove()
-				},
+				}
+				,
 				get_next_subtree_range: function (node_id, node_level) {
 						var self = this
 						var nodeIndex = self.get_node_index(node_id)
@@ -1776,7 +2002,8 @@ define([
 								subtreeRangeObj[subtreeStartId] = subtreeRangeObjArray[sI]
 						}
 						return subtreeRangeObj
-				},
+				}
+				,
 				//  根据传入的节点id计算节点下层的子树大小比例
 				get_subree_size_obj_array: function (node_id) {
 						var self = this
@@ -1814,7 +2041,8 @@ define([
 								}
 						}
 						return subtreeLengthObj
-				},
+				}
+				,
 				//  根据padding node计算最右侧孩子节点的位置
 				get_padding_node_right_loc: function (nodeId, nodeLevel) {
 						var self = this
@@ -1833,7 +2061,8 @@ define([
 								}
 								return globalMaxX
 						}
-				},
+				}
+				,
 				//  根据padding node计算最左侧孩子节点的位置
 				get_padding_node_left_loc: function (nodeId, nodeLevel) {
 						var self = this
@@ -1852,7 +2081,8 @@ define([
 								}
 								return globalMinX
 						}
-				},
+				}
+				,
 				//  计算该节点的最右侧孩子节点的位置
 				get_right_loc: function (node_id, node_level) {
 						var self = this
@@ -1872,7 +2102,8 @@ define([
 								}
 						}
 						return rightLoc
-				},
+				}
+				,
 				//  计算该节点的最左侧孩子节点的位置
 				get_left_loc: function (node_id, node_level) {
 						var self = this
@@ -1891,7 +2122,8 @@ define([
 										}
 								}
 						}
-				},
+				}
+				,
 				//  获取BarcodeNode的节点对象
 				get_barcode_node: function (subtreeRootId) {
 						var self = this
@@ -1901,7 +2133,8 @@ define([
 								return null
 						}
 						return barcodeNodeObj
-				},
+				}
+				,
 				//  获取barcodeTree的显示模式
 				get_barcode_tree_display_mode: function () {
 						var self = this
@@ -1915,20 +2148,16 @@ define([
 								currentDisplayMode = self.get('displayMode')
 						}
 						return currentDisplayMode
-				},
+				}
+				,
 				//  获取当前使用的barcode节点数组
 				get_barcode_node_array: function () {
 						var self = this
-						if (Variables.get('displayMode') === Config.get('CONSTANT').COMPACT) {
-								//  切换到原始的barcodeTree的compact的显示模式
-								var compactBarcodeNodeAttrArrayObj = self.get('compactBarcodeNodeAttrArrayObj')
-								var barcodeNodeAttrArray = compactBarcodeNodeAttrArrayObj['compact-0']
-						} else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL) || ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL))) {
-								//  切换到原始的barcodeTree的显示模式
-								var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						}
+						//  切换到原始的barcodeTree的显示模式
+						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
 						return barcodeNodeAttrArray
-				},
+				}
+				,
 				//  根据node的id获取node的index
 				get_node_index: function (nodeId) {
 						var self = this
@@ -1938,7 +2167,8 @@ define([
 										return bI
 								}
 						}
-				},
+				}
+				,
 				//  根据node的id获取node在categoryNodeObjArray的index
 				get_category_node_index: function (nodeId) {
 						var self = this
@@ -1948,7 +2178,8 @@ define([
 										return bI
 								}
 						}
-				},
+				}
+				,
 				//  根据已知的节点的属性, 寻找所有与这个节点相关的节点的属性
 				find_related_nodes: function (nodeObj) {
 						var self = this
@@ -1957,7 +2188,8 @@ define([
 						findingNodesObj.fatherCurrentNodes = self.find_father_current_nodes(nodeObj)
 						findingNodesObj.siblingNodes = self.find_sibling_nodes(nodeObj)
 						return findingNodesObj
-				},
+				}
+				,
 				//  根据已知的节点的属性, 寻找所有与这个节点相关的节点的属性
 				find_super_tree_related_nodes: function (nodeObj) {
 						var self = this
@@ -1966,7 +2198,8 @@ define([
 						findingNodesObj.fatherCurrentNodes = self.find_super_tree_father_current_nodes(nodeObj)
 						findingNodesObj.siblingNodes = self.find_super_tree_sibling_nodes(nodeObj)
 						return findingNodesObj
-				},
+				}
+				,
 				//  获取节点的sibling节点
 				find_sibling_nodes: function (nodeObj) {
 						var self = this
@@ -1998,7 +2231,8 @@ define([
 								}
 						}
 						return siblingNodesArray
-				},
+				}
+				,
 				//  获取节点的children节点
 				find_children_nodes: function (nodeObj) {
 						var self = this
@@ -2018,7 +2252,27 @@ define([
 						}
 						// self.highlightChildrenNodes(childrenNodesArray)
 						return childrenNodesArray
-				},
+				}
+				,
+				//  获取节点的全部children节点, 包括不存在的节点
+				find_all_children_nodes: function (nodeObj) {
+						var self = this
+						var nodeIndex = self.get_node_index(nodeObj.id)
+						var barcodeNodeAttrArray = self.get_barcode_node_array()
+						var childrenNodesArray = []
+						var nodeDepth = nodeObj.depth
+						for (var nI = (nodeIndex + 1); nI < barcodeNodeAttrArray.length; nI++) {
+								if (barcodeNodeAttrArray[nI].depth > nodeDepth) {
+										childrenNodesArray.push(barcodeNodeAttrArray[nI])
+								}
+								if (barcodeNodeAttrArray[nI].depth === nodeDepth) {
+										break
+								}
+						}
+						// self.highlightChildrenNodes(childrenNodesArray)
+						return childrenNodesArray
+				}
+				,
 				//  寻找父亲节点
 				find_father_nodes: function (nodeObj) {
 						var self = this
@@ -2042,7 +2296,8 @@ define([
 								nodeDepth = nodeDepth - 1
 						}
 						return fatherNodesArray
-				},
+				}
+				,
 				//  寻找所有的父亲以及当前节点, 即使是在padding范围内的也找出来
 				find_all_father_current_nodes: function (nodeObj) {
 						var self = this
@@ -2060,7 +2315,8 @@ define([
 								}
 						}
 						return fatherNodesArray
-				},
+				}
+				,
 				//  寻找父亲以及当前节点
 				find_father_current_nodes: function (nodeObj) {
 						var self = this
@@ -2136,7 +2392,8 @@ define([
 						}
 						// self.highlightChildrenNodes(childrenNodesArray)
 						return childrenNodesArray
-				},
+				}
+				,
 				//  寻找父亲以及当前节点
 				find_super_tree_father_current_nodes: function (nodeObj) {
 						var self = this
@@ -2153,7 +2410,8 @@ define([
 								}
 						}
 						return fatherNodesArray
-				},
+				}
+				,
 				change_barcode_attr_array: function () {
 						var self = this
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
@@ -2198,10 +2456,100 @@ define([
 										}
 								}
 						}
-				},
+				}
+				,
+				// 删除uncollapse的子树中的节点
+				remove_uncollapse_nodes: function (nodeDataId, nodeDataDepth) {
+						var self = this
+						var collapsedSubtreeIdArray = self.get('collapsedSubtreeIdArray')
+						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+						remove_subtree_nodes(barcodeNodeAttrArray, nodeDataId, nodeDataDepth)
+						var alignedBarcodeNodeAttrArray = self.get('alignedBarcodeNodeAttrArray')
+						remove_subtree_nodes(alignedBarcodeNodeAttrArray, nodeDataId, nodeDataDepth)
+
+						function remove_subtree_nodes(nodeAttrArray, nodeDataId, nodeDataDepth) {
+								var collapsedRootNodeIndex = 0
+								var collapsedNextRootNodeIndex = 0
+								var barcodeWidthArray = Variables.get('barcodeWidthArray')
+								var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+								var foundClickedNode = false
+								if (nodeAttrArray.length === 0) {
+										return
+								}
+								//  第一段寻找点击的node节点的index值
+								for (var nI = 0; nI < nodeAttrArray.length; nI++) {
+										if ((nodeAttrArray[nI].id === nodeDataId) && (nodeAttrArray[nI].depth === nodeDataDepth)) {
+												collapsedRootNodeIndex = nI
+												foundClickedNode = true
+												break
+										}
+								}
+								if (!foundClickedNode)
+										return
+								//  第二段依次伸展
+								for (var nI = (collapsedRootNodeIndex + 1); nI < nodeAttrArray.length; nI++) {
+										if (nodeAttrArray[nI].depth === nodeDataDepth) {
+												collapsedNextRootNodeIndex = nI
+												break
+										}
+										//	从折叠部分子树的节点数组中删除该部分子树的节点
+										var nodeId = nodeAttrArray[nI].id
+										var nodeIdIndex = collapsedSubtreeIdArray.indexOf(nodeId)
+										if (nodeIdIndex !== -1) {
+												collapsedSubtreeIdArray.splice(nodeIdIndex, 1)
+										}
+								}
+						}
+				}
+				,
+				//	增加折叠子树部分的节点
+				add_collapse_nodes: function (nodeDataId, nodeDataDepth) {
+						var self = this
+						var collapsedSubtreeIdArray = self.get('collapsedSubtreeIdArray')
+						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
+						add_subtree_node(barcodeNodeAttrArray, nodeDataId, nodeDataDepth)
+						var alignedBarcodeNodeAttrArray = self.get('alignedBarcodeNodeAttrArray')
+						add_subtree_node(alignedBarcodeNodeAttrArray, nodeDataId, nodeDataDepth)
+						var compactBarcodeNodeAttrArray = self.get('compactBarcodeNodeAttrArray')
+						add_subtree_node(compactBarcodeNodeAttrArray, nodeDataId, nodeDataDepth)
+
+						function add_subtree_node(nodeAttrArray, nodeDataId, nodeDataDepth) {
+								var collapsedRootNodeIndex = 0
+								var collapsedNextRootNodeIndex = -1
+								var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+								var foundClickedNode = false
+								if (nodeAttrArray.length === 0) {
+										return
+								}
+								//  第一段寻找点击的node节点的index值
+								for (var nI = 0; nI < nodeAttrArray.length; nI++) {
+										if ((nodeAttrArray[nI].id === nodeDataId) && (nodeAttrArray[nI].depth === nodeDataDepth)) {
+												collapsedRootNodeIndex = nI
+												foundClickedNode = true
+												break
+										}
+								}
+								if (!foundClickedNode)
+										return
+								//  第二段依次缩进
+								for (var nI = (collapsedRootNodeIndex + 1); nI < nodeAttrArray.length; nI++) {
+										if (nodeAttrArray[nI].depth === nodeDataDepth) {
+												collapsedNextRootNodeIndex = nI
+												break
+										}
+										//	将折叠部分的节点依次放入折叠的节点数组中
+										var nodeId = nodeAttrArray[nI].id
+										if (collapsedSubtreeIdArray.indexOf(nodeId) === -1) {
+												collapsedSubtreeIdArray.push(nodeId)
+										}
+								}
+						}
+				}
+				,
 				//  点击节点使得节点所在的子树被uncollapse所调用的方法
 				uncollapse_subtree: function (nodeDataId, nodeDataDepth) {
 						var self = this
+						var collapsedSubtreeIdArray = self.get('collapsedSubtreeIdArray')
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
 						uncollapse_subtree_location(barcodeNodeAttrArray, nodeDataId, nodeDataDepth)
 						var alignedBarcodeNodeAttrArray = self.get('alignedBarcodeNodeAttrArray')
@@ -2259,10 +2607,12 @@ define([
 										nodeAttrArray[nI].x = nodeAttrArray[nI].x + differenceX
 								}
 						}
-				},
+				}
+				,
 				//  点击节点使得其为根节点所在的子树被折叠
 				collapse_subtree: function (nodeDataId, nodeDataDepth) {
 						var self = this
+						var collapsedSubtreeIdArray = self.get('collapsedSubtreeIdArray')
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
 						collapse_change_location(barcodeNodeAttrArray, nodeDataId, nodeDataDepth)
 						var alignedBarcodeNodeAttrArray = self.get('alignedBarcodeNodeAttrArray')
@@ -2294,7 +2644,12 @@ define([
 												collapsedNextRootNodeIndex = nI
 												break
 										}
-										nodeAttrArray[nI].x = nodeAttrArray[collapsedRootNodeIndex].x
+										//	将折叠部分的节点依次放入折叠的节点数组中
+										var nodeId = nodeAttrArray[nI].id
+										if (collapsedSubtreeIdArray.indexOf(nodeId) === -1) {
+												collapsedSubtreeIdArray.push(nodeId)
+										}
+										nodeAttrArray[nI].x = nodeAttrArray[collapsedRootNodeIndex].x + nodeAttrArray[collapsedRootNodeIndex].width / 2
 										nodeAttrArray[nI].width = 0
 								}
 								//  下一个root节点不存在,就直接返回
@@ -2311,7 +2666,20 @@ define([
 										nodeAttrArray[nI].x = nodeAttrArray[nI].x + differenceX
 								}
 						}
-				},
+				}
+				,
+				//		判断一个节点是否在折叠的节点范围之内
+				is_collapsed_subtree_range: function (barcodeNodeId) {
+						var self = this
+						var collapsedSubtreeIdArray = self.get('collapsedSubtreeIdArray')
+						// console.log('collapsedSubtreeIdArray', collapsedSubtreeIdArray)
+						// console.log('barcodeNodeId', barcodeNodeId)
+						if (collapsedSubtreeIdArray.indexOf(barcodeNodeId) !== -1) {
+								return true
+						}
+						return false
+				}
+				,
 				//  计算barcode对齐部分的子树对应的alignedRangeObj对象
 				get_aligned_subtree_obj: function (barcodeNode) {
 						var self = this
@@ -2323,7 +2691,8 @@ define([
 										return alignedRangeObj
 								}
 						}
-				},
+				}
+				,
 				//  更新对齐部分的后续节点
 				update_align_followed_node: function () {
 						var self = this
@@ -2471,7 +2840,8 @@ define([
 								}
 								return false
 						}
-				},
+				}
+				,
 				update_single_compact_barcode_subtree: function (rootId, rootCategory, rootLevel, cloneCompactSuperTreeNodeLocArray, cloneCompactMaxNodeNumTreeNodeLocArray) {
 						var self = this
 						var compactBarcodeNodeAttrArray = self.get('compactBarcodeNodeAttrArray')
@@ -2485,7 +2855,8 @@ define([
 						)
 						self.update_compact_aligned_barcode_node_obj()
 						self.chang_compact_exist_attr(compactReplacedNodesArray, compactBarcodeNodeAttrArray)
-				},
+				}
+				,
 				update_compact_aligned_barcode_node_obj: function () {
 						var self = this
 						var compactAlignedBarcodeNodeAttrObj = {}
@@ -2535,13 +2906,6 @@ define([
 										currentTemplateNodeArray = []
 								}
 						}
-				},
-				//  设置barcode内部距离上边界的距离
-				set_barcode_padding_top: function () {
-						var self = this
-						var barcodeOriginalNodeHeight = self.get('barcodeOriginalNodeHeight')
-						var barcodePaddingTop = barcodeOriginalNodeHeight / 8
-						self.set('barcodePaddingTop', barcodePaddingTop)
 				},
 				//  计算得到比较的结果
 				get_single_comparison_result: function () {
@@ -2652,7 +3016,8 @@ define([
 										node_attr_array[nI].x = nodeLocationX
 								}
 						}
-				},
+				}
+				,
 				show_NaN_node: function () {
 						var self = this
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
@@ -2660,7 +3025,8 @@ define([
 								if (isNaN(barcodeNodeAttrArray[bI].x)) {
 								}
 						}
-				},
+				}
+				,
 				//  使用tablelens的方法对于BarcodeTree的子树进行变形
 				tablelens_interested_subtree: function (tablelensSubtreeArray, ratioAndSubtreeObj) {
 						var self = this
@@ -2713,7 +3079,8 @@ define([
 								}
 								return false
 						}
-				},
+				}
+				,
 				//  使用tablelens的方法对于BarcodeTree的子树进行变形
 				// tablelens_interested_subtree: function (tablelensSubtreeArray, ratioAndSubtreeObj) {
 				//   var self = this
@@ -2863,7 +3230,8 @@ define([
 						var self = this
 						var moveFirstPaddingNextUpdateValue = (self.get('moveFirstPaddingNextUpdateValue') + 1) % 2
 						self.set('moveFirstPaddingNextUpdateValue', moveFirstPaddingNextUpdateValue)
-				},
+				}
+				,
 				//  计算得到paddingNode的位置。计算paddingNode的方式是按照paddingnode的startIndex值计算barcodeTree的的位置
 				update_padding_node_location: function () {
 						var self = this
@@ -2892,7 +3260,8 @@ define([
 										}
 								}
 						}
-				},
+				}
+				,
 				//  根据节点的id获取节点的对象
 				get_node_obj_from_id: function (nodeId) {
 						var self = this
@@ -2902,7 +3271,8 @@ define([
 								nodeObj = window.Datacenter.barcodeCollection.get_node_obj_from_id(nodeId)
 						}
 						return nodeObj
-				},
+				}
+				,
 				get_node_index_from_id: function (nodeId, barcodeNodeAttrArray) {
 						var self = this
 						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
@@ -2916,7 +3286,8 @@ define([
 										return bI
 								}
 						}
-				},
+				}
+				,
 				get_related_index_from_id: function (nodeId, barcodeNodeAttrArray) {
 						var self = this
 						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
@@ -2925,7 +3296,8 @@ define([
 										return bI
 								}
 						}
-				},
+				}
+				,
 				update_barcode_subtree: function (rootId, rootCategory, rootLevel, maxX, subtreeNodeArray, alignedNodeIdArray) {
 						var self = this
 						var subtreeRootIndex = -1
@@ -3054,7 +3426,8 @@ define([
 						//   }
 						// }
 						// return alignedObj
-				},
+				}
+				,
 				update_covered_rect_obj: function () {
 						var self = this
 						var alignedNodeIdArray = Variables.get('alignedNodeIdArray')
@@ -3090,13 +3463,15 @@ define([
 								var cloneCoveredRectObjArray = JSON.parse(JSON.stringify(coveredRectObjArray))
 								self.set('coveredRectObjArray', cloneCoveredRectObjArray)
 						}
-				},
+				}
+				,
 				//  根据当前所处的状态获取barcodeNodeAttrArray
 				get_barcode_node_attr_array: function () {
 						var self = this
 						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
 						return barcodeNodeAttrArray
-				},
+				}
+				,
 				//	更新计算得到的padding对象数组中的is_removed属性值
 				update_padding_node_object_array: function (paddingControlObjIndex) {
 						var self = this
@@ -3107,362 +3482,6 @@ define([
 								paddingNodeObjArray[paddingControlObjIndex].is_removed = true
 						}
 				},
-				/**
-					* 根据节点id => 获取一个节点的位置
-					*/
-				get_node_location: function (rootId) {
-						var self = this
-						var nodeLocationObj = {}
-						var nodeLocation = null
-						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-						var BARCODETREE_GLOBAL_PARAS = Variables.get('BARCODETREE_GLOBAL_PARAS')
-						if (BARCODETREE_GLOBAL_PARAS['BarcodeTree_Split']) {
-								for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-										var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
-										var nodeArray = barcodeNodeRearrangeObj.node_array
-										var nI = 0
-										var selectedNodeObj = null
-										for (nI = 0; nI < nodeArray.length; nI++) {
-												if (nodeArray[nI].id === rootId) {
-														nodeLocation = nodeArray[nI].x
-														nodeLocationObj.startX = nodeLocation
-														selectedNodeObj = nodeArray[nI]
-														break
-												}
-										}
-										if (selectedNodeObj != null) {
-												for (nI = nI + 1; nI < nodeArray.length; nI++) {
-														nodeLocation = nodeArray[nI].x
-														nodeLocationObj.endX = nodeLocation
-														if (nodeArray[nI].depth <= selectedNodeObj.depth) {
-																break
-														}
-												}
-										}
-								}
-						} else {
-								var bI = 0
-								var selectedNodeObj = null
-								for (bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-										if (barcodeNodeAttrArray[bI].id === rootId) {
-												nodeLocation = barcodeNodeAttrArray[bI].x
-												nodeLocationObj.startX = nodeLocation
-												selectedNodeObj = barcodeNodeAttrArray[bI]
-												break
-										}
-								}
-								if (selectedNodeObj != null) {
-										for (bI = bI + 1; bI < barcodeNodeAttrArray.length; bI++) {
-												nodeLocation = barcodeNodeAttrArray[bI].x
-												nodeLocationObj.endX = nodeLocation
-												if (barcodeNodeAttrArray[bI].depth <= selectedNodeObj.depth) {
-														break
-												}
-										}
-								}
-						}
-						return nodeLocationObj
-				},
-				align_barcode_subtree: function (alignedObjArray, alignedNodeIdArray) {
-						var self = this
-						var barcodeNodeAttrArray = self.get('barcodeNodeAttrArray')
-						var moveX = null
-						for (var bI = 0; bI < barcodeNodeAttrArray.length; bI++) {
-								for (var aI = 0; aI < alignedObjArray.length; aI++) {
-										if (barcodeNodeAttrArray[bI].id === alignedObjArray[aI].alignedNodeId) {
-												moveX = alignedObjArray[aI].alignedNodeX - barcodeNodeAttrArray[bI].x
-										}
-								}
-								if ((moveX != null) && (moveX > 0)) {
-										barcodeNodeAttrArray[bI].x = barcodeNodeAttrArray[bI].x + moveX
-								}
-						}
-						// self.update_covered_rect_obj(alignedNodeIdArray)
-				},
-				//  计算得到barcode与当前的basedBarcodeModel比较的差别大小
-				get_node_difference: function () {
-						var self = this
-						var alignedComparisonResultArray = self.get('alignedComparisonResultArray')
-						var nodeDifference = 0
-						if (alignedComparisonResultArray != null) {
-								//  因为存在不同的对齐区间
-								var sumAdded = 0
-								var sumMissed = 0
-								var sumSame = 0
-								for (var aI = 0; aI < alignedComparisonResultArray.length; aI++) {
-										var alignedComparisonResultObj = alignedComparisonResultArray[aI]
-										var addedNodeIdArray = alignedComparisonResultObj.addedNodeIdArray
-										sumAdded = sumAdded + addedNodeIdArray.length
-										var missedNodeIdArray = alignedComparisonResultObj.missedNodeIdArray
-										sumMissed = sumMissed + missedNodeIdArray.length
-										var sameNodeIdArray = alignedComparisonResultObj.sameNodeIdArray
-										sumSame = sumSame + sameNodeIdArray.length
-								}
-								nodeDifference = (sumMissed + sumAdded) / (sumMissed + sumAdded + sumSame)
-						} else {
-								nodeDifference = null
-						}
-						return nodeDifference
-				},
-				//	计算Barcode Model的node value数组
-				get_node_value_array: function () {
-						var self = this
-						var nodeStatValueArray = []
-						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
-								var nodeArray = barcodeNodeRearrangeObj.node_array
-								if (barcodeNodeRearrangeObj.category === 'padding') {
-										var nodeStatObj = {
-												category: 'padding',
-												stat: nodeArray.length
-										}
-										nodeStatValueArray.push(nodeStatObj)
-								} else if (barcodeNodeRearrangeObj.category === 'align') {
-										//	aligned部分分为两个部分考虑 一个是对齐的部分, 一个是非对齐的部分
-										//	对齐的部分是用一个数组进行存储, 并且计算距离; 非对齐的部分使用paddingStatNum进行度量
-										var alignedArray = []
-										var paddingArray = []
-										var paddingStatNum = 0
-										var beginPadding = false
-										for (var nI = 0; nI < nodeArray.length; nI++) {
-												//	aligned数组仅仅考虑beyondAlign属性为false的节点
-												if (!nodeArray[nI].beyondAlign) {
-														//	设置对齐的部分的节点对应的向量
-														if (nodeArray[nI].existed) {
-																//	如果节点存在对应的节点为1
-																alignedArray.push(1)
-														} else {
-																// 节点不存在则对应的节点为0
-																alignedArray.push(0)
-														}
-														//	开始状态 => beyondAlign为false => 不应该initial的paddingStatNum加入到数组中
-														if (beginPadding) {
-																paddingArray.push(paddingStatNum)
-																paddingStatNum = 0
-														}
-												} else {
-														if (nodeArray[nI].existed) {
-																paddingStatNum = paddingStatNum + 1
-														}
-														beginPadding = true
-												}
-										}
-										//	将最后的padding的部分添加到paddingArray数组中
-										paddingArray.push(paddingStatNum)
-										var nodeStatObj = {
-												category: 'align',
-												align: alignedArray,
-												padding: paddingArray
-										}
-										nodeStatValueArray.push(nodeStatObj)
-								}
-						}
-						return nodeStatValueArray
-				},
-				//  对于barcodeTree切割得到的结果放到新的数据结构中
-				set_barcodetree_segmentation: function () {
-						var self = this
-						var alignedRangeObjArray = self.get('alignedRangeObjArray')
-						var barcodeTreeIndex = self.get('barcodeIndex')
-						var barcodeNodeAttrArray = JSON.parse(JSON.stringify(self.get('barcodeNodeAttrArray')))
-						var originalRangeStartNodeIndex = 0
-						var barcodeNodeRearrangeObjArray = []
-						// 对齐范围内的数据结构是一个数组, 数组中是对象, 对象决定barcodeTree中该部分节点的纵向位置
-						for (var aI = 0; aI < alignedRangeObjArray.length; aI++) {
-								var alignedRangeObj = alignedRangeObjArray[aI]
-								var rangeStartNodeIndex = alignedRangeObj.rangeStartNodeIndex
-								if (rangeStartNodeIndex !== originalRangeStartNodeIndex) {
-										//  第一段的padding范围
-										// [originalRangeStartNodeIndex, rangeStartNodeIndex]
-										var paddingNodeArray = self.extract_barcode_node_array(originalRangeStartNodeIndex, rangeStartNodeIndex, barcodeNodeAttrArray)
-										var barcodeNodeRearrangeObj = {
-												node_array: paddingNodeArray,
-												category: 'padding',
-												barcodeTreeIndex: barcodeTreeIndex
-										}
-										//	判断padding节点是否被removed => 决定该节点是否被放入到barcodeNodeRearrangeObjArray数组中
-										var isRemoved = false
-										if (paddingNodeArray.length > 0) {
-												var nodeId = paddingNodeArray[0].id
-												var paddingRangeObj = self.get_padding_range_obj(nodeId)
-												if (typeof (paddingRangeObj) !== 'undefined') {
-														isRemoved = paddingRangeObj.is_removed
-												}
-										}
-										//	没有被removed, isRemoved为false => 将该节点放入到barcodeNodeRearrangeObjArray数组中
-										if (!isRemoved) {
-												barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
-										}
-								}
-								var rangeEndNodeIndex = alignedRangeObj.rangeEndNodeIndex
-								//  aligned部分的节点范围
-								// [rangeStartNodeIndex, rangeEndNodeIndex]
-								var alignedNodeArrayArray = self.segment_barcodetree_aligned_range(rangeStartNodeIndex, rangeEndNodeIndex, barcodeNodeAttrArray)
-								for (var aj = 0; aj < alignedNodeArrayArray.length; aj++) {
-										var alignedNodeArray = alignedNodeArrayArray[aj]
-										var barcodeNodeRearrangeObj = {
-												node_array: alignedNodeArray,
-												category: 'align',
-												barcodeTreeIndex: barcodeTreeIndex
-										}
-										barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
-										// if (alignedNodeArray.length !== 0) {
-										// 		barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
-										// }
-								}
-								originalRangeStartNodeIndex = rangeEndNodeIndex + 1
-						}
-						if (originalRangeStartNodeIndex !== (barcodeNodeAttrArray.length - 1)) {
-								//  最后一段的padding范围
-								// [originalRangeStartNodeIndex, barcodeNodeAttrArray.length - 1]
-								var paddingNodeArray = self.extract_barcode_node_array(originalRangeStartNodeIndex, barcodeNodeAttrArray.length, barcodeNodeAttrArray)
-								var barcodeNodeRearrangeObj = {
-										node_array: paddingNodeArray,
-										category: 'padding',
-										barcodeTreeIndex: barcodeTreeIndex
-								}
-								//	判断padding节点是否被removed => 决定该节点是否被放入到barcodeNodeRearrangeObjArray数组中
-								var isRemoved = false
-								if (paddingNodeArray.length > 0) {
-										var nodeId = paddingNodeArray[0].id
-										var paddingRangeObj = self.get_padding_range_obj(nodeId)
-										if (typeof (paddingRangeObj) !== 'undefined') {
-												isRemoved = paddingRangeObj.is_removed
-										}
-								}
-								//	没有被removed, isRemoved为false => 将该节点放入到barcodeNodeRearrangeObjArray数组中
-								if (!isRemoved) {
-										barcodeNodeRearrangeObjArray.push(barcodeNodeRearrangeObj)
-								}
-						}
-						self.set('barcodeNodeRearrangeObjArray', barcodeNodeRearrangeObjArray)
-				},
-				//  计算barcodeTree的最大的长度
-				compute_max_barcodetree_xaxis: function () {
-						var self = this
-						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-						var BarcodeGlobalSetting = Variables.get('BARCODETREE_GLOBAL_PARAS')
-						var maxSubTreeXAxis = 0
-						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
-								var nodeArray = barcodeNodeRearrangeObj.node_array
-								if (BarcodeGlobalSetting['Subtree_Compact'] && barcodeNodeRearrangeObj.category === 'padding') {
-										var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
-										var barcodeNodePaddingLength = BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH']
-										maxSubTreeXAxis = nodeArray[0].x + barcodeNodePaddingLength
-								} else {
-										for (var nI = (nodeArray.length - 1); nI >= 0; nI--) {
-												if (nodeArray[nI].existed) {
-														maxSubTreeXAxis = nodeArray[nI].x + nodeArray[nI].width
-														break
-												}
-										}
-								}
-								barcodeNodeRearrangeObj.maxSubTreeXAxis = maxSubTreeXAxis
-								if ((typeof (nodeArray) !== 'undefined') && (nodeArray.length > 0)) {
-										var minSubTreeXAxis = nodeArray[0].x
-										barcodeNodeRearrangeObj.minSubTreeXAxis = minSubTreeXAxis
-								}
-						}
-				},
-				//  计算barcodeTree每一段的起始坐标
-				compute_start_barcodetree_axis: function () {
-						var self = this
-						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
-								var nodeArray = barcodeNodeRearrangeObj.node_array
-								if ((typeof (nodeArray) !== 'undefined') && (nodeArray.length > 0)) {
-										barcodeNodeRearrangeObj.subtreeStartX = nodeArray[0].x
-								}
-						}
-				},
-				//  将对齐部分的BarcodeTree按照当前对齐的层级进行切割
-				segment_barcodetree_aligned_range: function (aligned_range_start_index, aligned_range_end_index, barcodeNodeAttrArray) {
-						var self = this
-						// var alignedLevel = Variables.get('alignedLevel')
-						var segmentLevel = Variables.get('segmentLevel')
-						// var segmentLevel = 2
-						var partitionStartIndex = aligned_range_start_index
-						var alignedNodeArrayArray = []
-						for (var bI = aligned_range_start_index; bI <= aligned_range_end_index; bI++) {
-								var barcodeNode = barcodeNodeAttrArray[bI]
-								var barcodeNodeDepth = +barcodeNode.depth
-								if ((+barcodeNodeDepth) === (+segmentLevel)) {
-										if ((bI - 1) > 0) {
-												var previousNode = barcodeNodeAttrArray[bI - 1]
-												var previousNodeDepth = +previousNode.depth
-												//  只有上一个节点的深度比当前节点的深度更大时, 才会在这个地方进行切割
-												if (previousNodeDepth >= barcodeNodeDepth) {
-														var partitionEndIndex = bI
-														if (partitionStartIndex < partitionEndIndex) {
-																var alignedNodeArray = self.extract_barcode_node_array(partitionStartIndex, partitionEndIndex, barcodeNodeAttrArray)
-																alignedNodeArrayArray.push(alignedNodeArray)
-														}
-														partitionStartIndex = bI
-												}
-										}
-								}
-						}
-						if (partitionStartIndex !== aligned_range_end_index) {
-								var alignedNodeArray = self.extract_barcode_node_array(partitionStartIndex, (aligned_range_end_index + 1), barcodeNodeAttrArray)
-								alignedNodeArrayArray.push(alignedNodeArray)
-						}
-						return alignedNodeArrayArray
-				},
-				//  根据节点的index范围以及barcodeTree的节点数组, 获取对应的节点数组
-				extract_barcode_node_array: function (range_start_index, range_end_index, barcodeNodeAttrArray) {
-						var self = this
-						var extractBarcodeNodeArray = []
-						for (var bI = range_start_index; bI < range_end_index; bI++) {
-								extractBarcodeNodeArray.push(barcodeNodeAttrArray[bI])
-						}
-						return extractBarcodeNodeArray
-				},
-				//  设置对应的barcodeTree的segment的inde值
-				set_barcode_segement_index: function (mI, comparedNodeId) {
-						var self = this
-						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
-								var nodeArray = barcodeNodeRearrangeObj.node_array
-								for (var nI = 0; nI < nodeArray.length; nI++) {
-										var nodeId = nodeArray[nI].id
-										//  遍历所有的节点, 找到compareNodeId节点所对应的segement, 设置改segmentation的对应的index数值
-										if (nodeId === comparedNodeId) {
-												barcodeNodeRearrangeObj.barcodeTreeIndex = mI
-										}
-								}
-						}
-				},
-				//	计算与compareNodeId具有相同的segment的的id数组
-				get_same_segment_node_id_array: function (comparedNodeId) {
-						var self = this
-						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-						var nodeIdArray = []
-						var sameSegmentNodeArray = null
-						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
-								var nodeArray = barcodeNodeRearrangeObj.node_array
-								for (var nI = 0; nI < nodeArray.length; nI++) {
-										var nodeId = nodeArray[nI].id
-										//  遍历所有的节点, 找到compareNodeId节点所对应的segement, 设置改segmentation的对应的index数值
-										if (nodeId === comparedNodeId) {
-												sameSegmentNodeArray = nodeArray
-												break;
-										}
-								}
-						}
-						//	根据挑选得到的sameSegmentNodeArray, 进一步计算nodeIdArray
-						if (sameSegmentNodeArray != null) {
-								for (var sI = 0; sI < sameSegmentNodeArray.length; sI++) {
-										nodeIdArray.push(sameSegmentNodeArray[sI].id)
-								}
-						}
-						return nodeIdArray
-				},
 				//	设置barcodeTree所有对应的segement的index值
 				set_all_barcode_segement_index: function (mI) {
 						var self = this
@@ -3470,48 +3489,6 @@ define([
 						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
 								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
 								barcodeNodeRearrangeObj.barcodeTreeIndex = mI
-						}
-				},
-				/**
-					*  根据node id计算对应的segment的index值
-					*/
-				get_segment_index: function (comparedNodeId) {
-						var self = this
-						var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-						for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-								var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
-								var nodeArray = barcodeNodeRearrangeObj.node_array
-								for (var nI = 0; nI < nodeArray.length; nI++) {
-										var nodeId = nodeArray[nI].id
-										if (nodeId === comparedNodeId) {
-												return barcodeNodeRearrangeObj.barcodeTreeIndex
-										}
-								}
-						}
-				},
-				/**
-					* 重新设置barcodeTree中segment的顺序
-					*/
-				reset_sorting_result: function (dataNodeIdArray) {
-						var self = this
-						for (var dI = 0; dI < dataNodeIdArray.length; dI++) {
-								var compareNodeId = dataNodeIdArray[dI]
-								set_segment_index_to_init_index(compareNodeId)
-						}
-						//	设置barcodeTree的segment的index值为整个BArcodeTree的index值
-						function set_segment_index_to_init_index(compareNodeId) {
-								var wholeBarcodeTreeIndex = self.get('barcodeIndex')
-								var barcodeNodeRearrangeObjArray = self.get('barcodeNodeRearrangeObjArray')
-								for (var bI = 0; bI < barcodeNodeRearrangeObjArray.length; bI++) {
-										var barcodeNodeRearrangeObj = barcodeNodeRearrangeObjArray[bI]
-										var nodeArray = barcodeNodeRearrangeObj.node_array
-										for (var nI = 0; nI < nodeArray.length; nI++) {
-												var nodeId = nodeArray[nI].id
-												if (nodeId === compareNodeId) {
-														barcodeNodeRearrangeObj.barcodeTreeIndex = wholeBarcodeTreeIndex
-												}
-										}
-								}
 						}
 				}
 		})

@@ -4,99 +4,67 @@ define([
 		'underscore',
 		'jquery',
 		'backbone',
+		'config',
 		'd3',
 		'variables',
-		'views/barcode.single.view',
+		// 'views/barcode.single.view',
+		'views/barcode.single.canvas',
 		'views/svg-base.addon'
-], function (require, Mn, _, $, Backbone, d3, Variables, BarcodeSingleView, SVGBase) {
+], function (require, Mn, _, $, Backbone, Config, d3, Variables, BarcodeSingleCanvas, SVGBase) {
 		'use strict';
 
 		return Mn.CollectionView.extend(_.extend({
-				tagName: 'g',
-				childView: BarcodeSingleView,
+				tagName: 'div',
+				childView: BarcodeSingleCanvas,
 				attributes: {
-						'class': 'barcode-tree-single-g',
+						'id': 'collection-view',
+						'class': 'barcode-tree-collection-div',
 				},
 				initialize: function () {
 						var self = this
 						self.listenTo(this.collection, 'add', self.add)
 						self.listenTo(this.collection, 'remove', self.remove)
-						self.listenTo(Variables, 'change:barcodeNodexMaxX', self.update_barcode_view_width)
-						self.listenTo(Variables, 'change:barcodeNodeyMaxY', self.update_barcode_view_height)
-						Backbone.Events.on(Config.get('EVENTS')['HIDE_LOADING_ICON'], function (event) {
-								self.hide_loading_icon()
-						})
+						self.listenTo(Variables, 'change:selectedBarcodeTreeArray', self.update_barcode_tree_selection)
 						//  鼠标悬浮在barcode上面广播的事件
 						Backbone.Events.on(Config.get('EVENTS')['HOVERING_BARCODE_EVENT'], function (event) {
 								var barcodeTreeId = event.barcodeTreeId
-								self.hovering_barcode(barcodeTreeId)
 						})
 						//  鼠标从barcode上面移开广播的事件
 						Backbone.Events.on(Config.get('EVENTS')['UN_HOVERING_BARCODE_EVENT'], function (event) {
-								self.unhovering_barcode()
 						})
 				},
-				//  更新barcode视图的高度
-				update_barcode_view_height: function () {
+				//	更新barcdoeTree的选择
+				update_barcode_tree_selection: function () {
 						var self = this
-						var barcodeNodeYMaxY = Variables.get('barcodeNodeyMaxY')
-						$('#barcodetree-view').height(barcodeNodeYMaxY)
+						var selectedBarcodeTreeArray = Variables.get('selectedBarcodeTreeArray')
 				},
-				//  更新barcode视图的宽度
-				update_barcode_view_width: function () {
+				onShow: function () {
 						var self = this
-						var barcodeTreeContainerWidth = +$('#barcodetree-scrollpanel').width()
-						var barcodeNodexMaxX = Variables.get('barcodeNodexMaxX')
-						var comparisonViewMargin = Variables.get('comparisonViewMargin')
-						var barcodeTextPaddingLeft = Variables.get('barcodeTextPaddingLeft')
-						var barcodePaddingLeft = Variables.get('barcodePaddingLeft')
-						var barcodePaddingLeftAll = barcodeTextPaddingLeft + barcodePaddingLeft
-						//  增加barcode左侧padding的距离
-						barcodeNodexMaxX = barcodeNodexMaxX + barcodePaddingLeftAll
-						//  增加barcode右侧padding的距离
-						barcodeNodexMaxX = barcodeNodexMaxX + comparisonViewMargin.right
-						var barcodetreeViewWidth = barcodeTreeContainerWidth
-						if ((!isNaN(barcodeNodexMaxX)) && (typeof(barcodeNodexMaxX) !== 'undefined')) {
-								barcodetreeViewWidth = barcodeTreeContainerWidth > barcodeNodexMaxX ? barcodeTreeContainerWidth : barcodeNodexMaxX
-						}
-						$('#barcodetree-view').width(barcodetreeViewWidth)
-						$('#supertree-view').width(barcodetreeViewWidth)
-						$('#sorting-control-view').width(barcodetreeViewWidth)
-						d3.selectAll('.bg').attr('width', barcodetreeViewWidth)
-						d3.select('.container-bg').attr('width', barcodetreeViewWidth)
-				}
-				,
-				show_loading_icon: function () {
-						var self = this
-						d3.select('#barcode-view-loading').style('visibility', 'visible')
-				}
-				,
-				//  停止视图的更新
-				hide_loading_icon: function () {
-						var self = this
-						d3.select('#barcode-view-loading').style('visibility', 'hidden')
-				}
-				,
+						// $('#collection-view').on('click', function () {
+						// 		var barcodeCollection = self.collection
+						// 		//	删除在sorting视图中表示排序的icon
+						// 		Backbone.Events.trigger(Config.get('EVENTS')['REMOVE_ALL_NODE_SORTING_VIEW_ICON'])
+						// 		//  重置对齐的参数
+						// 		Variables.set('alignedLevel', 0)
+						// 		//	在barcodeCollection中删除所有选择的节点
+						// 		barcodeCollection.remove_all_selected_node()
+						// })
+				},
 				add: function () {
 						var self = this
-				}
-				,
+				},
 				remove: function () {
 						var self = this
-				}
-				,
-				hovering_barcode: function (barcodeTreeId) {
+				},
+				//	在选择的barcodeTree上增加表示选择的div边框
+				append_selection_div: function () {
 						var self = this
-						d3.select(self.el).select('#' + barcodeTreeId)
-								.select('.bg')
-								.classed('hovering-highlight', true)
-				}
-				,
-				unhovering_barcode: function () {
+
+				},
+				//	删除选择的div的边框
+				remove_selection_div: function () {
 						var self = this
-						d3.select(self.el)
-								.selectAll('.bg')
-								.classed('hovering-highlight', false)
+
 				}
-		}, SVGBase))
+		}))
 })

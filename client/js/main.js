@@ -1,13 +1,18 @@
 require.config({
   shim: {
-    'bootstrap': ['jquery'],
     'backbone': {
       deps: ['jquery','underscore']
     },
-    "jqueryUI": {
-      export:"$",
+    'bootstrap': {
       deps: ['jquery']
     },
+    'jquery-ui': {
+      deps: ['jquery', 'bootstrap']
+    },
+    // "jqueryUI": {
+    //   export:"$",
+    //   deps: ['jquery', 'bootstrap']
+    // },
     'd3Barchart': {
       deps:['d3']
     }
@@ -30,13 +35,9 @@ require.config({
     'd3Menu': '../bower_components/d3_menu/d3.menu',
     'd3Barchart': '../bower_components/d3_barchart/d3.barchart',
     'd3Barchart_dis': '../bower_components/d3_barchart_distribution/d3.barchart',
-    'd3Lasso': '../bower_components/d3_lasso/d3.lasso',
-    'jsColor': '../bower_components/jscolor/jscolor',
+    'konva': '../bower_components/konva/konva.min',
     'tooltips': '../bower_components/d3-tip/d3-tip',
     'iconfont': '../icon_library/iconfont',
-    'rangeslider': '../bower_components/rangeslider/dist/rangeslider',
-    'huebee': '../bower_components/huebee/dist/huebee.pkgd',
-    'sweetalert': '../bower_components/sweetalert/dist/sweetalert.min',
     // templates path
     'templates': '../templates',
     'communicator': 'controller/communicator',

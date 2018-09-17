@@ -5,7 +5,10 @@
 .library-bar {
     fill: #808080;
     cursor: pointer;
+}
 
+.label {
+    font-weight: normal;
 }
 
 .library-bar[class~=hovering-highlight] {
@@ -20,16 +23,18 @@
     fill: #eee;
 }
 
-.library-bar[class~=pre-click-highlight]{
+.library-bar[class~=pre-click-highlight] {
     fill: #808080;
 }
 
 .library-bar[class~=compare-based-selection] {
     /*fill: #1F77B4;*/
 }
-rect.hovering-rect{
-	fill: #ddd;
+
+rect.hovering-rect {
+    fill: #ddd;
 }
-rect.compare-based-rect{
-	fill: #ddd;
+
+rect.compare-based-rect {
+    fill: #ddd;
 }

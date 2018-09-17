@@ -101,6 +101,7 @@ define([
         var finishRequestDataDefer = $.Deferred()
         window.Datacenter.requestDataCenter(url, selectItemNameArray)
       })
+      //  将barcodeTree的节点fit到屏幕空间范围内
       $('#vertical-fit-layout').click(function () {
         if ($('#vertical-fit-layout').hasClass('active')) {
           //  当前处于vertical fit on screen的状态
@@ -111,12 +112,13 @@ define([
           $('#vertical-fit-layout').addClass('active')
           Variables.set('layoutMode', 'UNION')
         }
+        //  更新全局变量window.barcodeNodeHeight
         window.Variables.update_barcode_attr()
         barcodeCollection.change_layout_mode()
         //  更新在具有attribute的情况下的barcode节点高度
         barcodeCollection.update_attribute_height()
-        barcodeCollection.updateBarcodeNodeyMaxY()
         $('#supertree-scroll-panel').css('overflow-x', 'auto')
+        barcodeCollection.update_data_all_view()
       })
       $('#horizontal-fit-layout').click(function () {
         if ($('#horizontal-fit-layout').hasClass('active')) {
@@ -131,7 +133,7 @@ define([
           barcodeCollection.update_fit_in_screen()
           $('#supertree-scroll-panel').css('overflow-x', 'hidden')
         }
-        barcodeCollection.update_all_barcode_view()
+        barcodeCollection.update_data_all_view()
       })
       $('#original-display-button').click(function () {
         self.changeDisplayMode2Original()

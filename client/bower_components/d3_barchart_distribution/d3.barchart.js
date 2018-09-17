@@ -25,7 +25,8 @@
 
         let brush_trigger = function(d3_event, brushed_bar_sel) {}
 
-        let _font_style = '1rem sans-serif'
+        let _font_style = 'sans-serif'
+        let font_size = '1rem'
 
         //判断区间[x1,x2]与[bound1,bound2]的交集长度是否超过[x1,x2]长度的一半
         let _overhalf = function(x1, x2, bound1, bound2) {
@@ -48,7 +49,6 @@
         }
 
         function barchart(selection) {
-            console.log('************barchart***********')
             selection.each(function(dataset) {
                 console.log('dataset', dataset)
                 let innerWidth = width - margin.left - margin.right
@@ -104,6 +104,8 @@
 
                     xAxis_g_enter.selectAll('text')
                         .style('font', _font_style)
+                        .style('fontsize', _font_style)
+
                 }
 
                 if (draw_yAxis) {
@@ -133,6 +135,7 @@
 
                     yAxis_g_enter.selectAll('text')
                         .style('font', _font_style)
+                        .style('font-size', font_size)
                 }
 
                 let bars = g.selectAll('.bar')
@@ -241,6 +244,16 @@
                 return
             }
             draw_xAxis = value
+            return barchart
+        }
+
+        barchart.font_size = function (value) {
+            if (!arguments.length) return font_size
+            if (typeof(value) != 'boolean') {
+                console.warn('invalid value for draw_xAxis', value)
+                return
+            }
+            font_size = value
             return barchart
         }
 

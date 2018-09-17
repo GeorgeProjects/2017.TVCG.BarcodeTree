@@ -3,7 +3,7 @@ html {
 }
 
 body {
-  font-family: @font-family;
+  font-family: Abel, Yantramanav, Helvetica Neue, Helvetica, sans-serif !important;
   font-size: 1rem;
   moz-user-select: -moz-none;
   -moz-user-select: none;
@@ -30,7 +30,6 @@ body {
       background-color: #ffffff;
       opacity: 1;
     }
-
     .logo {
       position: absolute;
       margin: 5rem auto;
@@ -51,7 +50,7 @@ body {
     background-color: rgba(100, 100, 100, 0.2);
   }
   //  对于视图中的toolbar上面的倒三角大小统一进行设定
-  .caret#adaptive {
+  .caret {
     border-width: 0.5rem 0.5rem 0;
   }
   //  对于视图中的所有button进行设置
@@ -64,7 +63,7 @@ body {
     display: inline-block;
     padding: 0.6rem 1.2rem;
     margin-bottom: 0;
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 400;
     text-align: center;
     white-space: nowrap;
@@ -73,7 +72,7 @@ body {
     touch-action: manipulation;
     cursor: pointer;
     user-select: none;
-    border-radius: 0.4rem;
+    border-radius: 0.2rem;
   }
   #app {
     position: absolute;
@@ -88,22 +87,6 @@ body {
       width: 100%;
       box-shadow: 0 0 3px #c8c8c8;
       background-color: #fafafa;
-      #toolbar {
-        width: 100%;
-        height: 100%;
-      }
-      #comparison-dataset-open {
-        display: block;
-      }
-      #comparison-display-mode-control {
-        display: block;
-      }
-      #single-sample-file-open {
-        display: none;
-      }
-      #single-sample-file-upload {
-        display: none;
-      }
     }
     //第二个视图 与histogram.less一起控制
     #histogram-view {
@@ -112,6 +95,13 @@ body {
       height: @histogram-view_height;
       width: 100%;
       border-bottom: 1px solid rgba(200, 200, 200, 0.5);
+      #histogram-close {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        cursor: pointer;
+        visibility: hidden;
+      }
     }
     //第三个视图 barcode view视图
     #barcode-view {
@@ -121,6 +111,25 @@ body {
       width: 100%;
       background-color: white;
       overflow-y: visible;
+      #tooltip-view {
+        position: absolute;
+        padding: 0.3rem 1rem 0.3rem 1rem;
+        font-size: 1rem;
+        background-color: #ddd;
+        visibility: hidden;
+        opacity: 0.9;
+        z-index: 10;
+      }
+      #selection-options {
+        position: absolute;
+        background-color: white;
+        top: 0px;
+        z-index: 2;
+        .list-group-item.active {
+          background-color: #808080;
+          border-color: #808080;
+        }
+      }
       //  barcodeview视图中的第一个视图, 与top-toolbar.less一起控制视图
       #top-toolbar-container {
         position: absolute;
@@ -129,115 +138,144 @@ body {
         top: 0%;
         padding-left: @top-toolbar-container_padding-left;
         height: @top-toolbar-container_height;
-        border-bottom: #eeeeee 0.5px solid;
+        //border-bottom: #eeeeee 0.5px solid;
         background-color: white;
       }
-      // barcodeview视图中的第二个视图, barcode-supertree.less一起控制视图
-      #supertree-scroll-panel {
+      #brush-scroll-view {
         position: absolute;
-        overflow-x: auto;
-        overflow-y: auto;
-        top: @supertree-scroll-panel_top;
-        left: 0%;
-        right: 0%;
-        z-index: 50;
-        background-color: #eeeeee;
-        border-top: #eeeeee 1px;
-        #selected-item-list {
-          position: absolute;
-          overflow-x: hidden;
-          overflow-y: hidden;
-          top: 2px; // 设置2px是因为superTreeview中的background的border为2px
-          bottom: 0%;
-          left: 0%;
-          width: 55px; // selected item list是由barcode的距离左侧的距离确定的, 所以是准确的计算
-          background-color: white;
-          z-index: 2; //设置z-index是希望将supertree-view的div放在selected-item-list下面
-        }
-        #supertree-view {
-          position: absolute;
-          overflow-x: hidden;
-          overflow-y: hidden;
-          top: 0%;
-          height: 100%;
-          left: 0%;
-          right: 0%;
-          z-index: 1;
-        }
-      }
-      //  排序操作的控制视图, 该视图主要放置在superTree视图的下方, 用于放置操作barcodeTree的子树的排序的控制部分
-      #sorting-scroll-panel {
-        position: absolute;
-        overflow-x: auto;
-        overflow-y: auto;
-        top: @supertree-scroll-panel_top;
-        height: @sorting-scroll-panel_height;
-        right: 0%;
-        left: 0%;
-        background-color: white;
-        border-top: #eeeeee 0.5px solid;
-        #sorting-control-view {
-          position: absolute;
-          width: 100%;
-          .sorting-icon {
-            position: absolute;
-            padding: 0.15rem 0.2rem;
-            display: inline-block;
-            vertical-align: middle;
-          }
-          .padding-icon {
-            position: absolute;
-            padding: 0.15rem 0.25rem;
-            display: inline-block;
-            vertical-align: middle;
-          }
-        }
-      }
-      //  barcodeview中的第三个视图, barcodetree的主视图, 进行比较,同时这个视图支持用户进行滑动
-      #barcodetree-scrollpanel {
-        position: absolute;
-        overflow-x: auto;
-        overflow-y: hidden;
-        top: @barcodetree-scrollpanel_top + @sorting-scroll-panel_height;
-        left: 0%;
-        right: 0%;
+        top: @top-toolbar-container_height + @sorting-scroll-panel_height;
         bottom: 0%;
-        border-top: 1px solid #eeeeee;
-        #supertree-view-toggle {
-          position: fixed;
-          top: -1px;
-          height: 1.8rem;
-          width: 3rem;
-          left: 95%;
-          padding: 0.3rem 1rem;
-          font-size: 1rem;
-          border-radius: 0 0 0.4rem 0.4rem;
-          z-index: 1;
-          opacity: 0.3;
-          span {
-            margin-top: -0.3rem;
-          }
-        }
-        //  barcodeview中的第四个视图, 这个视图是不包括supertreeview的barcodetree的主视图
-        #barcodetree-view {
+        width: 1rem;
+        left: 0%;
+        overflow-y: auto;
+        #brush-view {
           position: absolute;
           top: 0%;
-          left: 0%;
           bottom: 0%;
+          left: 0%;
+          width: 100%;
+        }
+      }
+      //  scroll视图
+      #overall-scroll-panel {
+        position: absolute;
+        top: @top-toolbar-container_height;
+        bottom: 0%;
+        left: 1rem;
+        right: 0%;
+        // barcodeview视图中的第二个视图, barcode-supertree.less一起控制视图
+        #supertree-scroll-panel {
+          position: absolute;
+          overflow-x: auto;
+          overflow-y: auto;
+          top: @supertree-scroll-panel_top;
+          left: 0%;
           right: 0%;
+          z-index: 50;
+          //border-top: #eeeeee 1px;
+          #selected-item-list {
+            position: absolute;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            top: 2px; // 设置2px是因为superTreeview中的background的border为2px
+            bottom: 0%;
+            left: 0%;
+            width: 55px; // selected item list是由barcode的距离左侧的距离确定的, 所以是准确的计算
+            background-color: white;
+            z-index: 2; //设置z-index是希望将supertree-view的div放在selected-item-list下面
+          }
+          #supertree-view {
+            position: absolute;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            top: 0%;
+            height: 100%;
+            left: 0%;
+            right: 0%;
+            z-index: 1;
+          }
+        }
+        //  排序操作的控制视图, 该视图主要放置在superTree视图的下方, 用于放置操作barcodeTree的子树的排序的控制部分
+        #sorting-scroll-panel {
+          position: absolute;
+          overflow-x: auto;
+          overflow-y: hidden;
+          top: @supertree-scroll-panel_top;
+          height: @sorting-scroll-panel_height;
+          right: 0%;
+          left: 0%;
+          z-index: 1;
+          //border-top: #eeeeee 0.5px solid;
+        }
+        //  barcodeview中的第三个视图, barcodetree的主视图, 进行比较,同时这个视图支持用户进行滑动
+        #barcodetree-scrollpanel {
+          position: absolute;
+          overflow-x: auto;
+          overflow-y: hidden;
+          top: @sorting-scroll-panel_height;
+          left: 0%;
+          right: 0%;
+          bottom: 0%;
+          z-index: 1;
+          //border-top: 1px solid #eeeeee;
+          #supertree-view-toggle {
+            position: fixed;
+            top: 0px;
+            height: 1.8rem;
+            width: 3rem;
+            left: 95%;
+            padding: 0.3rem 1rem;
+            font-size: 1rem;
+            border-radius: 0 0 0.4rem 0.4rem;
+            z-index: 1;
+            opacity: 0.3;
+            span {
+              margin-top: -0.3rem;
+            }
+          }
+          //  barcodeview中的第四个视图, 这个视图是不包括supertreeview的barcodetree的主视图
+          #barcodetree-view {
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            bottom: 0%;
+            right: 0%;
+            #knova-container {
+              position: absolute;
+              top: 0%;
+              left: 0%;
+              bottom: 0%;
+              right: 0%;
+            }
+            #barcodetree-scrollpanel {
+              position: absolute;
+              top: 0%;
+              left: 0%;
+              bottom: 0%;
+              right: 0%;
+            }
+          }
+          //
+          #brush-view {
+            position: absolute;
+            top: 0%;
+            left: 0%;
+            bottom: 0%;
+            right: 0%;
+          }
         }
       }
       //  barcodeview中的第五个视图, 这是一个单独的视图, 目前是barcod额的distribution的histogram, 这个视图是不包括supertreeview的barcodetree的主视图
       //  与barcode-distribution.less一起进行控制
       #barcode-config {
         position: fixed;
-        top: ~"calc(15% + 15rem)";
+        top: 18rem;
         height: auto;
         right: -20rem;
         width: 20rem;
         //right: 0px;
         bottom: 5%;
-        z-index: 1;
+        z-index: 5;
         #distribution-view-toggle {
           position: absolute;
           top: 0px;
@@ -273,7 +311,10 @@ body {
           width: 20rem;
           overflow-x: hidden;
           overflow-y: auto;
-          padding: 1.5rem;
+          padding-top: 1rem;
+          padding-bottom: 1rem;
+          padding-right: 0.5rem;
+          padding-left: 0.5rem;
           #barcode-layout-mode {
             width: 20rem;
           }
@@ -315,123 +356,21 @@ body {
         }
       }
     }
-    //  barcodeview中的第六个视图, 这是一个单独的视图, 指的是barcode的节点的config的视图与barcode-node-config.less一起控制
-    #barcode-node-config {
-      position: absolute;
-      min-width: 18rem;
-      min-height: 20rem;
-      top: 40rem;
-      left: 80%;
-      background-color: #ffffff;
-      border: 1px solid #eee;
-      visibility: hidden;
+    .scroll-box::-webkit-scrollbar {
+      width: 1px;
+      height: 1px;
     }
-    //  barcodeview中的第七个视图, 这是一个单独的视图, 指的是barcode的节点的config的视图与tree-config.less一起控制
-    #tree-config-div {
-      position: absolute;
-      min-width: 18rem;
-      min-height: 20rem;
-      top: 10%;
-      left: 80%;
-      background-color: #ffffff;
-      border: 1px solid #eee;
-      visibility: hidden;
-      font-size: 1rem;
-      z-index: 100;
+    .scroll-box::-webkit-scrollbar,
+    .scroll-box::-webkit-scrollbar-thumb {
+      overflow:visible;
+      border-radius: 4px;
     }
-    //第四个视图 与barcode single视图
-    #barcode-single-view {
-      position: absolute;
-      top: @barcode-single-view_top; //3rem
-      bottom: 0%;
-      left: 0%;
-      right: 0%;
-      z-index: 3;
-      visibility: hidden;
-      #barcode-mode-config-view {
-        position: fixed;
-        top: @barcode-mode-config-view_top;
-        height: auto;
-        left: 0%;
-        width: @barcode-mode-config-view_width; // 6rem
-        border-right: solid #cccccc 1px;
-        background-color: #eee;
-        text-align: center;
-        line-height: 1;
-      }
-      #single-barcode-tree-view {
-        position: absolute;
-        top: 0%;
-        bottom: 0%;
-        left: @barcode-mode-config-view_width; //6%
-        width: @half-view_width; //(100% - @barcode-mode-config-view_width)/2
-        border-right: solid #cccccc 1px;
-      }
-      #single-nodelink-tree-view {
-        position: absolute;
-        top: 0%;
-        bottom: 0%;
-        left: @single-nodelink-tree-view_left;
-        width: @half-view_width; //(100% - @barcode-mode-config-view_width)/2
-      }
-      #barcode-upload-storage-view {
-        position: absolute;
-        top: 0%;
-        bottom: 0%;
-        left: 100%;
-        width: 0%;
-        border-left: solid #cccccc 1px;
-        visibility: hidden;
-      }
-      #single-view-dialog {
-        display: none;
-      }
+    .scroll-box::-webkit-scrollbar-thumb {
+      background: rgba(0,0,0,.2);
+    }
+    .scroll-box {
+      overflow: scroll;
     }
   }
 }
 
-/**
-**
-#barcode-config{
-  position: fixed;
-  top: ~"calc(15% + 40px)";
-  height: auto;
-  //right: -210px;
-  right: 0px;
-  bottom: 5%;
-  z-index: 102;
-  #btn-toggle{
-    position: absolute;
-    height: 60px;
-    width: 26px;
-    left: -25px;
-    border-radius: 4px 0 0;
-    z-index: 1;
-    span{
-      margin-left: -6px;
-    }
-  }
-  #btn-pin{
-    position: absolute;
-    height: 30px;
-    top: 59px;
-    left: -25px;
-    width: 26px;
-    border-radius: 0 0 0 4px;
-    z-index: 1;
-    span{
-      margin-left: -6px;
-    }
-  }
-  .content{
-    background-color: #fff;
-    border: solid 1px #ccc;
-    border-radius: 0 0 0 4px;
-    height: 100%;
-    min-width: 210px;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-}
-**
-**/

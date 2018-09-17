@@ -1,200 +1,104 @@
-		<span id = "top-toolbar-center-span">
-					<span id = "selection-operation-div" class = "config-div">
-							<span class = "operation-label"> SELECTION </span>
-							<span id = "barcode-selection" class="btn-group" role="group">
-											<!--<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "node selection" aria-label="Left Align" id="barcode-selection-group">
-       							<i class="fa fa-mouse-pointer" aria-hidden="true"></i>
-       				</button>-->
-							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "node selection" aria-label="Left Align" id="single-node-selection">
-														<i class="fa fa-square" aria-hidden="true"></i>
-							    </button>
-							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "subtree selection" aria-label="Left Align" id="subtree-node-selection">
-														<i class="fa fa-sitemap" aria-hidden="true"></i>
-							    </button>
-											<button type="button" class="btn btn-default btn-lg config-button active" data-toggle = "tooltip" title = "display links" aria-label="Left Align" id="father-child-link" disabled>
-														<i class="fa icon iconfont icon-node-link"></i>
-							    </button>
-							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "lasso selection" aria-label="Left Align" id="tree-selection">
-														<i class="fa icon iconfont icon-ico-lassotool-QQn-"></i>
-							    </button>
-							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "clear selection" aria-label="Right Align" id="selection-refresh">
-							       <i class="fa fa-times" aria-hidden="true"></i>
-							    </button>
-								    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "highlight state" aria-label="Right Align" id="highlight-mode">
-                <i class="fa icon iconfont icon-highlight-mode"></i>
- 							    </button>
-							    <button type="button" class="btn btn-default btn-lg config-button active" data-toggle = "tooltip" title = "display tooltip" aria-label="Right Align" id="selection-tooltip">
-							       <i class="fa fa-comment" aria-hidden="true"></i>
-							    </button>
-							</span>
+<span id = "top-toolbar-center-span">
+				<span id = "refresh-operation-div" class = "config-div">
+							<button type="button" class="btn btn-primary btn-lg config-button" data-toggle = "tooltip" title = "refresh selection" aria-label="Right Align" id="selection-refresh">
+							    REFRESH <i class="fa fa-refresh" aria-hidden="true"></i>
+							</button>
 					</span>
-					<!--<span id = "subtree-operation-div" class = "config-div">
-							<span class = "operation-label">SUBTREE</span>
-							<span id = "subtree-collapse-operation" class="btn-group" role="group">
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "collapse subtrees" aria-label="Right Align" id="subtree-collapse">
-														<i class="fa icon iconfont icon-tree-collapse1"></i>
-							    </button>
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "expand subtrees" aria-label="Right Align" id="subtree-uncollapse">
-														<i class="fa icon iconfont icon-tree-uncollapse1"></i>
-							    </button>
-							</span>
-					</span>-->
+					<span id = "clear-operation-div" class = "config-div">
+							<button type="button" class="btn btn-danger btn-lg config-button" data-toggle = "tooltip" title = "clear selection" aria-label="Right Align" id="selection-clear">
+							    CLEAR <i class="fa fa-times" aria-hidden="true"></i>
+							</button>
+					</span>
 					<span id = "compare-operation-div" class = "config-div">
 							<span class = "operation-label">COMPARISON</span>
 							<span id = "compare-operation" class="btn-group" role="group">
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "dropdown" title = "align selected" aria-label="Left Align" id="align-mode-controller">
-											   <i class="fa icon iconfont icon-align-icon"></i> <span class="caret" id="adaptive"></span>
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "align selected" aria-label="Left Align" id="align-selected-tree">
+											   <i class="fa icon iconfont icon-alignment"></i>
        				</button>
-											<div class="dropdown-menu comparison-dropdown-menu" id="aligned-mode-menu">
-					        <div id = "aligned-mode-menu-container">
-					          <div id = "slider-label">ALIGNED MODE</div>
-					            <div id = "align-mode-control" class="btn-toolbar mode-control" role="toolbar">
-					                <button type="button" class="btn control-btn btn-default btn-lg" id="align-selected-tree">
-					                   SELECTED
-					                </button>
-					                <button type="button" class="btn control-btn btn-default btn-lg" id="align-whole-tree">
-					                   WHOLE
-					                </button>
-					            </div>
-					        </div>
-					      </div>
 											<button class="btn btn-default btn-lg config-button" type="button" id = "structure-comparison" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
-					         <i class="fa icon iconfont icon-comparisonsamenode" data-toggle = "tooltip" title = "aligned level"></i> <span id = "aligned-level-text" ></span> <span class="caret" id="adaptive"></span>
+					         <i class="fa icon iconfont icon-level"></i> <span id = "aligned-level-text" ></span> <span class="caret" id="adaptive"></span>
 					      </button>
 					      <div class="dropdown-menu comparison-dropdown-menu" id="aligned-level-menu">
 					        <div id = "aligned-level-menu-container">
-					          <div id = "slider-label">ALIGNED LEVEL</div>
 					            <div id = "align-level-control" class="btn-toolbar level-control" role="toolbar">
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-1">1</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-2">2</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-3">3</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-4">4</button>
-					            </div>
-					          <!--<div id="structure-comparison-slider" class = "slider-div"><div id="structure-custom-handle" class="ui-slider-handle"></div></div>-->
-					        </div>
-					      </div>
-					      <button class="btn btn-default btn-lg config-button" type="button" id = "barcodetree-segment" data-toggle="dropdown" aria-haspopup="false" aria-expanded="false">
- 											  <i class="fa icon fa-scissors" aria-hidden="true"></i> <span id = "segement-level-text" >L1</span> <span class="caret" id="adaptive"></span>
-        			</button>
-											<div class="dropdown-menu comparison-dropdown-menu" id="segment-level-menu">
-					        <div id = "segment-level-menu-container">
-					          <div id = "slider-label">SEGMENT LEVEL</div>
-					            <div id = "segment-level-control" class="btn-toolbar segement-control" role="toolbar">
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-1">1</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-2">2</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-3">3</button>
-					                <button type="button" class="btn level-btn btn-default btn-lg" id="btn-4">4</button>
+					                <!--<li class = "slider-text">level-1</li>
+					                <li class = "slider-text">level-2</li>
+					                <li class = "slider-text">level-3</li>
+					                <li class = "slider-text">level-4</li>-->
+								             <button type="button" class="btn level-btn btn-default btn-lg" id="btn-1">1</button>
+								             <button type="button" class="btn level-btn btn-default btn-lg" id="btn-2">2</button>
+								             <button type="button" class="btn level-btn btn-default btn-lg" id="btn-3">3</button>
+								             <button type="button" class="btn level-btn btn-default btn-lg"   id="btn-4">4</button>
 					            </div>
 					        </div>
 					      </div>
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "summary histogram" aria-label="Right Align" id="summary-comparison">
-														<i class="fa icon iconfont icon-show-histogram"></i>
-							    </button>
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "collapse unselected" aria-label="Left Align" id="change-subtree-display-mode">
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "diagonal stripe mode" aria-label="Left Align" id="diagonal-strip-mode">
 														<i class="fa icon iconfont icon-disgonal-strip"></i>
 							    </button>
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "display padding nodes" aria-label="Left Align" id="show-padding-node">
-														<i class="fa icon iconfont icon-padding-node-icon"></i>
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "comparison mode" aria-label="Left Align" id="comparison-mode">
+														<i class="fa icon iconfont icon-comparison"></i>
 							    </button>
-           <!--<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "align the whole tree" aria-label="Left Align" id="global-display-controller">
-              <i class="fa fa-th"></i>
-           </button>-->
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "lock selection" aria-label="Right Align" id="barcodetree-cluster">
-											   <i class="fa icon fa-cubes" aria-hidden="true"></i>
-       				</button>
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "lock selection" aria-label="Right Align" id="compare-lock">
-											   <i class="fa icon fa-unlock" aria-hidden="true"></i>
-       				</button>
-							</span>
-					</span>
-					<span id = "sort-operation-div" class = "config-div">
-							<span class = "operation-label">SORTING</span>
-							<span id = "sort-operation" class="btn-group" role="group">
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "sort descending" aria-label="Right Align" id="sort-desc">
-														<i class="fa fa-sort-amount-desc" aria-hidden="true"></i>
-							    </button>
-							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "sort ascending" aria-label="Left Align" id="sort-asc">
-														<i class="fa fa-sort-amount-asc" aria-hidden="true"></i>
-							    </button>
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "matrix reordering" aria-label="Right Align" id="node-arrangement">
-							       <i class="fa fa-delicious" aria-hidden="true"></i>
-							    </button>
-							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "refresh" aria-label="Right Align" id="sort-refresh">
-							       <i class="fa fa-refresh" aria-hidden="true"></i>
-							    </button>
-											<button class="btn btn-default btn-lg dropdown-toggle config-button" type="button" id = "sort-options" data-toggle="dropdown" aria-label="Left Align" aria-haspopup="true" aria-expanded="false">
-					         <span id = "sort-options-text" data-toggle = "tooltip" title = "select sort criterion">NODENUMBER</span>&nbsp;<span class="caret" id="adaptive"></span>
-					       </button>
-					       <div class="dropdown-menu" id="sorting-option-menu">
-					        <div id = "sorting-options-menu-container">
-					          <div id = "sorting-options">SORTING OPTIONS</div>
-               <div class="radio">
-                 <label id="label-similarity">
-                   <input type="radio" name="optionsRadios" id="options-similarity" value="DATE" checked>
-                   DATE
-                 </label>
-               </div>
-               <div class="radio">
-                 <label id="label-similarity">
-                   <input type="radio" name="optionsRadios" id="options-similarity" value="DAY">
-                   DAY
-                 </label>
-               </div>
-															<div class="radio">
-                 <label id="label-structure">
-                   <input type="radio" name="optionsRadios" id="options-structure" value="NODENUMBER">
-                   NODENUMBER
-                 </label>
-               </div>
-															<div class="radio">
-                 <label id="label-attribute">
-                   <input type="radio" name="optionsRadios" id="options-attribute" value="ATTRIBUTE">
-                   ATTRIBUTE
-                 </label>
-               </div>
-               <div class="radio">
-                 <label id="label-similarity">
-                   <input type="radio" name="optionsRadios" id="options-similarity" value="SIMILARITY">
-                   SIMILARITY
-                 </label>
-               </div>
-					        </div>
-					       </div>
 							</span>
 					</span>
 					<span id = "config-panel" class = "config-div">
-							<span class = "operation-label">CONFIG</span>
+							<span class = "operation-label">DISPLAY</span>
+							<span id = "level-controller" class="btn-group" role="group">
+											<button type="button" class="btn btn-default btn-lg config-button level-controller active" data-toggle = "tooltip" title = "first level" aria-label="Right Align" id="level-controller1">L1</button>
+							    <button type="button" class="btn btn-default btn-lg config-button level-controller active" data-toggle = "tooltip" title = "second level" aria-label="Right Align" id="level-controller2">L2</button>
+							    <button type="button" class="btn btn-default btn-lg config-button level-controller active" data-toggle = "tooltip" title = "third level" aria-label="Right Align" id="level-controller3">L3</button>
+							    <button type="button" class="btn btn-default btn-lg config-button level-controller active" data-toggle = "tooltip" title = "forth level" aria-label="Right Align" id="level-controller4">L4</button>
+							</span>
+							<span id = "display-mode" class="btn-group" role="group">
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "BarcodeTree in compact mode" aria-label="Right Align" id="compact-barcodetree">
+															<i class="fa icon iconfont icon-compact"></i>
+											</button>
+							</span>
+							<span id = "attribute-encoding-mode" class="btn-group" role="group">
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "BarcodeTree with attribute" aria-label="Right Align" id="height-barcodetree">
+       								 <i class="fa icon iconfont icon-tree-attribute"></i>
+       				</button>
+       				<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "BarcodeTree with attribute" aria-label="Right Align" id="color-barcodetree">
+                <i class="fa icon iconfont icon-formatcolorfill"></i>
+       				</button>
+							</span>
+							<span class = "operation-label">FIT IN SCREEN</span>
+							<span id = "fit-screen-controller" class="btn-group" role="group">
+											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "fit in screen horizontally" aria-label="Right Align" id="horizontal-fit-toggle">
+														<i class="fa fa-arrows-h"></i>
+											</button>
+							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "fit in screen vertically" aria-label="Right Align" id="vertical-fit-toggle">
+													 <i class="fa fa-arrows-v"></i>
+							    </button>
+							</span>
+					</span>
+					<span id = "parameter-control-operation" class = "config-div">
+							<!--<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "parameter configuration" aria-label="Right Align" id="parameter-config">
+							    PARAS <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+							</button>-->
+							<div class="dropdown" id="parameter-slider-controller">
+         <button class="btn btn-default config-button dropdown-toggle" type="button" id="parameter-config" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+           PARAS <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+           <span class="caret"></span>
+         </button>
+         <ul class="dropdown-menu" aria-labelledby="parameter-config">
+           <li class = "slider-item"><span class = "slider-label">Level1</span> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC" id="level-1" data-slider-handle="triangle" /></li>
+           <li class = "slider-item"><span class = "slider-label">Level2</span> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC" id="level-2" data-slider-handle="triangle" /></li>
+           <li class = "slider-item"><span class = "slider-label">Level3</span> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC" id="level-3" data-slider-handle="triangle" /></li>
+           <li class = "slider-item"><span class = "slider-label">Level4</span> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC" id="level-4" data-slider-handle="triangle" /></li>
+           <li class = "slider-item"><span class = "slider-label">Height</span> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC" id="height" data-slider-handle="triangle" /></li>
+           <li class = "slider-item"><span class = "slider-label">Interval</span> <input type="text" class="span2" value="" data-slider-min="0" data-slider-max="255" data-slider-step="1" data-slider-value="128" data-slider-id="BC" id="interval" data-slider-handle="triangle" /></li>
+							    <button type="button" class="btn btn-default btn-lg" aria-label="Right Align" id="refresh-parameter">REFRESH &nbsp;<i class="fa fa-refresh"></i></button>
+         </ul>
+       </div>
+					</span>
+					<!--<span id = "config-panel" class = "config-div">
+							<span class = "operation-label">DISPLAY</span>
 							<span id = "config-operation" class="btn-group" role="group">
 											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "node configuration" aria-label="Right Align" id="node-config-panel-toggle">
 														<i class="fa fa-square" aria-hidden="true"></i> <i class="fa  fa-pencil-square-o " aria-hidden="true"></i>
 							    </button>
 							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "tree configuration" aria-label="Right Align" id="tree-config-panel-toggle">
 							       <i class="fa fa-sitemap" aria-hidden="true"></i> <i class="fa  fa-pencil-square-o " aria-hidden="true"></i>
-							    </button>
-							</span>
-					</span>
-					<!--<span id = "set-operation-panel" class = "config-div">
-							<span class = "operation-label">SET</span>
-							<span id = "set-selection" class="btn-group dropdown keep-open" role="group">
-											<button type="button" id="set-selection-toggle" class="btn btn-default btn-lg config-button" aria-label="Left Align" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-														<i class="fa fa-filter" data-toggle = "tooltip" title = "filter" aria-hidden="true"></i> <span class="caret" id="adaptive"></span>
-							    </button>
-											<div class="dropdown-menu keep-open" id = "filter-drop-menu">
-														<div id = "list-container-scroll" >
-																<span id="selection-list-title">SELECTION LIST</span>
-																<div class="list-group" id = "selection-group">
-																  <a href="#" class="list-group-item" id="element-added"><i class="fa fa-plus" aria-hidden="true"></i></a>
-																</div>
-														</div>
-					      </div>
-											<button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "and operation" aria-label="Left Align" id="and-operation-toggle">
-														<i class="fa icon iconfont icon-jiaoji" aria-hidden="true"></i>
-							    </button>
-							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "or operation" aria-label="Right Align" id="or-operation-toggle">
-														<i class="fa icon iconfont icon-bingji" aria-hidden="true"></i>
-							    </button>
-							    <button type="button" class="btn btn-default btn-lg config-button" data-toggle = "tooltip" title = "complement operation" aria-label="Right Align" id="complement-operation-toggle">
-														<i class="fa icon iconfont icon-buji" aria-hidden="true"></i>
 							    </button>
 							</span>
 					</span>-->

@@ -46,7 +46,6 @@ define([
 								Backbone.Events.on(Config.get('EVENTS')['REMOVE_SUMMARY_STATE'], function (event) {
 										var nodeObjId = event.nodeObjId
 										self.remove_summary_state(nodeObjId)
-
 								})
 								Backbone.Events.on(Config.get('EVENTS')['SHOW_SUMMARY_STATE'], function (event) {
 										var nodeObjId = event.nodeObjId
@@ -2936,7 +2935,7 @@ define([
 								return nodeNumber
 						}
 						,
-//  因为对于当前barcode的绘制是基于level的筛选的, 所以需要通过nodeId获取在实际的barcodeNodeAttrArray中的具体index值
+					//  因为对于当前barcode的绘制是基于level的筛选的, 所以需要通过nodeId获取在实际的barcodeNodeAttrArray中的具体index值
 						get_node_index: function (nodeId) {
 								var self = this
 								var treeDataModel = self.model
@@ -2974,7 +2973,7 @@ define([
 								}
 						}
 						,
-//  高亮从根节点到当前节点路径上的节点
+						//  高亮从根节点到当前节点路径上的节点
 						highlightFatherAndCurrentNodes: function (fatherNodesArray) {
 								var self = this
 								var treeDataModel = self.model

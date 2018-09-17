@@ -13,7 +13,7 @@
           yTickNum = null,
           xTickNum = null,
           xLabel = '',
-          xLabel_location = '-0.5em',
+          xLabel_location = '-1em',
           xLabel_text_anchor = 'middle',
           yLabel = '',
           enable_brush = true,
@@ -22,12 +22,16 @@
           x_ticks_format = null,
           y_ticks_value = null,
           y_ticks_format = null,
+          y_ticks_num = 5,
           local_brush_start = 0,
           local_brush_end = 0,
           bar_click_handler = null,
           bar_unclick_handler = null,
           x_interval = 0,
-          distribution_level = null
+          distribution_level = null,
+          font_size = '1rem',
+          y_scale_type = 'linear',
+										chart_title = null
 
         let brush_trigger = function(d3_event, brushed_bar_sel) {}
         let brush_start_trigger = function(d3_event, brushed_bar_sel) {}
@@ -37,8 +41,7 @@
         let pre_highlight_bar = function(){}
         let highlight_bar = function(){}
         let un_highlight_bar = function(){}
-        let _font_style = '1rem sans-serif'
-
+        // let _font_style = 'FontAwesome'
       /**
        * 渲染柱状图的函数
        * @param selection - selection是绘制barchart的svg
@@ -51,20 +54,43 @@
                   .domain([0, d3.max(dataset, d => d.x2)])
                 .range([0, innerWidth])
 
-                let y = d3.scale.linear()
-                  .domain([0, d3.max(dataset, d => d.y)])
-                .range([innerHeight, 0])
+																let titleFontSize = 0
+																let titlePaddingTop = innerHeight * 0.05
+																if(chart_title != null){
+																		titleFontSize = innerHeight * 0.2
+																		innerHeight = innerHeight - titleFontSize
+																}
+
+																let y = d3.scale.linear()
+																				.domain([0, d3.max(dataset, d => d.y)])
+																  		.range([innerHeight, 0])
+
+																if (y_scale_type === 'pow') {
+																		y = d3.scale.pow().exponent(.5)
+																				.domain([0, d3.max(dataset, d => d.y)])
+																    .range([innerHeight, 0])
+																}
 
                 let svg = d3.select(this)
                   .attr('width', width + margin.left + margin.right)
                   .attr('height', height + margin.top + margin.bottom)
 
-                let g = svg.selectAll('.container')
+																svg.append('g')
+																		.attr('class', 'text-container')
+																		.attr('transform', 'translate(' + width/2 + ',' + titlePaddingTop + ')')
+																		.append('text')
+																		.attr('font-size', '1rem')
+																		.attr('class', 'chart-title')
+																		.text(chart_title)
+																		.attr('text-anchor', 'middle')
+																		.attr('alignment-baseline', 'hanging')
+
+																let g = svg.selectAll('.container')
                   .data([null])
                   .enter().append('g')
                   .attr('class', 'container')
                 g = svg.selectAll('.container')
-                  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+                  .attr('transform', 'translate(' + margin.left + ',' + (margin.top + titleFontSize) + ')')
               /**
                * 绘制x坐标轴
                */
@@ -99,12 +125,12 @@
                       .attr('class', 'x label')
                       .attr('x', innerWidth)
                       .attr('dy', xLabel_location)
-                      .attr('fill', 'black')
                       .attr('text-anchor', 'end')
                       .text(xLabel)
 
                     xAxis_g_enter.selectAll('text')
-                      .style('font', _font_style)
+                      // .style('font', _font_style)
+                      .style('font-size', font_size)
                 }
               /**
                * 支持用户brush选择操作
@@ -115,7 +141,7 @@
                   .on('brushstart', brushstart)
                   .on('brush', brushmove)
                   .on('brushend', brushend)
-                
+
                 let brushG = g.select('g.brush')
 
                 if(g.select('g.brush').empty()){
@@ -123,7 +149,7 @@
                   .attr('class', 'brush')
                   .call(brush)
                 }
-              
+
                 brushG.selectAll('rect')
                   .attr('height', innerHeight)
 
@@ -166,8 +192,9 @@
                * 绘制y坐标轴
                */
               if (draw_yAxis) {
-                    let yAxis = d3.svg.axis().scale(y).orient("left")
-                    if (yTickNum !== null)
+                    let yAxis = d3.svg.axis().scale(y).orient("left").ticks(y_ticks_num)
+
+                if (yTickNum !== null)
                         yAxis.ticks(yTickNum)
 
                     if(y_ticks_value != null){
@@ -194,13 +221,12 @@
                       // .attr('transform', 'rotate(-90)')
                       .attr('text-anchor', 'start')
                       .attr('alignment-baseline', 'hanging')
-                      .attr('dy', '-0.5em')
-                      .attr('dx', '0.5em')
-                      .attr('fill', 'black')
+                      // .attr('dy', '0.5em')
+                      // .attr('dx', '0.5em')
                       .text(yLabel)
 
-                    yAxis_g_enter.selectAll('text')
-                      .style('font', _font_style)
+                    // yAxis_g_enter.selectAll('text')
+                    //   .style('font', _font_style)
                 }
                 //  首先绘制鼠标悬浮的bar chart
                 g.append('rect')
@@ -569,37 +595,83 @@
             return chart
         }
 
-        chart.x_ticks_value = function(value){
-            if (!arguments.length) return x_ticks_value
-            if(typeof(value) !== 'object'){
-                console.log('invalid value for ticks_value', value)
-                return
-            }
-            x_ticks_value = value
-            return chart
+        chart.font_size = function (value) {
+          if (!arguments.length) return font_size
+          if (typeof(value) != 'string') {
+            console.warn('invalid value for bar_interval', value)
+            return
+          }
+          font_size = value
+          return chart
+        }
+
+        chart.x_ticks_value = function(value) {
+          if (typeof (value) === 'undefined') {
+												return chart
+          } else {
+												if (!arguments.length) return x_ticks_value
+												if(typeof(value) !== 'object'){
+														console.log('invalid value for ticks_value', value)
+														return
+												}
+												x_ticks_value = value
+												return chart
+										}
         }
 
         chart.x_ticks_format = function(value){
-            if(!arguments.length){return x_ticks_format}
-            if(typeof(value) !== 'object'){
-                console.log('invalid value for ticks_format', value)
-                return
-            }
-            x_ticks_format = value
-            return chart
+        		if (typeof (value) === 'undefined') {
+        				return chart
+										} else {
+												if(!arguments.length){return x_ticks_format}
+												if(typeof(value) !== 'object'){
+														console.log('invalid value for ticks_format', value)
+														return
+												}
+												x_ticks_format = value
+												return chart
+										}
         }
 
         chart.y_ticks_value = function(value){
-            if (!arguments.length) return y_ticks_value
-            if(typeof(value) !== 'object'){
-                console.log('invalid value for ticks_value', value)
-                return
-            }
-            y_ticks_value = value
-            return chart
+        		if (typeof (value) === 'undefined') {
+												return chart
+										} else {
+												if (!arguments.length) return y_ticks_value
+												if(typeof(value) !== 'object'){
+														console.log('invalid value for ticks_value', value)
+														return
+												}
+												y_ticks_value = value
+												return chart
+										}
         }
 
-        chart.x_interval = function(value){
+								chart.y_ticks_format = function(value){
+										if (typeof (value) === 'undefined') {
+												return chart
+										} else {
+												if(!arguments.length){return y_ticks_format}
+												if(typeof(value) !== 'object'){
+														console.log('invalid value for ticks_format', value)
+														return
+												}
+												y_ticks_format = value
+												return chart
+										}
+								}
+
+						chart.y_scale_type = function (value) {
+								if(!arguments.length){return y_scale_type}
+								if(typeof(value) !== 'string'){
+										console.log('invalid value for ticks_format', value)
+										return
+								}
+								y_scale_type = value
+								return chart
+						}
+
+						chart.x_interval = function(value){
           if(!arguments.length){return x_interval}
           if(typeof(value) !== 'number'){
             console.log('invalid value for ticks_format', value)
@@ -619,17 +691,7 @@
         return chart
       }
 
-        chart.y_ticks_format = function(value){
-            if(!arguments.length){return y_ticks_format}
-            if(typeof(value) !== 'object'){
-                console.log('invalid value for ticks_format', value)
-                return
-            }
-            y_ticks_format = value
-            return chart
-        }
-
-        chart.bar_class = function(value){
+						chart.bar_class = function(value){
           if(!arguments.length){
             return bar_class
           }
@@ -640,6 +702,18 @@
           bar_class = value
           return chart
         }
+
+						chart.chart_title = function(value){
+								if(!arguments.length){
+										return chart_title
+								}
+								if(typeof(value) !== 'string'){
+										console.log('invalid value for ticks_format', value)
+										return
+								}
+								chart_title = value
+								return chart
+						}
 
         //  点击事件
         chart.bar_click_handler = function(value){
