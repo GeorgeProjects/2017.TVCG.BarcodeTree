@@ -1,0 +1,1274 @@
+{
+  "num": 193,
+  "name": "root",
+  "children": [
+    {
+      "num": 101,
+      "name": "3",
+      "children": [
+        {
+          "num": 61,
+          "name": "34",
+          "children": [
+            {
+              "num": 14,
+              "name": "345",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "In the interests of justice : reforming the legal profession  / Deborah L. Rhode."
+                },
+                {
+                  "num": 1,
+                  "name": "Court in the middle / Andrew Fraser."
+                },
+                {
+                  "num": 1,
+                  "name": "Legal problem solving : a guide for law students / Patrick Keyzer."
+                },
+                {
+                  "num": 1,
+                  "name": "Australasian mooting manual / Joel Butler ; Terry Gygar."
+                },
+                {
+                  "num": 1,
+                  "name": "Nemes and Coss' effective legal research / Bruce Bott, Ruth Talbot-Stokes."
+                },
+                {
+                  "num": 1,
+                  "name": "A practical guide to legal research / Jay Sanderson, Kim Kelly."
+                },
+                {
+                  "num": 1,
+                  "name": "Lawyers in Australia / Ainslie Lamb, John Littrich, Karina Murray."
+                },
+                {
+                  "num": 1,
+                  "name": "Skills, ethics and values for legal practice / Bobette Wolskiwith David Field and John Bahrij."
+                },
+                {
+                  "num": 1,
+                  "name": "Legal drafting : a how to guide / Ros Macdonald, Denise McGill."
+                },
+                {
+                  "num": 2,
+                  "name": "Lawyers' professional responsibility / G E Dal Pont."
+                },
+                {
+                  "num": 1,
+                  "name": "Legal secretary's handbook / [by Louise Aaron]."
+                },
+                {
+                  "num": 1,
+                  "name": "Shurman's Practical skills of the solicitor : a handbook of working techniques / Laurence Shurman"
+                },
+                {
+                  "num": 1,
+                  "name": "Lawyers' skills / Julian Webb ... [et al.]."
+                }
+              ]
+            },
+            {
+              "num": 14,
+              "name": "347",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Remedies : commentary and materials / Normann Witzleb, Elise Bant, Kit Barker, Simone Degeling."
+                },
+                {
+                  "num": 2,
+                  "name": "Understanding company law / Phillip Lipton, Abe Herzberg."
+                },
+                {
+                  "num": 2,
+                  "name": "Applied corporate law : a bilingual approach / Grace Li, Sophie Riley."
+                },
+                {
+                  "num": 1,
+                  "name": "To have, but not to hold : a history of attitudes to marriage and divorce in Australia 1858-1975 / H"
+                },
+                {
+                  "num": 1,
+                  "name": "Tort liability for mental harm / by  Peter Handford ; material on psychiatric injury and medical res"
+                },
+                {
+                  "num": 1,
+                  "name": "Torts : commentary and materials / Carolyn Sapideen, Prue Vines, Penelope Watson."
+                },
+                {
+                  "num": 1,
+                  "name": "Cases on torts / Barbara McDonald, Ross Anderson."
+                },
+                {
+                  "num": 1,
+                  "name": "The new law of torts / Danuta Mendelson."
+                },
+                {
+                  "num": 1,
+                  "name": "Essential tort law : indispensable preparation for today's law student / Anita Stuhmcke."
+                },
+                {
+                  "num": 1,
+                  "name": "Tort law principles / Bernadette Richards,  Melissa de Zwart."
+                },
+                {
+                  "num": 1,
+                  "name": "Insolvency and bankruptcy / Grant Mason BA, LLB."
+                },
+                {
+                  "num": 1,
+                  "name": "The law of misleading or deceptive conduct / Colin Lockhart."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "346",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The alchemy of race and rights / Patricia J. Williams."
+                }
+              ]
+            },
+            {
+              "num": 32,
+              "name": "341",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "\"Armed attack\" and Article 51 of the UN Charter : evolutions in customary law and practice / Tom Ruy"
+                },
+                {
+                  "num": 2,
+                  "name": "The international law of the sea / [by] C. John Colombos"
+                },
+                {
+                  "num": 2,
+                  "name": "Research handbook on international conflict and security law : jus ad bellum, jus in bello and jus p"
+                },
+                {
+                  "num": 2,
+                  "name": "The politics of justifying force : the Suez Crisis, the Iraq War, and international law / Charlotte"
+                },
+                {
+                  "num": 2,
+                  "name": "Under attack : challenges to the rules governing the international use of force / by Belinda Helmke."
+                },
+                {
+                  "num": 2,
+                  "name": "Human rights, intervention and the use of force / edited by Philip Alston and Euan Macdonald."
+                },
+                {
+                  "num": 2,
+                  "name": "The Oxford guide to treaties / edited by Duncan B. Hollis."
+                },
+                {
+                  "num": 2,
+                  "name": "The UNCITRAL model law after twenty-five years : global perspectives on international commercial arb"
+                },
+                {
+                  "num": 4,
+                  "name": "Oppenheim's international law. Volume 1. Peace"
+                },
+                {
+                  "num": 2,
+                  "name": "State participation in international treaty regimes / Srini Sitaraman."
+                },
+                {
+                  "num": 2,
+                  "name": "The UN security council in the twenty-first century / edited by Sebastian von Einsiedel, David M. Ma"
+                },
+                {
+                  "num": 2,
+                  "name": "Maritime boundaries and ocean resources / edited by Gerald Blake ; International Geographical Union"
+                },
+                {
+                  "num": 2,
+                  "name": "Extraterritorial application of human rights treaties : law, principles and policy / Marko Milanovic"
+                },
+                {
+                  "num": 2,
+                  "name": "Iraq and the use of force in international law / Marc Weller."
+                },
+                {
+                  "num": 1,
+                  "name": "Reappraising the resort to force : international law, jus ad bellum and the War on Terror / Lindsay"
+                },
+                {
+                  "num": 1,
+                  "name": "The international law of the sea / by D.P. O'Connell ; edited by I.A. Shearer"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 18,
+          "name": "33",
+          "children": [
+            {
+              "num": 5,
+              "name": "338",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Achieving sustainable production of sheep / edited by Professor Johan Greyling (University of the Fr"
+                },
+                {
+                  "num": 1,
+                  "name": "A pocket business guide for artists and designers / Alison Branagan ; [with a foreword by Sir James"
+                },
+                {
+                  "num": 1,
+                  "name": "What price a creative economy? / Stuart Cunningham."
+                },
+                {
+                  "num": 1,
+                  "name": "Price regulation and risk : the impact of regulation system shifts on risk components / Michael Hier"
+                },
+                {
+                  "num": 1,
+                  "name": "The Asian century, sustainable growth and climate change : responsible futures matter / edited by Mo"
+                }
+              ]
+            },
+            {
+              "num": 10,
+              "name": "332",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Financial institutions and markets / Chris Terry, Ben Hunt."
+                },
+                {
+                  "num": 1,
+                  "name": "Technical analysis for the trading professional : strategies and techniques for today's turbulent gl"
+                },
+                {
+                  "num": 1,
+                  "name": "Trading with intermarket analysis : a visual approach to beating the financial markets using exchang"
+                },
+                {
+                  "num": 1,
+                  "name": "Technical analysis of the financial markets : a comprehensive guide to trading methods and applicati"
+                },
+                {
+                  "num": 1,
+                  "name": "Understand day trading in a day / Ian Bruce."
+                },
+                {
+                  "num": 1,
+                  "name": "Charting secrets : trade like a machine and finally beat the markets using these bulletproof strateg"
+                },
+                {
+                  "num": 1,
+                  "name": "The new trading for a living : psychology, discipline, trading tools and systems, risk control, trad"
+                },
+                {
+                  "num": 1,
+                  "name": "Trading price action trading ranges : technical analysis of price charts bar by bar for the serious"
+                },
+                {
+                  "num": 1,
+                  "name": "New frontiers in technical analysis : effective tools and strategies for trading and investing / Pau"
+                },
+                {
+                  "num": 1,
+                  "name": "Forex analysis and trading : effective top-down strategies combining fundamental, position, and tech"
+                }
+              ]
+            },
+            {
+              "num": 2,
+              "name": "333",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The solar century : the past, present and world-changing future of solar energy / edited by Jeremy L"
+                },
+                {
+                  "num": 1,
+                  "name": "Energy from the desert : very large scale photovoltaic systems : socio-economic, financial, technica"
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "330",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Economics for managers / Paul G. Farnham."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 5,
+          "name": "30",
+          "children": [
+            {
+              "num": 1,
+              "name": "305",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Mount Tomah Darug Aboriginal connections / by Suzanne Kenney."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "302",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The high price of materialism / Tim Kasser."
+                }
+              ]
+            },
+            {
+              "num": 2,
+              "name": "301",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Conversations with Anthony Giddens : making sense of modernity / Anthony Giddens and Christopher Pie"
+                },
+                {
+                  "num": 1,
+                  "name": "The constitution of society : introduction of the theory of structuration / Anthony Giddens"
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "303",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Leadership on the line : staying alive through the dangers of leading / Ronald A. Heifetz, Marty Lin"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 8,
+          "name": "32",
+          "children": [
+            {
+              "num": 2,
+              "name": "320",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Politics and passion : toward a more egalitarian liberalism / Michael Walzer."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "323",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The vocal citizen / editor, Glenn Patmore."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "324",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The prince's new clothes : why do Australians dislike their politicians? / edited by David Burchell"
+                }
+              ]
+            },
+            {
+              "num": 4,
+              "name": "327",
+              "children": [
+                {
+                  "num": 4,
+                  "name": "International law / by D. P. O'Connell ; with a foreword by Lord McNair"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 4,
+          "name": "37",
+          "children": [
+            {
+              "num": 1,
+              "name": "372",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Teaching Synthetic Phonics in primary schools / Rhona Johnston & Joyce Watson"
+                }
+              ]
+            },
+            {
+              "num": 3,
+              "name": "371",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Transforming schools in Pakistan : towards the learning community / edited by John Retallick and Iff"
+                },
+                {
+                  "num": 1,
+                  "name": "Selective schools and scholarship tests / James A. Athanasou."
+                },
+                {
+                  "num": 1,
+                  "name": "Selective schools and scholarship tests : skills and strategies years 5-6 / John Moir."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 3,
+          "name": "36",
+          "children": [
+            {
+              "num": 1,
+              "name": "362",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Eric / Terry Pratchett."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "364",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Routledge international handbook of green criminology / edited by Nigel South and Avi Brisman."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "363",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Handbook of climate change and India : development, politics, and governance / edited by Navroz K. D"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 1,
+          "name": "35",
+          "children": [
+            {
+              "num": 1,
+              "name": "352",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Funding the future : financial sustainability and infrastructure finance in Australian local governm"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 1,
+          "name": "39",
+          "children": [
+            {
+              "num": 1,
+              "name": "391",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "A bad spell for the worst witch [sound recording] / [by Jill Murphy ;] read by Miriam Margolyes."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 7,
+      "name": "1",
+      "children": [
+        {
+          "num": 2,
+          "name": "12",
+          "children": [
+            {
+              "num": 1,
+              "name": "121",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The genesis of values / Hans Joas ; translated by Gregory Moore."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "128",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Waiting / Philip Salom."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 5,
+          "name": "15",
+          "children": [
+            {
+              "num": 2,
+              "name": "150",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Nietzsche and suffered social histories : genealogy and convalescence / Jeffrey M. Jackson."
+                },
+                {
+                  "num": 1,
+                  "name": "Philosophy and working-through the past : a psychoanalytic approach to social pathologies / Jeffrey"
+                }
+              ]
+            },
+            {
+              "num": 3,
+              "name": "158",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Coach yourself @ work : get yourself a (working) life / Anthony Grant & Jane Greene."
+                },
+                {
+                  "num": 2,
+                  "name": "Getting to yes : negotiating an agreement without giving in / Roger Fisher and William Ury [editor a"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 17,
+      "name": "8",
+      "children": [
+        {
+          "num": 9,
+          "name": "81",
+          "children": [
+            {
+              "num": 9,
+              "name": "813",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Lincoln in the Bardo : a novel / George Saunders."
+                },
+                {
+                  "num": 1,
+                  "name": "Our souls at night / Kent Haruf."
+                },
+                {
+                  "num": 1,
+                  "name": "Little women / Louisa May Alcott ; introduction by Jane Smiley ; notes by Siobhan Kilfeather and Vin"
+                },
+                {
+                  "num": 1,
+                  "name": "Dear life / Alice Munro."
+                },
+                {
+                  "num": 1,
+                  "name": "Everything we keep : a novel / Kerry Lonsdale."
+                },
+                {
+                  "num": 2,
+                  "name": "Where'd you go, Bernadette / Maria Semple."
+                },
+                {
+                  "num": 2,
+                  "name": "I feel bad about my neck."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 1,
+          "name": "89",
+          "children": [
+            {
+              "num": 1,
+              "name": "894",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "My cat Yugoslavia : a novel / Pajtim Statovci ; translated from the Finnish by David Hackston."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 1,
+          "name": "83",
+          "children": [
+            {
+              "num": 1,
+              "name": "839",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Dogs of Riga : A Kurt Wallander mystery / Henning Mankell ; translated by Laurie Thompson."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 5,
+          "name": "82",
+          "children": [
+            {
+              "num": 1,
+              "name": "824",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Force of nature / Jane Harper."
+                }
+              ]
+            },
+            {
+              "num": 4,
+              "name": "823",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The wrong girl / Zoe Foster."
+                },
+                {
+                  "num": 1,
+                  "name": "A New England affair / Steven Carroll."
+                },
+                {
+                  "num": 2,
+                  "name": "Into the water / Paula Hawkins."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 1,
+          "name": "80",
+          "children": [
+            {
+              "num": 1,
+              "name": "808",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The elements of style / by William Strunk, Jr. ; with revisions, an introd., and a chapter on writin"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 23,
+      "name": "6",
+      "children": [
+        {
+          "num": 18,
+          "name": "65",
+          "children": [
+            {
+              "num": 9,
+              "name": "658",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Research in organizational change and development."
+                },
+                {
+                  "num": 1,
+                  "name": "Management control systems : performance measurement, evaluation and incentives / Kenneth A. Merchan"
+                },
+                {
+                  "num": 1,
+                  "name": "Marketing management / Philip Kotler, Kevin Lane Keller."
+                },
+                {
+                  "num": 1,
+                  "name": "Management accounting : information for creating and managing value / Kim Langfield-Smith, Helen Tho"
+                },
+                {
+                  "num": 1,
+                  "name": "Management : 6th Asia-Pacific edition / John R. Schermerhorn, Paul Davidson, Aharon Factor, David Po"
+                },
+                {
+                  "num": 1,
+                  "name": "The $100 startup : reinvent the way you make a living, do what you love, and create a new future / C"
+                },
+                {
+                  "num": 1,
+                  "name": "Management / John R. Schermerhorn."
+                },
+                {
+                  "num": 1,
+                  "name": "HBR's 10 must reads for new managers."
+                },
+                {
+                  "num": 1,
+                  "name": "HBR's 10 must reads on making smart decisions."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "657",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Corporate accounting : a custom publication / prepared by Peter Lam, Anna Loyeung, Yaowen Shan"
+                }
+              ]
+            },
+            {
+              "num": 6,
+              "name": "650",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Everyone communicates, few connect : what the most effective people do differently / John C. Maxwell"
+                },
+                {
+                  "num": 1,
+                  "name": "The 2-hour job search : using technology to get the right job faster / Steve Dalton."
+                },
+                {
+                  "num": 2,
+                  "name": "You're hired! : secrets to successful job interviews / Sharon McDonnell."
+                },
+                {
+                  "num": 2,
+                  "name": "What color is your parachute?, 2012 / Richard N. Bolles."
+                }
+              ]
+            },
+            {
+              "num": 2,
+              "name": "659",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The copywriter's handbook : a step-by-step guide to writing copy that sells / Robert W. Bly."
+                },
+                {
+                  "num": 1,
+                  "name": "Ogilvy on advertising / David Ogilvy"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 3,
+          "name": "61",
+          "children": [
+            {
+              "num": 1,
+              "name": "618",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "First steps in modal logic / Sally Popkorn."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "613",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Fear of glass : Mies van der Rohe's pavilion in Barcelona / Josep Quetglas ; introduction by Rafael"
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "616",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Koneman's color atlas and textbook of diagnostic microbiology / Washington C. Winn, Jr. ... [et al.]"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 2,
+          "name": "62",
+          "children": [
+            {
+              "num": 1,
+              "name": "620",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Determination of viscoelastic properties of elastomers on exposure to forced vibration at non-resona"
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "621",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Logic and computer design fundamentals / Morris Mano, California State University, Los Angeles, Char"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 18,
+      "name": "5",
+      "children": [
+        {
+          "num": 2,
+          "name": "53",
+          "children": [
+            {
+              "num": 2,
+              "name": "530",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "American Prometheus : the triumph and tragedy of J. Robert Oppenheimer / by Kai Bird and Martin J. S"
+                },
+                {
+                  "num": 1,
+                  "name": "Chaos & cyber culture / Timothy Leary ; editor, Michael Horowitz ; associate editor, Vicki Marshall"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 3,
+          "name": "51",
+          "children": [
+            {
+              "num": 1,
+              "name": "516",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Euclidean geometry : a guided inquiry approach / David M. Clark."
+                }
+              ]
+            },
+            {
+              "num": 2,
+              "name": "515",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Multivariable calculus : concepts and contexts / James Stewart."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 2,
+          "name": "59",
+          "children": [
+            {
+              "num": 1,
+              "name": "593",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Corals in space and time : biogeography and evolution of the Scleractinia / J.E.N. Veron."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "599",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Physical appearance and gender : sociobiological and sociocultural perspectives / Linda A. Jackson."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 7,
+          "name": "57",
+          "children": [
+            {
+              "num": 6,
+              "name": "570",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Biology in focus : HSC course / Glenda Chidrawi, Margaret Robson ; with Stephanie Hollis."
+                },
+                {
+                  "num": 2,
+                  "name": "Campbell biology / Jane B. Reece, Noel Meyers,  Lisa A. Urry, Michael L. Cain, Steven A. Wasserman,"
+                },
+                {
+                  "num": 2,
+                  "name": "Biology in focus. Preliminary course / Glenda Chidrawi, Stephanie Hollis."
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "579",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Brock biology of microorganisms / Michael T. Madigan, Southern Illinois University Carbondale ; John"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 2,
+          "name": "50",
+          "children": [
+            {
+              "num": 2,
+              "name": "500",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Core science. stage 5 complete course / Pascale Warnant ... [et al.]."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 2,
+          "name": "54",
+          "children": [
+            {
+              "num": 2,
+              "name": "540",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Chemistry : the central science / Theodore L. Brown, University of Illinois at Urbana-Champaign, H."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 10,
+      "name": "0",
+      "children": [
+        {
+          "num": 9,
+          "name": "00",
+          "children": [
+            {
+              "num": 4,
+              "name": "005",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Python for data analysis / Wes McKinney."
+                },
+                {
+                  "num": 1,
+                  "name": "Soft skills : the software developer's life manual / John Z. Sonmez."
+                },
+                {
+                  "num": 1,
+                  "name": "Effective Python : 59 specific ways to write better Python / Brett Slatkin."
+                },
+                {
+                  "num": 1,
+                  "name": "Adobe Muse CC : classroom in a book : the official traning workbook from Adobe / Be Anastasios Velou"
+                }
+              ]
+            },
+            {
+              "num": 1,
+              "name": "006",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Designing bots : creating conversational experiences / Amir Shevat."
+                }
+              ]
+            },
+            {
+              "num": 4,
+              "name": "004",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Introduction to networking / Wendell Odom."
+                },
+                {
+                  "num": 1,
+                  "name": "Networking all-in-one for dummies / by Doug Lowe."
+                },
+                {
+                  "num": 1,
+                  "name": "Networking : a beginner's guide / Bruce Hallberg."
+                },
+                {
+                  "num": 1,
+                  "name": "Networking basics / Patrick Ciccarelli ... [et. al]."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 1,
+          "name": "07",
+          "children": [
+            {
+              "num": 1,
+              "name": "070",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Environmental journalism / edited by Henrik Bodker and Irene Neverla"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 14,
+      "name": "7",
+      "children": [
+        {
+          "num": 1,
+          "name": "77",
+          "children": [
+            {
+              "num": 1,
+              "name": "779",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "An uncertain grace / Krissy Kneen."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 9,
+          "name": "74",
+          "children": [
+            {
+              "num": 1,
+              "name": "745",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Research for designers : a guide to methods and practice / Gjoko Muratovski."
+                }
+              ]
+            },
+            {
+              "num": 3,
+              "name": "746",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Vogue on Yves Saint Laurent / Natasha Fraser-Cavassoni."
+                },
+                {
+                  "num": 1,
+                  "name": "Dior : a new look, a new enterprise (1947-57) / Alexandra Palmer."
+                },
+                {
+                  "num": 1,
+                  "name": "Christian Dior / Diana de Marly"
+                }
+              ]
+            },
+            {
+              "num": 5,
+              "name": "741",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Stand out : design a personal brand, build a killer portfolio, find a great design job / Denise Ande"
+                },
+                {
+                  "num": 1,
+                  "name": "A designer's research manual : succeed in design by knowing your clients + understanding what they r"
+                },
+                {
+                  "num": 1,
+                  "name": "Greetings from retro design : vintage graphics decade by decade / [Tony Seddon]."
+                },
+                {
+                  "num": 1,
+                  "name": "Josef Muller-Brockmann, designer : a pioneer of Swiss graphic design / edited by Lars Muller."
+                },
+                {
+                  "num": 1,
+                  "name": "Swiss graphic design : the origins and growth of an international style, 1920-1965 / Richard Hollis."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 2,
+          "name": "79",
+          "children": [
+            {
+              "num": 2,
+              "name": "794",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "HTML5 game engines : app development and distribution / Dan Nagle."
+                },
+                {
+                  "num": 1,
+                  "name": "The web game developer's cookbook : using JavaScript and HTML5 to develop games / Evan Burchard."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 2,
+          "name": "72",
+          "children": [
+            {
+              "num": 2,
+              "name": "720",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Architecture post mortem : the diastolic architecture of decline, dystopia, and death / [edited] by"
+                },
+                {
+                  "num": 1,
+                  "name": "Alvar Aalto / edited by Patricia de Muga ; text by Sandra Dachs ... [et al.]."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 2,
+      "name": "9",
+      "children": [
+        {
+          "num": 1,
+          "name": "94",
+          "children": [
+            {
+              "num": 1,
+              "name": "943",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The rise and fall of the Third Reich : a history of Nazi Germany / by William L. Shirer."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "num": 1,
+          "name": "99",
+          "children": [
+            {
+              "num": 1,
+              "name": "994",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Henry Parkes : a biography / [by] A.W. Martin"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "num": 1,
+      "name": "4",
+      "children": [
+        {
+          "num": 1,
+          "name": "42",
+          "children": [
+            {
+              "num": 1,
+              "name": "428",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Prepare for IELTS : academic practice tests / Penny Cameron and Vanessa Todd."
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

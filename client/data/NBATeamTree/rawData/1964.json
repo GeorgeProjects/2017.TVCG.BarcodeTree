@@ -1,0 +1,553 @@
+{
+  "Eastern": [
+    {
+      "teamScore": "112.8",
+      "playersObjArray": [
+        {
+          "pts": "25.9",
+          "name": "Sam Jones"
+        },
+        {
+          "pts": "18.3",
+          "name": "John Havlicek"
+        },
+        {
+          "pts": "14.1",
+          "name": "Bill Russell"
+        },
+        {
+          "pts": "13.6",
+          "name": "Tom Heinsohn"
+        },
+        {
+          "pts": "11.8",
+          "name": "Tom Sanders"
+        },
+        {
+          "pts": "10.5",
+          "name": "Willie Naulls"
+        },
+        {
+          "pts": "8.3",
+          "name": "K.C. Jones"
+        },
+        {
+          "pts": "7.4",
+          "name": "Ron Bonham"
+        },
+        {
+          "pts": "6.3",
+          "name": "Larry Siegfried"
+        },
+        {
+          "pts": "4.8",
+          "name": "Mel Counts"
+        },
+        {
+          "pts": "3.6",
+          "name": "John Thompson"
+        },
+        {
+          "pts": "2.0",
+          "name": "Bevo Nordmann"
+        },
+        {
+          "pts": "1.7",
+          "name": "Gerry Ward"
+        }
+      ],
+      "teamName": "Boston_Celtics"
+    },
+    {
+      "teamScore": "114.2",
+      "playersObjArray": [
+        {
+          "pts": "30.4",
+          "name": "Oscar Robertson"
+        },
+        {
+          "pts": "21.4",
+          "name": "Jerry Lucas"
+        },
+        {
+          "pts": "15.1",
+          "name": "Adrian Smith"
+        },
+        {
+          "pts": "14.5",
+          "name": "Jack Twyman"
+        },
+        {
+          "pts": "12.7",
+          "name": "Wayne Embry"
+        },
+        {
+          "pts": "7.8",
+          "name": "Bucky Bockhorn"
+        },
+        {
+          "pts": "7.5",
+          "name": "Bud Olsen"
+        },
+        {
+          "pts": "7.0",
+          "name": "Tom Hawkins"
+        },
+        {
+          "pts": "6.1",
+          "name": "Happy Hairston"
+        },
+        {
+          "pts": "3.8",
+          "name": "Jay Arnette"
+        },
+        {
+          "pts": "2.5",
+          "name": "Tom Thacker"
+        },
+        {
+          "pts": "2.3",
+          "name": "George Wilson"
+        }
+      ],
+      "teamName": "Cincinnati_Royals"
+    },
+    {
+      "teamScore": "107.4",
+      "playersObjArray": [
+        {
+          "pts": "19.5",
+          "name": "Willis Reed"
+        },
+        {
+          "pts": "15.5",
+          "name": "Jim Barnes"
+        },
+        {
+          "pts": "14.2",
+          "name": "Bob Boozer"
+        },
+        {
+          "pts": "12.2",
+          "name": "Howard Komives"
+        },
+        {
+          "pts": "11.0",
+          "name": "Johnny Green"
+        },
+        {
+          "pts": "9.2",
+          "name": "Johnny Egan"
+        },
+        {
+          "pts": "8.3",
+          "name": "Len Chappell"
+        },
+        {
+          "pts": "8.3",
+          "name": "Dave Budd"
+        },
+        {
+          "pts": "7.0",
+          "name": "Tom Gola"
+        },
+        {
+          "pts": "6.0",
+          "name": "John Rudometkin"
+        },
+        {
+          "pts": "5.7",
+          "name": "Art Heyman"
+        },
+        {
+          "pts": "4.9",
+          "name": "Em Bryant"
+        },
+        {
+          "pts": "4.4",
+          "name": "Barry Kramer"
+        },
+        {
+          "pts": "1.4",
+          "name": "Tom Hoover"
+        }
+      ],
+      "teamName": "New_York_Knicks"
+    },
+    {
+      "teamScore": "112.5",
+      "playersObjArray": [
+        {
+          "pts": "30.1",
+          "name": "Wilt Chamberlain"
+        },
+        {
+          "pts": "20.2",
+          "name": "Hal Greer"
+        },
+        {
+          "pts": "14.8",
+          "name": "Luke Jackson"
+        },
+        {
+          "pts": "14.4",
+          "name": "Paul Neumann"
+        },
+        {
+          "pts": "13.5",
+          "name": "Larry Costello"
+        },
+        {
+          "pts": "13.2",
+          "name": "Chet Walker"
+        },
+        {
+          "pts": "12.6",
+          "name": "Dave Gambee"
+        },
+        {
+          "pts": "8.2",
+          "name": "Red Kerr"
+        },
+        {
+          "pts": "7.8",
+          "name": "Connie Dierking"
+        },
+        {
+          "pts": "6.7",
+          "name": "Al Bianchi"
+        },
+        {
+          "pts": "5.7",
+          "name": "Larry Jones"
+        },
+        {
+          "pts": "4.8",
+          "name": "Jerry Greenspan"
+        },
+        {
+          "pts": "4.8",
+          "name": "Ben Warley"
+        },
+        {
+          "pts": "4.2",
+          "name": "Steve Courtin"
+        }
+      ],
+      "teamName": "Philadelphia_76ers"
+    }
+  ],
+  "Western": [
+    {
+      "teamScore": "113.6",
+      "playersObjArray": [
+        {
+          "pts": "24.8",
+          "name": "Walt Bellamy"
+        },
+        {
+          "pts": "19.2",
+          "name": "Bailey Howell"
+        },
+        {
+          "pts": "18.6",
+          "name": "Gus Johnson"
+        },
+        {
+          "pts": "18.4",
+          "name": "Don Ohl"
+        },
+        {
+          "pts": "12.8",
+          "name": "Kevin Loughery"
+        },
+        {
+          "pts": "6.7",
+          "name": "Wayne Hightower"
+        },
+        {
+          "pts": "5.8",
+          "name": "Si Green"
+        },
+        {
+          "pts": "5.3",
+          "name": "Bob Ferry"
+        },
+        {
+          "pts": "5.3",
+          "name": "Wali Jones"
+        },
+        {
+          "pts": "3.7",
+          "name": "Charlie Hardnett"
+        },
+        {
+          "pts": "3.3",
+          "name": "Gary Bradds"
+        },
+        {
+          "pts": "2.4",
+          "name": "Al Butler"
+        },
+        {
+          "pts": "1.8",
+          "name": "Les Hunter"
+        },
+        {
+          "pts": "0.0",
+          "name": "Gary Hill"
+        }
+      ],
+      "teamName": "Baltimore_Bullets"
+    },
+    {
+      "teamScore": "108.5",
+      "playersObjArray": [
+        {
+          "pts": "18.2",
+          "name": "Terry Dischinger"
+        },
+        {
+          "pts": "16.7",
+          "name": "Dave DeBusschere"
+        },
+        {
+          "pts": "15.5",
+          "name": "Ray Scott"
+        },
+        {
+          "pts": "13.7",
+          "name": "Eddie Miles"
+        },
+        {
+          "pts": "12.0",
+          "name": "Reggie Harding"
+        },
+        {
+          "pts": "11.0",
+          "name": "Rod Thorn"
+        },
+        {
+          "pts": "10.7",
+          "name": "Joe Caldwell"
+        },
+        {
+          "pts": "6.5",
+          "name": "Don Kojis"
+        },
+        {
+          "pts": "5.8",
+          "name": "Donnie Butcher"
+        },
+        {
+          "pts": "5.0",
+          "name": "Jackie Moreland"
+        },
+        {
+          "pts": "3.7",
+          "name": "Willie Jones"
+        },
+        {
+          "pts": "3.5",
+          "name": "Bob Duffy"
+        },
+        {
+          "pts": "3.4",
+          "name": "Hub Reed"
+        }
+      ],
+      "teamName": "Detroit_Pistons"
+    },
+    {
+      "teamScore": "111.9",
+      "playersObjArray": [
+        {
+          "pts": "31.0",
+          "name": "Jerry West"
+        },
+        {
+          "pts": "27.1",
+          "name": "Elgin Baylor"
+        },
+        {
+          "pts": "14.1",
+          "name": "Rudy LaRusso"
+        },
+        {
+          "pts": "13.8",
+          "name": "Dick Barnett"
+        },
+        {
+          "pts": "10.3",
+          "name": "LeRoy Ellis"
+        },
+        {
+          "pts": "6.3",
+          "name": "Jim King"
+        },
+        {
+          "pts": "5.1",
+          "name": "Gene Wiley"
+        },
+        {
+          "pts": "5.0",
+          "name": "Darrall Imhoff"
+        },
+        {
+          "pts": "4.2",
+          "name": "Mahdi Abdul-Rahman"
+        },
+        {
+          "pts": "2.4",
+          "name": "Don Nelson"
+        },
+        {
+          "pts": "2.1",
+          "name": "Cotton Nash"
+        },
+        {
+          "pts": "1.9",
+          "name": "Bill McGill"
+        },
+        {
+          "pts": "1.3",
+          "name": "Jerry Grote"
+        }
+      ],
+      "teamName": "Los_Angeles_Lakers"
+    },
+    {
+      "teamScore": "105.8",
+      "playersObjArray": [
+        {
+          "pts": "38.9",
+          "name": "Wilt Chamberlain"
+        },
+        {
+          "pts": "16.5",
+          "name": "Nate Thurmond"
+        },
+        {
+          "pts": "14.6",
+          "name": "Guy Rodgers"
+        },
+        {
+          "pts": "12.7",
+          "name": "Tom Meschery"
+        },
+        {
+          "pts": "10.8",
+          "name": "Paul Neumann"
+        },
+        {
+          "pts": "9.3",
+          "name": "Al Attles"
+        },
+        {
+          "pts": "8.4",
+          "name": "Wayne Hightower"
+        },
+        {
+          "pts": "8.3",
+          "name": "McCoy McLemore"
+        },
+        {
+          "pts": "8.0",
+          "name": "Connie Dierking"
+        },
+        {
+          "pts": "7.1",
+          "name": "Gary Phillips"
+        },
+        {
+          "pts": "6.0",
+          "name": "John Rudometkin"
+        },
+        {
+          "pts": "4.8",
+          "name": "George Lee"
+        },
+        {
+          "pts": "4.6",
+          "name": "Bud Koper"
+        },
+        {
+          "pts": "4.2",
+          "name": "Cotton Nash"
+        },
+        {
+          "pts": "3.1",
+          "name": "Barry Kramer"
+        },
+        {
+          "pts": "3.0",
+          "name": "Gary Hill"
+        }
+      ],
+      "teamName": "San_Francisco_Warriors"
+    },
+    {
+      "teamScore": "108.8",
+      "playersObjArray": [
+        {
+          "pts": "22.5",
+          "name": "Bob Pettit"
+        },
+        {
+          "pts": "16.9",
+          "name": "Zelmo Beaty"
+        },
+        {
+          "pts": "16.5",
+          "name": "Lenny Wilkens"
+        },
+        {
+          "pts": "14.4",
+          "name": "Richie Guerin"
+        },
+        {
+          "pts": "13.0",
+          "name": "Cliff Hagan"
+        },
+        {
+          "pts": "11.6",
+          "name": "Chico Vaughn"
+        },
+        {
+          "pts": "11.5",
+          "name": "Bill Bridges"
+        },
+        {
+          "pts": "7.0",
+          "name": "John Barnhill"
+        },
+        {
+          "pts": "6.8",
+          "name": "Mike Farmer"
+        },
+        {
+          "pts": "4.9",
+          "name": "Jeff Mullins"
+        },
+        {
+          "pts": "4.6",
+          "name": "Paul Silas"
+        },
+        {
+          "pts": "3.5",
+          "name": "John Tresvant"
+        },
+        {
+          "pts": "2.6",
+          "name": "Ed Burton"
+        },
+        {
+          "pts": "2.5",
+          "name": "Bill McGill"
+        }
+      ],
+      "teamName": "St._Louis_Hawks"
+    }
+  ],
+  "year": 1964
+}

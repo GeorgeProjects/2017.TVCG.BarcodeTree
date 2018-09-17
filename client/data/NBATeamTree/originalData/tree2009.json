@@ -1,0 +1,2834 @@
+{
+  "year": 2009,
+  "name": "root",
+  "categoryName": "root",
+  "children": [
+    {
+      "categoryName": "Eastern",
+      "children": [
+        {
+          "categoryName": "Southeast",
+          "children": [
+            {
+              "num": 101.7,
+              "categoryName": "Atlanta_Hawks",
+              "children": [
+                {
+                  "num": 21.3,
+                  "categoryName": "Joe Johnson",
+                  "name": "1_16_1_21"
+                },
+                {
+                  "num": 18,
+                  "categoryName": "Jamal Crawford",
+                  "name": "1_16_1_48"
+                },
+                {
+                  "num": 15.7,
+                  "categoryName": "Josh Smith",
+                  "name": "1_16_1_6"
+                },
+                {
+                  "num": 14.2,
+                  "categoryName": "Al Horford",
+                  "name": "1_16_1_40"
+                },
+                {
+                  "num": 10.1,
+                  "categoryName": "Marvin Williams",
+                  "name": "1_16_1_24"
+                },
+                {
+                  "num": 9.1,
+                  "categoryName": "Mike Bibby",
+                  "name": "1_16_1_39"
+                },
+                {
+                  "num": 5.7,
+                  "categoryName": "Maurice Evans",
+                  "name": "1_16_1_44"
+                },
+                {
+                  "num": 4.3,
+                  "categoryName": "Zaza Pachulia",
+                  "name": "1_16_1_22"
+                },
+                {
+                  "num": 3.2,
+                  "categoryName": "Jeff Teague",
+                  "name": "1_16_1_49"
+                },
+                {
+                  "num": 3,
+                  "categoryName": "Joe Smith",
+                  "name": "1_16_1_50"
+                },
+                {
+                  "num": 2.2,
+                  "categoryName": "Randolph Morris",
+                  "name": "1_16_1_47"
+                },
+                {
+                  "num": 1.6,
+                  "categoryName": "Othello Hunter",
+                  "name": "1_16_1_46"
+                },
+                {
+                  "num": 0.8,
+                  "categoryName": "Mario West",
+                  "name": "1_16_1_42"
+                },
+                {
+                  "num": 0.7,
+                  "categoryName": "Jason Collins",
+                  "name": "1_16_1_51"
+                }
+              ],
+              "name": "1_16_1_0"
+            },
+            {
+              "num": 95.3,
+              "categoryName": "Charlotte_Bobcats",
+              "children": [
+                {
+                  "num": 21.1,
+                  "categoryName": "Stephen Jackson",
+                  "name": "1_16_2_53"
+                },
+                {
+                  "num": 18.2,
+                  "categoryName": "Gerald Wallace",
+                  "name": "1_16_2_4"
+                },
+                {
+                  "num": 12.1,
+                  "categoryName": "Raymond Felton",
+                  "name": "1_16_2_20"
+                },
+                {
+                  "num": 12,
+                  "categoryName": "Raja Bell",
+                  "name": "1_16_2_40"
+                },
+                {
+                  "num": 11.3,
+                  "categoryName": "Boris Diaw",
+                  "name": "1_16_2_39"
+                },
+                {
+                  "num": 10.1,
+                  "categoryName": "Tyrus Thomas",
+                  "name": "1_16_2_54"
+                },
+                {
+                  "num": 9.9,
+                  "categoryName": "Ronald Murray",
+                  "name": "1_16_2_55"
+                },
+                {
+                  "num": 8.1,
+                  "categoryName": "Larry Hughes",
+                  "name": "1_16_2_56"
+                },
+                {
+                  "num": 7.9,
+                  "categoryName": "Nazr Mohammed",
+                  "name": "1_16_2_35"
+                },
+                {
+                  "num": 6.5,
+                  "categoryName": "Tyson Chandler",
+                  "name": "1_16_2_57"
+                },
+                {
+                  "num": 6.4,
+                  "categoryName": "D.J. Augustin",
+                  "name": "1_16_2_41"
+                },
+                {
+                  "num": 5.1,
+                  "categoryName": "Theo Ratliff",
+                  "name": "1_16_2_58"
+                },
+                {
+                  "num": 4.9,
+                  "categoryName": "V. Radmanovic",
+                  "name": "1_16_2_42"
+                },
+                {
+                  "num": 4.2,
+                  "categoryName": "Stephen Graham",
+                  "name": "1_16_2_59"
+                },
+                {
+                  "num": 3.3,
+                  "categoryName": "Derrick Brown",
+                  "name": "1_16_2_60"
+                },
+                {
+                  "num": 2.6,
+                  "categoryName": "G. Henderson, Jr.",
+                  "name": "1_16_2_61"
+                },
+                {
+                  "num": 1.8,
+                  "categoryName": "Acie Law",
+                  "name": "1_16_2_62"
+                },
+                {
+                  "num": 1.7,
+                  "categoryName": "Alexis Ajinca",
+                  "name": "1_16_2_49"
+                },
+                {
+                  "num": 1.2,
+                  "categoryName": "DeSagana Diop",
+                  "name": "1_16_2_46"
+                }
+              ],
+              "name": "1_16_2_0"
+            },
+            {
+              "num": 96.5,
+              "categoryName": "Miami_Heat",
+              "children": [
+                {
+                  "num": 26.6,
+                  "categoryName": "Dwyane Wade",
+                  "name": "1_16_3_1"
+                },
+                {
+                  "num": 14.8,
+                  "categoryName": "Michael Beasley",
+                  "name": "1_16_3_30"
+                },
+                {
+                  "num": 13.6,
+                  "categoryName": "Jermaine O'Neal",
+                  "name": "1_16_3_31"
+                },
+                {
+                  "num": 9.9,
+                  "categoryName": "Udonis Haslem",
+                  "name": "1_16_3_5"
+                },
+                {
+                  "num": 8.9,
+                  "categoryName": "Quentin Richardson",
+                  "name": "1_16_3_44"
+                },
+                {
+                  "num": 1,
+                  "categoryName": "Shavlik Randolph",
+                  "name": "1_16_3_45"
+                },
+                {
+                  "num": 7.1,
+                  "categoryName": "Mario Chalmers",
+                  "name": "1_16_3_33"
+                },
+                {
+                  "num": 7.1,
+                  "categoryName": "Dorell Wright",
+                  "name": "1_16_3_15"
+                },
+                {
+                  "num": 6.6,
+                  "categoryName": "Rafer Alston",
+                  "name": "1_16_3_46"
+                },
+                {
+                  "num": 6.1,
+                  "categoryName": "Carlos Arroyo",
+                  "name": "1_16_3_47"
+                },
+                {
+                  "num": 5,
+                  "categoryName": "Daequan Cook",
+                  "name": "1_16_3_34"
+                },
+                {
+                  "num": 4.1,
+                  "categoryName": "James Jones",
+                  "name": "1_16_3_37"
+                },
+                {
+                  "num": 2.7,
+                  "categoryName": "Joel Anthony",
+                  "name": "1_16_3_43"
+                },
+                {
+                  "num": 2.1,
+                  "categoryName": "Jamaal Magloire",
+                  "name": "1_16_3_40"
+                },
+                {
+                  "num": 0.8,
+                  "categoryName": "Yakhouba Diawara",
+                  "name": "1_16_3_39"
+                }
+              ],
+              "name": "1_16_3_0"
+            },
+            {
+              "num": 102.8,
+              "categoryName": "Orlando_Magic",
+              "children": [
+                {
+                  "num": 18.3,
+                  "categoryName": "Dwight Howard",
+                  "name": "1_16_4_5"
+                },
+                {
+                  "num": 16.6,
+                  "categoryName": "Vince Carter",
+                  "name": "1_16_4_39"
+                },
+                {
+                  "num": 14.1,
+                  "categoryName": "Rashard Lewis",
+                  "name": "1_16_4_29"
+                },
+                {
+                  "num": 12.6,
+                  "categoryName": "Jameer Nelson",
+                  "name": "1_16_4_6"
+                },
+                {
+                  "num": 9.6,
+                  "categoryName": "J.J. Redick",
+                  "name": "1_16_4_26"
+                },
+                {
+                  "num": 8.8,
+                  "categoryName": "Matt Barnes",
+                  "name": "1_16_4_40"
+                },
+                {
+                  "num": 8.7,
+                  "categoryName": "Mickael Pietrus",
+                  "name": "1_16_4_31"
+                },
+                {
+                  "num": 7.7,
+                  "categoryName": "Ryan Anderson",
+                  "name": "1_16_4_41"
+                },
+                {
+                  "num": 6,
+                  "categoryName": "Jason Williams",
+                  "name": "1_16_4_42"
+                },
+                {
+                  "num": 5.8,
+                  "categoryName": "Brandon Bass",
+                  "name": "1_16_4_43"
+                },
+                {
+                  "num": 4.2,
+                  "categoryName": "Anthony Johnson",
+                  "name": "1_16_4_33"
+                },
+                {
+                  "num": 3.6,
+                  "categoryName": "Marcin Gortat",
+                  "name": "1_16_4_34"
+                }
+              ],
+              "name": "1_16_4_0"
+            },
+            {
+              "num": 96.2,
+              "categoryName": "Washington_Wizards",
+              "children": [
+                {
+                  "num": 22.6,
+                  "categoryName": "Gilbert Arenas",
+                  "name": "1_16_5_1"
+                },
+                {
+                  "num": 20.5,
+                  "categoryName": "Antawn Jamison",
+                  "name": "1_16_5_3"
+                },
+                {
+                  "num": 16.9,
+                  "categoryName": "Caron Butler",
+                  "name": "1_16_5_17"
+                },
+                {
+                  "num": 14.5,
+                  "categoryName": "Josh Howard",
+                  "name": "1_16_5_37"
+                },
+                {
+                  "num": 14.1,
+                  "categoryName": "Andray Blatche",
+                  "name": "1_16_5_21"
+                },
+                {
+                  "num": 10.9,
+                  "categoryName": "Mike Miller",
+                  "name": "1_16_5_38"
+                },
+                {
+                  "num": 10.7,
+                  "categoryName": "Al Thornton",
+                  "name": "1_16_5_39"
+                },
+                {
+                  "num": 10.1,
+                  "categoryName": "Randy Foye",
+                  "name": "1_16_5_40"
+                },
+                {
+                  "num": 9.8,
+                  "categoryName": "Brendan Haywood",
+                  "name": "1_16_5_5"
+                },
+                {
+                  "num": 9.2,
+                  "categoryName": "Shaun Livingston",
+                  "name": "1_16_5_41"
+                },
+                {
+                  "num": 8.6,
+                  "categoryName": "Nick Young",
+                  "name": "1_16_5_30"
+                },
+                {
+                  "num": 7.4,
+                  "categoryName": "Alonzo Gee",
+                  "name": "1_16_5_42"
+                },
+                {
+                  "num": 6.6,
+                  "categoryName": "Earl Boykins",
+                  "name": "1_16_5_43"
+                },
+                {
+                  "num": 6.4,
+                  "categoryName": "JaVale McGee",
+                  "name": "1_16_5_32"
+                },
+                {
+                  "num": 6.4,
+                  "categoryName": "Cartier Martin",
+                  "name": "1_16_5_44"
+                },
+                {
+                  "num": 6.1,
+                  "categoryName": "James Singleton",
+                  "name": "1_16_5_45"
+                },
+                {
+                  "num": 4.5,
+                  "categoryName": "Mike James",
+                  "name": "1_16_5_31"
+                },
+                {
+                  "num": 3,
+                  "categoryName": "Cedric Jackson",
+                  "name": "1_16_5_46"
+                },
+                {
+                  "num": 2.5,
+                  "categoryName": "Paul Davis",
+                  "name": "1_16_5_47"
+                },
+                {
+                  "num": 2.2,
+                  "categoryName": "DeShawn Stevenson",
+                  "name": "1_16_5_25"
+                },
+                {
+                  "num": 1.5,
+                  "categoryName": "Quinton Ross",
+                  "name": "1_16_5_48"
+                },
+                {
+                  "num": 1.5,
+                  "categoryName": "Fabricio Oberto",
+                  "name": "1_16_5_49"
+                },
+                {
+                  "num": 0.8,
+                  "categoryName": "Mike Harris",
+                  "name": "1_16_5_50"
+                },
+                {
+                  "num": 0.7,
+                  "categoryName": "Dominic McGuire",
+                  "name": "1_16_5_34"
+                }
+              ],
+              "name": "1_16_5_0"
+            }
+          ],
+          "name": "1_16_0_0",
+          "num": 492.5
+        },
+        {
+          "categoryName": "Atlantic",
+          "children": [
+            {
+              "num": 99.2,
+              "categoryName": "Boston_Celtics",
+              "children": [
+                {
+                  "num": 18.3,
+                  "categoryName": "Paul Pierce",
+                  "name": "1_14_1_164"
+                },
+                {
+                  "num": 16.3,
+                  "categoryName": "Ray Allen",
+                  "name": "1_14_1_233"
+                },
+                {
+                  "num": 14.3,
+                  "categoryName": "Kevin Garnett",
+                  "name": "1_14_1_232"
+                },
+                {
+                  "num": 13.7,
+                  "categoryName": "Rajon Rondo",
+                  "name": "1_14_1_226"
+                },
+                {
+                  "num": 10.1,
+                  "categoryName": "Kendrick Perkins",
+                  "name": "1_14_1_210"
+                },
+                {
+                  "num": 9,
+                  "categoryName": "Rasheed Wallace",
+                  "name": "1_14_1_245"
+                },
+                {
+                  "num": 7.2,
+                  "categoryName": "Eddie House",
+                  "name": "1_14_1_235"
+                },
+                {
+                  "num": 7,
+                  "categoryName": "Oliver Lafayette",
+                  "name": "1_14_1_246"
+                },
+                {
+                  "num": 6.5,
+                  "categoryName": "Nate Robinson",
+                  "name": "1_14_1_247"
+                },
+                {
+                  "num": 6.3,
+                  "categoryName": "Glen Davis",
+                  "name": "1_14_1_237"
+                },
+                {
+                  "num": 6.1,
+                  "categoryName": "Tony Allen",
+                  "name": "1_14_1_214"
+                },
+                {
+                  "num": 5.6,
+                  "categoryName": "Marquis Daniels",
+                  "name": "1_14_1_248"
+                },
+                {
+                  "num": 5.2,
+                  "categoryName": "Michael Finley",
+                  "name": "1_14_1_249"
+                },
+                {
+                  "num": 3.7,
+                  "categoryName": "Shelden Williams",
+                  "name": "1_14_1_250"
+                },
+                {
+                  "num": 1.5,
+                  "categoryName": "Brian Scalabrine",
+                  "name": "1_14_1_223"
+                },
+                {
+                  "num": 1.4,
+                  "categoryName": "Lester Hudson",
+                  "name": "1_14_1_251"
+                },
+                {
+                  "num": 1.1,
+                  "categoryName": "J.R. Giddens",
+                  "name": "1_14_1_244"
+                },
+                {
+                  "num": 1,
+                  "categoryName": "Henry Walker",
+                  "name": "1_14_1_242"
+                },
+                {
+                  "num": 0,
+                  "categoryName": "Marcus Landry",
+                  "name": "1_14_1_252"
+                }
+              ],
+              "name": "1_14_1_0"
+            },
+            {
+              "num": 92.4,
+              "categoryName": "New_Jersey_Nets",
+              "children": [
+                {
+                  "num": 18.8,
+                  "categoryName": "Brook Lopez",
+                  "name": "1_14_6_250"
+                },
+                {
+                  "num": 16.9,
+                  "categoryName": "Devin Harris",
+                  "name": "1_14_6_249"
+                },
+                {
+                  "num": 12.5,
+                  "categoryName": "Courtney Lee",
+                  "name": "1_14_6_262"
+                },
+                {
+                  "num": 12,
+                  "categoryName": "Yi Jianlian",
+                  "name": "1_14_6_253"
+                },
+                {
+                  "num": 9.8,
+                  "categoryName": "C. Douglas-Roberts",
+                  "name": "1_14_6_256"
+                },
+                {
+                  "num": 9.7,
+                  "categoryName": "Rafer Alston",
+                  "name": "1_14_6_263"
+                },
+                {
+                  "num": 8.4,
+                  "categoryName": "Terrence Williams",
+                  "name": "1_14_6_264"
+                },
+                {
+                  "num": 8.1,
+                  "categoryName": "Kris Humphries",
+                  "name": "1_14_6_265"
+                },
+                {
+                  "num": 7.8,
+                  "categoryName": "Jarvis Hayes",
+                  "name": "1_14_6_252"
+                },
+                {
+                  "num": 6.9,
+                  "categoryName": "Keyon Dooling",
+                  "name": "1_14_6_251"
+                },
+                {
+                  "num": 5.3,
+                  "categoryName": "Bobby Simmons",
+                  "name": "1_14_6_254"
+                },
+                {
+                  "num": 4.5,
+                  "categoryName": "Trenton Hassell",
+                  "name": "1_14_6_258"
+                },
+                {
+                  "num": 4,
+                  "categoryName": "Josh Boone",
+                  "name": "1_14_6_245"
+                },
+                {
+                  "num": 3.8,
+                  "categoryName": "Eduardo Najera",
+                  "name": "1_14_6_259"
+                },
+                {
+                  "num": 2.6,
+                  "categoryName": "Sean Williams",
+                  "name": "1_14_6_260"
+                },
+                {
+                  "num": 2.4,
+                  "categoryName": "Tony Battie",
+                  "name": "1_14_6_266"
+                },
+                {
+                  "num": 2.2,
+                  "categoryName": "Chris Quinn",
+                  "name": "1_14_6_267"
+                }
+              ],
+              "name": "1_14_6_0"
+            },
+            {
+              "num": 102.1,
+              "categoryName": "New_York_Knicks",
+              "children": [
+                {
+                  "num": 20.2,
+                  "categoryName": "David Lee",
+                  "name": "1_14_3_219"
+                },
+                {
+                  "num": 17.7,
+                  "categoryName": "Al Harrington",
+                  "name": "1_14_3_229"
+                },
+                {
+                  "num": 15.3,
+                  "categoryName": "Wilson Chandler",
+                  "name": "1_14_3_231"
+                },
+                {
+                  "num": 15.1,
+                  "categoryName": "Danilo Gallinari",
+                  "name": "1_14_3_234"
+                },
+                {
+                  "num": 13.2,
+                  "categoryName": "Nate Robinson",
+                  "name": "1_14_3_216"
+                },
+                {
+                  "num": 11.9,
+                  "categoryName": "Henry Walker",
+                  "name": "1_14_3_242"
+                },
+                {
+                  "num": 11.7,
+                  "categoryName": "Earl Barron",
+                  "name": "1_14_3_243"
+                },
+                {
+                  "num": 9.6,
+                  "categoryName": "Larry Hughes",
+                  "name": "1_14_3_232"
+                },
+                {
+                  "num": 9.4,
+                  "categoryName": "Tracy McGrady",
+                  "name": "1_14_3_244"
+                },
+                {
+                  "num": 8.6,
+                  "categoryName": "Toney Douglas",
+                  "name": "1_14_3_245"
+                },
+                {
+                  "num": 7.4,
+                  "categoryName": "Sergio Rodriguez",
+                  "name": "1_14_3_246"
+                },
+                {
+                  "num": 7.4,
+                  "categoryName": "Chris Duhon",
+                  "name": "1_14_3_233"
+                },
+                {
+                  "num": 6.4,
+                  "categoryName": "Eddie House",
+                  "name": "1_14_3_247"
+                },
+                {
+                  "num": 5.5,
+                  "categoryName": "Jared Jeffries",
+                  "name": "1_14_3_226"
+                },
+                {
+                  "num": 4.7,
+                  "categoryName": "Jonathan Bender",
+                  "name": "1_14_3_248"
+                },
+                {
+                  "num": 4.1,
+                  "categoryName": "J.R. Giddens",
+                  "name": "1_14_3_249"
+                },
+                {
+                  "num": 4,
+                  "categoryName": "Jordan Hill",
+                  "name": "1_14_3_250"
+                },
+                {
+                  "num": 3.7,
+                  "categoryName": "Eddy Curry",
+                  "name": "1_14_3_212"
+                },
+                {
+                  "num": 2.6,
+                  "categoryName": "Marcus Landry",
+                  "name": "1_14_3_251"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "Darko Milicic",
+                  "name": "1_14_3_252"
+                }
+              ],
+              "name": "1_14_3_0"
+            },
+            {
+              "num": 97.7,
+              "categoryName": "Philadelphia_76ers",
+              "children": [
+                {
+                  "num": 17.1,
+                  "categoryName": "Andre Iguodala",
+                  "name": "1_14_4_277"
+                },
+                {
+                  "num": 14,
+                  "categoryName": "Lou Williams",
+                  "name": "1_14_4_286"
+                },
+                {
+                  "num": 13.9,
+                  "categoryName": "Allen Iverson",
+                  "name": "1_14_4_200"
+                },
+                {
+                  "num": 13.8,
+                  "categoryName": "Thaddeus Young",
+                  "name": "1_14_4_295"
+                },
+                {
+                  "num": 13.1,
+                  "categoryName": "Elton Brand",
+                  "name": "1_14_4_296"
+                },
+                {
+                  "num": 8.7,
+                  "categoryName": "Willie Green",
+                  "name": "1_14_4_271"
+                },
+                {
+                  "num": 8.6,
+                  "categoryName": "Marreese Speights",
+                  "name": "1_14_4_297"
+                },
+                {
+                  "num": 8.1,
+                  "categoryName": "Samuel Dalembert",
+                  "name": "1_14_4_254"
+                },
+                {
+                  "num": 8,
+                  "categoryName": "Jrue Holiday",
+                  "name": "1_14_4_302"
+                },
+                {
+                  "num": 5.9,
+                  "categoryName": "Jodie Meeks",
+                  "name": "1_14_4_303"
+                },
+                {
+                  "num": 5.7,
+                  "categoryName": "Jason Kapono",
+                  "name": "1_14_4_304"
+                },
+                {
+                  "num": 4.7,
+                  "categoryName": "Rodney Carney",
+                  "name": "1_14_4_290"
+                },
+                {
+                  "num": 3.4,
+                  "categoryName": "Jason Smith",
+                  "name": "1_14_4_305"
+                },
+                {
+                  "num": 2.7,
+                  "categoryName": "Royal Ivey",
+                  "name": "1_14_4_300"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "Francisco Elson",
+                  "name": "1_14_4_306"
+                },
+                {
+                  "num": 0.7,
+                  "categoryName": "Primoz Brezec",
+                  "name": "1_14_4_307"
+                }
+              ],
+              "name": "1_14_4_0"
+            },
+            {
+              "num": 104.1,
+              "categoryName": "Toronto_Raptors",
+              "children": [
+                {
+                  "num": 24,
+                  "categoryName": "Chris Bosh",
+                  "name": "1_14_12_2"
+                },
+                {
+                  "num": 17.2,
+                  "categoryName": "Andrea Bargnani",
+                  "name": "1_14_12_27"
+                },
+                {
+                  "num": 11.4,
+                  "categoryName": "Jarrett Jack",
+                  "name": "1_14_12_49"
+                },
+                {
+                  "num": 11.3,
+                  "categoryName": "Hedo Turkoglu",
+                  "name": "1_14_12_50"
+                },
+                {
+                  "num": 10.3,
+                  "categoryName": "Jose Calderon",
+                  "name": "1_14_12_20"
+                },
+                {
+                  "num": 8.6,
+                  "categoryName": "DeMar DeRozan",
+                  "name": "1_14_12_51"
+                },
+                {
+                  "num": 7.5,
+                  "categoryName": "Sonny Weems",
+                  "name": "1_14_12_52"
+                },
+                {
+                  "num": 7.1,
+                  "categoryName": "Marco Belinelli",
+                  "name": "1_14_12_53"
+                },
+                {
+                  "num": 6.5,
+                  "categoryName": "Antoine Wright",
+                  "name": "1_14_12_54"
+                },
+                {
+                  "num": 6.2,
+                  "categoryName": "Amir Johnson",
+                  "name": "1_14_12_55"
+                },
+                {
+                  "num": 5,
+                  "categoryName": "Marcus Banks",
+                  "name": "1_14_12_45"
+                },
+                {
+                  "num": 3.9,
+                  "categoryName": "Rasho Nesterovic",
+                  "name": "1_14_12_31"
+                },
+                {
+                  "num": 3.4,
+                  "categoryName": "Reggie Evans",
+                  "name": "1_14_12_56"
+                },
+                {
+                  "num": 2.1,
+                  "categoryName": "Pops Mensah-Bonsu",
+                  "name": "1_14_12_40"
+                },
+                {
+                  "num": 1.7,
+                  "categoryName": "Patrick O'Bryant",
+                  "name": "1_14_12_42"
+                }
+              ],
+              "name": "1_14_12_0"
+            }
+          ],
+          "name": "1_14_0_0",
+          "num": 495.5
+        },
+        {
+          "categoryName": "Central",
+          "children": [
+            {
+              "num": 97.5,
+              "categoryName": "Chicago_Bulls",
+              "children": [
+                {
+                  "num": 20.8,
+                  "categoryName": "Derrick Rose",
+                  "name": "1_15_12_203"
+                },
+                {
+                  "num": 17.6,
+                  "categoryName": "Luol Deng",
+                  "name": "1_15_12_168"
+                },
+                {
+                  "num": 12.7,
+                  "categoryName": "John Salmons",
+                  "name": "1_15_12_202"
+                },
+                {
+                  "num": 10.9,
+                  "categoryName": "Kirk Hinrich",
+                  "name": "1_15_12_159"
+                },
+                {
+                  "num": 10.7,
+                  "categoryName": "Joakim Noah",
+                  "name": "1_15_12_196"
+                },
+                {
+                  "num": 10.1,
+                  "categoryName": "Ronald Murray",
+                  "name": "1_15_12_206"
+                },
+                {
+                  "num": 9,
+                  "categoryName": "Taj Gibson",
+                  "name": "1_15_12_207"
+                },
+                {
+                  "num": 8.8,
+                  "categoryName": "Tyrus Thomas",
+                  "name": "1_15_12_189"
+                },
+                {
+                  "num": 8.8,
+                  "categoryName": "Brad Miller",
+                  "name": "1_15_12_135"
+                },
+                {
+                  "num": 8.7,
+                  "categoryName": "Hakim Warrick",
+                  "name": "1_15_12_208"
+                },
+                {
+                  "num": 5.5,
+                  "categoryName": "Acie Law",
+                  "name": "1_15_12_209"
+                },
+                {
+                  "num": 5.5,
+                  "categoryName": "Jannero Pargo",
+                  "name": "1_15_12_158"
+                },
+                {
+                  "num": 3.9,
+                  "categoryName": "James Johnson",
+                  "name": "1_15_12_210"
+                },
+                {
+                  "num": 2.3,
+                  "categoryName": "Aaron Gray",
+                  "name": "1_15_12_198"
+                },
+                {
+                  "num": 2.1,
+                  "categoryName": "Chris Richard",
+                  "name": "1_15_12_211"
+                },
+                {
+                  "num": 1.8,
+                  "categoryName": "Devin Brown",
+                  "name": "1_15_12_212"
+                },
+                {
+                  "num": 1,
+                  "categoryName": "Lindsey Hunter",
+                  "name": "1_15_12_204"
+                },
+                {
+                  "num": 0.5,
+                  "categoryName": "Joe Alexander",
+                  "name": "1_15_12_213"
+                }
+              ],
+              "name": "1_15_12_0"
+            },
+            {
+              "num": 102.1,
+              "categoryName": "Cleveland_Cavaliers",
+              "children": [
+                {
+                  "num": 29.7,
+                  "categoryName": "LeBron James",
+                  "name": "1_15_4_233"
+                },
+                {
+                  "num": 15.8,
+                  "categoryName": "Mo Williams",
+                  "name": "1_15_4_279"
+                },
+                {
+                  "num": 15.8,
+                  "categoryName": "Antawn Jamison",
+                  "name": "1_15_4_286"
+                },
+                {
+                  "num": 12,
+                  "categoryName": "Shaquille O'Neal",
+                  "name": "1_15_4_287"
+                },
+                {
+                  "num": 9.8,
+                  "categoryName": "Sebastian Telfair",
+                  "name": "1_15_4_288"
+                },
+                {
+                  "num": 8.8,
+                  "categoryName": "Delonte West",
+                  "name": "1_15_4_269"
+                },
+                {
+                  "num": 8.6,
+                  "categoryName": "Anderson Varejao",
+                  "name": "1_15_4_247"
+                },
+                {
+                  "num": 8.5,
+                  "categoryName": "J.J. Hickson",
+                  "name": "1_15_4_280"
+                },
+                {
+                  "num": 7.4,
+                  "categoryName": "Zydrunas Ilgauskas",
+                  "name": "1_15_4_184"
+                },
+                {
+                  "num": 7.3,
+                  "categoryName": "Anthony Parker",
+                  "name": "1_15_4_289"
+                },
+                {
+                  "num": 6.3,
+                  "categoryName": "Daniel Gibson",
+                  "name": "1_15_4_264"
+                },
+                {
+                  "num": 4.9,
+                  "categoryName": "Jamario Moon",
+                  "name": "1_15_4_290"
+                },
+                {
+                  "num": 4.1,
+                  "categoryName": "Jawad Williams",
+                  "name": "1_15_4_284"
+                },
+                {
+                  "num": 4,
+                  "categoryName": "Leon Powe",
+                  "name": "1_15_4_291"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "Danny Green",
+                  "name": "1_15_4_292"
+                },
+                {
+                  "num": 0.8,
+                  "categoryName": "Darnell Jackson",
+                  "name": "1_15_4_282"
+                },
+                {
+                  "num": 0.2,
+                  "categoryName": "Cedric Jackson",
+                  "name": "1_15_4_293"
+                },
+                {
+                  "num": 0,
+                  "categoryName": "Coby Karl",
+                  "name": "1_15_4_294"
+                }
+              ],
+              "name": "1_15_4_0"
+            },
+            {
+              "num": 94,
+              "categoryName": "Detroit_Pistons",
+              "children": [
+                {
+                  "num": 18.1,
+                  "categoryName": "Richard Hamilton",
+                  "name": "1_15_10_191"
+                },
+                {
+                  "num": 16.6,
+                  "categoryName": "Rodney Stuckey",
+                  "name": "1_15_10_224"
+                },
+                {
+                  "num": 13.8,
+                  "categoryName": "Ben Gordon",
+                  "name": "1_15_10_235"
+                },
+                {
+                  "num": 13.5,
+                  "categoryName": "Tayshaun Prince",
+                  "name": "1_15_10_194"
+                },
+                {
+                  "num": 11.9,
+                  "categoryName": "Charlie Villanueva",
+                  "name": "1_15_10_236"
+                },
+                {
+                  "num": 10,
+                  "categoryName": "Will Bynum",
+                  "name": "1_15_10_232"
+                },
+                {
+                  "num": 9.3,
+                  "categoryName": "Jonas Jerebko",
+                  "name": "1_15_10_237"
+                },
+                {
+                  "num": 6.8,
+                  "categoryName": "Jason Maxiell",
+                  "name": "1_15_10_217"
+                },
+                {
+                  "num": 5.5,
+                  "categoryName": "Ben Wallace",
+                  "name": "1_15_10_177"
+                },
+                {
+                  "num": 5.1,
+                  "categoryName": "Austin Daye",
+                  "name": "1_15_10_238"
+                },
+                {
+                  "num": 4.5,
+                  "categoryName": "Chris Wilcox",
+                  "name": "1_15_10_239"
+                },
+                {
+                  "num": 4,
+                  "categoryName": "Chucky Atkins",
+                  "name": "1_15_10_175"
+                },
+                {
+                  "num": 3.3,
+                  "categoryName": "Kwame Brown",
+                  "name": "1_15_10_233"
+                },
+                {
+                  "num": 3,
+                  "categoryName": "DaJuan Summers",
+                  "name": "1_15_10_240"
+                }
+              ],
+              "name": "1_15_10_0"
+            },
+            {
+              "num": 100.8,
+              "categoryName": "Indiana_Pacers",
+              "children": [
+                {
+                  "num": 24.1,
+                  "categoryName": "Danny Granger",
+                  "name": "1_15_11_159"
+                },
+                {
+                  "num": 14.6,
+                  "categoryName": "Troy Murphy",
+                  "name": "1_15_11_163"
+                },
+                {
+                  "num": 11.7,
+                  "categoryName": "Roy Hibbert",
+                  "name": "1_15_11_176"
+                },
+                {
+                  "num": 10.3,
+                  "categoryName": "T.J. Ford",
+                  "name": "1_15_11_173"
+                },
+                {
+                  "num": 10.2,
+                  "categoryName": "Dahntay Jones",
+                  "name": "1_15_11_181"
+                },
+                {
+                  "num": 9.9,
+                  "categoryName": "Mike Dunleavy, Jr.",
+                  "name": "1_15_11_162"
+                },
+                {
+                  "num": 9.4,
+                  "categoryName": "Brandon Rush",
+                  "name": "1_15_11_175"
+                },
+                {
+                  "num": 8.5,
+                  "categoryName": "Tyler Hansbrough",
+                  "name": "1_15_11_182"
+                },
+                {
+                  "num": 7.8,
+                  "categoryName": "Earl Watson",
+                  "name": "1_15_11_183"
+                },
+                {
+                  "num": 7.6,
+                  "categoryName": "Luther Head",
+                  "name": "1_15_11_184"
+                },
+                {
+                  "num": 7.3,
+                  "categoryName": "A.J. Price",
+                  "name": "1_15_11_185"
+                },
+                {
+                  "num": 4.3,
+                  "categoryName": "Josh McRoberts",
+                  "name": "1_15_11_180"
+                },
+                {
+                  "num": 4,
+                  "categoryName": "Solomon Jones",
+                  "name": "1_15_11_186"
+                },
+                {
+                  "num": 3.1,
+                  "categoryName": "Jeff Foster",
+                  "name": "1_15_11_127"
+                },
+                {
+                  "num": 0.8,
+                  "categoryName": "Travis Diener",
+                  "name": "1_15_11_179"
+                }
+              ],
+              "name": "1_15_11_0"
+            },
+            {
+              "num": 97.7,
+              "categoryName": "Milwaukee_Bucks",
+              "children": [
+                {
+                  "num": 19.9,
+                  "categoryName": "John Salmons",
+                  "name": "1_15_13_227"
+                },
+                {
+                  "num": 15.9,
+                  "categoryName": "Andrew Bogut",
+                  "name": "1_15_13_199"
+                },
+                {
+                  "num": 15.5,
+                  "categoryName": "Brandon Jennings",
+                  "name": "1_15_13_228"
+                },
+                {
+                  "num": 11.9,
+                  "categoryName": "Michael Redd",
+                  "name": "1_15_13_166"
+                },
+                {
+                  "num": 11,
+                  "categoryName": "Carlos Delfino",
+                  "name": "1_15_13_229"
+                },
+                {
+                  "num": 10.4,
+                  "categoryName": "Luke Ridnour",
+                  "name": "1_15_13_218"
+                },
+                {
+                  "num": 10.4,
+                  "categoryName": "Ersan Ilyasova",
+                  "name": "1_15_13_208"
+                },
+                {
+                  "num": 10.2,
+                  "categoryName": "Hakim Warrick",
+                  "name": "1_15_13_230"
+                },
+                {
+                  "num": 8.5,
+                  "categoryName": "Jerry Stackhouse",
+                  "name": "1_15_13_231"
+                },
+                {
+                  "num": 6.5,
+                  "categoryName": "Charlie Bell",
+                  "name": "1_15_13_201"
+                },
+                {
+                  "num": 6.2,
+                  "categoryName": "Luc Mbah a Moute",
+                  "name": "1_15_13_219"
+                },
+                {
+                  "num": 4.1,
+                  "categoryName": "Jodie Meeks",
+                  "name": "1_15_13_232"
+                },
+                {
+                  "num": 3.1,
+                  "categoryName": "Roko Ukic",
+                  "name": "1_15_13_233"
+                },
+                {
+                  "num": 3,
+                  "categoryName": "Kurt Thomas",
+                  "name": "1_15_13_234"
+                },
+                {
+                  "num": 2.8,
+                  "categoryName": "Dan Gadzuric",
+                  "name": "1_15_13_176"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "Darnell Jackson",
+                  "name": "1_15_13_235"
+                },
+                {
+                  "num": 1.3,
+                  "categoryName": "Royal Ivey",
+                  "name": "1_15_13_236"
+                },
+                {
+                  "num": 1,
+                  "categoryName": "Primoz Brezec",
+                  "name": "1_15_13_237"
+                },
+                {
+                  "num": 0.9,
+                  "categoryName": "Francisco Elson",
+                  "name": "1_15_13_223"
+                }
+              ],
+              "name": "1_15_13_0"
+            }
+          ],
+          "name": "1_15_0_0",
+          "num": 492.1
+        }
+      ],
+      "name": "1_0_0_0",
+      "num": 1480.1
+    },
+    {
+      "categoryName": "Western",
+      "children": [
+        {
+          "categoryName": "Northwest",
+          "children": [
+            {
+              "num": 106.5,
+              "categoryName": "Denver_Nuggets",
+              "children": [
+                {
+                  "num": 28.2,
+                  "categoryName": "Carmelo Anthony",
+                  "name": "2_34_1_1"
+                },
+                {
+                  "num": 19.5,
+                  "categoryName": "Chauncey Billups",
+                  "name": "2_34_1_39"
+                },
+                {
+                  "num": 15.4,
+                  "categoryName": "J.R. Smith",
+                  "name": "2_34_1_26"
+                },
+                {
+                  "num": 13.8,
+                  "categoryName": " Nene",
+                  "name": "2_34_1_7"
+                },
+                {
+                  "num": 11.5,
+                  "categoryName": "Kenyon Martin",
+                  "name": "2_34_1_2"
+                },
+                {
+                  "num": 8.8,
+                  "categoryName": "Arron Afflalo",
+                  "name": "2_34_1_48"
+                },
+                {
+                  "num": 8.3,
+                  "categoryName": "Ty Lawson",
+                  "name": "2_34_1_49"
+                },
+                {
+                  "num": 5.9,
+                  "categoryName": "Chris Andersen",
+                  "name": "2_34_1_40"
+                },
+                {
+                  "num": 4.2,
+                  "categoryName": "Joey Graham",
+                  "name": "2_34_1_50"
+                },
+                {
+                  "num": 3.4,
+                  "categoryName": "Johan Petro",
+                  "name": "2_34_1_43"
+                },
+                {
+                  "num": 3.3,
+                  "categoryName": "Anthony Carter",
+                  "name": "2_34_1_30"
+                },
+                {
+                  "num": 2.1,
+                  "categoryName": "Malik Allen",
+                  "name": "2_34_1_51"
+                },
+                {
+                  "num": 1.1,
+                  "categoryName": "Renaldo Balkman",
+                  "name": "2_34_1_42"
+                }
+              ],
+              "name": "2_34_1_0"
+            },
+            {
+              "num": 98.2,
+              "categoryName": "Minnesota_Timberwolves",
+              "children": [
+                {
+                  "num": 17.1,
+                  "categoryName": "Al Jefferson",
+                  "name": "2_34_2_28"
+                },
+                {
+                  "num": 14,
+                  "categoryName": "Kevin Love",
+                  "name": "2_34_2_30"
+                },
+                {
+                  "num": 13.5,
+                  "categoryName": "Jonny Flynn",
+                  "name": "2_34_2_41"
+                },
+                {
+                  "num": 13,
+                  "categoryName": "Corey Brewer",
+                  "name": "2_34_2_34"
+                },
+                {
+                  "num": 10.9,
+                  "categoryName": "Ryan Gomes",
+                  "name": "2_34_2_29"
+                },
+                {
+                  "num": 8.3,
+                  "categoryName": "Darko Milicic",
+                  "name": "2_34_2_42"
+                },
+                {
+                  "num": 8.2,
+                  "categoryName": "Ramon Sessions",
+                  "name": "2_34_2_43"
+                },
+                {
+                  "num": 6.6,
+                  "categoryName": "Wayne Ellington",
+                  "name": "2_34_2_44"
+                },
+                {
+                  "num": 6.1,
+                  "categoryName": "Ryan Hollins",
+                  "name": "2_34_2_45"
+                },
+                {
+                  "num": 5.6,
+                  "categoryName": "Damien Wilkins",
+                  "name": "2_34_2_46"
+                },
+                {
+                  "num": 4.5,
+                  "categoryName": "Oleksiy Pecherov",
+                  "name": "2_34_2_47"
+                },
+                {
+                  "num": 3.7,
+                  "categoryName": "Sasha Pavlovic",
+                  "name": "2_34_2_48"
+                },
+                {
+                  "num": 3.2,
+                  "categoryName": "Nathan Jawai",
+                  "name": "2_34_2_49"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "Alando Tucker",
+                  "name": "2_34_2_50"
+                },
+                {
+                  "num": 1.7,
+                  "categoryName": "Brian Cardinal",
+                  "name": "2_34_2_38"
+                },
+                {
+                  "num": 0,
+                  "categoryName": "Jason Hart",
+                  "name": "2_34_2_51"
+                }
+              ],
+              "name": "2_34_2_0"
+            },
+            {
+              "num": 101.5,
+              "categoryName": "Oklahoma_City_Thunder",
+              "children": [
+                {
+                  "num": 30.1,
+                  "categoryName": "Kevin Durant",
+                  "name": "2_34_6_1"
+                },
+                {
+                  "num": 16.1,
+                  "categoryName": "Russell Westbrook",
+                  "name": "2_34_6_3"
+                },
+                {
+                  "num": 15.1,
+                  "categoryName": "Jeff Green",
+                  "name": "2_34_6_2"
+                },
+                {
+                  "num": 9.9,
+                  "categoryName": "James Harden",
+                  "name": "2_34_6_21"
+                },
+                {
+                  "num": 8.4,
+                  "categoryName": "Nenad Krstic",
+                  "name": "2_34_6_4"
+                },
+                {
+                  "num": 6.3,
+                  "categoryName": "Serge Ibaka",
+                  "name": "2_34_6_22"
+                },
+                {
+                  "num": 6,
+                  "categoryName": "Thabo Sefolosha",
+                  "name": "2_34_6_6"
+                },
+                {
+                  "num": 5.9,
+                  "categoryName": "Nick Collison",
+                  "name": "2_34_6_8"
+                },
+                {
+                  "num": 4.9,
+                  "categoryName": "D.J. White",
+                  "name": "2_34_6_5"
+                },
+                {
+                  "num": 4.5,
+                  "categoryName": "Eric Maynor",
+                  "name": "2_34_6_23"
+                },
+                {
+                  "num": 4,
+                  "categoryName": "Mike Wilks",
+                  "name": "2_34_6_24"
+                },
+                {
+                  "num": 4,
+                  "categoryName": "Ryan Bowen",
+                  "name": "2_34_6_25"
+                },
+                {
+                  "num": 3.3,
+                  "categoryName": "Etan Thomas",
+                  "name": "2_34_6_26"
+                },
+                {
+                  "num": 3,
+                  "categoryName": "Kyle Weaver",
+                  "name": "2_34_6_13"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "Antonio Anderson",
+                  "name": "2_34_6_27"
+                },
+                {
+                  "num": 1.8,
+                  "categoryName": "Kevin Ollie",
+                  "name": "2_34_6_28"
+                },
+                {
+                  "num": 1.1,
+                  "categoryName": "Byron Mullens",
+                  "name": "2_34_6_29"
+                },
+                {
+                  "num": 1,
+                  "categoryName": "Shaun Livingston",
+                  "name": "2_34_6_9"
+                }
+              ],
+              "name": "2_34_6_0"
+            },
+            {
+              "num": 98.1,
+              "categoryName": "Portland_Trail_Blazers",
+              "children": [
+                {
+                  "num": 21.5,
+                  "categoryName": "Brandon Roy",
+                  "name": "2_34_3_26"
+                },
+                {
+                  "num": 17.9,
+                  "categoryName": "LaMarcus Aldridge",
+                  "name": "2_34_3_27"
+                },
+                {
+                  "num": 14,
+                  "categoryName": "Andre Miller",
+                  "name": "2_34_3_45"
+                },
+                {
+                  "num": 11.1,
+                  "categoryName": "Greg Oden",
+                  "name": "2_34_3_38"
+                },
+                {
+                  "num": 10.1,
+                  "categoryName": "Nicolas Batum",
+                  "name": "2_34_3_39"
+                },
+                {
+                  "num": 9.9,
+                  "categoryName": "Travis Outlaw",
+                  "name": "2_34_3_10"
+                },
+                {
+                  "num": 9.4,
+                  "categoryName": "Martell Webster",
+                  "name": "2_34_3_21"
+                },
+                {
+                  "num": 8.5,
+                  "categoryName": "Jerryd Bayless",
+                  "name": "2_34_3_40"
+                },
+                {
+                  "num": 8.1,
+                  "categoryName": "Rudy Fernandez",
+                  "name": "2_34_3_37"
+                },
+                {
+                  "num": 7.6,
+                  "categoryName": "Steve Blake",
+                  "name": "2_34_3_19"
+                },
+                {
+                  "num": 7,
+                  "categoryName": "Marcus Camby",
+                  "name": "2_34_3_46"
+                },
+                {
+                  "num": 6,
+                  "categoryName": "Juwan Howard",
+                  "name": "2_34_3_47"
+                },
+                {
+                  "num": 4.1,
+                  "categoryName": "Joel Przybilla",
+                  "name": "2_34_3_9"
+                },
+                {
+                  "num": 3.9,
+                  "categoryName": "Dante Cunningham",
+                  "name": "2_34_3_48"
+                },
+                {
+                  "num": 2.7,
+                  "categoryName": "Jeff Ayres",
+                  "name": "2_34_3_49"
+                },
+                {
+                  "num": 2.6,
+                  "categoryName": "Patty Mills",
+                  "name": "2_34_3_50"
+                },
+                {
+                  "num": 1.3,
+                  "categoryName": "Shavlik Randolph",
+                  "name": "2_34_3_42"
+                },
+                {
+                  "num": 0.6,
+                  "categoryName": "Travis Diener",
+                  "name": "2_34_3_51"
+                },
+                {
+                  "num": 0,
+                  "categoryName": "Anthony Tolliver",
+                  "name": "2_34_3_52"
+                }
+              ],
+              "name": "2_34_3_0"
+            },
+            {
+              "num": 104.2,
+              "categoryName": "Utah_Jazz",
+              "children": [
+                {
+                  "num": 19.5,
+                  "categoryName": "Carlos Boozer",
+                  "name": "2_34_5_1"
+                },
+                {
+                  "num": 18.7,
+                  "categoryName": "Deron Williams",
+                  "name": "2_34_5_18"
+                },
+                {
+                  "num": 13.5,
+                  "categoryName": "Mehmet Okur",
+                  "name": "2_34_5_4"
+                },
+                {
+                  "num": 11.9,
+                  "categoryName": "Andrei Kirilenko",
+                  "name": "2_34_5_2"
+                },
+                {
+                  "num": 11.6,
+                  "categoryName": "Paul Millsap",
+                  "name": "2_34_5_26"
+                },
+                {
+                  "num": 9.9,
+                  "categoryName": "C.J. Miles",
+                  "name": "2_34_5_21"
+                },
+                {
+                  "num": 9.5,
+                  "categoryName": "Ronnie Brewer",
+                  "name": "2_34_5_27"
+                },
+                {
+                  "num": 9.4,
+                  "categoryName": "Wesley Matthews",
+                  "name": "2_34_5_38"
+                },
+                {
+                  "num": 7.2,
+                  "categoryName": "Kyle Korver",
+                  "name": "2_34_5_32"
+                },
+                {
+                  "num": 5.2,
+                  "categoryName": "Eric Maynor",
+                  "name": "2_34_5_39"
+                },
+                {
+                  "num": 4.3,
+                  "categoryName": "Ronnie Price",
+                  "name": "2_34_5_34"
+                },
+                {
+                  "num": 3.3,
+                  "categoryName": "Sundiata Gaines",
+                  "name": "2_34_5_40"
+                },
+                {
+                  "num": 2.6,
+                  "categoryName": "Othyus Jeffers",
+                  "name": "2_34_5_41"
+                },
+                {
+                  "num": 2.6,
+                  "categoryName": "Kyrylo Fesenko",
+                  "name": "2_34_5_37"
+                },
+                {
+                  "num": 1.5,
+                  "categoryName": "Kosta Koufos",
+                  "name": "2_34_5_33"
+                }
+              ],
+              "name": "2_34_5_0"
+            }
+          ],
+          "name": "2_34_0_0",
+          "num": 508.49999999999994
+        },
+        {
+          "categoryName": "Pacific",
+          "children": [
+            {
+              "num": 108.8,
+              "categoryName": "Golden_State_Warriors",
+              "children": [
+                {
+                  "num": 25.5,
+                  "categoryName": "Monta Ellis",
+                  "name": "2_33_6_268"
+                },
+                {
+                  "num": 19.8,
+                  "categoryName": "Corey Maggette",
+                  "name": "2_33_6_292"
+                },
+                {
+                  "num": 17.5,
+                  "categoryName": "Stephen Curry",
+                  "name": "2_33_6_300"
+                },
+                {
+                  "num": 16.6,
+                  "categoryName": "Stephen Jackson",
+                  "name": "2_33_6_273"
+                },
+                {
+                  "num": 15.2,
+                  "categoryName": "Reggie Williams",
+                  "name": "2_33_6_301"
+                },
+                {
+                  "num": 13.9,
+                  "categoryName": "Kelenna Azubuike",
+                  "name": "2_33_6_275"
+                },
+                {
+                  "num": 13,
+                  "categoryName": "Anthony Morrow",
+                  "name": "2_33_6_293"
+                },
+                {
+                  "num": 12.3,
+                  "categoryName": "Anthony Tolliver",
+                  "name": "2_33_6_302"
+                },
+                {
+                  "num": 11.6,
+                  "categoryName": "Anthony Randolph",
+                  "name": "2_33_6_294"
+                },
+                {
+                  "num": 11,
+                  "categoryName": "Raja Bell",
+                  "name": "2_33_6_303"
+                },
+                {
+                  "num": 10.3,
+                  "categoryName": "C.J. Watson",
+                  "name": "2_33_6_285"
+                },
+                {
+                  "num": 9,
+                  "categoryName": "Cartier Martin",
+                  "name": "2_33_6_304"
+                },
+                {
+                  "num": 7,
+                  "categoryName": "Coby Karl",
+                  "name": "2_33_6_305"
+                },
+                {
+                  "num": 6.6,
+                  "categoryName": "V. Radmanovic",
+                  "name": "2_33_6_306"
+                },
+                {
+                  "num": 6.2,
+                  "categoryName": "Acie Law",
+                  "name": "2_33_6_307"
+                },
+                {
+                  "num": 5.4,
+                  "categoryName": "Devean George",
+                  "name": "2_33_6_308"
+                },
+                {
+                  "num": 5,
+                  "categoryName": "Andris Biedrins",
+                  "name": "2_33_6_261"
+                },
+                {
+                  "num": 5,
+                  "categoryName": "Mikki Moore",
+                  "name": "2_33_6_309"
+                },
+                {
+                  "num": 4.9,
+                  "categoryName": "Ronny Turiaf",
+                  "name": "2_33_6_295"
+                },
+                {
+                  "num": 4.5,
+                  "categoryName": "Chris Hunter",
+                  "name": "2_33_6_310"
+                }
+              ],
+              "name": "2_33_6_0"
+            },
+            {
+              "num": 95.7,
+              "categoryName": "Los_Angeles_Clippers",
+              "children": [
+                {
+                  "num": 18.5,
+                  "categoryName": "Chris Kaman",
+                  "name": "2_33_10_162"
+                },
+                {
+                  "num": 16.9,
+                  "categoryName": "Eric Gordon",
+                  "name": "2_33_10_199"
+                },
+                {
+                  "num": 15.3,
+                  "categoryName": "Baron Davis",
+                  "name": "2_33_10_200"
+                },
+                {
+                  "num": 14.8,
+                  "categoryName": "Drew Gooden",
+                  "name": "2_33_10_210"
+                },
+                {
+                  "num": 11.9,
+                  "categoryName": "Rasual Butler",
+                  "name": "2_33_10_211"
+                },
+                {
+                  "num": 10.7,
+                  "categoryName": "Al Thornton",
+                  "name": "2_33_10_198"
+                },
+                {
+                  "num": 8.7,
+                  "categoryName": "Travis Outlaw",
+                  "name": "2_33_10_212"
+                },
+                {
+                  "num": 7.8,
+                  "categoryName": "Craig Smith",
+                  "name": "2_33_10_213"
+                },
+                {
+                  "num": 7.7,
+                  "categoryName": "Marcus Camby",
+                  "name": "2_33_10_201"
+                },
+                {
+                  "num": 6.8,
+                  "categoryName": "Steve Blake",
+                  "name": "2_33_10_214"
+                },
+                {
+                  "num": 4.8,
+                  "categoryName": "DeAndre Jordan",
+                  "name": "2_33_10_207"
+                },
+                {
+                  "num": 4.4,
+                  "categoryName": "Ricky Davis",
+                  "name": "2_33_10_204"
+                },
+                {
+                  "num": 4.3,
+                  "categoryName": "Sebastian Telfair",
+                  "name": "2_33_10_215"
+                },
+                {
+                  "num": 3,
+                  "categoryName": "Bobby Brown",
+                  "name": "2_33_10_216"
+                },
+                {
+                  "num": 2.6,
+                  "categoryName": "Mardy Collins",
+                  "name": "2_33_10_205"
+                },
+                {
+                  "num": 2.1,
+                  "categoryName": "Steve Novak",
+                  "name": "2_33_10_203"
+                },
+                {
+                  "num": 1.6,
+                  "categoryName": "Brian Skinner",
+                  "name": "2_33_10_128"
+                },
+                {
+                  "num": 1.3,
+                  "categoryName": "Kareem Rush",
+                  "name": "2_33_10_217"
+                },
+                {
+                  "num": 0,
+                  "categoryName": "JamesOn Curry",
+                  "name": "2_33_10_218"
+                }
+              ],
+              "name": "2_33_10_0"
+            },
+            {
+              "num": 101.7,
+              "categoryName": "Los_Angeles_Lakers",
+              "children": [
+                {
+                  "num": 27,
+                  "categoryName": "Kobe Bryant",
+                  "name": "2_33_1_159"
+                },
+                {
+                  "num": 18.3,
+                  "categoryName": "Pau Gasol",
+                  "name": "2_33_1_229"
+                },
+                {
+                  "num": 15,
+                  "categoryName": "Andrew Bynum",
+                  "name": "2_33_1_221"
+                },
+                {
+                  "num": 11,
+                  "categoryName": "Metta World Peace",
+                  "name": "2_33_1_236"
+                },
+                {
+                  "num": 10.8,
+                  "categoryName": "Lamar Odom",
+                  "name": "2_33_1_208"
+                },
+                {
+                  "num": 8.1,
+                  "categoryName": "Shannon Brown",
+                  "name": "2_33_1_232"
+                },
+                {
+                  "num": 7.5,
+                  "categoryName": "Derek Fisher",
+                  "name": "2_33_1_163"
+                },
+                {
+                  "num": 7.2,
+                  "categoryName": "Jordan Farmar",
+                  "name": "2_33_1_227"
+                },
+                {
+                  "num": 2.8,
+                  "categoryName": "Sasha Vujacic",
+                  "name": "2_33_1_214"
+                },
+                {
+                  "num": 2.7,
+                  "categoryName": "Josh Powell",
+                  "name": "2_33_1_231"
+                },
+                {
+                  "num": 2.4,
+                  "categoryName": "Adam Morrison",
+                  "name": "2_33_1_234"
+                },
+                {
+                  "num": 2.4,
+                  "categoryName": "Luke Walton",
+                  "name": "2_33_1_205"
+                },
+                {
+                  "num": 2.1,
+                  "categoryName": "D.J. Mbenga",
+                  "name": "2_33_1_233"
+                }
+              ],
+              "name": "2_33_1_0"
+            },
+            {
+              "num": 110.2,
+              "categoryName": "Phoenix_Suns",
+              "children": [
+                {
+                  "num": 23.1,
+                  "categoryName": "Amar'e Stoudemire",
+                  "name": "2_33_8_198"
+                },
+                {
+                  "num": 16.5,
+                  "categoryName": "Steve Nash",
+                  "name": "2_33_8_151"
+                },
+                {
+                  "num": 15.7,
+                  "categoryName": "Jason Richardson",
+                  "name": "2_33_8_239"
+                },
+                {
+                  "num": 11.3,
+                  "categoryName": "Grant Hill",
+                  "name": "2_33_8_240"
+                },
+                {
+                  "num": 11.2,
+                  "categoryName": "Channing Frye",
+                  "name": "2_33_8_251"
+                },
+                {
+                  "num": 9.5,
+                  "categoryName": "Leandro Barbosa",
+                  "name": "2_33_8_203"
+                },
+                {
+                  "num": 8.4,
+                  "categoryName": "Robin Lopez",
+                  "name": "2_33_8_246"
+                },
+                {
+                  "num": 8.2,
+                  "categoryName": "Jared Dudley",
+                  "name": "2_33_8_242"
+                },
+                {
+                  "num": 7.9,
+                  "categoryName": "Goran Dragic",
+                  "name": "2_33_8_244"
+                },
+                {
+                  "num": 4.7,
+                  "categoryName": "Lou Amundson",
+                  "name": "2_33_8_245"
+                },
+                {
+                  "num": 3.9,
+                  "categoryName": "Alando Tucker",
+                  "name": "2_33_8_243"
+                },
+                {
+                  "num": 2.7,
+                  "categoryName": "Earl Clark",
+                  "name": "2_33_8_252"
+                },
+                {
+                  "num": 1.3,
+                  "categoryName": "Taylor Griffin",
+                  "name": "2_33_8_253"
+                },
+                {
+                  "num": 1,
+                  "categoryName": "Jarron Collins",
+                  "name": "2_33_8_254"
+                },
+                {
+                  "num": 0,
+                  "categoryName": "Dwayne Jones",
+                  "name": "2_33_8_255"
+                }
+              ],
+              "name": "2_33_8_0"
+            },
+            {
+              "num": 100,
+              "categoryName": "Sacramento_Kings",
+              "children": [
+                {
+                  "num": 20.1,
+                  "categoryName": "Tyreke Evans",
+                  "name": "2_33_11_164"
+                },
+                {
+                  "num": 19.8,
+                  "categoryName": "Kevin Martin",
+                  "name": "2_33_11_133"
+                },
+                {
+                  "num": 18,
+                  "categoryName": "Carl Landry",
+                  "name": "2_33_11_165"
+                },
+                {
+                  "num": 12.9,
+                  "categoryName": "Beno Udrih",
+                  "name": "2_33_11_154"
+                },
+                {
+                  "num": 12.5,
+                  "categoryName": "Jason Thompson",
+                  "name": "2_33_11_153"
+                },
+                {
+                  "num": 10.3,
+                  "categoryName": "Omri Casspi",
+                  "name": "2_33_11_166"
+                },
+                {
+                  "num": 10,
+                  "categoryName": "Spencer Hawes",
+                  "name": "2_33_11_152"
+                },
+                {
+                  "num": 8.5,
+                  "categoryName": "Donte Greene",
+                  "name": "2_33_11_159"
+                },
+                {
+                  "num": 8.5,
+                  "categoryName": "Andres Nocioni",
+                  "name": "2_33_11_150"
+                },
+                {
+                  "num": 8.1,
+                  "categoryName": "Francisco Garcia",
+                  "name": "2_33_11_140"
+                },
+                {
+                  "num": 6,
+                  "categoryName": "Sergio Rodriguez",
+                  "name": "2_33_11_167"
+                },
+                {
+                  "num": 3.6,
+                  "categoryName": "Ime Udoka",
+                  "name": "2_33_11_168"
+                },
+                {
+                  "num": 3.3,
+                  "categoryName": "Sean May",
+                  "name": "2_33_11_169"
+                },
+                {
+                  "num": 2.8,
+                  "categoryName": "Jon Brockman",
+                  "name": "2_33_11_170"
+                },
+                {
+                  "num": 2.6,
+                  "categoryName": "Desmond Mason",
+                  "name": "2_33_11_171"
+                },
+                {
+                  "num": 2.2,
+                  "categoryName": "Garrett Temple",
+                  "name": "2_33_11_172"
+                },
+                {
+                  "num": 1.7,
+                  "categoryName": "Hilton Armstrong",
+                  "name": "2_33_11_173"
+                },
+                {
+                  "num": 1.6,
+                  "categoryName": "Kenny Thomas",
+                  "name": "2_33_11_128"
+                },
+                {
+                  "num": 1.5,
+                  "categoryName": "Joey Dorsey",
+                  "name": "2_33_11_174"
+                },
+                {
+                  "num": 0.8,
+                  "categoryName": "Dominic McGuire",
+                  "name": "2_33_11_175"
+                }
+              ],
+              "name": "2_33_11_0"
+            }
+          ],
+          "name": "2_33_0_0",
+          "num": 516.4
+        },
+        {
+          "categoryName": "Southwest",
+          "children": [
+            {
+              "num": 102,
+              "categoryName": "Dallas_Mavericks",
+              "children": [
+                {
+                  "num": 25,
+                  "categoryName": "Dirk Nowitzki",
+                  "name": "2_35_1_1"
+                },
+                {
+                  "num": 16.6,
+                  "categoryName": "Jason Terry",
+                  "name": "2_35_1_5"
+                },
+                {
+                  "num": 15.2,
+                  "categoryName": "Caron Butler",
+                  "name": "2_35_1_45"
+                },
+                {
+                  "num": 12.5,
+                  "categoryName": "Josh Howard",
+                  "name": "2_35_1_4"
+                },
+                {
+                  "num": 12,
+                  "categoryName": "Shawn Marion",
+                  "name": "2_35_1_46"
+                },
+                {
+                  "num": 10.3,
+                  "categoryName": "Jason Kidd",
+                  "name": "2_35_1_30"
+                },
+                {
+                  "num": 8.9,
+                  "categoryName": "Drew Gooden",
+                  "name": "2_35_1_47"
+                },
+                {
+                  "num": 8.1,
+                  "categoryName": "Brendan Haywood",
+                  "name": "2_35_1_48"
+                },
+                {
+                  "num": 7.6,
+                  "categoryName": "Jose Juan Barea",
+                  "name": "2_35_1_28"
+                },
+                {
+                  "num": 7.5,
+                  "categoryName": "Tim Thomas",
+                  "name": "2_35_1_49"
+                },
+                {
+                  "num": 7.1,
+                  "categoryName": "Rodrigue Beaubois",
+                  "name": "2_35_1_50"
+                },
+                {
+                  "num": 6,
+                  "categoryName": "Erick Dampier",
+                  "name": "2_35_1_7"
+                },
+                {
+                  "num": 5.2,
+                  "categoryName": "Kris Humphries",
+                  "name": "2_35_1_51"
+                },
+                {
+                  "num": 3.3,
+                  "categoryName": "Eduardo Najera",
+                  "name": "2_35_1_52"
+                },
+                {
+                  "num": 2.4,
+                  "categoryName": "James Singleton",
+                  "name": "2_35_1_41"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "DeShawn Stevenson",
+                  "name": "2_35_1_53"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "Quinton Ross",
+                  "name": "2_35_1_54"
+                },
+                {
+                  "num": 1.8,
+                  "categoryName": "Matt Carroll",
+                  "name": "2_35_1_44"
+                }
+              ],
+              "name": "2_35_1_0"
+            },
+            {
+              "num": 102.4,
+              "categoryName": "Houston_Rockets",
+              "children": [
+                {
+                  "num": 21.3,
+                  "categoryName": "Kevin Martin",
+                  "name": "2_35_2_53"
+                },
+                {
+                  "num": 19.6,
+                  "categoryName": "Aaron Brooks",
+                  "name": "2_35_2_45"
+                },
+                {
+                  "num": 16.2,
+                  "categoryName": "Luis Scola",
+                  "name": "2_35_2_44"
+                },
+                {
+                  "num": 16.1,
+                  "categoryName": "Carl Landry",
+                  "name": "2_35_2_47"
+                },
+                {
+                  "num": 14.9,
+                  "categoryName": "Trevor Ariza",
+                  "name": "2_35_2_54"
+                },
+                {
+                  "num": 9.1,
+                  "categoryName": "Kyle Lowry",
+                  "name": "2_35_2_48"
+                },
+                {
+                  "num": 8.9,
+                  "categoryName": "Chase Budinger",
+                  "name": "2_35_2_55"
+                },
+                {
+                  "num": 8,
+                  "categoryName": "Shane Battier",
+                  "name": "2_35_2_37"
+                },
+                {
+                  "num": 6.4,
+                  "categoryName": "Jordan Hill",
+                  "name": "2_35_2_56"
+                },
+                {
+                  "num": 5.8,
+                  "categoryName": "David Andersen",
+                  "name": "2_35_2_57"
+                },
+                {
+                  "num": 5,
+                  "categoryName": "Garrett Temple",
+                  "name": "2_35_2_58"
+                },
+                {
+                  "num": 4.9,
+                  "categoryName": "Jared Jeffries",
+                  "name": "2_35_2_59"
+                },
+                {
+                  "num": 4.4,
+                  "categoryName": "Chuck Hayes",
+                  "name": "2_35_2_30"
+                },
+                {
+                  "num": 4.1,
+                  "categoryName": "Jermaine Taylor",
+                  "name": "2_35_2_60"
+                },
+                {
+                  "num": 2.5,
+                  "categoryName": "Mike Harris",
+                  "name": "2_35_2_61"
+                },
+                {
+                  "num": 3.2,
+                  "categoryName": "Tracy McGrady",
+                  "name": "2_35_2_1"
+                },
+                {
+                  "num": 1.6,
+                  "categoryName": "Joey Dorsey",
+                  "name": "2_35_2_52"
+                },
+                {
+                  "num": 1.4,
+                  "categoryName": "Brian Cook",
+                  "name": "2_35_2_51"
+                },
+                {
+                  "num": 1.3,
+                  "categoryName": "Pops Mensah-Bonsu",
+                  "name": "2_35_2_62"
+                },
+                {
+                  "num": 1.2,
+                  "categoryName": "Will Conroy",
+                  "name": "2_35_2_63"
+                },
+                {
+                  "num": 1.1,
+                  "categoryName": "Hilton Armstrong",
+                  "name": "2_35_2_64"
+                }
+              ],
+              "name": "2_35_2_0"
+            },
+            {
+              "num": 102.5,
+              "categoryName": "Memphis_Grizzlies",
+              "children": [
+                {
+                  "num": 20.8,
+                  "categoryName": "Zach Randolph",
+                  "name": "2_35_3_43"
+                },
+                {
+                  "num": 19.6,
+                  "categoryName": "Rudy Gay",
+                  "name": "2_35_3_24"
+                },
+                {
+                  "num": 17.5,
+                  "categoryName": "O.J. Mayo",
+                  "name": "2_35_3_31"
+                },
+                {
+                  "num": 14.6,
+                  "categoryName": "Marc Gasol",
+                  "name": "2_35_3_32"
+                },
+                {
+                  "num": 12.3,
+                  "categoryName": "Allen Iverson",
+                  "name": "2_35_3_44"
+                },
+                {
+                  "num": 12,
+                  "categoryName": "Mike Conley",
+                  "name": "2_35_3_33"
+                },
+                {
+                  "num": 7.4,
+                  "categoryName": "Sam Young",
+                  "name": "2_35_3_45"
+                },
+                {
+                  "num": 4.5,
+                  "categoryName": "Darrell Arthur",
+                  "name": "2_35_3_34"
+                },
+                {
+                  "num": 4.3,
+                  "categoryName": "Marcus Williams",
+                  "name": "2_35_3_46"
+                },
+                {
+                  "num": 4,
+                  "categoryName": "Lester Hudson",
+                  "name": "2_35_3_47"
+                },
+                {
+                  "num": 3.5,
+                  "categoryName": "Jamaal Tinsley",
+                  "name": "2_35_3_48"
+                },
+                {
+                  "num": 3.1,
+                  "categoryName": "Hasheem Thabeet",
+                  "name": "2_35_3_49"
+                },
+                {
+                  "num": 2.9,
+                  "categoryName": "DeMarre Carroll",
+                  "name": "2_35_3_50"
+                },
+                {
+                  "num": 2.5,
+                  "categoryName": "Steven Hunter",
+                  "name": "2_35_3_51"
+                },
+                {
+                  "num": 2,
+                  "categoryName": "Ronnie Brewer",
+                  "name": "2_35_3_52"
+                },
+                {
+                  "num": 1.7,
+                  "categoryName": "Hamed Haddadi",
+                  "name": "2_35_3_40"
+                },
+                {
+                  "num": 1,
+                  "categoryName": "Trey Gilder",
+                  "name": "2_35_3_53"
+                }
+              ],
+              "name": "2_35_3_0"
+            },
+            {
+              "num": 100.2,
+              "categoryName": "New_Orleans_Hornets",
+              "children": [
+                {
+                  "num": 19,
+                  "categoryName": "David West",
+                  "name": "2_35_4_14"
+                },
+                {
+                  "num": 18.7,
+                  "categoryName": "Chris Paul",
+                  "name": "2_35_4_23"
+                },
+                {
+                  "num": 14.5,
+                  "categoryName": "Marcus Thornton",
+                  "name": "2_35_4_37"
+                },
+                {
+                  "num": 12.6,
+                  "categoryName": "Peja Stojakovic",
+                  "name": "2_35_4_24"
+                },
+                {
+                  "num": 12.4,
+                  "categoryName": "Darren Collison",
+                  "name": "2_35_4_38"
+                },
+                {
+                  "num": 10.4,
+                  "categoryName": "Emeka Okafor",
+                  "name": "2_35_4_39"
+                },
+                {
+                  "num": 9.7,
+                  "categoryName": "Devin Brown",
+                  "name": "2_35_4_28"
+                },
+                {
+                  "num": 7.2,
+                  "categoryName": "Darius Songaila",
+                  "name": "2_35_4_40"
+                },
+                {
+                  "num": 7.1,
+                  "categoryName": "Morris Peterson",
+                  "name": "2_35_4_30"
+                },
+                {
+                  "num": 6.6,
+                  "categoryName": "Bobby Brown",
+                  "name": "2_35_4_41"
+                },
+                {
+                  "num": 5.2,
+                  "categoryName": "James Posey",
+                  "name": "2_35_4_26"
+                },
+                {
+                  "num": 3.8,
+                  "categoryName": "Julian Wright",
+                  "name": "2_35_4_31"
+                },
+                {
+                  "num": 3.6,
+                  "categoryName": "Aaron Gray",
+                  "name": "2_35_4_42"
+                },
+                {
+                  "num": 2.8,
+                  "categoryName": "Hilton Armstrong",
+                  "name": "2_35_4_29"
+                },
+                {
+                  "num": 0.7,
+                  "categoryName": "Sean Marks",
+                  "name": "2_35_4_33"
+                },
+                {
+                  "num": 0.5,
+                  "categoryName": "Jason Hart",
+                  "name": "2_35_4_43"
+                }
+              ],
+              "name": "2_35_4_0"
+            },
+            {
+              "num": 101.4,
+              "categoryName": "San_Antonio_Spurs",
+              "children": [
+                {
+                  "num": 17.9,
+                  "categoryName": "Tim Duncan",
+                  "name": "2_35_5_1"
+                },
+                {
+                  "num": 16.5,
+                  "categoryName": "Manu Ginobili",
+                  "name": "2_35_5_3"
+                },
+                {
+                  "num": 16,
+                  "categoryName": "Tony Parker",
+                  "name": "2_35_5_2"
+                },
+                {
+                  "num": 12.4,
+                  "categoryName": "George Hill",
+                  "name": "2_35_5_32"
+                },
+                {
+                  "num": 12.3,
+                  "categoryName": "Richard Jefferson",
+                  "name": "2_35_5_42"
+                },
+                {
+                  "num": 7.8,
+                  "categoryName": "DeJuan Blair",
+                  "name": "2_35_5_43"
+                },
+                {
+                  "num": 7,
+                  "categoryName": "Matt Bonner",
+                  "name": "2_35_5_25"
+                },
+                {
+                  "num": 6.3,
+                  "categoryName": "Roger Mason",
+                  "name": "2_35_5_30"
+                },
+                {
+                  "num": 6.2,
+                  "categoryName": "Garrett Temple",
+                  "name": "2_35_5_44"
+                },
+                {
+                  "num": 5.8,
+                  "categoryName": "Antonio McDyess",
+                  "name": "2_35_5_45"
+                },
+                {
+                  "num": 4.4,
+                  "categoryName": "Keith Bogans",
+                  "name": "2_35_5_46"
+                },
+                {
+                  "num": 3.9,
+                  "categoryName": "Ian Mahinmi",
+                  "name": "2_35_5_47"
+                },
+                {
+                  "num": 3.7,
+                  "categoryName": "Michael Finley",
+                  "name": "2_35_5_18"
+                },
+                {
+                  "num": 2.5,
+                  "categoryName": "Marcus Haislip",
+                  "name": "2_35_5_48"
+                },
+                {
+                  "num": 2.3,
+                  "categoryName": "Cedric Jackson",
+                  "name": "2_35_5_49"
+                },
+                {
+                  "num": 2.1,
+                  "categoryName": "Malik Hairston",
+                  "name": "2_35_5_37"
+                },
+                {
+                  "num": 1.6,
+                  "categoryName": "Theo Ratliff",
+                  "name": "2_35_5_50"
+                }
+              ],
+              "name": "2_35_5_0"
+            }
+          ],
+          "name": "2_35_0_0",
+          "num": 508.5
+        }
+      ],
+      "name": "2_0_0_0",
+      "num": 1533.3999999999999
+    }
+  ],
+  "num": 3013.5
+}
