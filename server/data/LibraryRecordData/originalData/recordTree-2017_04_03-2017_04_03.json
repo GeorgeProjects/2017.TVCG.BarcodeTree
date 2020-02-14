@@ -1,0 +1,3392 @@
+{
+  "num": 757,
+  "name": "root",
+  "children": [
+    {
+      "num": 300,
+      "name": "3_0_0",
+      "children": [
+        {
+          "num": 163,
+          "name": "3_4_0",
+          "children": [
+            {
+              "num": 28,
+              "name": "3_4_1",
+              "children": [
+                {
+                  "num": 7,
+                  "name": "International commercial law / John Shijian Mo.-341-0"
+                },
+                {
+                  "num": 2,
+                  "name": "International humanitarian law / Emily Crawford and Alison Pert.-341-1"
+                },
+                {
+                  "num": 15,
+                  "name": "International organizations : the politics and processes of global governance / Margaret P. Karns, K-341-2"
+                },
+                {
+                  "num": 1,
+                  "name": "The International Law Commission's articles on state responsibility : introduction, text, and commen-341-3"
+                },
+                {
+                  "num": 2,
+                  "name": "The international law of human trafficking / Anne T. Gallagher.-341-4"
+                },
+                {
+                  "num": 1,
+                  "name": "International law / Malcolm Shaw.-341-5"
+                }
+              ],
+              "categoryName": "International law"
+            },
+            {
+              "num": 11,
+              "name": "3_4_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Statutory interpretation in Australia / Emeritus Professor Dennis C. Pearce ; Adjunct Professor Robe-345-0"
+                },
+                {
+                  "num": 5,
+                  "name": "Principles and practice of Australian law / by Elizabeth Ellis.-345-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Lawyers in Australia / Ainslie Lamb, John Littrich, Karina Murray.-345-2"
+                },
+                {
+                  "num": 2,
+                  "name": "Mastering law studies and law exam techniques / Richard Krever ; with contributions by Susan Barkeha-345-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Accounting / John Hoggett, Lew Edwards, John Medlin, Keryn Chalmers, Andreas Hellmann, Claire Beatti-345-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Project management essentials / Therese Linton.-345-5"
+                }
+              ],
+              "categoryName": "Criminal law"
+            },
+            {
+              "num": 91,
+              "name": "3_4_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Environmental law in Australia / Gerry Bates.-347-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Torts : cases and commentary / Harold Luntz ... [et al.].-347-1"
+                },
+                {
+                  "num": 2,
+                  "name": "Company law : theories, principles and applications / Jason Harris.-347-2"
+                },
+                {
+                  "num": 6,
+                  "name": "Succession : families, property and death : text and cases / Rosalind Croucher, Prue Vines.-347-3"
+                },
+                {
+                  "num": 7,
+                  "name": "Equity and trusts / Michael Evans, Bradley L Jones, Theresa M Power.-347-4"
+                },
+                {
+                  "num": 5,
+                  "name": "Real property / Geoffrey Moore.-347-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Law for nurses and midwives / Hon Justice Patricia J Staunton, Professor Mary Chiarella.-347-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Nurse's law : legal questions & answers for the practicing nurse / Michele Mathes, JoAnne Reifsnyder-347-7"
+                },
+                {
+                  "num": 1,
+                  "name": "Assisted dying : reflections on the need for law reform / Sheila A. M. McLean.-347-8"
+                },
+                {
+                  "num": 1,
+                  "name": "On equity / Peter W Young, Clyde Croft, Megan Louise Smith.-347-9"
+                },
+                {
+                  "num": 1,
+                  "name": "Estoppel by conduct and election / by The Honourable Mr Justice K. R. Handley.-347-10"
+                },
+                {
+                  "num": 5,
+                  "name": "Australian corporate law / Jason Harris, Anil Hargovan, Michael Adams.-347-11"
+                },
+                {
+                  "num": 1,
+                  "name": "Companion to Uniform evidence law / Miiko Kumar, Stephen Odgers, Elisabeth Peden.-347-12"
+                },
+                {
+                  "num": 1,
+                  "name": "Uniform evidence in Australia / Neil Williams, John Anderson, Judith Marychurch, Julia Roy.-347-13"
+                },
+                {
+                  "num": 1,
+                  "name": "Meagher, Gummow and Lehane's equity : doctrines and remedies / R. P. Meagher, J. D. Heydon, M. J. Le-347-14"
+                },
+                {
+                  "num": 3,
+                  "name": "Deceptive trade practices / by Geoffrey Moore.-347-15"
+                },
+                {
+                  "num": 1,
+                  "name": "A guide to evidence : companion to the LBC casebook by Waight & Williams / by Kenneth Arenson, Mirko-347-16"
+                },
+                {
+                  "num": 1,
+                  "name": "Australian principles of evidence / Jeremy Gans & Andrew Palmer.-347-17"
+                },
+                {
+                  "num": 1,
+                  "name": "The patient and the practitioner : health law and ethics in Australia / Sonia Allan,  Meredith Blake-347-18"
+                },
+                {
+                  "num": 2,
+                  "name": "Contemporary business law : workbook / John Taggart & Mark Squire.-347-19"
+                },
+                {
+                  "num": 1,
+                  "name": "Law and ethics in nursing and healthcare : an introduction / Graham Avery.-347-20"
+                },
+                {
+                  "num": 2,
+                  "name": "Australian principles of tort law / Pam Stewart ; Anita Stuhmcke.-347-21"
+                },
+                {
+                  "num": 2,
+                  "name": "Understanding construction law / Jeremy Coggins, Tom Davie, Tony Earls, Phil Evans.-347-22"
+                },
+                {
+                  "num": 1,
+                  "name": "Construction contract law : the essentials / John Adriaanse.-347-23"
+                },
+                {
+                  "num": 2,
+                  "name": "Real property law / by Samantha Hepburn.-347-24"
+                },
+                {
+                  "num": 1,
+                  "name": "Miller's Australian Competition and Consumer Law annotated / Russell V. Miller ; foreword by Graeme-347-25"
+                },
+                {
+                  "num": 1,
+                  "name": "The law of misleading or deceptive conduct / Colin Lockhart.-347-26"
+                },
+                {
+                  "num": 2,
+                  "name": "Commercial law / Samantha J Traves.-347-27"
+                },
+                {
+                  "num": 1,
+                  "name": "Principles of Australian commercial law / Clive Turner, John Trone, Roger Gamble,-347-28"
+                },
+                {
+                  "num": 1,
+                  "name": "Property law / Laura-Leigh Cameron-Dow.-347-29"
+                },
+                {
+                  "num": 1,
+                  "name": "Gun propulsion technology / edited by Ludwig Stiefel-347-30"
+                },
+                {
+                  "num": 2,
+                  "name": "Legal and ethical issues in nursing / Ginny Wacker Guido, JD, MSN, RN, FAAN, Regional Director-Nursi-347-31"
+                },
+                {
+                  "num": 1,
+                  "name": "Australian commercial law / Dilan Thampapillai, Claudio Bozzi, Vivi Tan, Anne Matthew.-347-32"
+                },
+                {
+                  "num": 1,
+                  "name": "Commercial law / by Andrew Gibson, Douglas Fraser.-347-33"
+                },
+                {
+                  "num": 1,
+                  "name": "Business law / Brendan Pentony.-347-34"
+                },
+                {
+                  "num": 1,
+                  "name": "Business law / Brendan Pentony, Jann Lennard.-347-35"
+                },
+                {
+                  "num": 1,
+                  "name": "Autonomy, consent and the law / Sheila A. M. McLean.-347-36"
+                },
+                {
+                  "num": 1,
+                  "name": "Law, ethics and professional issues for nursing : a reflective and portfolio-building approach / Her-347-37"
+                },
+                {
+                  "num": 1,
+                  "name": "Best practice in construction disputes : avoidance, management and resolution / Dr Paula Gerber, Bre-347-38"
+                },
+                {
+                  "num": 1,
+                  "name": "Dispute resolution in construction management / Ian M. Eilenberg.-347-39"
+                },
+                {
+                  "num": 6,
+                  "name": "Australian family law : the contemporary context / Belinda Fehlberg, Rae Kaspiew, Jenni Millbank, Ju-347-40"
+                },
+                {
+                  "num": 2,
+                  "name": "Australian family law : the contemporary context : teaching materials / Belinda Fehlberg, Rae Kaspie-347-41"
+                },
+                {
+                  "num": 1,
+                  "name": "Construction contract claims / Reg Thomas.-347-42"
+                },
+                {
+                  "num": 1,
+                  "name": "Annotated personal property securities act 2009 (Cth) : with regulations 2010 (Cth) / Jason Harris a-347-43"
+                },
+                {
+                  "num": 1,
+                  "name": "Uniform evidence / Jeremy Gans, Andrew Palmer.-347-44"
+                },
+                {
+                  "num": 4,
+                  "name": "Shanahan's Australian law of trade marks & passing off / Mark Davison, Ian Horak.-347-45"
+                },
+                {
+                  "num": 1,
+                  "name": "Annotated family law legislation / Richard Chisholm, Susanne Christie, Julie Kearney.-347-46"
+                },
+                {
+                  "num": 1,
+                  "name": "Australian land law in context / Ken Mackie, Elise Bennett Histed, John Page.-347-47"
+                },
+                {
+                  "num": 1,
+                  "name": "Corporate law / Elizabeth Boros, John Duns.-347-48"
+                },
+                {
+                  "num": 1,
+                  "name": "Corporations law / Colin Anderson, Jennifer Dickfos, Margaret Hyland, Marina Nehme, Andrew Dahdal.-347-49"
+                },
+                {
+                  "num": 1,
+                  "name": "Banking law in Australia / Alan L. Tyree.-347-50"
+                },
+                {
+                  "num": 1,
+                  "name": "The law of succession in New South Wales / G.L. Certoma.-347-51"
+                },
+                {
+                  "num": 1,
+                  "name": "Australian corporations legislation-347-52"
+                },
+                {
+                  "num": 1,
+                  "name": "A sourcebook on equity and trusts in Australia / M. W. Bryan, S. E. Degeling, M. S. Donald and V. J.-347-53"
+                }
+              ],
+              "categoryName": "Civil procedure & courts"
+            },
+            {
+              "num": 30,
+              "name": "3_4_6",
+              "children": [
+                {
+                  "num": 7,
+                  "name": "Blackshield and Williams Australian constitutional law and theory : commentary and materials / Georg-346-0"
+                },
+                {
+                  "num": 2,
+                  "name": "Criminal laws : materials and commentary on criminal law and process of New South Wales / David Brow-346-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Please knock before you enter : Aboriginal regulation of outsiders and the implications for research-346-2"
+                },
+                {
+                  "num": 5,
+                  "name": "Taxation law & practice : workbook / Geoff Cliff, John Taggart, James Cooper.-346-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Statutory interpretation and human rights / James Spigelman.-346-4"
+                },
+                {
+                  "num": 2,
+                  "name": "Taxation law & practice / James Cooper, John Taggart and Geoff Cliff.-346-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Blackshield and Williams Australian constitutional law and theory : commentary and materials / Tony-346-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Constitutional law guidebook / Bede Harris.-346-7"
+                },
+                {
+                  "num": 1,
+                  "name": "Principles of Australian constitutional law / Professor Patrick Keyzer.-346-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Hanks Australian constitutional law : materials and commentary / Dan Meagher ; Amelia Simpson ; Jame-346-9"
+                },
+                {
+                  "num": 1,
+                  "name": "Australian tax analysis : cases, commentary, commercial applications and questions / Cynthia Coleman-346-10"
+                },
+                {
+                  "num": 4,
+                  "name": "Government accountability : Australian administrative law / Judith Bannister, Gabrielle Appleby, Ann-346-11"
+                },
+                {
+                  "num": 2,
+                  "name": "Administrative Appeals Tribunal / Dennis C Pearce.-346-12"
+                },
+                {
+                  "num": 1,
+                  "name": "Criminal law elements / Dr Penny Crofts.-346-13"
+                }
+              ],
+              "categoryName": "Private law"
+            },
+            {
+              "num": 1,
+              "name": "3_4_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Animal law in Australia : an integrated approach / Alex Bruce.-340-0"
+                }
+              ],
+              "categoryName": "Law"
+            },
+            {
+              "num": 2,
+              "name": "3_4_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Legality and legitimacy : Carl Schmitt, Hans Kelson, and Hermann Heller in Weimar / David Dyzenhaus.-349-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Principles of contract law / Jeannie Paterson, Andrew Robertson, Arlen Duke.-349-1"
+                }
+              ],
+              "categoryName": "Law of specific jurisdictions & areas"
+            }
+          ],
+          "categoryName": "Law"
+        },
+        {
+          "num": 53,
+          "name": "3_3_0",
+          "children": [
+            {
+              "num": 16,
+              "name": "3_3_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Tourism management / David B. Weaver, Laura Lawton.-338-0"
+                },
+                {
+                  "num": 4,
+                  "name": "Corporate finance : theory and practice [readings for Course no. 25557]-338-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Understanding tourism : a critical introduction / Kevin Hannam & Dan Knox.-338-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Understanding tourism / S. Medlik.-338-3"
+                },
+                {
+                  "num": 1,
+                  "name": "An introduction to the geography of tourism / Velvet Nelson.-338-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Tourism impacts, planning and management / Peter Mason.-338-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Political economy of tourism : a critical perspective / edited by Jan Mosedale.-338-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Tourism policy and international tourism in OECD member countries : evolution of tourism in OECD mem-338-7"
+                },
+                {
+                  "num": 1,
+                  "name": "Development as freedom.-338-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Handbook of research on impacts of international business and political affairs on the global econom-338-9"
+                },
+                {
+                  "num": 1,
+                  "name": "CaseBase. Case studies in global business / Andrew Ashwin, general editor.-338-10"
+                },
+                {
+                  "num": 1,
+                  "name": "Producer services in China : economic and urban development / edited by Anthony G.O. Yeh and Fiona F-338-11"
+                },
+                {
+                  "num": 1,
+                  "name": "Business forecasting / John E. Hanke, Dean W. Wichern.-338-12"
+                }
+              ],
+              "categoryName": "Production"
+            },
+            {
+              "num": 13,
+              "name": "3_3_0",
+              "children": [
+                {
+                  "num": 3,
+                  "name": "Principles of economics / Joshua Gans, Stephen King, Robin Stonecash, N. Gregory Mankiw.-330-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Principles of economics / Joshua Gans, Stephen King, Robin Stonecash, Martin Byford, Jan Libich, N.-330-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Basic econometrics / Damodar N. Gujarati, Dawn C. Porter.-330-2"
+                },
+                {
+                  "num": 1,
+                  "name": "And the weak suffer what they must? : Europe, austerity and the threat to global stability / Yanis V-330-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Behavioural economics : a very short introduction.-330-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Theory and measurement of economic externalities / edited by Steven A.Y. Lin-330-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Economics for managers / Paul G. Farnham, Georgia State University.-330-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Econometrics of panel data : methods and applications / Erik Bjorn.-330-7"
+                },
+                {
+                  "num": 2,
+                  "name": "Dear undercover economist : priceless advice on money, work, sex, kids, and life's other challanges-330-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Essentials of econometrics / Damodar N. Gujarati, Dawn C. Porter.-330-9"
+                }
+              ],
+              "categoryName": "Economics"
+            },
+            {
+              "num": 17,
+              "name": "3_3_2",
+              "children": [
+                {
+                  "num": 3,
+                  "name": "Financial institutions and markets / Chris Terry, Ben Hunt.-332-0"
+                },
+                {
+                  "num": 6,
+                  "name": "Financial institutions, instruments and markets / Christopher Viney, Peter Phillips.-332-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Financial institutions management : a risk management approach / Helen Lange, Anthony Saunders, Marc-332-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Financial markets integration of Iran within the middle East and with the rest of the world / by Par-332-3"
+                },
+                {
+                  "num": 6,
+                  "name": "Principles of investments / Anup Basu ; Michael E. Drew ; Zvi Bodie ; Alex Kane ; Alan J. Marcus.-332-4"
+                }
+              ],
+              "categoryName": "Financial economics"
+            },
+            {
+              "num": 3,
+              "name": "3_3_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Transnational corporations from the standpoint of workers / Nora Rathzel, Diana Mulinari and Aina To-331-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Dimensions, structure and history of Australian unemployment / Jeff Borland and Steven Kennedy.-331-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Export wage premium in China's manufacturing sector : a firm level analysis / Dahai Fu and Yanrui Wu-331-2"
+                }
+              ],
+              "categoryName": "Labor economics"
+            },
+            {
+              "num": 3,
+              "name": "3_3_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Mathematical modeling / Mark M. Meerschaert.-333-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Industry dimensions of the resource boom : an input-output analysis / Vanessa Rayner and James Bisho-333-1"
+                },
+                {
+                  "num": 1,
+                  "name": "The shifting sands / Emily Rodda.-333-2"
+                }
+              ],
+              "categoryName": "Land economics"
+            },
+            {
+              "num": 1,
+              "name": "3_3_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Macroeconomics / Rudiger Dornbusch ... [et al.].-339-0"
+                }
+              ],
+              "categoryName": "Macroeconomics & related topics"
+            }
+          ],
+          "categoryName": "Economics"
+        },
+        {
+          "num": 12,
+          "name": "3_6_0",
+          "children": [
+            {
+              "num": 5,
+              "name": "3_6_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The knockoff economy : how imitation sparks innovation / Kal Raustiala and Christopher Sprigman.-364-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Corporate crime / Marshall B. Clinard and Peter C. Yeager, with the collaboration of Ruth Blackburn-364-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Power, crime, and mystification / Steven Box-364-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Crime and capitalism : readings in Marxist criminology / edited by David F. Greenberg-364-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Challenging silence : innovative responses to sexual and domestic violence / edited by Jan Breckenri-364-4"
+                }
+              ],
+              "categoryName": "Criminology"
+            },
+            {
+              "num": 4,
+              "name": "3_6_2",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "The roar behind the silence : why kindness, compassion and respect matter in maternity care / edited-362-0"
+                },
+                {
+                  "num": 2,
+                  "name": "The Australian health care system / Stephen Duckett, Sharon Willcox.-362-1"
+                }
+              ],
+              "categoryName": "Social welfare problems & services"
+            },
+            {
+              "num": 3,
+              "name": "3_6_3",
+              "children": [
+                {
+                  "num": 3,
+                  "name": "Operations and supply chain management.-363-0"
+                }
+              ],
+              "categoryName": "Other social problems & services"
+            }
+          ],
+          "categoryName": "Social services; association"
+        },
+        {
+          "num": 25,
+          "name": "3_7_0",
+          "children": [
+            {
+              "num": 12,
+              "name": "3_7_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Fifty major thinkers on education : from Confucius to Dewey / edited by Joy A. Palmer ; advisory edi-370-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Teaching to transgress : education as the practice of freedom / Bell Hooks.-370-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Teaching community : a pedagogy of hope / Bell Hooks.-370-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Critical pedagogy in the new dark ages : challenges and possibilities / edited by Maria Nikolakaki ;-370-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Problematizing public pedagogy / edited by Jake Burdick, Jennifer A. Sandlin and Michael P. O'Malley-370-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Pedagogy, oppression and transformation in a \"post-critical\" climate : the return to Freirean thinki-370-5"
+                },
+                {
+                  "num": 1,
+                  "name": "A critical pedagogy of embodied education : learning to become an activist / Tracey Ollis.-370-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Echoes from Freire for a critically engaged pedagogy / Peter Mayo.-370-7"
+                },
+                {
+                  "num": 1,
+                  "name": "Critical aesthetic pedagogy : toward a theory of self and social empowerment / Yolanda Medina.-370-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Popular education and social change in Latin America / Liam Kane.-370-9"
+                },
+                {
+                  "num": 1,
+                  "name": "International critical pedagogy reader / Antonia Darder, Peter Mayo, and Joao Paraskeva, editors.-370-10"
+                },
+                {
+                  "num": 1,
+                  "name": "On critical pedagogy / Henry A. Giroux.-370-11"
+                }
+              ],
+              "categoryName": "Education"
+            },
+            {
+              "num": 5,
+              "name": "3_7_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "I am Malala : the girl who stood up for education and was shot by the Taliban / Malala Yousafzai ; w-371-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Changes in educational policies in Britain, 1800-1920 : how gender inequalities reshaped the teachin-371-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Palestine in Israeli school books : ideology and propaganda in education / Nurit Peled-Elhanan.-371-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Recovering informal learning : wisdom, judgement and community / by Paul Hager and John Halliday.-371-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Critical pedagogy in the twenty-first century : a new generation of scholars / edited by Curry Steph-371-4"
+                }
+              ],
+              "categoryName": "School management; special education"
+            },
+            {
+              "num": 7,
+              "name": "3_7_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Modeling mathematical ideas : developing strategic competence in elementary and middle school / Jenn-372-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Mathematics formative assessment : 75 practical strategies for linking assessment, instruction, and-372-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Good questions : great ways to differentiate mathematics instruction / Marian Small.-372-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Visualizing elementary and middle school mathematics methods / Joan Cohen Jones.-372-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Math on the move : engaging students in whole body learning / Malke Rosenfeld.-372-4"
+                },
+                {
+                  "num": 1,
+                  "name": "The problem with math is English : a language-focused approach to helping all students develop a dee-372-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Whole class mathematics discussions : improving in-depth mathematical thinking and learning / Teruni-372-6"
+                }
+              ],
+              "categoryName": "Elementary education"
+            },
+            {
+              "num": 1,
+              "name": "3_7_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Liminal spaces and call for praxis(ing) / edited by Miryam Espinosa-Dulanto [and three others].-375-0"
+                }
+              ],
+              "categoryName": "Curriculums"
+            }
+          ],
+          "categoryName": "Education"
+        },
+        {
+          "num": 32,
+          "name": "3_0_0",
+          "children": [
+            {
+              "num": 6,
+              "name": "3_0_5",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Our world : Bardi Jaawi : life at Ardiyooloon / One Arm Point Remote Community School.-305-0"
+                },
+                {
+                  "num": 1,
+                  "name": "On not speaking Chinese : living between Asia and the West / Ien Ang.-305-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Feminist theory reader : local and global perspectives / edited by Carole R. McCann and Seung-kyung-305-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Survival : a history of Aboriginal life in New South Wales / Nigel Parbury.-305-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Living in Australia / Robin Boyd ; Mark Strizic, photography.-305-4"
+                }
+              ],
+              "categoryName": "Social groups"
+            },
+            {
+              "num": 1,
+              "name": "3_0_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Understanding Bourdieu / Jen Webb, Tony Schirato and Geoff Danaher.-301-0"
+                }
+              ],
+              "categoryName": "Sociology & anthropology"
+            },
+            {
+              "num": 7,
+              "name": "3_0_6",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The body : the key concepts / Lisa Blackman.-306-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Tourism and Australian beach cultures : revealing bodies / Christine Metusela and Gordon Waitt.-306-1"
+                },
+                {
+                  "num": 1,
+                  "name": "The body and social theory / Chris Shilling.-306-2"
+                },
+                {
+                  "num": 3,
+                  "name": "Home game : an accidental guide to fatherhood / Michael Lewis ; photographs by Tabitha Soren.-306-3"
+                },
+                {
+                  "num": 1,
+                  "name": "English speech practice [kit] : a pronunciation course for advanced learners of English, based on au-306-4"
+                }
+              ],
+              "categoryName": "Culture & institutions"
+            },
+            {
+              "num": 5,
+              "name": "3_0_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "How we got to now : six innovations that made the modern world / Steven Johnson.-303-0"
+                },
+                {
+                  "num": 1,
+                  "name": "The inevitable : understanding the 12 technological forces that will shape our future / Kevin Kelly.-303-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Lost geographies of power / John Allen.-303-2"
+                },
+                {
+                  "num": 1,
+                  "name": "An introduction to intercultural communication : identities in a global community / Fred E. Jandt.-303-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Principles of intercultural communication / Igor Klyukanov.-303-4"
+                }
+              ],
+              "categoryName": "Social processes"
+            },
+            {
+              "num": 12,
+              "name": "3_0_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Handbook of multiple choice questions / [produced by the Australian Medical Council].-302-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Visual methodologies : an introduction to researching with visual materials / Gillian Rose.-302-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Flow TV : television in the age of media convergence / edited by Michael Kackman ... [et al.].-302-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Millennial fandom : television audiences in the transmedia age / Louisa Ellen Stein.-302-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Legitimating television : media convergence and cultural status / by Michael Z. Newman and Elana Lev-302-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Handbook of social capital : the troika of sociology, political science and economics / edited by Ge-302-5"
+                },
+                {
+                  "num": 2,
+                  "name": "Body language / Julius Fast-302-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Handbook of communication in organisations and professions / edited by Christopher N. Candlin and Sr-302-7"
+                },
+                {
+                  "num": 1,
+                  "name": "Visual communication : images with messages / Paul Martin Lester, California State University, Fulle-302-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Media semiotics : an introduction / Jonathan Bignell.-302-9"
+                },
+                {
+                  "num": 1,
+                  "name": "Converging media : a new introduction to mass communication / John V. Pavlik, Rutgers University ; S-302-10"
+                }
+              ],
+              "categoryName": "Social interaction"
+            },
+            {
+              "num": 1,
+              "name": "3_0_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Event history analysis / Kazuo Yamaguchi-300-0"
+                }
+              ],
+              "categoryName": "Social sciences"
+            }
+          ],
+          "categoryName": "Social sciences"
+        },
+        {
+          "num": 9,
+          "name": "3_2_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "3_2_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Philosophy, politics, and economics : an anthology / by Jonathan Anomaly, Duke University, Universti-320-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Cong fei yuan dao yan yuan / Tang Keyang zhu.-320-1"
+                }
+              ],
+              "categoryName": "Political science"
+            },
+            {
+              "num": 5,
+              "name": "3_2_7",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "International law / Malcolm Shaw.-327-0"
+                },
+                {
+                  "num": 1,
+                  "name": "The question of Palestine / Edward W. Said.-327-1"
+                },
+                {
+                  "num": 1,
+                  "name": "International law.-327-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Introduction to international & global studies / Shawn Smallman, Kimberley Brown.-327-3"
+                }
+              ],
+              "categoryName": "International relations"
+            },
+            {
+              "num": 2,
+              "name": "3_2_1",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Republicanism : a theory of freedom and government / Philip Pettit.-321-0"
+                }
+              ],
+              "categoryName": "Systems of governments & states"
+            }
+          ],
+          "categoryName": "Political science"
+        },
+        {
+          "num": 6,
+          "name": "3_9_0",
+          "children": [
+            {
+              "num": 6,
+              "name": "3_9_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Why do we celebrate that? / [Jane Wilcox].-394-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Easter / Anita Ganeri.-394-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Commemorative days / Samone Bos.-394-2"
+                },
+                {
+                  "num": 1,
+                  "name": "How I celebrate / Pam Robson.-394-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Food pedagogies / edited by Rick Flowers and Elaine Swan.-394-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Research methods for arts and event management / A.J. Veal and Christine Burton.-394-5"
+                }
+              ],
+              "categoryName": "General customs"
+            }
+          ],
+          "categoryName": "Customs, etiquette, folklore"
+        }
+      ],
+      "categoryName": "Social sciences"
+    },
+    {
+      "num": 55,
+      "name": "0_0_0",
+      "children": [
+        {
+          "num": 48,
+          "name": "0_0_0",
+          "children": [
+            {
+              "num": 20,
+              "name": "0_0_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "An introduction to object-oriented programming with Java / C. Thomas Wu.-005-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Writing effective use cases / Alistair Cockburn.-005-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Introduction to the theory of programming languages / Gilles Dowek, Jean-Jacques Levy.-005-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Data science from scratch : first principles with Python / Joel Grus.-005-3"
+                },
+                {
+                  "num": 3,
+                  "name": "Introduction to computation and programming using Python / John V. Guttag.-005-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Introduction to programming using Python / Y. Daniel Liang.-005-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Introduction to programming in Python : an interdisciplinary approach / Robert Sedgewick, Kevin Wayn-005-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Java SE 8 for the really impatient / Cay S. Horstmann.-005-7"
+                },
+                {
+                  "num": 2,
+                  "name": "The lean startup : how today's entrepreneurs use continuous innovation to create radically successfu-005-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Python in a nutshell / Alex Martelli.-005-9"
+                },
+                {
+                  "num": 1,
+                  "name": "Starting out with Java : early objects / Tony Gaddis.-005-10"
+                },
+                {
+                  "num": 1,
+                  "name": "Learn Python the hard way : a very simple introduction to the terrifyingly beautiful world of comput-005-11"
+                },
+                {
+                  "num": 1,
+                  "name": "PHP and MySQL 5 : for dynamic web sites / Larry Ullman.-005-12"
+                },
+                {
+                  "num": 1,
+                  "name": "Netzwerke des Exils : kunstlerische Verflechtungen, Austausch und Patronage nach 1933 / Burcu Dogram-005-13"
+                },
+                {
+                  "num": 1,
+                  "name": "Introduction to computer networks and cybersecurity / Chwan-Hwa (John) Wu, Auburn University, J. Dav-005-14"
+                },
+                {
+                  "num": 1,
+                  "name": "Building applications on Mesos / David Greenberg.-005-15"
+                },
+                {
+                  "num": 1,
+                  "name": "Docker : up and running / Karl Matthias and Sean P. Kane.-005-16"
+                }
+              ],
+              "categoryName": "Computer programming, programs & data"
+            },
+            {
+              "num": 24,
+              "name": "0_0_6",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Advanced computational intelligence strategies for mental task classification using electroencephalo-006-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Fire / Kristin Cashore.-006-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Data scientist : the definitive guide to becoming a data scientist / Zacharias Voulgaris.-006-2"
+                },
+                {
+                  "num": 3,
+                  "name": "Stop staring : facial modeling and animation done right / Jason Osipa.-006-3"
+                },
+                {
+                  "num": 3,
+                  "name": "An essential introduction to Maya character rigging / Cheryl Cabrera.-006-4"
+                },
+                {
+                  "num": 3,
+                  "name": "Mastering Autodesk Maya 2015 / Todd Palamar.-006-5"
+                },
+                {
+                  "num": 3,
+                  "name": "Computer animation complete : all-in-one : learn motion capture, characteristic, point-based, and Ma-006-6"
+                },
+                {
+                  "num": 3,
+                  "name": "Cartoon character animation with Maya : mastering the art of exaggerated animation / Keith Osborn.-006-7"
+                },
+                {
+                  "num": 2,
+                  "name": "Rig it right! : Maya animation rigging concepts / Tina O'Hailey.-006-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Machine learning : hands-on for developers and technical professionals / Jason Bell.-006-9"
+                },
+                {
+                  "num": 1,
+                  "name": "Pattern recognition and machine learning / Christopher M. Bishop.-006-10"
+                },
+                {
+                  "num": 1,
+                  "name": "Blogging for dummies / Amy Lupold Bair.-006-11"
+                },
+                {
+                  "num": 1,
+                  "name": "Squarespace 6 for dummies / by Kris Black.-006-12"
+                }
+              ],
+              "categoryName": "Special computer methods"
+            },
+            {
+              "num": 4,
+              "name": "0_0_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Practical packet analysis : using Wireshark to solve real-world network problems / by Chris Sanders.-004-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Routing and switching essentials v6 companion guide / Cisco Networking Academy.-004-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Learning CFEngine 3 : automated system administration for sites of any size / by Diego Zamboni.-004-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Vagrant : up and running / Mitchell Hashimoto.-004-3"
+                }
+              ],
+              "categoryName": "Data processing & computer science"
+            }
+          ],
+          "categoryName": "Computer science, knowledge & systems"
+        },
+        {
+          "num": 1,
+          "name": "0_2_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "0_2_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Digital curation / Gillian Oliver, Ross Harvey.-025-0"
+                }
+              ],
+              "categoryName": "Library operations"
+            }
+          ],
+          "categoryName": "Library & information sciences"
+        },
+        {
+          "num": 5,
+          "name": "0_7_0",
+          "children": [
+            {
+              "num": 5,
+              "name": "0_7_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Documenting the documentary : close readings of documentary film and video  / edited by Barry Keith-070-0"
+                },
+                {
+                  "num": 1,
+                  "name": "A new history of documentary film / Jack C. Ellis and Betsy A. McLane.-070-1"
+                },
+                {
+                  "num": 1,
+                  "name": "A new history of British documentary / James Chapman.-070-2"
+                },
+                {
+                  "num": 1,
+                  "name": "The origins of television news in America : the visualizers of CBS in the 1940s / Mike Conway.-070-3"
+                },
+                {
+                  "num": 1,
+                  "name": "US television news and Cold War propaganda, 1947-1960 / Nancy E. Bernhard.-070-4"
+                }
+              ],
+              "categoryName": "News media, journalism & publishing"
+            }
+          ],
+          "categoryName": "News media, journalism & publishing"
+        },
+        {
+          "num": 1,
+          "name": "0_3_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "0_3_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Earth : a visitor's guide / Ian Harrison.-032-0"
+                }
+              ],
+              "categoryName": "Encyclopedias in English"
+            }
+          ],
+          "categoryName": "Encyclopedias & books of facts"
+        }
+      ],
+      "categoryName": "Computer science, information & general works"
+    },
+    {
+      "num": 223,
+      "name": "6_0_0",
+      "children": [
+        {
+          "num": 128,
+          "name": "6_5_0",
+          "children": [
+            {
+              "num": 109,
+              "name": "6_5_8",
+              "children": [
+                {
+                  "num": 3,
+                  "name": "Operations and supply chain management.-658-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Mergers and acquisitions basics : all you need to know / Donald DePamphilis.-658-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Merger and acquisition strategies : how to create value / Angelo Dringoli School of Economics and Ma-658-2"
+                },
+                {
+                  "num": 10,
+                  "name": "Marketing research / Joseph F. Hair Jr, Bryan Lukas, Ken Roberts, Sharon Lee-Lukas.-658-3"
+                },
+                {
+                  "num": 3,
+                  "name": "Designing creative organizations : tools, processes and practice / Igor Hawryszkiewycz.-658-4"
+                },
+                {
+                  "num": 6,
+                  "name": "Transnational management : text, cases, and readings in cross-border management / Christopher A. Bar-658-5"
+                },
+                {
+                  "num": 5,
+                  "name": "Organisation theory : concepts and cases / Stephen P. Robbins, Neil Barnwell.-658-6"
+                },
+                {
+                  "num": 10,
+                  "name": "Management accounting : information for creating and managing value / Kim Langfield-Smith, Helen Tho-658-7"
+                },
+                {
+                  "num": 2,
+                  "name": "Consumer behavior / Wayne D, Hoyer, Deborah J. MacInnis, Rik Pieters.-658-8"
+                },
+                {
+                  "num": 2,
+                  "name": "ACCT MBA  for University of Technology, Sydney / Jonathan Tyler and five others ; compiled by Profes-658-9"
+                },
+                {
+                  "num": 1,
+                  "name": "Managing and organizations : an introduction to theory and practice / Stewart Clegg, Martin Kornberg-658-10"
+                },
+                {
+                  "num": 1,
+                  "name": "Management decisions for engineers / James Parkin.-658-11"
+                },
+                {
+                  "num": 1,
+                  "name": "Introduction to information systems : supporting and transforming business / R. Kelly Rainer Jr., Br-658-12"
+                },
+                {
+                  "num": 2,
+                  "name": "Quantitative business analysis : mathematical and econometric methods for business and finance / [Co-658-13"
+                },
+                {
+                  "num": 4,
+                  "name": "Financial reporting / Janice Loftus, Ken Leo, Noel Boys, Belinda Luke, Sorin Daniliuc, Hong Nee Ang,-658-14"
+                },
+                {
+                  "num": 1,
+                  "name": "Managing and organizations : an introduction to theory & practice / Stewart Clegg, Martin Kornberger-658-15"
+                },
+                {
+                  "num": 1,
+                  "name": "Marketing data science : modeling techniques in predictive analytics with R and Python / Thomas W. M-658-16"
+                },
+                {
+                  "num": 1,
+                  "name": "From Little's Law to marketing science : essays in honor of John D.C. Little / John R. Hauser and Gl-658-17"
+                },
+                {
+                  "num": 2,
+                  "name": "Consumer behaviour / Leon Schiffman ; Aron O'Cass ; Angela Paladino ; Jamie Carlson.-658-18"
+                },
+                {
+                  "num": 6,
+                  "name": "Marketing / Greg Elliott, Sharyn Rundle-Thiele, David Waller.-658-19"
+                },
+                {
+                  "num": 6,
+                  "name": "Marketing channels : a management view / Bert Rosenbloom.-658-20"
+                },
+                {
+                  "num": 1,
+                  "name": "Making sense of the organization. Vol. 2, The impermanent organization / Karl E. Weick.-658-21"
+                },
+                {
+                  "num": 1,
+                  "name": "Managing across borders : the transnational solution / Christopher A. Bartlett and Sumantra Ghoshal-658-22"
+                },
+                {
+                  "num": 1,
+                  "name": "Decision analysis for management judgment / Paul Goodwin, George Wright.-658-23"
+                },
+                {
+                  "num": 1,
+                  "name": "Behavioral risk management : managing the psychology that drives decisions and influences operationa-658-24"
+                },
+                {
+                  "num": 1,
+                  "name": "Marketing management / Philip Kotler, Kevin Lane Keller.-658-25"
+                },
+                {
+                  "num": 1,
+                  "name": "Business computing : using Microsoft Office 2013 / Greg Pazmandy, David Bedford & Jakob Govendir.-658-26"
+                },
+                {
+                  "num": 1,
+                  "name": "Management accounting : information for managing and creating value / Kim Langfield-Smith, Helen Tho-658-27"
+                },
+                {
+                  "num": 1,
+                  "name": "Creativity, Inc. : overcoming the unseen forces that stand in the way of true inspiration / Ed Catmu-658-28"
+                },
+                {
+                  "num": 1,
+                  "name": "Why Orwell matters / Christopher Hitchens.-658-29"
+                },
+                {
+                  "num": 2,
+                  "name": "International financial management / Jeff Madura.-658-30"
+                },
+                {
+                  "num": 1,
+                  "name": "Human resource management in Australia : strategy, people, performance / Robin Kramar ... [et al.].-658-31"
+                },
+                {
+                  "num": 1,
+                  "name": "Human resource management in Australia : strategy, people, performance / Helen De Cieri ... [et al.]-658-32"
+                },
+                {
+                  "num": 3,
+                  "name": "Management information systems / Heather Gray, Tomayess Issa, Graeme Pye, Indrit Troshani, R. Kelly-658-33"
+                },
+                {
+                  "num": 1,
+                  "name": "Fundamentals of corporate finance / Stephen A. Ross, Randolph W. Westerfield, Bradford D. Jordan.-658-34"
+                },
+                {
+                  "num": 1,
+                  "name": "Fundamentals of corporate finance / Stephen Ross, Robert Bianchi, Mark Christensen, Michael Drew, Ra-658-35"
+                },
+                {
+                  "num": 1,
+                  "name": "ACCT MBA for University of Technology, Sydney / compiled by Professor Martin Bugeja and Professor Pe-658-36"
+                },
+                {
+                  "num": 2,
+                  "name": "Supply chain management : strategy, planning, and operation / Sunil Chopra, Kellogg School of Manage-658-37"
+                },
+                {
+                  "num": 1,
+                  "name": "Commercial conflict management and dispute resolution / Peter Fenn.-658-38"
+                },
+                {
+                  "num": 1,
+                  "name": "Facebook marketing : designing your next marketing campaign / Justin R. Levy.-658-39"
+                },
+                {
+                  "num": 1,
+                  "name": "The little black book of management : essential tools for getting results NOW / Suzanne Turner.-658-40"
+                },
+                {
+                  "num": 1,
+                  "name": "The best digital marketing campaigns in the world : mastering the art of customer engagement / Damia-658-41"
+                },
+                {
+                  "num": 1,
+                  "name": "Advanced Google AdWords / Brad Geddes.-658-42"
+                },
+                {
+                  "num": 1,
+                  "name": "How to measure social media : a step-by-step guide to developing and assessing social media ROI : Ni-658-43"
+                },
+                {
+                  "num": 1,
+                  "name": "Multinational financial management / Alan C. Shapiro.-658-44"
+                },
+                {
+                  "num": 1,
+                  "name": "Designing and managing a research project : a business student's guide / Michael Jay Polonsky, David-658-45"
+                },
+                {
+                  "num": 1,
+                  "name": "Business analysis & valuation : using financial statements : text & cases / Krishna G. Palepu, Paul-658-46"
+                },
+                {
+                  "num": 1,
+                  "name": "Introduction to management accounting / Charles T. Horngren, Stanford University ; Gary L. Sundem, U-658-47"
+                },
+                {
+                  "num": 1,
+                  "name": "Management accounting / Leslie Eldenburg ... [et al.].-658-48"
+                },
+                {
+                  "num": 1,
+                  "name": "Essentials of negotiation / Roy J. Lewicki, The Ohio State University, Bruce Barry, Vanderbilt Unive-658-49"
+                },
+                {
+                  "num": 1,
+                  "name": "Business analysis and valuation : using financial statements : text and cases / Krishna G. Palepu, P-658-50"
+                },
+                {
+                  "num": 1,
+                  "name": "Business analysis & valuation : using financial statements / Krishna G. Palepu, Paul M. Healy.-658-51"
+                },
+                {
+                  "num": 1,
+                  "name": "Management accounting : information for creating and managing value / Langfield-Smith, Thorne and Hi-658-52"
+                },
+                {
+                  "num": 1,
+                  "name": "Competitive solutions : the strategist's toolkit / R. Preston McAfee.-658-53"
+                },
+                {
+                  "num": 1,
+                  "name": "Strategic foresight : a new look at scenarios / Alfred Marcus.-658-54"
+                },
+                {
+                  "num": 1,
+                  "name": "Strategic management : a competitive advantage approach, concepts and cases / Fred R. David, Francis-658-55"
+                },
+                {
+                  "num": 1,
+                  "name": "Project management essentials / Therese Linton.-658-56"
+                }
+              ],
+              "categoryName": "General management"
+            },
+            {
+              "num": 4,
+              "name": "6_5_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Public relations : the basics / Ron Smith.-659-0"
+                },
+                {
+                  "num": 2,
+                  "name": "Advertising : principles and practice / Sandra Moriarty, Nancy Mitchell, William Wells, Robert Crawf-659-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Evaluating public relations : a best practice guide to public relations planning, research and evalu-659-2"
+                }
+              ],
+              "categoryName": "Advertising & public relations"
+            },
+            {
+              "num": 11,
+              "name": "6_5_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Auditing, assurance services and ethics in Australia : an integrated approach / [Alvin A.] Arens ...-657-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Auditing & assurance services in Australia / Grant Gay, Roger Simnett.-657-1"
+                },
+                {
+                  "num": 2,
+                  "name": "ACCT2 financial / Jonathan Tyler, Norman Godwin, C Wayne Alderman.-657-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Financial accounting : reporting, analysis and decision making / Shirley Carlon, Rosina Mladenovic,-657-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Corporate Finance / compiled by Dr Nahid Rahman for UTS Business School-657-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Accounting information systems / Marshall B. Romney  ... [et al.].-657-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Financial reporting handbook : incorporating all the standards as at 1 December ... / the Institute-657-6"
+                },
+                {
+                  "num": 2,
+                  "name": "MYOB v19.8 AccountRight plus : a practical guide to computer accounting // by Greg Pazmandy.-657-7"
+                },
+                {
+                  "num": 1,
+                  "name": "Accounting information systems : understanding business processes / Brett Considine ... [et al.].-657-8"
+                }
+              ],
+              "categoryName": "Accounting"
+            },
+            {
+              "num": 4,
+              "name": "6_5_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "How to succeed at assessment centres / Kathleen Houston and Eileen Cunningham.-650-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Excel at graduate interviews : how to make the best impression with recruiters / Bruce Woodcock.-650-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Body language / Julius Fast-650-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Doing business research : a guide to theory and practice / Nick Lee with Ian Lings.-650-3"
+                }
+              ],
+              "categoryName": "Management & auxiliary services"
+            }
+          ],
+          "categoryName": "Management & auxiliary services"
+        },
+        {
+          "num": 57,
+          "name": "6_1_0",
+          "children": [
+            {
+              "num": 12,
+              "name": "6_1_0",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Care of people with diabetes : a manual of nursing practice / Trisha Dunning.-610-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Potter & Perry's Fundamentals of nursing / Australian adaptation edited by Jackie Crisp ... [et al.]-610-1"
+                },
+                {
+                  "num": 2,
+                  "name": "Rehabilitation nursing secrets / Jeanne Flannery.-610-2"
+                },
+                {
+                  "num": 3,
+                  "name": "Lewis's medical-surgical nursing : assessment and management of clinical problems / edited by Diane-610-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Clinical psychomotor skills : assessment tools for nursing students / Joanne Tollefson.-610-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Fundamentals of nursing : standards & practice / Sue C. DeLaune, Patricia K. Ladner.-610-5"
+                },
+                {
+                  "num": 2,
+                  "name": "Lewis's medical-surgical nursing : assessment and management of clinical problems / Diane Brown ; He-610-6"
+                }
+              ],
+              "categoryName": "Medical sciences; Medicine"
+            },
+            {
+              "num": 7,
+              "name": "6_1_6",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Acute stroke nursing / edited by Jane Williams, Lin Perry, Caroline Watkins.-616-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Evidence-based practice across the health professions / Tammy Hoffmann, Sally Bennett, Chris Del Mar-616-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Sparks and Taylor's nursing diagnosis reference manual / Sheila Sparks Ralph, Cynthia M. Taylor.-616-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Sparks and Taylor's nursing diagnosis pocket guide / Sheila Sparks Ralph, Cynthia M. Taylor.-616-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Handbook of nursing diagnosis / Lynda Juall Carpenito.-616-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Tietz fundamentals of clinical chemistry and molecular diagnostics / Carl A. Burtis, Ph.D, Emeritus,-616-5"
+                }
+              ],
+              "categoryName": "Diseases"
+            },
+            {
+              "num": 12,
+              "name": "6_1_2",
+              "children": [
+                {
+                  "num": 9,
+                  "name": "Understanding the Person-612-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Maternal, fetal, and neonatal physiology : a clinical perspective / Susan Tucker Blackburn, Donna Le-612-1"
+                },
+                {
+                  "num": 2,
+                  "name": "Human anatomy & physiology / Elaine N. Marieb, Katja Hoehn.-612-2"
+                }
+              ],
+              "categoryName": "Human physiology"
+            },
+            {
+              "num": 9,
+              "name": "6_1_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "A new understanding of ADHD in children and adults : executive function impairments / Thomas E. Brow-618-0"
+                },
+                {
+                  "num": 2,
+                  "name": "Attention-deficit hyperactivity disorder : a handbook for diagnosis and treatment / edited by Russel-618-1"
+                },
+                {
+                  "num": 1,
+                  "name": "The birth wars / Mary-Rose MacColl.-618-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Miller's Nursing for wellness in older adults / Sandra P. Hirst, RN, PhD, GNC(c), Associate Professo-618-3"
+                },
+                {
+                  "num": 2,
+                  "name": "Midwifery : preparation for practice 3e / Sally Pairman, Sally K. Tracy, Carol Thorogood, Jan Pincom-618-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Nursing for wellness in older adults / Carol A. Miller.-618-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Acupuncture and moxibustion therapy in gynecology and obstetrics / Hou Jinglun ... [et al.]-618-6"
+                }
+              ],
+              "categoryName": "Gynecology & other medical specialties"
+            },
+            {
+              "num": 9,
+              "name": "6_1_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Fundamentals of anatomy & physiology / Frederic H. Martini, Judi L. Nath, Edwin F. Bartholomew ; [wi-611-0"
+                },
+                {
+                  "num": 2,
+                  "name": "Histology : a text and atlas : with correlated cell and molecular biology / Michael H. Ross, Wojciec-611-1"
+                },
+                {
+                  "num": 2,
+                  "name": "Wheater's functional histology : a text and colour atlas / Barbara Young, Geraldine O'Dowd, Phillip-611-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Color textbook of histology / Leslie P. Gartner, James L. Hiatt.-611-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Human anatomy & physiology / Elaine N. Marieb, Katja Hoehn.-611-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Wheater's functional histology : a text and colour atlas.-611-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Basic histology : text & atlas / Luiz Carlos Junqueira, Jose Carneiro.-611-6"
+                }
+              ],
+              "categoryName": "Human anatomy, cytology, histology"
+            },
+            {
+              "num": 7,
+              "name": "6_1_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Pharmacology / H.P. Rang, M.M. Dale, J.M. Ritter ; illustrations by Peter Lamb.-615-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Marijuana and madness / edited by David Castle, Robin M. Murray, Deepak Cyril D'Souza.-615-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Chinese bodywork : a complete manual of Chinese therapeutic massage / editor-in-chief, Sun Chengnan-615-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Chinese massage therapy : a handbook of therapeutic massage / compiled at the Anhui Medical School H-615-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Chinese tuina and therapeutic applications / Chen Ping ... [et al.].-615-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Tuina therapy / written by Wang Daoquan ; translated by Yan Menghui, Zhang Fan.-615-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Clinical exercise physiology / Jonathan K. Ehrman, Paul M. Gordon, Paul S. Visich, Steven J. Keteyia-615-6"
+                }
+              ],
+              "categoryName": "Pharmacology and therapeutics"
+            },
+            {
+              "num": 1,
+              "name": "6_1_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Statistics for sports and exercise science / John Newell, Tom Aitchison, Stanley Grant.-613-0"
+                }
+              ],
+              "categoryName": "Personal health & safety"
+            }
+          ],
+          "categoryName": "Medical sciences; Medicine"
+        },
+        {
+          "num": 35,
+          "name": "6_2_0",
+          "children": [
+            {
+              "num": 12,
+              "name": "6_2_0",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Materials science and engineering : an introduction / William D. Callister, Jr. Department Of Metall-620-0"
+                },
+                {
+                  "num": 3,
+                  "name": "Engineering your future : an Australasian guide / David Dowling, Roger Hadgraft, Anna Carew, Tim McC-620-1"
+                },
+                {
+                  "num": 2,
+                  "name": "Engineering your future : an Australasian guide / David Dowling, Anna Carew, Roger Hadgraft.-620-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Mechanics of materials / Ferdinand P. Beer, E. Russell Johnston, Jr., John T. DeWolf.-620-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Engineering mechanics. Statics / R.C. Hibbeler ; SI conversion by Kai Beng Yap.-620-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Mechanics of materials / R.C. Hibbeler.-620-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Theory and uses of acoustic emissions / Justin K. Burnett, editor.-620-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Acoustic emission : standards and technology update / Sotirios J. Vahaviolos, editor.-620-7"
+                }
+              ],
+              "categoryName": "Engineering & Applied operations"
+            },
+            {
+              "num": 18,
+              "name": "6_2_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "A dictionary of construction, surveying, and civil engineering / by Christopher Gorse, David Johnsto-624-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Structural bearings and expansion joints for bridges / Gunter Ramberger.-624-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Bridge engineering : substructure design / edited by Wai-Fah Chen and Lian Duan.-624-2"
+                },
+                {
+                  "num": 2,
+                  "name": "Bridge design code.-624-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Elastomeric bearings design, construction, and materials / J.F. Stanton and C.W. Roeder ; research s-624-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Reinforced concrete basics : analysis and design of reinforced concrete structures / S.J. Foster, A.-624-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Wind loading of structures / John D. Holmes.-624-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Significant changes to the wind load provisions of ASCE 7-10 : an illustrated guide / T. Eric Staffo-624-7"
+                },
+                {
+                  "num": 1,
+                  "name": "A commentary on the Australian standard for wind loads AS 1170 Part 2, 1989 / J.D. Holmes, W.H. Melb-624-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Minimum design loads for buildings and other structures.-624-9"
+                },
+                {
+                  "num": 1,
+                  "name": "Prestressed concrete design to Eurocodes / Prabhakara Bhatt.-624-10"
+                },
+                {
+                  "num": 1,
+                  "name": "Mediation in the construction industry : an international review / edited by Penny Brooker and Suzan-624-11"
+                },
+                {
+                  "num": 1,
+                  "name": "Reinforced and prestressed concrete design to EC2 : the complete process / Eugene O'Brien, Andrew Di-624-12"
+                },
+                {
+                  "num": 1,
+                  "name": "Acoustic emission and critical phenomena : from structural mechanics to geophysics / edited by Alber-624-13"
+                },
+                {
+                  "num": 1,
+                  "name": "Soil mechanics : principles and practice / Graham Barnes.-624-14"
+                },
+                {
+                  "num": 2,
+                  "name": "Structural analysis : lecture notes / A. Saleh.-624-15"
+                }
+              ],
+              "categoryName": "Civil engineering"
+            },
+            {
+              "num": 5,
+              "name": "6_2_1",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Introduction to power electronics / Daniel W. Hart.-621-0"
+                },
+                {
+                  "num": 2,
+                  "name": "Power electronics : devices, circuits, and applications / Muhammad H. Rashid, Life Fellow IEEE, Elec-621-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Power system analysis / Hadi Saadat.-621-2"
+                }
+              ],
+              "categoryName": "Applied physics"
+            }
+          ],
+          "categoryName": "Engineering & Applied operations"
+        },
+        {
+          "num": 2,
+          "name": "6_9_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "6_9_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Rawlinson's Australian construction handbook.-690-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Cost C16, improving the quality of existing urban building envelopes. Facades and roofs / edited by-690-1"
+                }
+              ],
+              "categoryName": "Buildings"
+            }
+          ],
+          "categoryName": "Buildings"
+        },
+        {
+          "num": 1,
+          "name": "6_4_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "6_4_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The mindful child : how to help your kid manage stress and become happier, kinder, and more compassi-649-0"
+                }
+              ],
+              "categoryName": "Child rearing & home care of sick"
+            }
+          ],
+          "categoryName": "Home economics & family living"
+        }
+      ],
+      "categoryName": "Technology"
+    },
+    {
+      "num": 74,
+      "name": "7_0_0",
+      "children": [
+        {
+          "num": 3,
+          "name": "7_3_0",
+          "children": [
+            {
+              "num": 3,
+              "name": "7_3_8",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Potter & Perry's Fundamentals of nursing / Australian adaptation edited by Jackie Crisp ... [et al.]-738-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Potter & Perry's fundamentals of nursing / Australian adaptation edited by Jackie Crisp, Clint Dougl-738-1"
+                }
+              ],
+              "categoryName": "Ceramic arts"
+            }
+          ],
+          "categoryName": "Plastic arts; Sculpture"
+        },
+        {
+          "num": 28,
+          "name": "7_2_0",
+          "children": [
+            {
+              "num": 3,
+              "name": "7_2_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Peter Zumthor : Kunsthaus Bregenz / Kunsthaus Bregenz, Archiv Kunst Architektur-727-0"
+                },
+                {
+                  "num": 1,
+                  "name": "In the realm of learning : the University of Sydney's new Law School : incorporating the Faculty of-727-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Glass construction manual / Christian Schittich ... [et al.].-727-2"
+                }
+              ],
+              "categoryName": "Buildings for education & research"
+            },
+            {
+              "num": 9,
+              "name": "7_2_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Peter Zumthor, works : buildings and projects, 1979-1997 / photographs by Helene Binet ; text by Pet-720-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Substraction / Keller Easterling ; edited by Nikolaus Hirsch, Markus Miessen.-720-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Michelangelo at San Lorenzo : the genius as entrepreneur / William E. Wallace.-720-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Palladio : the complete buildings / Manfred Wundram and Thomas Pape.-720-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Analysing architecture / Simon Unwin.-720-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Delirious New York : a retroactive manifesto for Manhattan / Rem Koolhaas.-720-5"
+                },
+                {
+                  "num": 1,
+                  "name": "The architecture of happiness / Alain de Botton.-720-6"
+                },
+                {
+                  "num": 1,
+                  "name": "SANAA : Kazuyo Sejima, Ryue Nishizawa, 2011-2015 : sistemas de continuidad = continuity systems / ed-720-7"
+                },
+                {
+                  "num": 1,
+                  "name": "Essays on the intersection of music and architecture / Mikesch W. Muecke, Miriam S. Zach, editors.-720-8"
+                }
+              ],
+              "categoryName": "Architecture"
+            },
+            {
+              "num": 2,
+              "name": "7_2_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Textile tectonics / edited by Lars Spuybroek.-729-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Structural design in architecture / by M. Salvadori and M. Levy ; with example and problem solutions-729-1"
+                }
+              ],
+              "categoryName": "Design & decoration"
+            },
+            {
+              "num": 1,
+              "name": "7_2_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Guarino Guarini's church of San Lorenzo in Turin / Elwin Clark Robison-724-0"
+                }
+              ],
+              "categoryName": "Architecture from 1400"
+            },
+            {
+              "num": 3,
+              "name": "7_2_6",
+              "children": [
+                {
+                  "num": 3,
+                  "name": "Rise of the guardians [videorecording].-726-0"
+                }
+              ],
+              "categoryName": "Buildings for religious purposes"
+            },
+            {
+              "num": 8,
+              "name": "7_2_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Facade [electronic resource] / design, engineering, writing, animation and production,  Michael Mate-721-0"
+                },
+                {
+                  "num": 2,
+                  "name": "Building skins / Christian Schittich (ed.) ; with essays contributed by Christian Schittich, Werner-721-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Falling glass : problems and solutions in contemporary architecture / Patrick Loughran.-721-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Glas = Glass / [Redaktion, Christian Schittich ... et al.].-721-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Intelligente glasfassadens : Material, Anwendung, Gestaltung = Intelligent glass facades : material,-721-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Skins, envelopes, and enclosures : concepts for designing building exteriors / Mayine L. Yu.-721-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Contemporary curtain wall architecture / Scott Murray.-721-6"
+                }
+              ],
+              "categoryName": "Architectural structure"
+            },
+            {
+              "num": 2,
+              "name": "7_2_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Buildings for music : the architect, the musician, and the listener from the seventeenth century to-725-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Watercube : the book : Beijing National Aquatics Centre, People's Republic of China / [concept and t-725-1"
+                }
+              ],
+              "categoryName": "Public structures"
+            }
+          ],
+          "categoryName": "Architecture"
+        },
+        {
+          "num": 12,
+          "name": "7_7_0",
+          "children": [
+            {
+              "num": 10,
+              "name": "7_7_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The British journal of photography-770-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Thinking photography / edited by Victor Burgin-770-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Roland Barthes on photography : the critical tradition in perspective / Nancy M. Shawcross.-770-2"
+                },
+                {
+                  "num": 3,
+                  "name": "Camera Lucida : reflections on photography / Roland Barthes ; translated by Richard Howard-770-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Photography : a critical introduction / edited by Liz Wells.-770-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Helios : Eadweard Muybridge in a time of change / Philip Brookman ; with contributions by Marta Brau-770-5"
+                },
+                {
+                  "num": 2,
+                  "name": "Digital photography for dummies / by Julie Adair King.-770-6"
+                }
+              ],
+              "categoryName": "Photography & photographs"
+            },
+            {
+              "num": 2,
+              "name": "7_7_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The face of Asia / introduction by Robert Shaplen-779-0"
+                },
+                {
+                  "num": 1,
+                  "name": "William eggleston portraits.-779-1"
+                }
+              ],
+              "categoryName": "Photographs"
+            }
+          ],
+          "categoryName": "Photography & photographs"
+        },
+        {
+          "num": 15,
+          "name": "7_9_0",
+          "children": [
+            {
+              "num": 9,
+              "name": "7_9_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Channels of discourse, reassembled : television and contemporary criticism / edited by Robert C. All-791-0"
+                },
+                {
+                  "num": 2,
+                  "name": "Animation in context : a practical guide to theory and making / Mark Collington.-791-1"
+                },
+                {
+                  "num": 1,
+                  "name": "The art of Big Hero 6 / by Jessica Julius ; preface by John Lasseter ; foreword by Don Hall and Chri-791-2"
+                },
+                {
+                  "num": 1,
+                  "name": "The art of Zootopia / by Jessica Julius ; preface by John Lasseter ; foreword by Byron Howard and Ri-791-3"
+                },
+                {
+                  "num": 1,
+                  "name": "The art of Ratatouille / by Karen Paik ; foreword by John Lasseter ; introduction by Brad Bird.-791-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Reality television / Richard M. Huff.-791-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Reality TV : realism and revelation / Anita Biressi, Heather Nunn.-791-6"
+                },
+                {
+                  "num": 1,
+                  "name": "Diary of a wimpy kid : Rodrick rules / by Jeff Kinney.-791-7"
+                }
+              ],
+              "categoryName": "Public performances"
+            },
+            {
+              "num": 2,
+              "name": "7_9_0",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Research methods for leisure and tourism : a practical guide / A. J. Veal.-790-0"
+                }
+              ],
+              "categoryName": "Recreational & performing arts"
+            },
+            {
+              "num": 4,
+              "name": "7_9_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Soul eater. Complete series collection, episodes 01-51 [videorecording].-792-0"
+                },
+                {
+                  "num": 3,
+                  "name": "A Practical handbook for the actor / Melissa Bruder ... [et al.] ; with an introduction by David Mam-792-1"
+                }
+              ],
+              "categoryName": "Stage presentations"
+            }
+          ],
+          "categoryName": "Recreational & performing arts"
+        },
+        {
+          "num": 12,
+          "name": "7_4_0",
+          "children": [
+            {
+              "num": 10,
+              "name": "7_4_6",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Shibori : the inventive art of Japanese shaped resist dyeing : tradition techniques innovation / Yos-746-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Japanese inspired knits : Marianne Isager collection / [Marianne Isager].-746-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Knitovation : creative knitwear made from 3 simple shapes / Barry Klein & Fayla Reiss.-746-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Bags that rock : knitting on the road / with Kelley Deal.-746-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Knits from a painter's palette : modular masterpieces in handpainted yarn / Maie Landra, Koigu Wool-746-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Knitting beautiful boas & scarves / Ruth Lee.-746-5"
+                },
+                {
+                  "num": 1,
+                  "name": "The world according to Karl : the wit and wisdom of Karl Lagerfeld / edited by Jean-Christophe Napia-746-6"
+                },
+                {
+                  "num": 1,
+                  "name": "A  Magazine. 2 / curated by Yohji Yamamoto.-746-7"
+                },
+                {
+                  "num": 1,
+                  "name": "Pantone on fashion : a century of color in design / by Leatrice Eiseman and E.P. Cutler ; Julien Tom-746-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Mode aus Wien, 1815-1938 / Gerda Buxbaum ; [Herausgeber, Hochschule fur Angewandte Kunst in Wien].-746-9"
+                }
+              ],
+              "categoryName": "Textile arts"
+            },
+            {
+              "num": 1,
+              "name": "7_4_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Treasures of the American arts & crafts movement / Tod M. Volpe, Beth Cathers and Alastair Duncan.-745-0"
+                }
+              ],
+              "categoryName": "Decorative arts"
+            },
+            {
+              "num": 1,
+              "name": "7_4_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The illusion of life : Disney animation / Frank Thomas and Ollie Johnston.-741-0"
+                }
+              ],
+              "categoryName": "Drawing & drawings"
+            }
+          ],
+          "categoryName": "Drawing & decorative arts"
+        },
+        {
+          "num": 1,
+          "name": "7_0_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "7_0_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The power of display : a history of exhibition installations at the Museum of Modern Art / Mary Anne-709-0"
+                }
+              ],
+              "categoryName": "Historical, areas, persons treatment"
+            }
+          ],
+          "categoryName": "Arts"
+        },
+        {
+          "num": 2,
+          "name": "7_6_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "7_6_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Ed Ruscha / Neal Benezra, Kerry Brougher ; with a contribution by Phyllis Rosenzweig.-760-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Ed Ruscha / Richard Marshall.-760-1"
+                }
+              ],
+              "categoryName": "Graphic arts; Printmaking & prints"
+            }
+          ],
+          "categoryName": "Graphic arts; Printmaking & prints"
+        },
+        {
+          "num": 1,
+          "name": "7_1_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "7_1_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The city of collective memory : its historical imagery and architectural entertainments / M. Christi-711-0"
+                }
+              ],
+              "categoryName": "Area planning (Civic art)"
+            }
+          ],
+          "categoryName": "Civic & landscape art"
+        }
+      ],
+      "categoryName": "Arts & recreation"
+    },
+    {
+      "num": 16,
+      "name": "1_0_0",
+      "children": [
+        {
+          "num": 7,
+          "name": "1_5_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "1_5_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "American journal on mental retardation : AJMR-157-0"
+                }
+              ],
+              "categoryName": "Emotions"
+            },
+            {
+              "num": 4,
+              "name": "1_5_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Mind in society : the development of higher psychological processes / L. S. Vygotsky ; edited by Mic-155-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Culture's consequences : international differences in work-related values / Geert Hofstede.-155-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Scientific principles of stress / James L. Mills.-155-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Stress management for life : a research-based experiential approach / Michael Olpin, Margie Hesson.-155-3"
+                }
+              ],
+              "categoryName": "Differential and developmental psychology"
+            },
+            {
+              "num": 2,
+              "name": "1_5_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Getting to yes : negotiating agreement without giving in / by Roger Fisher and William Ury ; with Br-158-0"
+                },
+                {
+                  "num": 1,
+                  "name": "The 7 habits of highly effective people : powerful lessons in personal change / Stephen R. Covey.-158-1"
+                }
+              ],
+              "categoryName": "Applied psychology"
+            }
+          ],
+          "categoryName": "Psychology"
+        },
+        {
+          "num": 7,
+          "name": "1_7_0",
+          "children": [
+            {
+              "num": 5,
+              "name": "1_7_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Ethics and health care : an introduction / John C. Moskop.-174-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Ethics in nursing practice : a guide to ethical decision making / Sara T. Fry, Megan-Jane Johnstone.-174-1"
+                },
+                {
+                  "num": 2,
+                  "name": "Nursing law and ethics / edited by John Tingle, Reader in Health Law, Head of International Developm-174-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Ethics in public relations : a guide to best practice / Patricia J. Parsons.-174-3"
+                }
+              ],
+              "categoryName": "Occupational ethics"
+            },
+            {
+              "num": 1,
+              "name": "1_7_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "End-of-life decisions in medical care : principles and policies for regulating the dying process / S-179-0"
+                }
+              ],
+              "categoryName": "Other ethical norms"
+            },
+            {
+              "num": 1,
+              "name": "1_7_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Humanity : a moral history of the twentieth century / Jonathan Glover.-172-0"
+                }
+              ],
+              "categoryName": "Political ethics"
+            }
+          ],
+          "categoryName": "Ethics (Moral philosophy)"
+        },
+        {
+          "num": 1,
+          "name": "1_1_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "1_1_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Phantasmagoria : spirit visions, metaphors, and media into the twenty-first century / Marina Warner.-110-0"
+                }
+              ],
+              "categoryName": "Metaphysics"
+            }
+          ],
+          "categoryName": "Metaphysics"
+        },
+        {
+          "num": 1,
+          "name": "1_9_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "1_9_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Jacques Derrida / Nicholas Royle.-194-0"
+                }
+              ],
+              "categoryName": "Modern Western philosophy of France"
+            }
+          ],
+          "categoryName": "Modern Western philosophy"
+        }
+      ],
+      "categoryName": "Philosophy and psychology"
+    },
+    {
+      "num": 39,
+      "name": "4_0_0",
+      "children": [
+        {
+          "num": 27,
+          "name": "4_2_0",
+          "children": [
+            {
+              "num": 22,
+              "name": "4_2_8",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Exploring grammar in context : upper-intermediate and advanced / Ronald Carter, Rebecca Hughes and M-428-0"
+                },
+                {
+                  "num": 2,
+                  "name": "English in medicine : a course in communication skills / Eric H. Glendinning, Beverly A.S. Holmstrom-428-1"
+                },
+                {
+                  "num": 2,
+                  "name": "Advanced grammar in use : a self-study reference and practice book for advanced learners of English-428-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Everyday grammar / John Seely.-428-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Fundamentals of academic writing / Linda Butler.-428-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Cambridge IELTS 7 : examination papers from University of Cambridge ESOL examinations : English for-428-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Cambridge IELTS 8 : examination papers from University of Cambridge ESOL examinations : English for-428-6"
+                },
+                {
+                  "num": 2,
+                  "name": "Prepare for IELTS practice tests : academic module.-428-7"
+                },
+                {
+                  "num": 1,
+                  "name": "The official guide to PTE : Pearson Test of English Academic.-428-8"
+                },
+                {
+                  "num": 1,
+                  "name": "Classrooms of possibility : supporting at-risk EALstudents / Jennifer Hammond, Jenny Miller, authors-428-9"
+                },
+                {
+                  "num": 1,
+                  "name": "PTE Academic : practice tests plus : Pearson test of English academic / from the test developers ; [-428-10"
+                },
+                {
+                  "num": 1,
+                  "name": "Text-based syllabus design / Susan Feez with Helen Joyce.-428-11"
+                },
+                {
+                  "num": 1,
+                  "name": "Pronunciation plus : practice through interaction : North American English / Martin Hewings, Sharon-428-12"
+                },
+                {
+                  "num": 2,
+                  "name": "Asian language notes : some likely areas of difficulty for Asian learners of English. No. 1. Burmese-428-13"
+                },
+                {
+                  "num": 1,
+                  "name": "Telephoning in English / B. Jean Naterop, Rod Revell.-428-14"
+                },
+                {
+                  "num": 1,
+                  "name": "Approaches to teaching English pronunciation / editor, Jacquie Widin.-428-15"
+                },
+                {
+                  "num": 1,
+                  "name": "Pronunciation : study book / Jonathan Smith and Annette Margolis.-428-16"
+                }
+              ],
+              "categoryName": "Standard English usage"
+            },
+            {
+              "num": 5,
+              "name": "4_2_1",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "A course in spoken English : intonation / M.A.K.Halliday-421-0"
+                },
+                {
+                  "num": 2,
+                  "name": "English phonology and pronunciation teaching / Pamela Rogerson-Revell.-421-1"
+                },
+                {
+                  "num": 1,
+                  "name": "English intonation : an introduction / J.C. Wells.-421-2"
+                }
+              ],
+              "categoryName": "English writing system & phonology"
+            }
+          ],
+          "categoryName": "English & Old English"
+        },
+        {
+          "num": 2,
+          "name": "4_9_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "4_9_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Basic Korean : a grammar & workbook / Andrew Sangpil Byon.-495-0"
+                }
+              ],
+              "categoryName": "Languages of East & Southeast Asia"
+            },
+            {
+              "num": 1,
+              "name": "4_9_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "49123 : WASTE AND POLLUTION MANAGEMENT : READER-491-0"
+                }
+              ],
+              "categoryName": "East Indo-European & Celtic languages"
+            }
+          ],
+          "categoryName": "Other languages"
+        },
+        {
+          "num": 1,
+          "name": "4_1_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "4_1_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Chomsky for beginners / John Maher and Judy Groves ; edited by Richard Appignanesi.-410-0"
+                }
+              ],
+              "categoryName": "Linguistics"
+            }
+          ],
+          "categoryName": "Linguistics"
+        },
+        {
+          "num": 3,
+          "name": "4_8_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "4_8_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "48331 : MECHANICS OF SOLIDS : TUTORIAL AND ASSIGNMENT PROBLEMS-483-0"
+                },
+                {
+                  "num": 1,
+                  "name": "48331 : MECHANICS OF SOLIDS : READER-483-1"
+                }
+              ],
+              "categoryName": "Classical Greek dictionaries"
+            },
+            {
+              "num": 1,
+              "name": "4_8_6",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "48651 : MECHANICAL & MECHATRONIC ENGINEERING : READER-486-0"
+                }
+              ]
+            }
+          ],
+          "categoryName": "Hellenic languages; Classical Greek"
+        },
+        {
+          "num": 2,
+          "name": "4_3_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "4_3_8",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Kontakte : a communicative approach / Erwin Tschirner, Brigitte Nikolai, Tracy D. Terrell.-438-0"
+                }
+              ],
+              "categoryName": "Standard German usage"
+            }
+          ],
+          "categoryName": "Germanic languages; German"
+        },
+        {
+          "num": 1,
+          "name": "4_0_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "4_0_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "How languages are learned / Patsy M. Lightbown & Nina Spada.-401-0"
+                }
+              ],
+              "categoryName": "Philosophy & theory"
+            }
+          ],
+          "categoryName": "Language"
+        },
+        {
+          "num": 2,
+          "name": "4_6_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "4_6_8",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Aula 1. Libro del alumno : curso de espanol / Jaime Corpas, Eva Garcia, Agustin Garmendia ; pedagogi-468-0"
+                }
+              ],
+              "categoryName": "Standard Spanish usage"
+            }
+          ],
+          "categoryName": "Spanish & Portuguese languages"
+        },
+        {
+          "num": 2,
+          "name": "4_4_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "4_4_8",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Reprise : a French grammar review worktext / David M. Stillman, Ronni L. Gordon.-448-0"
+                }
+              ],
+              "categoryName": "Standard French usage"
+            }
+          ],
+          "categoryName": "Romance languages; French"
+        }
+      ],
+      "categoryName": "Language"
+    },
+    {
+      "num": 26,
+      "name": "5_0_0",
+      "children": [
+        {
+          "num": 1,
+          "name": "5_2_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "5_2_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Cosmos / Carl Sagan ; with a new foreword by Neil DeGrasse Tyson ; introduction by Ann Druyan.-523-0"
+                }
+              ],
+              "categoryName": "Specific celestial bodies & phenomena"
+            }
+          ],
+          "categoryName": "Astronomy & allied sciences"
+        },
+        {
+          "num": 11,
+          "name": "5_1_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "5_1_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Linear algebra : algorithms, applications, and techniques.-512-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Linear algebra : an introduction / Richard Bronson, Gabriel B. Costa.-512-1"
+                }
+              ],
+              "categoryName": "Algebra & number theory"
+            },
+            {
+              "num": 8,
+              "name": "5_1_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Australasian business statistics / Ken Black, John Asafu-Adjaye, Paul Burke, Nazim Khan, Gerard King-519-0"
+                },
+                {
+                  "num": 2,
+                  "name": "Australasian business statistics / Ken Black ... [et al.].-519-1"
+                },
+                {
+                  "num": 1,
+                  "name": "Matlab programming / David C. Kuncicky.-519-2"
+                },
+                {
+                  "num": 1,
+                  "name": "Convergence of probability measures / Patrick Billingsley.-519-3"
+                },
+                {
+                  "num": 1,
+                  "name": "Applied time series : analysis and forecasting / T.M.J.A. Cooray.-519-4"
+                },
+                {
+                  "num": 1,
+                  "name": "Multilevel analysis : an introduction to basic and advanced multilevel modeling / Tom A.B. Snijders,-519-5"
+                },
+                {
+                  "num": 1,
+                  "name": "Principles and practice of structural equation modeling / Rex B. Kline.-519-6"
+                }
+              ],
+              "categoryName": "Probabilities & applied mathematics"
+            },
+            {
+              "num": 1,
+              "name": "5_1_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Calculus : concepts and contexts / James Stewart.-515-0"
+                }
+              ],
+              "categoryName": "Analysis"
+            }
+          ],
+          "categoryName": "Mathematics"
+        },
+        {
+          "num": 6,
+          "name": "5_7_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "5_7_0",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Campbell biology / Jane B. Reece, Noel Meyers,  Lisa A. Urry, Michael L. Cain, Steven A. Wasserman,-570-0"
+                }
+              ],
+              "categoryName": "Life sciences"
+            },
+            {
+              "num": 2,
+              "name": "5_7_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Brock biology of microorganisms / Michael T. Madigan, John M. Martinko, Kelly S. Bender, Daniel H. B-579-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Anatomy & physiology : an integrative approach / Michael P. McKinley, Glendale Community College, Va-579-1"
+                }
+              ],
+              "categoryName": "Microorganisms, fungi, algae"
+            },
+            {
+              "num": 2,
+              "name": "5_7_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Essential biochemistry / Charlotte W. Pratt, Seattle Pacific University, Kathleen Cornely, Providenc-572-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Biochemistry and molecular biology-572-1"
+                }
+              ],
+              "categoryName": "Biochemistry"
+            }
+          ],
+          "categoryName": "Life sciences"
+        },
+        {
+          "num": 5,
+          "name": "5_3_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "5_3_5",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Absorption and scattering of light by small particles / Craig F. Bohren, Donald R. Huffman.-535-0"
+                },
+                {
+                  "num": 1,
+                  "name": "The truthful art : data, charts, and maps for communication / Alberto Cairo.-535-1"
+                }
+              ],
+              "categoryName": "Light & paraphotic phenomena"
+            },
+            {
+              "num": 1,
+              "name": "5_3_0",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Sears and Zemansky's university physics : with modern physics.-530-0"
+                }
+              ],
+              "categoryName": "Physics"
+            },
+            {
+              "num": 2,
+              "name": "5_3_7",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Electric circuits / James W. Nilsson, Susan A. Riedel.-537-0"
+                }
+              ],
+              "categoryName": "Electricity & electronics"
+            }
+          ],
+          "categoryName": "Physics"
+        },
+        {
+          "num": 2,
+          "name": "5_4_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "5_4_0",
+              "children": [
+                {
+                  "num": 2,
+                  "name": "Chemistry : the central science / [Theodore L.] Brown, [H. Eugene] LeMay [Jr.], [Bruce E.] Bursten,-540-0"
+                }
+              ],
+              "categoryName": "Chemistry & allied sciences"
+            }
+          ],
+          "categoryName": "Chemistry & allied sciences"
+        },
+        {
+          "num": 1,
+          "name": "5_9_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "5_9_7",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Hugo [videorecording].-597-0"
+                }
+              ],
+              "categoryName": "Cold-blooded vertebrates, fish"
+            }
+          ],
+          "categoryName": "Zoological sciences/Animals"
+        }
+      ],
+      "categoryName": "Science"
+    },
+    {
+      "num": 13,
+      "name": "8_0_0",
+      "children": [
+        {
+          "num": 4,
+          "name": "8_1_0",
+          "children": [
+            {
+              "num": 3,
+              "name": "8_1_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "A brief history of seven killings / Marlon James.-813-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Breakfast of champions, or, Goodbye blue Monday! / by Kurt Vonnegut ; with drawings by the author.-813-1"
+                },
+                {
+                  "num": 1,
+                  "name": "The bell jar / by Sylvia Plath-813-2"
+                }
+              ],
+              "categoryName": "Fiction"
+            },
+            {
+              "num": 1,
+              "name": "8_1_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "A girl's life / by Johanna Drucker & Susan Bee.-811-0"
+                }
+              ],
+              "categoryName": "Poetry"
+            }
+          ],
+          "categoryName": "American literature in English"
+        },
+        {
+          "num": 1,
+          "name": "8_9_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "8_9_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Snow / Orhan Pamuk ; translated from the Turkish by Maureen Freely.-894-0"
+                }
+              ],
+              "categoryName": "Ural–Altaic, Paleosiberian, Dravidian"
+            }
+          ],
+          "categoryName": "Literatures of other languages"
+        },
+        {
+          "num": 2,
+          "name": "8_0_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "8_0_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Mediawriting : print, broadcast, and public relations / W. Richard Whitaker, Janet E. Ramsey, Ronald-808-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Writing by choice / Eric Henderson.-808-1"
+                }
+              ],
+              "categoryName": "Rhetoric & collections of literature"
+            }
+          ],
+          "categoryName": "Literature, rhetoric & criticism"
+        },
+        {
+          "num": 2,
+          "name": "8_2_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "8_2_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Five bells / Gail Jones.-821-0"
+                }
+              ],
+              "categoryName": "English poetry"
+            },
+            {
+              "num": 1,
+              "name": "8_2_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Reedy River / Dick Diamond-822-0"
+                }
+              ],
+              "categoryName": "English drama"
+            }
+          ],
+          "categoryName": "English & Old English literatures"
+        },
+        {
+          "num": 3,
+          "name": "8_6_0",
+          "children": [
+            {
+              "num": 3,
+              "name": "8_6_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "El huerto de mi amada / Alfredo Bryce Echenique.-863-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Los detectives salvajes / Roberto Bolano.-863-1"
+                },
+                {
+                  "num": 1,
+                  "name": "El amor en los tiempos del colera / Gabriel Garcia Marquez.-863-2"
+                }
+              ],
+              "categoryName": "Spanish fiction"
+            }
+          ],
+          "categoryName": "Spanish & Portuguese literatures"
+        },
+        {
+          "num": 1,
+          "name": "8_3_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "8_3_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The jukebox and other essays on storytelling / [by] Peter Handke ; translated by Ralph Manheim and K-834-0"
+                }
+              ],
+              "categoryName": "German essays"
+            }
+          ],
+          "categoryName": "German & related literatures"
+        }
+      ],
+      "categoryName": "Literature"
+    },
+    {
+      "num": 8,
+      "name": "9_0_0",
+      "children": [
+        {
+          "num": 4,
+          "name": "9_0_0",
+          "children": [
+            {
+              "num": 2,
+              "name": "9_0_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "The end of history and the last man / Francis Fukuyama.-901-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Event history and survival analysis / Paul D. Allison, University of Pennsylvania.-901-1"
+                }
+              ],
+              "categoryName": "Philosophy & theory"
+            },
+            {
+              "num": 1,
+              "name": "9_0_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Sapiens : a brief history of humankind / Yuval Noah Harari.-909-0"
+                }
+              ],
+              "categoryName": "World history"
+            },
+            {
+              "num": 1,
+              "name": "9_0_3",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "New dictionary of the history of ideas / edited by Maryanne Cline Horowitz.-903-0"
+                }
+              ],
+              "categoryName": "Dictionaries & encyclopedias"
+            }
+          ],
+          "categoryName": "History"
+        },
+        {
+          "num": 1,
+          "name": "9_9_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "9_9_4",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Dispossession, dreams and diversity : issues in Australian studies / David Carter.-994-0"
+                }
+              ],
+              "categoryName": "General history of other areas; Australia"
+            }
+          ],
+          "categoryName": "General history of other areas"
+        },
+        {
+          "num": 3,
+          "name": "9_1_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "9_1_1",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "History, geography and civics : teaching and learning in the primary years / John Buchanan.-911-0"
+                }
+              ],
+              "categoryName": "Historical geography"
+            },
+            {
+              "num": 2,
+              "name": "9_1_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Seeing through maps : the power of images to shape our world view / Ward L. Kaiser & Denis Wood.-912-0"
+                },
+                {
+                  "num": 1,
+                  "name": "Mapping the world : an illustrated history of cartography / Ralph E. Ehrenberg.-912-1"
+                }
+              ],
+              "categoryName": "Graphic representations of earth"
+            }
+          ],
+          "categoryName": "Geography & travel"
+        }
+      ],
+      "categoryName": "History & geography"
+    },
+    {
+      "num": 3,
+      "name": "2_0_0",
+      "children": [
+        {
+          "num": 1,
+          "name": "2_5_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "2_5_9",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "At the end of the day : Church of England perspectives on end of life issues / Mia Hilborn, Brendan-259-0"
+                }
+              ],
+              "categoryName": "Activities of the local church"
+            }
+          ],
+          "categoryName": "Christian orders & local church"
+        },
+        {
+          "num": 1,
+          "name": "2_4_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "2_4_8",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Approaching the end of life : a practical and spiritual guide / Donna Schaper.-248-0"
+                }
+              ],
+              "categoryName": "Christian experience, practice, life"
+            }
+          ],
+          "categoryName": "Christian moral & devotional theology"
+        },
+        {
+          "num": 1,
+          "name": "2_0_0",
+          "children": [
+            {
+              "num": 1,
+              "name": "2_0_2",
+              "children": [
+                {
+                  "num": 1,
+                  "name": "Astrology and cosmology in the world's religions / Nicholas Campion.-202-0"
+                }
+              ],
+              "categoryName": "Doctrines"
+            }
+          ],
+          "categoryName": "Religion"
+        }
+      ],
+      "categoryName": "Religion"
+    }
+  ],
+  "categoryName": "root"
+}

@@ -46,29 +46,14 @@ var handleCompactData = function (request, response) {
 
 var handleOriginalData = function (request, response) {
   //  读取传递的的数据
+  var originalDataStartTime = new Date()
   var reqBody = request.body
   var dataSetName = reqBody.dataSetName
   var dataItemNameArray = reqBody['dataItemNameArray']
   var allSelectedDataItemNameArray = reqBody['allSelectedDataItemNameArray']
   var dataItemType = typeof(dataItemNameArray)
   var allSelectedItemType = typeof(allSelectedDataItemNameArray)
-  var selectedLevels = reqBody['selectedLevels']
-  var barcodeWidthArray = reqBody['barcodeWidthArray']
-  var barcodeHeight = reqBody['barcodeHeight']
-  var compactNum = reqBody['compactNum']
-  var maxDepth = reqBody['maxDepth']
-  var barcodeNodeInterval = +reqBody['barcodeNodeInterval']
-  //  将barcodeWidth的数组内部的元素转换为数字
-  for (var bI = 0; bI < barcodeWidthArray.length; bI++) {
-    barcodeWidthArray[bI] = +barcodeWidthArray[bI]
-  }
-  //  将selectedLevels的数组内部的元素转换为数字
-  if (typeof(selectedLevels) === 'undefined') {
-    selectedLevels = []
-  }
-  for (var sI = 0; sI < selectedLevels.length; sI++) {
-    selectedLevels[sI] = +selectedLevels[sI]
-  }
+  var compactNum = +reqBody['compactNum']
   //  选择一个barcodeTree的情况下, 将其变成数组, 方便后续的处理
   if (dataItemType === 'string') {
     dataItemNameArray = [dataItemNameArray]
@@ -77,19 +62,19 @@ var handleOriginalData = function (request, response) {
     allSelectedDataItemNameArray = [allSelectedDataItemNameArray]
   }
   //  删除之后allSelectedDataItemNameArray所包含的元素是需要读取的barcodeItem
-  var originalTreeObjObject = dataCenter.get_original_data(dataSetName, dataItemNameArray)
-  var linearTreeNodeArrayObject = dataCenter.get_linear_data(dataSetName, dataItemNameArray, selectedLevels)
-  var linearizedTreeNodeLocArrayObj = compute_node_location(linearTreeNodeArrayObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
+  // var originalTreeObjObject = dataCenter.get_original_data(dataSetName, dataItemNameArray)
+  var linearTreeNodeArrayObject = dataCenter.get_linear_data(dataSetName, dataItemNameArray)
+  // var linearizedTreeNodeLocArrayObj = compute_node_location(linearTreeNodeArrayObject, selectedLevels, barcodeWidthArray, barcodeHeight, barcodeNodeInterval)
+  var originalDataEndTime = new Date()
   //  将线性化的节点对象传递给客户端
-  sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeLocArrayObj)
+  sendTreeNodeArray(linearTreeNodeArrayObject)
   //  更新构建的superTree
-  buildUpdateSuperTree(originalTreeObjObject, allSelectedDataItemNameArray)
+  // buildUpdateSuperTree(originalTreeObjObject, allSelectedDataItemNameArray)
   //  向客户端传递barcode的节点位置, 大小等信息
-  function sendTreeNodeArray(originalTreeObjObject, linearizedTreeNodeArrayObj) {
+  function sendTreeNodeArray(linearizedTreeNodeArrayObj) {
     response.setHeader('Content-Type', 'application/json')
     response.setHeader('Access-Control-Allow-Origin', '*')
     var treeNodeObject = {
-      'originalTreeObjObject': originalTreeObjObject,
       'treeNodeArrayObject': linearizedTreeNodeArrayObj
     }
     response.send(JSON.stringify(treeNodeObject, null, 3))

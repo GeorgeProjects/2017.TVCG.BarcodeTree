@@ -610,10 +610,12 @@ define([
 						var heightScale = d3.scale.pow().exponent(powExponenet).domain([0, barcodeTreeNodeMaxValue]).range([miniHeight, barcodeHeight]).clamp(true)
 						// console.log('maxValue', maxValue)
 						//	初始化颜色的color Scale
-						var colorArray = ["#2c7bb6", "#00a6ca", "#00ccbc", "#90eb9d", "#ffff8c", "#f9d057", "#f29e2e", "#e76818", "#d7191c"]
+						// var colorArray = ["#eeeeee", "black"]
+						// var colorArray = ["#2c7bb6", "#00a6ca", "#00ccbc", "#90eb9d", "#ffff8c", "#f9d057", "#f29e2e", "#e76818", "#d7191c"]
 						// var colorArray = ["#d73127", "#f46d43", "#fead61", "#fee08b", "#fffec2", "#d9ee90", "#a7d770", "#6abb67", "#1f9850"]
 						// var colorArray = ["#1f9850", "#6abb67", "#a7d770", "#d9ee90", "#fffec2", "#fee08b", "#fead61", "#f46d43", "#d73127"]
 						// var colorArray = ['#dddddd', '#000000']
+						var colorArray = ["#ffffcc", "#ffeda0", '#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#bd0026', '#800026']
 						var colorDomainArray = []
 						var colorNum = colorArray.length
 						for (var cI = 0; cI < colorNum; cI++) {
@@ -1735,11 +1737,11 @@ define([
 				change_subtree_display_mode: function () {
 						var self = this
 						var sortingModel = Datacenter.sortingModel
-						if ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL)) {
-								self.update_zoomed_range_location()
-						} else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL)) {
-								self.process_barcode_model_data()
-						}
+						self.process_barcode_model_data()
+						// if ((Variables.get('displayMode') === Config.get('CONSTANT').GLOBAL)) {
+						// 		self.update_zoomed_range_location()
+						// } else if ((Variables.get('displayMode') === Config.get('CONSTANT').ORIGINAL)) {
+						// }
 						//  在更新完成所有的视图之后, 用户需要首先改变BarcodeTree的model中存储barcodeTree节点的数组的数据结构
 						//	sortingModel的sortingModelUpdate变量, 因此视图会更新
 						// sortingModel.update_sorting_view()
@@ -2158,6 +2160,8 @@ define([
 						barcodeNodexMaxX = barcodeNodexMaxX + barcodeTextPaddingLeft + barcodePaddingLeft
 						//  增加barcode右侧padding的距离
 						barcodeNodexMaxX = barcodeNodexMaxX + comparisonViewMargin.right
+						var barcodeTreeCollectionWidth = $('#collection-view').width()
+						barcodeNodexMaxX = barcodeNodexMaxX > barcodeTreeCollectionWidth? barcodeNodexMaxX : barcodeTreeCollectionWidth
 						Variables.set('barcodeNodexMaxX', barcodeNodexMaxX)
 						return barcodeNodexMaxX
 

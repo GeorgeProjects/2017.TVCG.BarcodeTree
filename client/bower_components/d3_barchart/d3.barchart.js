@@ -52,7 +52,7 @@
                 let innerHeight = height
                 let x = d3.scale.linear()
                   .domain([0, d3.max(dataset, d => d.x2)])
-                .range([0, innerWidth])
+                  .range([0, innerWidth])
 
 																let titleFontSize = 0
 																let titlePaddingTop = innerHeight * 0.05
@@ -748,6 +748,7 @@
         chart.select_all_items = function(histogramDataArray){
           selectAllItems(histogramDataArray)
         }
+
         return chart
     }
 })()

@@ -1,0 +1,20 @@
+**Background:** 
+There are over 300 different tree visualizations according to treevis.net. 
+The most appropriate tree visualization to use may change during a single user session (as tasks change) or from one subtree to another of the same tree (as a function of local characteristics).
+When visualizing hierarchical data to finish specific tasks, users need to find the tree visualization which can meet their requirements. 
+
+Users select one traditional visualization technique to get the visualization result at first,
+then they may find that this technique is unsatisfied from some aspects, 
+next they need to change current tree visualizations slightly. 
+
+Therefore, from the above example, users need to explore the alternative of the tree visualizations. 
+
+However, users cannot know how to change the tree visualizations and which aspects of tree visualizations they can change during this procedure. 
+
+\\
+**Motivation:** The motivation of this work is to build a framework for all the visualizations to support explore their variants easily.\\
+\\
+\\
+**Challenge:** The major challenge of this work is that feature space of tree visualizations is very large and the framework need to be generic to these visualizations.
+\\
+Comparing to the animation among different tree visualizations, transformation stresses that the variant results of tree visualizations.

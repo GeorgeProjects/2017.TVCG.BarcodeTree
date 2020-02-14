@@ -50,10 +50,6 @@ function add_compact_original_data_set(data_set_name, compact_data_set_obj) {
   globalCompactOriginalObjDataCenter[data_set_name] = compact_data_set_obj
 }
 
-//  更新selectedLevels数组
-function update_select_levels(selected_levels) {
-  globalSelectedLevels = clone(selected_levels)
-}
 //  根据dataSet的名称, dataItem的内容, subtreeid的内容, 获取subtreeObject的对象
 function get_subtree_id_index_data(data_set_name, data_item, subtree_id) {
   var IdIndexObjDataSet = globalIdIndexObjDataCenter[data_set_name]
@@ -77,14 +73,14 @@ function get_original_data(data_set_name, data_item_name_array) {
 }
 
 //  从全局的数据对象中获取线性化之后的结果数据
-function get_linear_data(data_set_name, data_item_name_array, selectedLevels) {
+function get_linear_data(data_set_name, data_item_name_array) {
   var linearTreeObjObject = {}
   if (typeof (data_item_name_array) !== 'undefined') {
     for (var dI = 0; dI < data_item_name_array.length; dI++) {
       var dataItemName = data_item_name_array[dI]
       var dataItem = globalLinearTreeNodeArrayCenter[data_set_name][dataItemName]
       var originalTreeObj = clone(dataItem)
-      originalTreeObj = filter_data_item(originalTreeObj, selectedLevels)
+      // originalTreeObj = filter_data_item(originalTreeObj, selectedLevels)
       linearTreeObjObject[dataItemName] = originalTreeObj
     }
   }
@@ -299,7 +295,6 @@ exports.add_compact_original_data_set = add_compact_original_data_set
 exports.get_linear_data = get_linear_data
 exports.get_compact_linear_data = get_compact_linear_data
 exports.get_single_linear_data = get_single_linear_data
-exports.update_select_levels = update_select_levels
 
 exports.get_super_tree_obj = get_super_tree_obj
 exports.update_super_tree_obj_item_array = update_super_tree_obj_item_array

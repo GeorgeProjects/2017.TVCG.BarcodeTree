@@ -36,7 +36,7 @@ define([
 								// 需要将barcode变换完成之后再绘制icon, 所以时间是需要比bar
 								ICON_WAIT_DURATION: 1000,
 								COMPARISON_RESULT_PADDING: 50,
-								BARCODE_NODE_PADDING_LENGTH: 20
+								BARCODE_NODE_PADDING_LENGTH: 30
 						},
 						BARCODETREE_STATE: {
 								BARCODETREE_NODE_SELECTION: 'NODE',// 需要将barcode变换完成之后再绘制icon, 所以时间是需要比bar

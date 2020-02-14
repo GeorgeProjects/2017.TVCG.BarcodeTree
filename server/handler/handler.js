@@ -112,7 +112,8 @@ function initialize(root, v_logger) {
     '/complement_operation_result': setOperationHandler.handlerComplementOperation,
     '/remove_from_super_tree': removeFromSuperTreeHandler.removeUpdateCurrentSuperTree,
     '/update_barcode_tree_sequence': updateBarcodeTreeSequence.updateBarcodeTreeSequence,
-    '/update_barcode_tree_vertical_sequence': updateBarcodeTreeVerticalSequence.updateBarcodeTreeVerticalSequence
+    '/update_barcode_tree_vertical_sequence': updateBarcodeTreeVerticalSequence.updateBarcodeTreeVerticalSequence,
+    '/pre-request-barcode-tree': originalDataHandler.handleOriginalData
   }
 
   var handle = {}
@@ -125,6 +126,7 @@ function initialize(root, v_logger) {
   handle['/file_name'] = handlerObj['/file_name']
   //  获取barcodeTree的原始形式以及compact形式的handler
   handle['/barcode_original_data'] = handlerObj['/barcode_original_data']
+  handle['/pre-request-barcode-tree'] = handlerObj['/pre-request-barcode-tree']
   handle['/barcode_compact_data'] = handlerObj['/barcode_compact_data']
   //  集合操作的handler, and, or, complement
   handle['/and_operation_result'] = handlerObj['/and_operation_result']

@@ -308,11 +308,16 @@ define([
 										var stripeSpaceLevel = stripeSpaceNum - Math.round((paddingNodeNumber - minpaddingNodeNumber) / (maxpaddingNodeNumber - minpaddingNodeNumber) * stripeSpaceNum) + 1
 										//	将属性值映射到stripe的宽度属性上
 										var stripeDensityNum = Variables.get('stripeDensityNum')
+										var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
+										var barcodeNodePaddingLength = BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH']
 										var stripeDensityLevel = stripeDensityNum - (Math.round((paddingNodeNumber - minpaddingNodeNumber) / (maxpaddingNodeNumber - minpaddingNodeNumber) * (stripeDensityNum - 1)))
+										// var barcodeNodePaddingScale = d3.scale.linear().range([barcodeNodePaddingLength / 4, barcodeNodePaddingLength]).domain([minpaddingNodeNumber, maxpaddingNodeNumber])
+										// var stripeDensityLevel = 2
 										//	将节点数量映射到stripe间隙的宽度属性上
 										var stripeSpaceNum = Variables.get('stripeSpaceNum')
 										var diagonalStripId = paddingNodeObj.paddingNodeId + '=' + barcodeTreeIndex + '=diagonalstrip'
 										var rectWidth = barcodeNodePaddingLength
+										// var rectWidth = barcodeNodePaddingScale(paddingNodeNumber)
 										var rectHeight = barcodeNodeHeight
 										var diagonalStripRect = {
 												x: barcodeTreeNodePaddingLeft + rectX,
@@ -434,7 +439,7 @@ define([
 					*/
 				get_single_box_label_attr: function () {
 						var selectedLabelBoxHeight = +window.barcodeHeight * (1 - Variables.get('barcodePaddingBottomRatio'))
-						var barcodeTreeNodePaddingLeft = Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft')
+						var barcodeTreeNodePaddingLeft = Variables.get('barcodePaddingLeft') + Variables.get('barcodeTextPaddingLeft') - window.barcodeNodeInterval / 2
 						var selectedLabelLeft = 0
 						var selectedLabelRight = barcodeTreeNodePaddingLeft
 						var labelBoxAttr = {
@@ -603,8 +608,7 @@ define([
 						var powExponenet = Variables.get('POW_EXPONENT')
 						var heightScale = d3.scale.pow().exponent(powExponenet).domain([0, barcodeMaxAttribute]).range([miniHeight, barcodeHeight]).clamp(true)
 						return heightScale
-				}
-				,
+				},
 				/**
 					* 对于单个barcodeTree的对齐部分进行更新
 					*/
@@ -631,11 +635,11 @@ define([
 						// 根据replace得到的节点修改对齐之后的节点是否存在的属性
 						// self.reset_node_num_attr(replaceNodesObj, replaceNotExistedNodesObj, barcodeNodeAttrArray)
 						self.change_exist_num_attr(replacedNodesArray, replaceNodesObj, replaceNotExistedNodesObj, barcodeNodeAttrArray)
+						// console.log('barcodeNodeAttrArray', JSON.parse(JSON.stringify(barcodeNodeAttrArray)))
 						var alignedNodeIndexObjArray = self.get_aligned_node_index_array(barcodeNodeAttrArray)
 						//  根据alignedbarcodeNodeAttrArray建立索引构建alignedBarcodeNodeAttrObj
 						self.build_aligned_barcode_node_obj()
-				}
-				,
+				},
 				/**
 					* 更新对于所增加的barcode的相关统计信息, 主要包括在不同的层级范围内的节点的数量信息
 					*/
@@ -1843,15 +1847,15 @@ define([
 								compareResultObj.miss = []
 								if (typeof (array1) !== 'undefined') {
 										for (var a1I = 0; a1I < array1.length; a1I++) {
-												if (array1[a1I].compare_result === 'same') {
-														compareResultObj.same.push(array1[a1I])
-												} else if (array1[a1I].compare_result === 'miss') {
+												if (array1[a1I].compare_result === 'miss') {
 														compareResultObj.miss.push(array1[a1I])
 												}
 										}
 								}
 								for (var a2I = 0; a2I < array2.length; a2I++) {
-										if (array2[a2I].compare_result === 'add') {
+										if (array2[a2I].compare_result === 'same') {
+												compareResultObj.same.push(array2[a2I])
+										} else if (array2[a2I].compare_result === 'add') {
 												compareResultObj.add.push(array2[a2I])
 										}
 								}

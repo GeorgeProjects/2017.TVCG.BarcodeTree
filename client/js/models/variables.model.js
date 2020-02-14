@@ -94,7 +94,7 @@ define([
 						//  barcodeTree中label的颜色
 						barcodeTreeLabelColor: 'black',
 						//  barcode中节点的颜色
-						barcodeNodeColor: '#808080',
+						barcodeNodeColor: '#808080',//'#808080'
 						//  barcodeTree中节点unhighlight的颜色
 						unHighlightColor: '#eeeeee',
 						//  barcodeTree的label的大小

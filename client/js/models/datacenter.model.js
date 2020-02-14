@@ -157,6 +157,7 @@ define([
 						for (var dI = 0; dI < defaultBarcodeWidthArray.length; dI++) {
 								defaultBarcodeWidthArray[dI] = self.update_width_by_ratio(defaultBarcodeWidthArray[dI])
 						}
+						console.log('defaultBarcodeWidthArray', defaultBarcodeWidthArray)
 						Variables.set('barcodeWidthArray', defaultBarcodeWidthArray)
 						//  设置未更改之前的barcode节点宽度的数组
 						Variables.set('barcodeWidthArray_previous', JSON.parse(JSON.stringify(defaultBarcodeWidthArray)))
@@ -220,6 +221,18 @@ define([
 						minIconSize = self.update_height_by_ratio(minIconSize)
 						Variables.set('minIconSize', minIconSize)
 						window.minIconSize = minIconSize
+						//	 13. 更新barcodeTree的label的大小
+						var barcodeTreeTextMaxSize = Variables.get('barcodeTreeTextMaxSize')
+						barcodeTreeTextMaxSize = self.update_height_by_ratio(barcodeTreeTextMaxSize)
+						Variables.set('barcodeTreeTextMaxSize', barcodeTreeTextMaxSize)
+						window.barcodeTreeTextMaxSize = barcodeTreeTextMaxSize
+						//	14. 更新barcodeTree的diagonal strip rectangle padding的大小
+						var BARCODETREE_VIEW_SETTING = Config.get('BARCODETREE_VIEW_SETTING')
+						var barcodeNodePaddingLength = BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH']
+						BARCODETREE_VIEW_SETTING['BARCODE_NODE_PADDING_LENGTH'] = self.update_height_by_ratio(barcodeNodePaddingLength)
+						//	15. 更新barcodeTree的COMPARISON_RESULT_PADDING的大小
+						var comparisonResultPadding = BARCODETREE_VIEW_SETTING['COMPARISON_RESULT_PADDING']
+						BARCODETREE_VIEW_SETTING['COMPARISON_RESULT_PADDING'] = self.update_height_by_ratio(comparisonResultPadding)
 				},
 				/**
 					* 按照比例更新barcode的节点的宽度相关的属性
@@ -264,11 +277,21 @@ define([
 						var self = this
 						window.requestDataCenterBeginTime = new Date()
 						var barcodeNodeInterval = Variables.get('barcodeNodeInterval')
+						console.log('window.barcodeWidthArray', window.barcodeWidthArray)
 						var barcdoeWidthArray = window.barcodeWidthArray
 						var barcodeHeight = window.barcodeHeight * Variables.get('barcodeHeightRatio')
 						var selectedLevels = window.selectedLevels
 						var barcdoeNodeLocArray = self.rawDataModel.get_barcode_node_location_array(selectedItemsArray, barcodeNodeInterval, barcdoeWidthArray, barcodeHeight, selectedLevels)
-						console.log('barcdoeNodeLocArray', JSON.parse(JSON.stringify(barcdoeNodeLocArray)))
+						console.log('barcdoeNodeLocArray', barcdoeNodeLocArray)
+						var nodeSum = 0
+						var treeNum = 0
+						for (var item in barcdoeNodeLocArray) {
+									var nodeArray = barcdoeNodeLocArray[item]
+									nodeSum = nodeSum + nodeArray.length
+									treeNum = treeNum + 1
+						}
+						console.log('nodeSum', nodeSum)
+						console.log('treeNum', treeNum)
 						window.requestDataCenterEndTime = new Date()
 						window.renderDataCenterStartTime = new Date()
 						self.original_tree_object_request_handler(barcdoeNodeLocArray)
@@ -435,7 +458,6 @@ define([
 								'compactNum': compactNum,
 								'originalSequenceState': originalSequenceState
 						}
-						window.buildSuperTreeStartTime = +new Date()
 						var buildSuperTreeSuccessFunc = function (result) {
 								// window.buildSuperTreeEndTime = +new Date()
 								// console.log('build supertree time', (window.buildSuperTreeEndTime - window.buildSuperTreeStartTime))
